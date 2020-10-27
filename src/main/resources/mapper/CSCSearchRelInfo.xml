@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSCSearchRelInfoDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CSCSearchRelInfo" id="CSCSearchRelInfoResult">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAll" resultMap="CSCSearchRelInfoResult">
+        SELECT * FROM tpm_cscsearchrelinfo
+    </select>
+
+    <select id="SelectcsConfigInfo" resultMap="CSCSearchRelInfoResult">
+         SELECT * FROM tpm_cscsearchrelinfo where CSConfigGd=#{CSConfigGd}
+    </select>
+
+    <insert id="InsertCSCSearchRelInfo">
+        INSERT INTO tpm_cscsearchrelinfo(CSConfigGd,CSSearchGd,Creator,CreateTime)
+        VALUES (#{CSConfigGd},#{CSSearchGd},#{Creator},#{CreateTime})
+    </insert>
+
+    <delete id="DeleteAllByConfigGd">
+      DELETE c1.*,
+        c2.*,
+        c3.*,
+        c4.*
+        FROM
+            tpm_cscsearchrelinfo c1
+            LEFT JOIN tpm_cssearchinfo c2 ON c1.CSSearchGd = c2.Guid
+            LEFT JOIN tpm_cssearchfieldsinfo c3 ON c2.Guid = c3.CSSearchGd
+            LEFT JOIN tpm_cssearchddinfo c4 ON c3.Guid = c4.CSSearchFieldGd
+        WHERE
+            c1.CSConfigGd = #{configGd}
+    </delete>
+</mapper>

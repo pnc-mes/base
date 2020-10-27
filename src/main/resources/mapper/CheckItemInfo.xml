@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckItemDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CheckItemInfo" id="CheckItemInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAll" resultMap="CheckItemInfoMap">
+        SELECT * FROM tpm_checkiteminfo
+    </select>
+
+    <select id="SelectByRuid" resultMap="CheckItemInfoMap">
+        SELECT * FROM tpm_checkiteminfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="CheckItemInfoMap">
+        SELECT * FROM tpm_checkiteminfo where  Guid=#{guid}
+    </select>
+
+    <select id="SelectByCode" resultMap="CheckItemInfoMap">
+        SELECT * FROM tpm_checkiteminfo where  CheckItemCode=#{checkItemCode}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_checkiteminfo(Guid,CheckItemCode,CheckItemName,CheckMethodGd,CheckItemC,SureType,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{checkItemCode},#{checkItemName},#{CheckMethodGd},#{checkItemC},#{sureType},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <update id="UpdateByGuid">
+        UPDATE tpm_checkiteminfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="CheckItemCode != null">
+                CheckItemCode = #{CheckItemCode},
+            </if>
+            <if test="checkItemName != null">
+                checkItemName = #{checkItemName},
+            </if>
+            <if test="checkItemC != null">
+                checkItemC = #{checkItemC},
+            </if>
+            <if test="sureType != null">
+                sureType = #{sureType},
+            </if>
+            <if test="CheckMethodGd != null">
+                CheckMethodGd = #{CheckMethodGd},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+        </trim>
+        WHERE Guid =#{guid}
+    </update>
+
+    <delete id="DeleteByGuid">
+        DELETE  FROM tpm_checkiteminfo WHERE Guid =#{guid}
+    </delete>
+
+</mapper>
+

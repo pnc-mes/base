@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PackDAO">
+    <resultMap id="packInfoMap" type="pnc.mesadmin.entity.PackInfo">
+        <id column="Ruid" property="ruid"/>
+        <result column="Guid" property="guid"/>
+        <result column="PCode" property="pCode"/>
+        <result column="BarType" property="barType"/>
+        <result column="BarCode" property="barCode"/>
+        <result column="WoCode" property="woCode"/>
+        <result column="MaVerGd" property="maVerGd"/>
+        <result column="PrintTGd" property="printTGd"/>
+        <result column="Num" property="num"/>
+        <result column="Status" property="Status"/>
+        <result column="TorsionStatus" property="TorsionStatus"/>
+        <result column="PWeight" property="pWeight"/>
+        <result column="Creator" property="creator"/>
+        <result column="CreateTime" property="createTime"/>
+        <result column="LastModifyMan" property="lastModifyMan"/>
+        <result column="LastModifyTime" property="lastModifyTime"/>
+        <result column="Remark" property="remark"/>
+        <result column="IsFull" property="isFull"/>
+        <result column="IsRework" property="isRework" />
+    </resultMap>
+
+    <!-- 新增打包日志 (By-pjf) -->
+    <insert id="InsertPackInfo">
+        INSERT INTO tpm_packinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,PCode,BarType,BarCode,MaVerGd,PrintTGd,Num,PWeight,Creator,CreateTime,
+
+            <if test="isRework != null">
+                isRework,
+            </if>
+            <if test="woCode != null">
+                WoCode,
+            </if>
+            <if test="Status != null">
+                Status,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="isFull != null">
+                isFull,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{pCode},#{barType},#{barCode},#{maVerGd},
+            #{printTGd},#{num},#{pWeight},#{creator},#{createTime},
+
+            <if test="isRework != null">
+                #{isRework},
+            </if>
+            <if test="woCode != null">
+                #{woCode},
+            </if>
+            <if test="Status != null">
+                #{Status},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="isFull != null">
+                #{isFull}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="Delete">
+        DELETE FROM tpm_packinfo WHERE guid = #{argGuid}
+    </delete>
+
+    <!-- 修改打包日志->只更新pCode （By-pjf） -->
+    <update id="UpdatePackInfo">
+        UPDATE tpm_packinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pCode != null">
+                pCode = #{ pCode },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="isFull != null">
+                IsFull = #{ isFull },
+            </if>
+            <if test="num != null">
+                Num = #{ num },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <update id="updatePackInfoIsReworkAndRuid">
+          update tpm_packinfo a set  a.IsRework=#{isRework} where a.ruid=#{ruid}
+    </update>
+
+
+    <update id="UpdatePackInfoStauts">
+        UPDATE tpm_packinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Status != null">
+                Status = #{ Status },
+            </if>
+
+
+            <if test="SaleStatus != null">
+                SaleStatus = #{ SaleStatus },
+            </if>
+            <if test="FreezeMsg != null">
+                FreezeMsg = #{ FreezeMsg },
+            </if>
+            <if test="ObsoleteMsg != null">
+                ObsoleteMsg = #{ ObsoleteMsg },
+            </if>
+            <if test="BeforeCheckQC != null">
+                BeforeCheckQC = #{ BeforeCheckQC },
+            </if>
+            <if test="AfterCheckQC != null">
+                AfterCheckQC = #{ AfterCheckQC },
+            </if>
+            <if test="TorsionStatus != null">
+                TorsionStatus = #{ TorsionStatus },
+            </if>
+            <if test="isRework != null">
+                IsRework = #{ isRework },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="isFull != null">
+                IsFull = #{ isFull },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <update id="UpdatePack">
+        UPDATE tpm_packinfo SET num = #{num},pWeight = #{pWeight},
+        lastModifyMan = #{lastModifyMan},lastModifyTime = #{lastModifyTime},
+        remark = #{remark}
+        WHERE guid = #{guid}
+    </update>
+    <!--查询打包日志信息 张亮亮-->
+    <select id="SelectPackInfo" resultMap="packInfoMap">
+      SELECT * from `tpm_packinfo`
+    </select>
+
+    <!-- 根据打包单号查询打包日志 （By-pjf） -->
+    <select id="SelectByBarCode" resultMap="packInfoMap">
+        SELECT * from `tpm_packinfo` WHERE BarCode = #{ argBarCode }
+    </select>
+
+    <select id="SelectListByBarCode" resultMap="packInfoMap">
+        SELECT * from `tpm_packinfo` WHERE BarCode = #{ barCode }
+    </select>
+
+    <select id="SelectByGuid" resultMap="packInfoMap">
+        SELECT * from `tpm_packinfo` WHERE guid = #{ argGuid }
+    </select>
+
+    <select id="SelectByList" resultType="java.util.HashMap">
+      CALL ${ scriptName }(
+        #{ serialRuleGd }, #{ date }, @prCode, @errorCode
+      )
+    </select>
+
+    <select id="SelectPackInfoByPrintTGd" parameterType="string" resultMap="packInfoMap">
+        select  * from tpm_packinfo where PrintTGd=#{printTGd}
+    </select>
+</mapper>

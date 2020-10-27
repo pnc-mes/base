@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MaPackDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.MaPackInfo" id="MaPackInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="maVerGd" column="maVerGd" />
+        <result property="packType" column="packType" />
+        <result property="pTGd" column="pTGd" />
+        <result property="tempName" column="tempName" />
+        <result property="serialRuleGd" column="serialRuleGd" />
+        <result property="num" column="num" />
+        <result property="weight" column="weight" />
+        <result property="upLimit" column="upLimit" />
+        <result property="downLimit" column="downLimit" />
+        <result property="isDef" column="isDef" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+	<!-- 新增物料包装规格信息 (By-pjf)-->
+	<insert id="InsertMaPack">
+        INSERT INTO tpm_mapackinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,maVerGd,packType,pTGd,tempName,serialRuleGd,num,weight,upLimit,
+            downLimit,isDef,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{maVerGd},#{packType},#{pTGd},#{tempName},#{serialRuleGd},#{num},#{weight},#{upLimit},
+            #{downLimit},#{isDef},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+	</insert>
+
+    <!-- 删除物料包装规格信息 (By-pjf)-->
+    <delete id="DeleteMaPack">
+        DELETE FROM tpm_mapackinfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 根据物料版本Guid删除物料包装规格信息 (By-pjf)-->
+    <delete id="DeleteByMaVerGd">
+        DELETE FROM tpm_mapackinfo WHERE MaVerGd = #{ argMaVerGd }
+    </delete>
+
+    <update id="UpdateMaPack">
+        UPDATE tpm_mapackinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="maVerGd != null">
+                maVerGd = #{ maVerGd },
+            </if>
+            <if test="pTGd != null">
+                pTGd = #{ pTGd },
+            </if>
+            <if test="tempName != null">
+                tempName = #{ tempName },
+            </if>
+            <if test="serialRuleGd != null">
+                serialRuleGd = #{ serialRuleGd },
+            </if>
+            <if test="num != null">
+                num = #{ num },
+            </if>
+            <if test="weight != null">
+                weight = #{ weight },
+            </if>
+            <if test="upLimit != null">
+                upLimit = #{ upLimit },
+            </if>
+            <if test="downLimit != null">
+                downLimit = #{ downLimit },
+            </if>
+            <if test="isDef != null">
+                isDef = #{ isDef },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据物料版本标识和包装类型查询物料包装规格 (By-pjf)-->
+    <select id="SelectByMaVerGd" resultMap="MaPackInfoResult">
+        SELECT * FROM tpm_mapackinfo WHERE MaVerGd = #{ argMaVerGd } AND PackType = #{ argPackType }
+    </select>
+
+    <!-- 根据物料版本标识查询物料包装规格 (By-pjf)-->
+    <select id="SelectByMaVer" resultMap="MaPackInfoResult">
+        SELECT * FROM tpm_mapackinfo WHERE MaVerGd = #{ argMaVerGd }
+    </select>
+
+</mapper>

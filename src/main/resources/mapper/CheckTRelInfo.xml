@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckTRelDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CheckTRelInfo" id="CheckTRelInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAll" resultMap="CheckTRelInfoMap">
+        SELECT * FROM tpm_checktrelinfo
+    </select>
+
+    <select id="SelectByRuid" resultMap="CheckTRelInfoMap">
+        SELECT * FROM tpm_checktrelinfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="CheckTRelInfoMap">
+        SELECT * FROM tpm_checktrelinfo where  Guid=#{guid}
+    </select>
+
+    <select id="SelectByName" resultMap="CheckTRelInfoMap">
+        SELECT * FROM tpm_checktrelinfo where  TempRelName=#{name}
+    </select>
+
+    <select id="SelectByTempRelTypeAndRelTypeAndRelGd" resultMap="CheckTRelInfoMap">
+        SELECT * FROM tpm_checktrelinfo where  TempRelType=#{TempRelType} and  RelType=#{RelType} and RelGd=#{RelGd}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_checktrelinfo(Guid,TempRelName,TempRelType,SupplierGd,CustomerGd,RelType,RelGd,CheckDocGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{TempRelName},#{TempRelType},#{SupplierGd},#{CustomerGd},#{RelType},#{RelGd},#{CheckDocGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <update id="UpdateByGuid">
+        UPDATE tpm_checktrelinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="TempRelName != null">
+                TempRelName = #{TempRelName},
+            </if>
+            <if test="TempRelType != null">
+                TempRelType = #{TempRelType},
+            </if>
+            <if test="SupplierGd != null">
+                SupplierGd = #{SupplierGd},
+            </if>
+            <if test="CustomerGd != null">
+                CustomerGd = #{CustomerGd},
+            </if>
+            <if test="RelType != null">
+                RelType = #{RelType},
+            </if>
+            <if test="RelGd != null">
+                RelGd = #{RelGd},
+            </if>
+            <if test="CheckDocGd != null">
+                CheckDocGd = #{CheckDocGd},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+        </trim>
+        WHERE Guid =#{guid}
+    </update>
+
+    <delete id="DeleteByGuid">
+        DELETE  FROM tpm_checktrelinfo WHERE Guid =#{guid}
+    </delete>
+
+</mapper>
+

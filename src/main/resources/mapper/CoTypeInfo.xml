@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CoTypeDAO">
+    <resultMap id="coTypeInfoMap" type="pnc.mesadmin.entity.CoTypeInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="CoTName" property="coTName"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime"></result>
+        <result column="LastModifyMan" property="lastModifyMan"></result>
+        <result column="LastModifyTime" property="lastModifyTime"></result>
+        <result column="Remark" property="remark"></result>
+    </resultMap>
+    <select id="SelectAllCoTypeInfo" resultMap="coTypeInfoMap">
+        select * from  tpm_cotypeinfo
+    </select>
+
+    <insert id="InsertCoTypeInfo">
+        INSERT INTO `tpm_cotypeinfo`(Guid,CoTName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{coTName},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <delete id="DeleteCoTypeInfoByRuid" parameterType="int">
+        DELETE  FROM `tpm_cotypeinfo` WHERE Ruid=#{ruid}
+    </delete>
+
+    <update id="UpdateCoTypeInfo" parameterType="int">
+        UPDATE `tpm_cotypeinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="coTName != null">
+                CoTName = #{ coTName },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <select id="SelectCoTypeInfoByRuid" parameterType="int" resultMap="coTypeInfoMap">
+        select * from  tpm_cotypeinfo where   Ruid=#{ruid}
+    </select>
+
+    <select id="SelectCoTypeInfoByGuid" parameterType="string" resultMap="coTypeInfoMap">
+        select * from  tpm_cotypeinfo where   Guid=#{guid}
+    </select>
+
+    <select id="SelectCoTypeInfoByCoTName" parameterType="string" resultMap="coTypeInfoMap">
+        select * from  tpm_cotypeinfo where   CoTName=#{coTName}
+    </select>
+
+
+</mapper>

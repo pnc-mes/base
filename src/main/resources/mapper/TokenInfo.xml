@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.TokenDAO">
+    <resultMap id="tokenInfoMap" type="pnc.mesadmin.entity.TokenInfo">
+        <id column="ruid" property="ruid"/>
+        <result column="guid" property="guid"></result>
+        <result column="userGd" property="userGd"/>
+        <result column="token" property="token"/>
+        <result column="sValidTime" property="sValidTime"/>
+        <result column="eValidTime" property="eValidTime"/>
+        <result column="creator" property="creator"/>
+        <result column="createTime" property="createTime"/>
+        <result column="lastModifyMan" property="lastModifyMan"/>
+        <result column="lastModifyTime" property="lastModifyTime"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <insert id="InsertTokenInfo">
+        INSERT INTO tpm_tokeninfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            guid,userGd,token,sValidTime,eValidTime,creator,createTime,
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{userGd},#{token},#{sValidTime},#{eValidTime},#{creator},#{createTime},
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+
+    <insert id="UpdateTokenInfo">
+        UPDATE tpm_tokeninfo
+        <trim prefix="set" suffixOverrides=",">
+            guid = #{guid},userGd = #{userGd},token = #{token},
+            sValidTime = #{sValidTime},eValidTime = #{eValidTime},
+            creator = #{creator},createTime = #{createTime},
+            <if test="lastModifyMan != null">
+                lastModifyMan =  #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </insert>
+
+    <!--根据token 查询用户令牌信息 张亮亮-->
+    <select id="SelectTokenInfoBytoken" resultMap="tokenInfoMap" parameterType="string">
+      SELECT * FROM `tpm_tokeninfo` WHERE token=#{token}
+    </select>
+
+    <!--根据UserGuid 查询用户令牌信息 王怀龙-->
+    <select id="SelectTokenInfoByUserGuid" resultMap="tokenInfoMap" parameterType="string">
+      SELECT * FROM `tpm_tokeninfo` WHERE userGd=#{argUserGuid}
+    </select>
+</mapper>

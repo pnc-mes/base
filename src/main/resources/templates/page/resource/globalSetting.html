@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>全局配置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        #globalSetting {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-fluid" id="globalSetting">
+    <div class="layui-btn-container">
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="save"> 保存</button>
+    </div>
+    <form class="layui-form" action="" lay-filter="component-form-group" >
+
+        <div class="layui-card">
+            <div class="layui-card-body" >
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">参数配置</li>
+                        <li>代码生成规则</li>
+                        <li>数据同步控制</li>
+                        <li>通知服务</li>
+                        <li>邮件服务器</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+
+                            <table class="layui-table">
+                                <thead>
+                                <th>模式项</th>
+                                <th></th>
+                                </thead>
+                                <tbody id="tbody1">
+                                <tr>
+                                    <td id="M1">原材料入库依据</td>
+                                    <td id="M1Val">
+                                        <input type="radio" name="item1"  value="M1_00" title="以采购单为标准">
+                                        <input type="radio" name="item1" value="M1_01" title="以来料收货通知单为准">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="M2">工序扣料方式</td>
+                                    <td  id="M2Val">
+                                        <input type="radio" name="item2" value="M2_00" title="以工单扣减">
+                                        <input type="radio" name="item2" value="M2_01" title="以批次扣除">
+                                        <input type="radio" name="item2" value="M2_02" title="关闭扣料">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="M3">上机装料模式</td>
+                                    <td id="M3Val">
+                                        <input type="radio" name="item3" value="M3_00" title="足量上机">
+                                        <input type="radio" name="item3" value="M3_00"  title="缺料上机">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="M4">产品创批</td>
+                                    <td id="M4Val">
+                                        <input type="radio" name="item4" value="M4_00" title="工单下达创批">
+                                        <input type="radio" name="item4"  value="M4_01" title="手动创批">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="M5">在制品结束点</td>
+                                    <td id="M5Val">
+                                        <input type="radio" name="item5" id="M5_00" title="工艺流程结束">
+                                        <input type="radio" name="item5" id="M5_01" title="入库完成">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td id="M6">工艺流程验证</td>
+                                    <td id="M6Val">
+                                        <input type="radio" name="item6" value="M6_00" title="打开">
+                                        <input type="radio" name="item6" value="M6_01" title="关闭">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="M7">IQC验证</td>
+                                    <td id="M7Val">
+                                        <input type="radio" name="item7" value="M7_00" title="打开">
+                                        <input type="radio" name="item7" value="M7_01" title="关闭">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="M8">第三方集成</td>
+                                    <td id="M8Val">
+                                        <input type="radio" name="item8" value="M8_00" title="打开">
+                                        <input type="radio" name="item8" value="M8_01" title="关闭">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="M9">IQC检验顺序</td>
+                                    <td id="M9Val">
+                                        <input type="radio" name="item9" value="M9_00" title="入库前 ">
+                                        <input type="radio" name="item9" value="M9_01" title="入库后">
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+                            <span>消息</span><br/>
+                            <input type="checkbox" name="like1[read]" id="C1" lay-skin="primary" title="物料创建批次成功通知执行人员">
+
+                        </div>
+
+                        <div class="layui-tab-item" >
+                            <span>代码自动生成规则：代码前缀+时间+序号</span>
+                            <table class="layui-table">
+                                <thead>
+                                <th>代码类型</th>
+                                <th>代码前缀</th>
+                                <th>时间格式</th>
+                                <th>序号位数</th>
+                                <th>代码后缀</th>
+                                <th>启用</th>
+                                </thead>
+                                <tbody id="tbody2">
+                                <tr>
+                                    <td>物料代码</td>
+                                    <td><input type="text" id="wldm1" class="layui-input"/></td>
+                                    <td><input type="text" id="wldm2" class="layui-input"/></td>
+                                    <td><input type="text" id="wldm3" class="layui-input"/></td>
+                                    <td><input type="text" id="wldm4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="wldm5" lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>BOM代码</td>
+                                    <td><input type="text" id="bom1" class="layui-input"/></td>
+                                    <td><input type="text" id="bom2" class="layui-input"/></td>
+                                    <td><input type="text" id="bom3" class="layui-input"/></td>
+                                    <td><input type="text" id="bom4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="bom5" lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>供应商代码</td>
+                                    <td><input type="text" id="gys1" class="layui-input"/></td>
+                                    <td><input type="text" id="gys2" class="layui-input"/></td>
+                                    <td><input type="text" id="gys3" class="layui-input"/></td>
+                                    <td><input type="text" id="gys4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="gys5"lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>工单号</td>
+                                    <td><input type="text" id="gd1" class="layui-input"/></td>
+                                    <td><input type="text" id="gd2" class="layui-input"/></td>
+                                    <td><input type="text" id="gd3" class="layui-input"/></td>
+                                    <td><input type="text" id="gd4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="gd5" lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>采购单号</td>
+                                    <td><input type="text" id="cg1" class="layui-input"/></td>
+                                    <td><input type="text" id="cg2" class="layui-input"/></td>
+                                    <td><input type="text" id="cg3" class="layui-input"/></td>
+                                    <td><input type="text" id="cg4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="cg5" lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>来料收获通知单</td>
+                                    <td><input type="text" id="llsh1" class="layui-input"/></td>
+                                    <td><input type="text" id="llsh2" class="layui-input"/></td>
+                                    <td><input type="text" id="llsh3" class="layui-input"/></td>
+                                    <td><input type="text" id="llsh4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="llsh5" lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>领料单号</td>
+                                    <td><input type="text" id="lldh1" class="layui-input"/></td>
+                                    <td><input type="text" id="lldh2" class="layui-input"/></td>
+                                    <td><input type="text" id="lldh3" class="layui-input"/></td>
+                                    <td><input type="text" id="lldh4" class="layui-input"/></td>
+                                    <td><input type="checkbox"id="lldh5" lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>退料单号</td>
+                                    <td><input type="text" id="tl1"  class="layui-input"/></td>
+                                    <td><input type="text" id="tl2" class="layui-input"/></td>
+                                    <td><input type="text" id="tl3" class="layui-input"/></td>
+                                    <td><input type="text" id="tl4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="tl5" lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>成品入库单号</td>
+                                    <td><input type="text" id="cp1" class="layui-input"/></td>
+                                    <td><input type="text" id="cp2" class="layui-input"/></td>
+                                    <td><input type="text" id="cp3" class="layui-input"/></td>
+                                    <td><input type="text" id="cp4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="cp5"  lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>盘点单号</td>
+                                    <td><input type="text" id="pd1" class="layui-input"/></td>
+                                    <td><input type="text" id="pd2" class="layui-input"/></td>
+                                    <td><input type="text" id="pd3" class="layui-input"/></td>
+                                    <td><input type="text" id="pd4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="pd5" lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>企业代码</td>
+                                    <td><input type="text" id="qy1" class="layui-input"/></td>
+                                    <td><input type="text" id="qy2" class="layui-input"/></td>
+                                    <td><input type="text" id="qy3" class="layui-input"/></td>
+                                    <td><input type="text" id="qy4" class="layui-input"/></td>
+                                    <td><input type="checkbox" id="qy5" lay-skin="primary"/></td>
+                                </tr>
+                                <tr>
+                                    <td>仓库代码</td>
+                                    <td><input type="text" class="layui-input" id="ck1"/></td>
+                                    <td><input type="text" class="layui-input" id="ck2"/></td>
+                                    <td><input type="text" class="layui-input" id="ck3"/></td>
+                                    <td><input type="text" class="layui-input" id="ck4"/></td>
+                                    <td><input type="checkbox" lay-skin="primary" id="ck5"/></td>
+                                </tr>
+                                <tr>
+                                    <td>库位代码</td>
+                                    <td><input type="text" class="layui-input" id="kw1"/></td>
+                                    <td><input type="text" class="layui-input" id="kw2"/></td>
+                                    <td><input type="text" class="layui-input" id="kw3"/></td>
+                                    <td><input type="text" class="layui-input" id="kw4"/></td>
+                                    <td><input type="checkbox" lay-skin="primary" id="kw5"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td>载具家族代码</td>
+                                    <td><input type="text" class="layui-input" id="zjjz1"/></td>
+                                    <td><input type="text" class="layui-input" id="zjjz2"/></td>
+                                    <td><input type="text" class="layui-input" id="zjjz3"/></td>
+                                    <td><input type="text" class="layui-input" id="zjjz4"/></td>
+                                    <td><input type="checkbox" lay-skin="primary" id="zjjz5"/></td>
+                                </tr>
+                                <tr>
+                                    <td>订单代码</td>
+                                    <td><input type="text" class="layui-input" id="dd1"/></td>
+                                    <td><input type="text" class="layui-input" id="dd2"/></td>
+                                    <td><input type="text" class="layui-input" id="dd3"/></td>
+                                    <td><input type="text" class="layui-input" id="dd4"/></td>
+                                    <td><input type="checkbox" lay-skin="primary" id="dd5"/></td>
+                                </tr>
+                                <tr>
+                                    <td>成品出库代码</td>
+                                    <td><input type="text" class="layui-input" id="cpck1"/></td>
+                                    <td><input type="text" class="layui-input" id="cpck2"/></td>
+                                    <td><input type="text" class="layui-input" id="cpck3"/></td>
+                                    <td><input type="text" class="layui-input" id="cpck4"/></td>
+                                    <td><input type="checkbox" lay-skin="primary" id="cpck5"/></td>
+                                </tr>
+                                <tr>
+                                    <td>质检单号</td>
+                                    <td><input type="text" class="layui-input" id="zj1"/></td>
+                                    <td><input type="text" class="layui-input" id="zj2"/></td>
+                                    <td><input type="text" class="layui-input" id="zj3"/></td>
+                                    <td><input type="text" class="layui-input" id="zj4"/></td>
+                                    <td><input type="checkbox" lay-skin="primary" id="zj5"/></td>
+                                </tr>
+                                <tr>
+                                    <td>OQC单号</td>
+                                    <td><input type="text" class="layui-input" id="oqc1"/></td>
+                                    <td><input type="text" class="layui-input" id="oqc2"/></td>
+                                    <td><input type="text" class="layui-input" id="oqc3"/></td>
+                                    <td><input type="text" class="layui-input" id="oqc4"/></td>
+                                    <td><input type="checkbox" lay-skin="primary" id="oqc5"/></td>
+                                </tr>
+                                <tr>
+                                    <td>备货单号</td>
+                                    <td><input type="text" class="layui-input" id="bh1"/></td>
+                                    <td><input type="text" class="layui-input" id="bh2"/></td>
+                                    <td><input type="text" class="layui-input" id="bh3"/></td>
+                                    <td><input type="text" class="layui-input" id="bh4"/></td>
+                                    <td><input type="checkbox" lay-skin="primary" id="bh5"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="layui-tab-item">
+
+                            <table class="layui-table">
+                                <thead>
+                                <th>控制项</th>
+                                <th>启用</th>
+                                </thead>
+                                <tbody id="tbody3">
+                                <tr>
+                                    <td id="RawM_Storage">原材料入库数据同步</td>
+                                    <td id="RawM_StorageVal">
+                                        <input type="checkbox" name="item31" lay-skin="primary" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="PickOut_Storage">领料出库数据同步</td>
+                                    <td id="PickOut_StorageVal">
+                                        <input type="checkbox" name="item32" lay-skin="primary" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="RetMa_Storage">退料数据同步</td>
+                                    <td id="RetMa_StorageVal">
+                                        <input type="checkbox" name="item33" lay-skin="primary" >
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="layui-tab-item">
+                            <table class="layui-table">
+                                <thead>
+                                <th>通知服务</th>
+                                <th>启用</th>
+                                </thead>
+                                <tbody id="tbody4">
+                                <tr>
+                                    <td>保养通知</td>
+                                    <td>
+                                        <input type="checkbox" id="SERVICE_PM" name="item41" lay-skin="primary" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>点检通知</td>
+                                    <td>
+                                        <input type="checkbox" name="item42" id="SERVICE_DJ" lay-skin="primary" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>在线物料过期通知</td>
+                                    <td>
+                                        <input type="checkbox" name="item43" id="SERVICE_WLGQ" lay-skin="primary" >
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>最小时间管控通知</td>
+                                    <td>
+                                        <input type="checkbox" name="item44" id="SERVICE_ZXSJ" lay-skin="primary" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>最大时间管控通知</td>
+                                    <td>
+                                        <input type="checkbox" name="item45" id="SERVICE_ZDSJ" lay-skin="primary" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>数据采集异常通知</td>
+                                    <td>
+                                        <input type="checkbox" name="item46" id="SERVICE_CJYC" lay-skin="primary" >
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">SMTP服务器地址</label>
+                                    <div class="layui-input-inline">
+                                        <input type="tel" id="SMTPURL" name="input51" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">端口</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="port" name="input52" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">用户名</label>
+                                        <div class="layui-input-inline">
+                                            <input type="tel" id="UserName" name="input53" lay-verify="required" autocomplete="off" class="layui-input">
+                                        </div>
+                                        <input type="hidden" id="_hidden"/>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">密码</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" id="Password" name="input54" lay-verify="required" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item layui-form-text">
+                                        <div class="layui-input-block">
+                                            <input type="checkbox" id="UseSSL" name="input55" lay-skin="primary" title="启用SSL">
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'element'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+        //重新渲染表单函数
+        function renderForm() {
+            layui.use('form', function() {
+                var form = layui.form;
+                form.render();
+            });
+        }
+        //页面首次加载
+        load();
+        //初始化表格数据
+        function load() {
+           //加载邮件服务器
+            var treeID = 6;
+            var objBusData = JSON.stringify({"SMTPRd": treeID});
+            var objData = {
+                "ExecType": "00",
+                "BusData": objBusData,
+            };
+            requests({url: "/SMTP/GetSMTPInfo", contentType: "application/x-www-form-urlencoded", data: objData}, function (res) {
+                $("#UserName").val( res.Data.UserName);
+
+
+
+                $("#_hidden").val(res.Data.SMTPRd);
+                $("#Password").val( res.Data.Password);
+                $("#SMTPURL").val( res.Data.SMTPURL);
+                $("#port").val( res.Data.Port);
+                if(res.Data.UseSSL){
+                    $("#UseSSL").prop("checked", true);
+                }else {
+                    $("#UseSSL").prop("checked",false);
+                }
+                renderForm();
+            });
+
+
+            //获取其他所有数据
+            requests({url: "/GConfig/GetGCInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"}}, function (Body){
+                var modeData = Body.Data.ModeC;
+                var msgData = Body.Data.MsgC;
+                var codeRuleData=Body.Data.CodeRule;
+                console.log(codeRuleData)
+                var synchCdata=Body.Data.SynchC;
+
+                for(var i in synchCdata){
+                    if(synchCdata[i].SynchName=="RawM_Storage"){
+                        if(synchCdata[i].Status=="00"){
+                            $("input[name='item31']").prop("checked", true);
+                        }else{
+                            $("input[name='item31']").prop("checked", false);
+                        }
+                    }
+                    if(synchCdata[i].SynchName=="PickOut_Storage"){
+                        if(synchCdata[i].Status=="00"){
+                            $("input[name='item32']").prop("checked", true);
+                        }else{
+                            $("input[name='item32']").prop("checked", false);
+                        }
+                    }
+                    if(synchCdata[i].SynchName=="RetMa_Storage"){
+                        if(synchCdata[i].Status=="00"){
+                            $("input[name='item33']").prop("checked", true);
+                        }else{
+                            $("input[name='item33']").prop("checked", false);
+                        }
+                    }
+                }
+
+                for (var i in  msgData) {
+                    if (msgData[i].MsgValue == 'C1_00') {
+                        $('#C1').attr('checked',true);
+                    }
+                    else if (msgData[i].MsgValue == 'C1_01') {
+                        $('#C1').attr('checked',false);
+                    }
+                }
+
+                for(var i in modeData){
+                    if(modeData[i].ModeName == "M1"){
+                        if(modeData[i].ModeValue == 'M1_00' ){
+                            $('#M1Val').find("input:eq(0)").attr('checked',true);
+                        }
+                        else if(modeData[i].ModeValue == 'M1_01'){
+                            $('#M1Val').find("input:eq(1)").attr('checked',true);
+                        }
+                    }
+
+                    if(modeData[i].ModeName == "M2"){
+                        if(modeData[i].ModeValue == 'M2_00' ){
+                            $('#M2Val').find("input:eq(0)").attr('checked',true);
+                        }
+                        else if(modeData[i].ModeValue == 'M2_01'){
+                            $('#M2Val').find("input:eq(1)").attr('checked',true);
+                        }else if(modeData[i].ModeValue == 'M2_02'){
+                            $('#M2Val').find("input:eq(2)").attr('checked',true);
+                        }
+                    }
+
+                    if(modeData[i].ModeName == "M3"){
+                        if(modeData[i].ModeValue == 'M3_00' ){
+                            $('#M3Val').find("input:eq(0)").attr('checked',true);
+                        }
+                        else if(modeData[i].ModeValue == 'M3_01'){
+                            $('#M3Val').find("input:eq(1)").attr('checked',true);
+                        }
+                    }
+
+                    if(modeData[i].ModeName == "M4"){
+                        if(modeData[i].ModeValue == 'M4_00' ){
+                            $('#M4Val').find("input:eq(0)").attr('checked',true);
+                        }
+                        else if(modeData[i].ModeValue == 'M4_01'){
+                            $('#M4Val').find("input:eq(1)").attr('checked',true);
+                        }
+                    }
+                    if(modeData[i].ModeName == "M5"){
+                        if(modeData[i].ModeValue == 'M5_00' ){
+                            $('#M5Val').find("input:eq(0)").attr('checked',true);
+                        }
+                        else if(modeData[i].ModeValue == 'M5_01'){
+                            $('#M5Val').find("input:eq(1)").attr('checked',true);
+                        }
+                    }
+                    if(modeData[i].ModeName == "M6"){
+                        if(modeData[i].ModeValue == 'M6_00' ){
+                            $('#M6Val').find("input:eq(0)").attr('checked',true);
+                        }
+                        else if(modeData[i].ModeValue == 'M6_01'){
+                            $('#M6Val').find("input:eq(1)").attr('checked',true);
+                        }
+                    }
+                    if(modeData[i].ModeName == "M7"){
+                        if(modeData[i].ModeValue == 'M7_00' ){
+                            $('#M7Val').find("input:eq(0)").attr('checked',true);
+                        }
+                        else if(modeData[i].ModeValue == 'M7_01'){
+                            $('#M7Val').find("input:eq(1)").attr('checked',true);
+                        }
+                    }
+                    if(modeData[i].ModeName == "M8"){
+                        if(modeData[i].ModeValue == 'M8_00' ){
+                            $('#M8Val').find("input:eq(0)").attr('checked',true);
+                        }
+                        else if(modeData[i].ModeValue == 'M8_01'){
+                            $('#M8Val').find("input:eq(1)").attr('checked',true);
+                        }
+                    }
+                    if(modeData[i].ModeName == "M9"){
+                        if(modeData[i].ModeValue == 'M9_00' ){
+                            $('#M9Val').find("input:eq(0)").attr('checked',true);
+                        }
+                        else if(modeData[i].ModeValue == 'M9_01'){
+                            $('#M9Val').find("input:eq(1)").attr('checked',true);
+                        }
+                    }
+
+
+
+
+
+                    if(modeData[i].ModeName == "SERVICE_PM"){
+                        if(modeData[i].ModeValue == 'SERVICE_PM_00' ){
+                            $('#SERVICE_PM').prop("checked",true);
+                        }
+                        else if(modeData[i].ModeValue == 'SERVICE_PM_01'){
+                            $('#SERVICE_PM').prop("checked",false);
+                        }
+                    }
+                    if(modeData[i].ModeName == "SERVICE_DJ"){
+                        if(modeData[i].ModeValue == 'SERVICE_DJ_00' ){
+                            $('#SERVICE_DJ').prop("checked",true);
+                        }
+                        else if(modeData[i].ModeValue == 'SERVICE_DJ_01'){
+                            $('#SERVICE_DJ').prop("checked",false);
+                        }
+                    }
+
+                    if(modeData[i].ModeName == "SERVICE_WLGQ"){
+                        if(modeData[i].ModeValue == 'SERVICE_WLGQ_00' ){
+                            $('#SERVICE_WLGQ').prop("checked",true);
+                        }
+                        else if(modeData[i].ModeValue == 'SERVICE_WLGQ_01'){
+                            $('#SERVICE_WLGQ').prop("checked",false);
+                        }
+                    }
+
+                    if(modeData[i].ModeName == "SERVICE_ZXSJ"){
+                        if(modeData[i].ModeValue == 'SERVICE_ZXSJ_00' ){
+                            $('#SERVICE_ZXSJ').prop("checked",true);
+                        }
+                        else if(modeData[i].ModeValue == 'SERVICE_ZXSJ_01'){
+                            $('#SERVICE_ZXSJ').prop("checked",false);
+                        }
+                    }
+
+                    if(modeData[i].ModeName == "SERVICE_ZDSJ"){
+                        if(modeData[i].ModeValue == 'SERVICE_ZDSJ_00' ){
+                            $('#SERVICE_ZDSJ').prop("checked",true);
+                        }
+                        else if(modeData[i].ModeValue == 'SERVICE_ZDSJ_01'){
+                            $('#SERVICE_ZDSJ').prop("checked",false);
+                        }
+                    }
+
+                    if(modeData[i].ModeName == "SERVICE_CJYC"){
+                        if(modeData[i].ModeValue == 'SERVICE_CJYC_00' ){
+                            $('#SERVICE_CJYC').prop("checked",true);
+                        }
+                        else if(modeData[i].ModeValue == 'SERVICE_CJYC_01'){
+                            $('#SERVICE_CJYC').prop("checked",false);
+                        }
+                    }
+
+                }
+
+                if(codeRuleData.length>0){
+                    for(var i in codeRuleData){
+                        if(codeRuleData[i].CodeType=="物料代码"){
+                            $("#wldm1").val(codeRuleData[i].Prefix);
+                            $("#wldm2").val(codeRuleData[i].DtFormat);
+                            $("#wldm3").val(codeRuleData[i].SNLength);
+                            $("#wldm4").val(codeRuleData[i].Suffix);
+                            $("#wldm5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="BOM代码"){
+                            $("#bom1").val(codeRuleData[i].Prefix);
+                            $("#bom2").val(codeRuleData[i].DtFormat);
+                            $("#bom3").val(codeRuleData[i].SNLength);
+                            $("#bom4").val(codeRuleData[i].Suffix);
+                            $("#bom5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="供应商代码"){
+                            $("#gys1").val(codeRuleData[i].Prefix);
+                            $("#gys2").val(codeRuleData[i].DtFormat);
+                            $("#gys3").val(codeRuleData[i].SNLength);
+                            $("#gys4").val(codeRuleData[i].Suffix);
+                            $("#gys5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="工单号"){
+                            $("#gd1").val(codeRuleData[i].Prefix);
+                            $("#gd2").val(codeRuleData[i].DtFormat);
+                            $("#gd3").val(codeRuleData[i].SNLength);
+                            $("#gd4").val(codeRuleData[i].Suffix);
+                            $("#gd5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="采购单号"){
+                            $("#cg1").val(codeRuleData[i].Prefix);
+                            $("#cg2").val(codeRuleData[i].DtFormat);
+                            $("#cg3").val(codeRuleData[i].SNLength);
+                            $("#cg4").val(codeRuleData[i].Suffix);
+                            $("#cg5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="来料通知单号"){
+                            $("#llsh1").val(codeRuleData[i].Prefix);
+                            $("#llsh2").val(codeRuleData[i].DtFormat);
+                            $("#llsh3").val(codeRuleData[i].SNLength);
+                            $("#llsh4").val(codeRuleData[i].Suffix);
+                            $("#llsh5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="领料单号"){
+                            $("#lldh1").val(codeRuleData[i].Prefix);
+                            $("#lldh2").val(codeRuleData[i].DtFormat);
+                            $("#lldh3").val(codeRuleData[i].SNLength);
+                            $("#lldh4").val(codeRuleData[i].Suffix);
+                            $("#lldh5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="退料单号"){
+                            $("#tl1").val(codeRuleData[i].Prefix);
+                            $("#tl2").val(codeRuleData[i].DtFormat);
+                            $("#tl3").val(codeRuleData[i].SNLength);
+                            $("#tl4").val(codeRuleData[i].Suffix);
+                            $("#tl5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="成品入库单号"){
+                            $("#cp1").val(codeRuleData[i].Prefix);
+                            $("#cp2").val(codeRuleData[i].DtFormat);
+                            $("#cp3").val(codeRuleData[i].SNLength);
+                            $("#cp4").val(codeRuleData[i].Suffix);
+                            $("#cp5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="盘点单号"){
+                            $("#pd1").val(codeRuleData[i].Prefix);
+                            $("#pd2").val(codeRuleData[i].DtFormat);
+                            $("#pd3").val(codeRuleData[i].SNLength);
+                            $("#pd4").val(codeRuleData[i].Suffix);
+                            $("#pd5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="企业代码"){
+                            $("#qy1").val(codeRuleData[i].Prefix);
+                            $("#qy2").val(codeRuleData[i].DtFormat);
+                            $("#qy3").val(codeRuleData[i].SNLength);
+                            $("#qy4").val(codeRuleData[i].Suffix);
+                            $("#qy5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="仓库代码"){
+                            $("#ck1").val(codeRuleData[i].Prefix);
+                            $("#ck2").val(codeRuleData[i].DtFormat);
+                            $("#ck3").val(codeRuleData[i].SNLength);
+                            $("#ck4").val(codeRuleData[i].Suffix);
+                            $("#ck5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="库位代码"){
+                            $("#kw1").val(codeRuleData[i].Prefix);
+                            $("#kw2").val(codeRuleData[i].DtFormat);
+                            $("#kw3").val(codeRuleData[i].SNLength);
+                            $("#kw4").val(codeRuleData[i].Suffix);
+                            $("#kw5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="载具家族代码"){
+                            $("#zjjz1").val(codeRuleData[i].Prefix);
+                            $("#zjjz2").val(codeRuleData[i].DtFormat);
+                            $("#zjjz3").val(codeRuleData[i].SNLength);
+                            $("#zjjz4").val(codeRuleData[i].Suffix);
+                            $("#zjjz5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="订单代码"){
+                            $("#dd1").val(codeRuleData[i].Prefix);
+                            $("#dd2").val(codeRuleData[i].DtFormat);
+                            $("#dd3").val(codeRuleData[i].SNLength);
+                            $("#dd4").val(codeRuleData[i].Suffix);
+                            $("#dd5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="成品出库单号"){
+                            $("#cpck1").val(codeRuleData[i].Prefix);
+                            $("#cpck2").val(codeRuleData[i].DtFormat);
+                            $("#cpck3").val(codeRuleData[i].SNLength);
+                            $("#cpck4").val(codeRuleData[i].Suffix);
+                            $("#cpck5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="质检单号"){
+                            $("#zj1").val(codeRuleData[i].Prefix);
+                            $("#zj2").val(codeRuleData[i].DtFormat);
+                            $("#zj3").val(codeRuleData[i].SNLength);
+                            $("#zj4").val(codeRuleData[i].Suffix);
+                            $("#zj5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="OQC单号"){
+                            $("#oqc1").val(codeRuleData[i].Prefix);
+                            $("#oqc2").val(codeRuleData[i].DtFormat);
+                            $("#oqc3").val(codeRuleData[i].SNLength);
+                            $("#oqc4").val(codeRuleData[i].Suffix);
+                            $("#oqc5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }else if(codeRuleData[i].CodeType=="备货单号"){
+                            $("#bh1").val(codeRuleData[i].Prefix);
+                            $("#bh2").val(codeRuleData[i].DtFormat);
+                            $("#bh3").val(codeRuleData[i].SNLength);
+                            $("#bh4").val(codeRuleData[i].Suffix);
+                            $("#bh5").prop("checked",codeRuleData[i].Status=="00"?true:false);
+                        }
+                    }
+                }
+                renderForm();
+            });
+        }
+
+
+        //保存
+        $('#save').on('click',function() {
+            var ModeCs = [];
+            var MsgCs = [];
+            var ModeC = {
+                "ModeName": "M1",
+                "ModeValue": ""
+            };
+
+            var ModeC1 = {
+                "ModeName": "M2",
+                "ModeValue": ""
+            };
+
+            var ModeC2 = {
+                "ModeName": "M3",
+                "ModeValue": ""
+            };
+
+            var ModeC3 = {
+                "ModeName": "M4",
+                "ModeValue": ""
+            };
+            var ModeC4 = {
+                "ModeName": "M5",
+                "ModeValue": ""
+            };
+            var ModeC5 = {
+                "ModeName": "M6",
+                "ModeValue": ""
+            };
+            if ($('#M1Val').find("input:eq(0)").is(':checked') == true) {
+                ModeC.ModeValue = 'M1_00';
+
+            }
+            else if ($('#M1Val').find("input:eq(1)").is(':checked') == true) {
+                ModeC.ModeValue = 'M1_01';
+            }
+
+            if ($('#M2Val').find("input:eq(0)").is(':checked') == true) {
+                ModeC1.ModeValue = 'M2_00';
+
+            }
+            else if ($('#M2Val').find("input:eq(1)").is(':checked') == true) {
+                ModeC1.ModeValue = 'M2_01';
+            } else if ($('#M2Val').find("input:eq(2)").is(':checked') == true) {
+                ModeC1.ModeValue = 'M2_02';
+            }
+
+            if ($('#M3Val').find("input:eq(0)").is(':checked') == true) {
+                ModeC2.ModeValue = 'M3_00';
+
+            }
+            else if ($('#M3Val').find("input:eq(1)").is(':checked') == true) {
+                ModeC2.ModeValue = 'M3_01';
+            }
+            if ($('#M4Val').find("input:eq(0)").is(':checked') == true) {
+                ModeC3.ModeValue = 'M4_00';
+
+            }
+            else if ($('#M4Val').find("input:eq(1)").is(':checked') == true) {
+                ModeC3.ModeValue = 'M4_01';
+            }
+            if ($('#M5Val').find("input:eq(0)").is(':checked') == true) {
+                ModeC4.ModeValue = 'M5_00';
+
+            }
+            else if ($('#M5Val').find("input:eq(1)").is(':checked') == true) {
+                ModeC4.ModeValue = 'M5_01';
+            }
+            if ($('#M6Val').find("input:eq(0)").is(':checked') == true) {
+                ModeC5.ModeValue = 'M6_00';
+
+            }
+            else if ($('#M6Val').find("input:eq(1)").is(':checked') == true) {
+                ModeC5.ModeValue = 'M6_01';
+            }
+            ModeCs.push(ModeC);
+            ModeCs.push(ModeC1);
+            ModeCs.push(ModeC2);
+            ModeCs.push(ModeC3);
+            ModeCs.push(ModeC4);
+            ModeCs.push(ModeC5);
+
+            if ($("#SERVICE_PM").is(":checked")) {
+                ModeCs.push({
+                    "ModeName": "SERVICE_PM",
+                    "ModeValue": "SERVICE_PM_00"
+                })
+            } else {
+                ModeCs.push({
+                    "ModeName": "SERVICE_PM",
+                    "ModeValue": "SERVICE_PM_01"
+                })
+            }
+            if ($("#SERVICE_DJ").is(":checked")) {
+                ModeCs.push({
+                    "ModeName": "SERVICE_DJ",
+                    "ModeValue": "SERVICE_DJ_00"
+                })
+            } else {
+                ModeCs.push({
+                    "ModeName": "SERVICE_DJ",
+                    "ModeValue": "SERVICE_DJ_01"
+                })
+            }
+
+            if ($("#SERVICE_WLGQ").is(":checked")) {
+                ModeCs.push({
+                    "ModeName": "SERVICE_WLGQ",
+                    "ModeValue": "SERVICE_WLGQ_00"
+                })
+            } else {
+                ModeCs.push({
+                    "ModeName": "SERVICE_WLGQ",
+                    "ModeValue": "SERVICE_WLGQ_01"
+                })
+            }
+
+            if ($("#SERVICE_ZXSJ").is(":checked")) {
+                ModeCs.push({
+                    "ModeName": "SERVICE_ZXSJ",
+                    "ModeValue": "SERVICE_ZXSJ_00"
+                })
+            } else {
+                ModeCs.push({
+                    "ModeName": "SERVICE_ZXSJ",
+                    "ModeValue": "SERVICE_ZXSJ_01"
+                })
+            }
+
+
+            if ($("#SERVICE_ZDSJ").is(":checked")) {
+                ModeCs.push({
+                    "ModeName": "SERVICE_ZDSJ",
+                    "ModeValue": "SERVICE_ZDSJ_00"
+                })
+            } else {
+                ModeCs.push({
+                    "ModeName": "SERVICE_ZDSJ",
+                    "ModeValue": "SERVICE_ZDSJ_01"
+                })
+            }
+
+
+            if ($("#SERVICE_CJYC").is(":checked")) {
+                ModeCs.push({
+                    "ModeName": "SERVICE_CJYC",
+                    "ModeValue": "SERVICE_CJYC_00"
+                })
+            } else {
+                ModeCs.push({
+                    "ModeName": "SERVICE_CJYC",
+                    "ModeValue": "SERVICE_CJYC_01"
+                })
+            }
+
+
+            var synchC = [];
+            var synch = {
+                "SynchName": "RawM_Storage",
+                "Status": ""
+            };
+            var synch1 = {
+                "SynchName": "PickOut_Storage",
+                "Status": ""
+            };
+            var synch2 = {
+                "SynchName": "RetMa_Storage",
+                "Status": ""
+            };
+            if ($('#RawM_StorageVal').find("input:eq(0)").is(':checked') == true) {
+                synch.Status = '00';
+            } else {
+                synch.Status = '01';
+            }
+            if ($('#PickOut_StorageVal').find("input:eq(0)").is(':checked') == true) {
+                synch1.Status = '00';
+            } else {
+                synch1.Status = '01';
+            }
+            if ($('#RetMa_StorageVal').find("input:eq(0)").is(':checked') == true) {
+                synch2.Status = '00';
+            } else {
+                synch2.Status = '01';
+            }
+            synchC.push(synch);
+            synchC.push(synch1);
+            synchC.push(synch2);
+
+            var MsgC = {
+                "MsgName": "C1",
+                "MsgValue": "C1_00"
+            };
+            if (!$('.Msg').prop("checked")) {
+                MsgC.MsgValue = "C1_01";
+            }
+            MsgCs.push(MsgC);
+
+           /* var json = getTableData("list3");
+            for (var i = 0; i < json.length; i++) {
+                delete json[i]["ItemRd"]
+            }*/
+            var json=[];
+            $("#tbody2 tr").each(function(){
+                var tdArr = $(this).children();
+                var jsons='';
+                //"ItemName":tdArr.eq(1).find("input[name='a']").val().trim(),
+                var jsons={
+                    "CodeType":tdArr.eq(0).text(),
+                    "Prefix":tdArr.eq(1).find("input").val().trim(),
+                    "DtFormat":tdArr.eq(2).find("input").val().trim(),
+                    "SNLength":tdArr.eq(3).find("input").val().trim(),
+                    "Suffix":tdArr.eq(4).find("input").val().trim(),
+                    "Status":tdArr.eq(5).find("input").prop('checked')==true?"00":"01",
+                }
+                json.push(jsons);
+            });
+
+
+            var port = $("#port").val();
+            var newData = {};
+            if (port == "" && port == null) {
+                toastr.warning("端口不能为空");
+                return false;
+            }
+            newData = {
+                "UserName": $("#UserName").val(),
+                "Password": $("#Password").val(),
+                "SMTPURL": $("#SMTPURL").val(),
+                "Port": $("#port").val(),
+                "Ruid": $("#_hidden").val()
+            };
+            var ischeck = $("#UseSSL").prop("checked");
+            if (ischeck) {
+                newData.UseSSL = 1;
+            } else {
+                newData.UseSSL = 0;
+            }
+            var data={
+                "ModeC": ModeCs,
+                "MsgC": MsgCs,
+                "CodeRule": json,
+                "SynchC": synchC,
+                "SMTPInfo": newData
+            }
+            requests({url: "/GConfig/SaveGCInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify(data)
+                }}, function (res) {
+                layer.msg("保存成功", {icon: 1});
+                table.reload('currentTableId');
+            });
+        });
+
+    });
+</script>
+</body>
+</html>

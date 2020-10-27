@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.LineDao">
+    <resultMap id="lineMapper" type="pnc.mesadmin.entity.Lineinfo">
+        <id property="ruid" column="Ruid"></id>
+        <result property="guid" column="Guid"></result>
+        <result property="lineCode" column="LineCode"></result>
+        <result property="lineName" column="LineName"></result>
+        <result property="faGd" column="FaGd"></result>
+        <result property="lineDes" column="LineDes"></result>
+        <result property="creator" column="Creator"></result>
+        <result property="createTime" column="CreateTime"></result>
+        <result property="lastModifyMan" column="LastModifyMan"></result>
+        <result property="lastModifyTime" column="LastModifyTime"></result>
+        <result property="remark" column="Remark"></result>
+    </resultMap>
+    <!--删除线别信息，根据线别ID-->
+    <delete id="DeleteLineInfoByruid">
+        DELETE FROM `tpm_lineinfo` WHERE Ruid=#{ruid}
+    </delete>
+    <!--更新线体信息-->
+    <update id="UpdateLineInfoByruid">
+        UPDATE `tpm_lineinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="lineCode != null">
+                LineCode = #{ lineCode },
+            </if>
+            <if test="lineName != null">
+                LineName = #{ lineName },
+            </if>
+            <if test="faGd != null">
+                FaGd = #{ faGd },
+            </if>
+            <if test="lineDes != null">
+                LineDes = #{ lineDes },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+    <!--根据名称查线体信息 ,此查询是在工作中心中查询  张亮亮-->
+    <select id="SelectLineInfoByLineNameName" resultMap="lineMapper" parameterType="string">
+        SELECT * FROM `tpm_lineinfo` WHERE LineName=#{lineName}
+    </select>
+    <!-- 获取线体列表信息-->
+    <select id="SelectAllLineInfo" resultMap="lineMapper">
+        SELECT * FROM `tpm_lineinfo`
+    </select>
+
+    <!--根据线体ruid查询线别信息 -->
+    <select id="SelectLineInfoBygruid" resultMap="lineMapper" parameterType="int">
+        SELECT * FROM `tpm_lineinfo` WHERE Ruid=#{ruid}
+    </select>
+    <!--增加线体信息-->
+    <insert id="InsertLineInfo">
+        INSERT INTO `tpm_lineinfo`(Guid,LineCode,LineName,FaGd,LineDes,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{lineCode},#{lineName},#{faGd},#{lineDes},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--根据guid查询线体信息 ,此查询是在工作中心中查询 -->
+    <select id="SelectLineInfoByguid" resultMap="lineMapper" parameterType="string">
+        SELECT * FROM `tpm_lineinfo` WHERE Guid=#{guid}
+    </select>
+
+    <select id="SelectLineInfoByLineCode" parameterType="string" resultMap="lineMapper">
+        SELECT * FROM `tpm_lineinfo` WHERE LineCode=#{lineCode}
+    </select>
+</mapper>

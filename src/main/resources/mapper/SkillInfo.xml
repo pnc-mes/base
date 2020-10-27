@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SkillDAO" >
+    <resultMap type="pnc.mesadmin.entity.SkillInfo" id="SkillInfoResult">
+        <id property="ruid" column="ruid" />
+       <result property="guid" column="guid"/>
+       <result property="SkillName" column="SkillName"/>
+       <!--<result property="startDate" column="startDate"/>
+       <result property="endDate" column="endDate"/>-->
+        <result property="VPDate" column="VPDate"/>
+       <result property="status" column="status"/>
+       <result property="creator" column="creator"/>
+       <result property="createTime" column="createTime"/>
+       <result property="lastModifyMan" column="lastModifyMan"/>
+       <result property="lastModifyTime" column="lastModifyTime"/>
+       <result property="remark" column="remark"/>
+    </resultMap>
+
+    <insert id="InsertSkillInfo" >
+        INSERT INTO tpm_skillinfo (guid,SkillName,VPDate,status,creator,createTime,remark)
+        VALUES (#{guid},#{SkillName},#{VPDate},#{status},#{creator},#{createTime},#{remark})
+    </insert>
+
+    <delete id="DeleteSkillInfoByRuid">
+        DELETE FROM tpm_skillinfo WHERE ruid = #{argRuid}
+    </delete>
+
+    <update id="UpdateSkillInfo">
+        UPDATE tpm_skillinfo SET SkillName=#{SkillName},VPDate=#{VPDate},status=#{status},lastModifyMan=#{lastModifyMan},lastModifyTime=#{lastModifyTime},remark=#{remark}
+        WHERE  ruid = #{ruid}
+    </update>
+    
+    <!-- 查询所有-->
+    <select id="SelectAllSkillInfo" resultMap="SkillInfoResult">
+        SELECT * FROM tpm_skillinfo
+    </select>
+    <!-- 根据guid查询技能信息 -->
+    <select id="SelectSkillInfoByGuid" resultMap="SkillInfoResult">
+        SELECT * FROM tpm_skillinfo WHERE guid = #{guid}
+    </select>
+    <!-- 根据ruid查询技能信息 -->
+    <select id="SelectSkillInfoByRuid" resultMap="SkillInfoResult">
+        SELECT * FROM tpm_skillinfo WHERE ruid = #{argRuid}
+    </select>
+
+    <select id="SelectSkillInfoByName" resultMap="SkillInfoResult">
+        SELECT * FROM tpm_skillinfo WHERE skillname = #{skillName}
+    </select>
+
+    <select id="SelectCountByName" resultType="_int">
+      SELECT count(ruid) From tpm_skillinfo WHERE skillname = #{SkillName} and ruid != #{ruid}
+    </select>
+</mapper>

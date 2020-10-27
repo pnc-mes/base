@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.StationAlarmDAO">
+
+    <resultMap type="pnc.mesadmin.entity.StationAlarmInfo" id="StationAlarmInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="selectStationAlarm" resultMap="StationAlarmInfoMap">
+        SELECT * FROM tpm_stationalarminfo WHERE StationGd=#{StationGd}
+    </select>
+
+    <!--插入警报提示信息-->
+    <insert id="insertStationAlarmInfo">
+        INSERT INTO tpm_stationalarminfo (Guid,StationGd,ExcepType,AlarmType,AlarmRev,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{StationGd},#{ExcepType},#{AlarmType},#{AlarmRev},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+    <!--根据工位标识删除信息-->
+    <delete id="deleteStationAlarmInfo">
+        DELETE FROM tpm_stationalarminfo WHERE StationGd=#{StationGd};
+    </delete>
+
+    <!--根据工位标识和类型查询信息-->
+    <select id="selectStationGDAndExcepType" resultMap="StationAlarmInfoMap">
+        SELECT * FROM tpm_stationalarminfo WHERE StationGd=#{StationGd} and ExcepType in
+        <foreach collection="ExcepType" item="id" index="list" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>
+

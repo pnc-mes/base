@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckTypeDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CheckTypeInfo" id="CheckTypeInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAll" resultMap="CheckTypeInfoMap">
+        SELECT * FROM tpm_checktypeinfo
+    </select>
+
+    <select id="SelectByRuid" resultMap="CheckTypeInfoMap">
+        SELECT * FROM tpm_checktypeinfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="CheckTypeInfoMap">
+        SELECT * FROM tpm_checktypeinfo where  Guid=#{guid}
+    </select>
+
+    <select id="SelectByCode" resultMap="CheckTypeInfoMap">
+        SELECT * FROM tpm_checktypeinfo where  CheckTypeCode=#{code}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_checktypeinfo(Guid,CheckTypeCode,CheckTypeName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{checkTypeCode},#{checkTypeName},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <update id="UpdateByGuid">
+        UPDATE tpm_checktypeinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="CheckTypeCode != null">
+                CheckTypeCode = #{CheckTypeCode},
+            </if>
+            <if test="CheckTypeName != null">
+                CheckTypeName = #{CheckTypeName},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+        </trim>
+        WHERE Guid =#{guid}
+    </update>
+
+    <delete id="DeleteByGuid">
+        DELETE  FROM tpm_checktypeinfo WHERE Guid =#{guid}
+    </delete>
+
+</mapper>
+

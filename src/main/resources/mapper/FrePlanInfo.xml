@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.FrePlanDAO">
+    <resultMap id="FrePlanInfo" type="pnc.mesadmin.entity.FrePlanInfo">
+        <id property="Ruid" column="Ruid"></id>
+        <result property="Guid" column="Guid"></result>
+        <result property="FrePlanName" column="FrePlanName"></result>
+        <result property="Status" column="Status"></result>
+        <result property="Description" column="Description"></result>
+        <result property="ReaCodeGd" column="ReaCodeGd"></result>
+        <result property="FileVerGd" column="FileVerGd"></result>
+        <result property="UseNum" column="UseNum"></result>
+        <result property="Reference" column="Reference"></result>
+        <result property="UnitType" column="UnitType"></result>
+        <result property="Creator" column="Creator"></result>
+        <result property="CreateTime" column="CreateTime"></result>
+        <result property="LastModifyMan" column="LastModifyMan"></result>
+        <result property="LastModifyTime" column="LastModifyTime"></result>
+        <result property="Remark" column="Remark"></result>
+
+    </resultMap>
+
+    <!--查询次数保养计划列表-->
+    <select id="selectAllFrePlan" resultMap="FrePlanInfo">
+        SELECT * FROM tpm_freplaninfo
+    </select>
+
+    <select id="selectFrePlanByGuid" resultMap="FrePlanInfo" parameterType="string">
+        SELECT * FROM tpm_freplaninfo where Guid=#{guid}
+    </select>
+
+    <!--根据id查询在线物料有效期-->
+    <select id="selectFrePlan" parameterType="int" resultMap="FrePlanInfo">
+        select * from tpm_freplaninfo where Ruid=#{Ruid}
+    </select>
+
+    <!--新增在线物料有效期-->
+    <insert id="insertFrePlan">
+        INSERT INTO tpm_freplaninfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,FrePlanName,Status,Description,ReaCodeGd,FileVerGd,UseNum,UnitType,Reference,
+            Creator,CreateTime,LastModifyMan,LastModifyTime,Remark
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{Guid},#{FrePlanName},#{Status},#{Description},#{ReaCodeGd},#{FileVerGd},#{UseNum},#{UnitType},#{Reference},
+            #{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark},
+        </trim>
+    </insert>
+
+    <!--根据在线物料有效期名字查询一条信息-->
+    <select id="selectAllFrePlanName" parameterType="string" resultMap="FrePlanInfo">
+        select * from tpm_freplaninfo where FrePlanName=#{FrePlanName}
+    </select>
+
+    <!--删除在线物料有效期-->
+    <delete id="deleteFrePlan" parameterType="int">
+        delete from tpm_freplaninfo where Ruid=#{Ruid}
+    </delete>
+
+    <!--更新在线物料有效期-->
+    <update id="updateFrePlan">
+        UPDATE `tpm_freplaninfo`
+        <trim prefix="set" suffixOverrides=",">
+            Guid = #{ Guid },
+            FrePlanName = #{ FrePlanName },
+            Status = #{ Status },
+            Description = #{ Description },
+            ReaCodeGd = #{ ReaCodeGd },
+            FileVerGd = #{ FileVerGd },
+            UseNum = #{ UseNum },
+            UnitType = #{ UnitType },
+            Reference = #{ Reference },
+            Creator = #{ Creator},
+            CreateTime = #{ CreateTime },
+            LastModifyMan = #{ LastModifyMan },
+            LastModifyTime = #{ LastModifyTime },
+            Remark = #{ Remark },
+        </trim>
+        WHERE Ruid = #{ Ruid }
+    </update>
+</mapper>

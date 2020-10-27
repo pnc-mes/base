@@ -1,0 +1,622 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：工序操作
+* 创建人：pjf
+* 创建时间：2020-09-16
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>工序操作</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+        .dPanel{
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+    </div>
+</script>
+
+<script type="text/html" id="currentTableBar">
+    <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+</script>
+
+<script id="sopC" type="text/html">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>工艺指导书</legend>
+    </fieldset>
+    <ul class="layui-timeline">
+        {{# layui.each(d, function(index, item){
+            if(index === 0){
+        }}
+        <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title">
+                    <a href="{{ item.FilePath }}">{{ item.FileName }}</a>
+                </div>
+            </div>
+        </li>
+        {{# }else{ }}
+        <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <div class="layui-timeline-title">
+                    <a href='{{ item.FilePath }}'>{{ item.FileName }}</a>
+                </div>
+            </div>
+        </li>
+        {{#  } }); }}
+        {{#  if(d.length === 0){ }}
+            无数据
+        {{#  } }}
+    </ul>
+</script>
+
+<!-- content -->
+<div class="layui-row">
+    <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
+        <div class="layuimini-container" style="margin: 0 5px 5px 0;">
+            <div class="layuimini-main">
+                <div class="layui-form-item">
+                    <button type="button" class="layui-btn layui-btn-primary" id="query">查询</button>
+
+                    <button type="button" class="layui-btn layui-btn-normal" id="_in">进站</button>
+
+                    <button type="button" class="layui-btn layui-btn-warm" id="_out">出站</button>
+
+                    <button type="button" class="layui-btn layui-btn-danger" id="_up">上机</button>
+
+                    <button type="button" class="layui-btn" id="_down">下机</button>
+                </div>
+            </div>
+        </div>
+        <div class="layuimini-container" style="margin-right: 5px;">
+            <div class="layuimini-main">
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">生产批次</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="batch" name="batch" lay-verify="required" class="layui-input" placeholder="请输入批次号" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item" id="_dev" style="display: none;">
+                    <label class="layui-form-label required">设备</label>
+                    <div class="layui-input-block">
+                        <div id="dev" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">批次数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="num" name="num" lay-verify="required" class="layui-input inputRead" readonly />
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">物料代码</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="maCode" name="maCode" lay-verify="required" class="layui-input inputRead" readonly />
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">物料名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="maName" name="maName" lay-verify="required" class="layui-input inputRead" readonly />
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">物料描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="maDes" name="maDes" lay-verify="required" class="layui-input inputRead" readonly />
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">工艺流程</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="wf" name="wf" lay-verify="required" class="layui-input inputRead" readonly />
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">工序</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="specRd" style="display: none;" />
+                        <input type="text" id="spec" name="spec" lay-verify="required" class="layui-input inputRead" readonly />
+                    </div>
+                </div>
+
+                <div id="sop"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-col-xs12 layui-col-sm8 layui-col-md8">
+        <div class="layuimini-container" style="margin-left: 5px;">
+            <div class="layuimini-main">
+                <div class="layui-tab layui-tab-brief" lay-filter="tab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this" lay-id="1" id="li_1">物料消耗</li>
+                        <li lay-id="2" id="li_2">数据采集</li>
+                        <li lay-id="3" id="li_3">标记不良</li>
+                        <li lay-id="4" id="li_4">等待进站批次</li>
+                        <li lay-id="5" id="li_5">等待出站批次</li>
+                    </ul>
+                    <div class="layui-form layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <!-- 物料消耗 -->
+                            <table class="layui-hide" id="maTable" lay-filter="maTableFilter"></table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 数据采集 -->
+                            <table class="layui-hide" id="dcTable" lay-filter="maTableFilter"></table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 标记不良 -->
+                            <div class="layui-form-item">
+                                <div id="rcg" class="xm-select-demo" style="width: 300px;"></div>
+                            </div>
+                            <table class="layui-hide" id="drTable" lay-filter="drTableFilter"></table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 等待进站批次 -->
+                            <table class="layui-hide" id="dwjTable" lay-filter="maTableFilter"></table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 等待出站批次 -->
+                            <table class="layui-hide" id="dwcTable" lay-filter="maTableFilter"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['laytpl','form','element','table','xmSelect'], function () {
+        let $ = layui.jquery,
+            laytpl = layui.laytpl,
+            form = layui.form,
+            table = layui.table,
+            element = layui.element,
+            xmSelect = layui.xmSelect;
+
+        //页面首次加载
+        load();
+
+        //单选通用设置
+        let radioSetting = {
+            radio: true
+            ,clickClose: true
+            ,theme: {
+                color: '#5FB878',
+            },model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            },toolbar: {
+                show: true,
+            },
+            filterable: true
+        }
+
+        //加载设备
+        let devS = xmSelect.render({
+            el: '#dev'
+            ,...radioSetting
+            ,prop: {
+                name: 'DevName',
+                value: 'DevRd',
+            }
+            ,data: []
+        });
+
+        //加载标记不良
+        let rcgS = xmSelect.render({
+            el: '#rcg'
+            ,prop: {
+                name: 'ReaDes',
+                value: 'ReaCode',
+            }
+            ,data: []
+            ,on: function (data) {
+                table.reload('drTable', {
+                    data: data.arr
+                });
+            }
+            ,toolbar: {
+                show: true,
+            },
+            filterable: true
+        });
+
+        //标记不良编辑事件
+        table.on('edit(drTableFilter)', function(obj){
+            if (obj.value === undefined || obj.value.trim() === ''|| !(/(^[1-9]\d*$)/).test(obj.value.trim())){
+                layer.msg("不良数量不能为空且需为正整数", {icon: 2});
+            }
+        });
+
+        //查询事件
+        $("#query").click(function (obj) {
+            let batch = $("#batch").val().trim();
+
+            query(batch);
+        });
+        //回车事件
+        $(document).on('keydown', function (event) {
+            if (event.keyCode == 13) {
+                if($("#batch").is(":focus")) {
+                    query($("#batch").val().trim());
+                }
+            }
+        });
+
+        //进站
+        $("#_in").click(function () {
+            let batch = $("#batch").val();
+            let specVerRd = $("#specRd").val();
+
+            //不良代码采集
+            let doRCInfo = table.cache['drTable'];
+            let flag = false;
+            doRCInfo.forEach(function (obj) {
+                if (obj.Num === undefined || obj.Num.trim() === ''|| !(/(^[1-9]\d*$)/).test(obj.Num.trim())){
+                    flag = true;
+                    return;
+                }
+            });
+            if(flag){
+                layer.msg("不良数量不能为空且需为正整数", {icon: 2});
+                return;
+            }
+
+            save("00", {Batch: batch, SpecVGd: specVerRd, DoRCInfo: doRCInfo.map(item => {return {ReaDes: item.ReaDes, ReaCode: item.ReaCode, Num: item.Num}})});
+        });
+
+        //出站
+        $("#_out").click(function () {
+            //批次号、工序版本Rd、消耗物料、采集信息
+            let batch = $("#batch").val();
+            let specVerRd = $("#specRd").val();
+
+            //数据采集
+            let doDCInfo = table.cache['dcTable'];
+
+            //不良代码采集
+            let doRCInfo = table.cache['drTable'];
+            let flag = false;
+            doRCInfo.forEach(function (obj) {
+                if (obj.Num === undefined || obj.Num.trim() === ''|| !(/(^[1-9]\d*$)/).test(obj.Num.trim())){
+                    flag = true;
+                    return;
+                }
+            });
+            if(flag){
+                layer.msg("不良数量不能为空且需为正整数", {icon: 2});
+                return;
+            }
+
+            let data = {
+                Batch: batch,
+                SpecVerRd: specVerRd,
+                DoDCInfo: doDCInfo.map(item => {return {DCItemRd: item.DCItemRd, ItemName: item.ItemName, CValue: item.ReferVal}}),
+                DoRCInfo: doRCInfo.map(item => {return {ReaDes: item.ReaDes, ReaCode: item.ReaCode, Num: item.Num}})
+            };
+
+            save("01", data);
+        });
+
+        //上机
+        $("#_up").click(function () {
+            let batch = $("#batch").val();
+            let specVerRd = $("#specRd").val();
+            let devRd = devS.getValue("valueStr");
+
+            if(devRd === undefined || devRd === ''){
+                layer.msg('设备信息不能为空', {icon: 2});
+                return;
+            }
+
+            //数据采集
+            let doDCInfo = table.cache['dcTable'];
+
+            //不良代码采集
+            let doRCInfo = table.cache['drTable'];
+            let flag = false;
+            doRCInfo.forEach(function (obj) {
+                if (obj.Num === undefined || obj.Num.trim() === ''|| !(/(^[1-9]\d*$)/).test(obj.Num.trim())){
+                    flag = true;
+                    return;
+                }
+            });
+            if(flag){
+                layer.msg("不良数量不能为空且需为正整数", {icon: 2});
+                return;
+            }
+
+            let data = {
+                Batch: batch,
+                SpecVerRd: specVerRd,
+                DevRd: devRd,
+                DoDCInfo: doDCInfo.map(item => {return {DCItemRd: item.DCItemRd, ItemName: item.ItemName, CValue: item.ReferVal}}),
+                DoRCInfo: doRCInfo.map(item => {return {ReaDes: item.ReaDes, ReaCode: item.ReaCode, Num: item.Num}})
+            };
+
+            save("02", data);
+        });
+
+        //下机
+        $("#_down").click(function () {
+            let batch = $("#batch").val();
+            let specVerRd = $("#specRd").val();
+            let devRd = devS.getValue("valueStr");
+
+            if(devRd === undefined || devRd === ''){
+                layer.msg('设备信息不能为空', {icon: 2});
+                return;
+            }
+
+            //数据采集
+            let doDCInfo = table.cache['dcTable'];
+
+            //不良代码采集
+            let doRCInfo = table.cache['drTable'];
+            let flag = false;
+            doRCInfo.forEach(function (obj) {
+                if (obj.Num === undefined || obj.Num.trim() === ''|| !(/(^[1-9]\d*$)/).test(obj.Num.trim())){
+                    flag = true;
+                    return;
+                }
+            });
+            if(flag){
+                layer.msg("不良数量不能为空且需为正整数", {icon: 2});
+                return;
+            }
+
+            let data = {
+                Batch: batch,
+                SpecVerRd: specVerRd,
+                DoDCInfo: doDCInfo.map(item => {return {DCItemRd: item.DCItemRd, ItemName: item.ItemName, CValue: item.ReferVal}}),
+                DoRCInfo: doRCInfo.map(item => {return {ReaDes: item.ReaDes, ReaCode: item.ReaCode, Num: item.Num}}),
+                DevRd: devRd
+            };
+
+            save("03", data);
+        });
+
+        //查询
+        function query(batch) {
+            if(batch === undefined || batch === ''){
+                return;
+            }
+            requests({url: "/SpecOperate/GetSpecBNew", contentType: "application/x-www-form-urlencoded", data: {batch: batch}
+            }, function (res) {
+                let data = res.data;
+                let num = data.Num;
+                let bomInfo = data.BOMInfo;
+                let dcInfo = data.DCInfo;
+                let rcgInfo = data.RCGInfo;
+
+                $("#num").val(num);
+                $("#maCode").val(data.MaCode);
+                $("#maName").val(data.MaName);
+                $("#maDes").val(data.MaDes);
+                $("#wf").val(data.WFName);
+                $("#spec").val(data.SpecName);
+                $("#specRd").val(data.SpecVerRd);
+
+                table.reload('maTable', {
+                    data: bomInfo
+                });
+                table.reload('dcTable', {
+                    data: dcInfo.map(item => {return {DCItemRd: item.DCItemRd, ItemName: item.ItemName, ReferVal: ''}})
+                });
+                table.reload('dwjTable', {
+                    data: data.WJSpecInfo
+                });
+                table.reload('dwcTable', {
+                    data: data.WCSpecInfo
+                });
+                devS.update({
+                    data: data.DevGInfo,
+                    autoRow: true
+                });
+                rcgS.update({
+                    data: data.RCGInfo,
+                    autoRow: true
+                });
+                table.reload('drTable', {
+                    data: []
+                });
+
+                //工艺指导书
+                var uri = getBasePath() + "/File/download/";
+                let sop = data.SOPInfo.map(o => { return {...o, FilePath: uri + o.FilePath} });
+                let getTpl = sopC.innerHTML, view = document.getElementById('sop');
+                laytpl(getTpl).render(sop, function (html) {
+                    view.innerHTML = html;
+                });
+
+                isButton(data.Status);
+
+                let flag = false;
+
+                //选项卡
+                if(bomInfo.length > 0){
+                    element.tabChange('tab', '1');
+                    flag = true;
+                    $("#li_1").show();
+                }else{
+                    $("#li_1").hide();
+                }
+                if(dcInfo.length > 0){
+                    if(!flag) {
+                        element.tabChange('tab', '2');
+                        flag = true;
+                    }
+                    $("#li_2").show();
+                }else{
+                    $("#li_2").hide();
+                }
+                if(rcgInfo.length > 0){
+                    if(!flag) {
+                        element.tabChange('tab', '3');
+                    }
+                    $("#li_3").show();
+                }else{
+                    if(!flag) {
+                        element.tabChange('tab', '4');
+                    }
+                    $("#li_3").hide();
+                }
+            });
+        }
+
+        function save(type, data) {
+            requests({url: "/SpecOperate/GetIOSInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": type,
+                    "BusData": JSON.stringify(data)
+                }}, function (res) {
+                layer.msg(res.MsgDes, {icon: 1});
+                query(data.Batch);
+            });
+        }
+
+        //初始化表格数据
+        function load() {
+            //物料消耗
+            table.render({
+                elem: '#maTable',
+                cols: [
+                    [
+                        /*{field: 'AllNum', title: '需求量' },*/
+                        {field: 'MaCode', title: '物料代码' },
+                        {field: 'MaName', title: '物料名称' },
+                        /*{field: 'Brand', title: '品牌' },
+                        {field: 'OrderNum', title: '订货号' },*/
+                        {field: 'DoNum', title: '需求量' }
+                    ]
+                ],
+                data: [],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                //page: true,
+                skin: 'row '
+            });
+            //数据采集
+            table.render({
+                elem: '#dcTable',
+                cols: [
+                    [
+                        {field: 'DCItemRd', title: 'id', hide: true },
+                        {field: 'ItemName', title: '采集内容' },
+                        {field: 'ReferVal', title: '采集值', edit: 'text'}
+                    ]
+                ],
+                data: [],
+                skin: 'row '
+            });
+            //标记不良
+            table.render({
+                elem: '#drTable',
+
+                cols: [
+                    [
+                        {field: 'ReaCode', title: '不良代码' },
+                        {field: 'ReaDes', title: '不良描述' },
+                        {field: 'Num', title: '数量', edit: true}
+                    ]
+                ],
+                data: [],
+                skin: 'row '
+            });
+            let cols = [{
+                field: 'Batch', title: '生产批次'
+            },{
+                field: 'SpecName', title: '当前工序'
+            },{
+                field: 'MaCode', title: '物料代码'
+            },{
+                field: 'MaName', title: '物料名称'
+            },{
+                field: 'MaDes', title: '物料描述'
+            },{
+                field: 'Num', title: '数量'
+            },{
+                field: 'UnitName', title: '单位'
+            }];
+            //待进站
+            table.render({
+                elem: '#dwjTable',
+                cols: [cols],
+                data: [],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+            //待出站
+            table.render({
+                elem: '#dwcTable',
+                cols: [cols],
+                data: [],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        //按钮控制
+        function isButton(type){
+            $("#_in").hide();
+            $("#_out").hide();
+            $("#_up").hide();
+            $("#_down").hide();
+            $("#_dev").hide();
+
+            if("00" == type){ //显示待入站按钮
+                $("#_in").show();
+            }else if("01" == type){ //显示待上机按钮
+                $("#_up").show();
+                $("#_dev").show();
+            }else if("02" == type){ //显示待下机按钮
+                $("#_down").show();
+                $("#_dev").show();
+            }else if("03" == type){ //显示待出站按钮
+                $("#_out").show();
+            }
+        }
+    });
+</script>
+</body>
+</html>

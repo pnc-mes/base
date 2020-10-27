@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.OnLineMaPeriodDAO">
+    <resultMap id="OnLineMaPeriodInfo" type="pnc.mesadmin.entity.OnLineMaPeriodInfo">
+        <id property="Ruid" column="Ruid"></id>
+        <result property="Guid" column="Guid"></result>
+        <result property="MaPeriodName" column="MaPeriodName"></result>
+        <result property="Description" column="Description"></result>
+        <result property="PeriodTime" column="PeriodTime"></result>
+        <result property="PresetTime" column="PresetTime"></result>
+        <result property="PresetEmailDistributionGd" column="PresetEmailDistributionGd"></result>
+        <result property="PresetEmailMessageGd" column="PresetEmailMessageGd"></result>
+        <result property="OverTimeAction" column="OverTimeAction"></result>
+        <result property="OverdueEmailDistributionGd" column="OverdueEmailDistributionGd"></result>
+        <result property="OverdueEmailMessageGd" column="OverdueEmailMessageGd"></result>
+        <result property="Creator" column="Creator"></result>
+        <result property="CreateTime" column="CreateTime"></result>
+        <result property="LastModifyMan" column="LastModifyMan"></result>
+        <result property="LastModifyTime" column="LastModifyTime"></result>
+        <result property="Remark" column="Remark"></result>
+    </resultMap>
+
+    <!--查询在线物料有效期列表-->
+    <select id="selectAllMaPeriod" resultMap="OnLineMaPeriodInfo">
+        SELECT * FROM tpm_onlinemaperiodinfo
+    </select>
+
+    <!--根据Guid查询在线物料有效期-->
+    <select id="selectMaPeriodByGuid" parameterType="String" resultMap="OnLineMaPeriodInfo">
+        select * from tpm_onlinemaperiodinfo where Guid=#{Guid}
+    </select>
+
+    <!--根据id查询在线物料有效期-->
+    <select id="selectMaPeriodByRuid" parameterType="int" resultMap="OnLineMaPeriodInfo">
+        select * from tpm_onlinemaperiodinfo where Ruid=#{Ruid}
+    </select>
+
+
+    <!--新增在线物料有效期-->
+    <insert id="insertMaPeriod">
+        INSERT INTO tpm_onlinemaperiodinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,MaPeriodName,PeriodTime,PresetTime,Creator,CreateTime,
+            <if test="Description !=null">
+                Description,
+            </if>
+            <if test="PresetEmailDistributionGd != null">
+                PresetEmailDistributionGd,
+            </if>
+            <if test="PresetEmailMessageGd != null">
+                PresetEmailMessageGd,
+            </if>
+            <if test="OverTimeAction != null">
+                OverTimeAction,
+            </if>
+            <if test="OverdueEmailDistributionGd != null">
+                OverdueEmailDistributionGd,
+            </if>
+            <if test="OverdueEmailMessageGd != null">
+                OverdueEmailMessageGd,
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan,
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime,
+            </if>
+            <if test="Remark != null">
+                Remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{Guid},#{MaPeriodName},#{PeriodTime},#{PresetTime},#{Creator},#{CreateTime},
+            <if test="Description !=null">
+                #{Description},
+            </if>
+            <if test="PresetEmailDistributionGd != null">
+                #{PresetEmailDistributionGd},
+            </if>
+            <if test="PresetEmailMessageGd != null">
+                #{PresetEmailMessageGd},
+            </if>
+            <if test="OverTimeAction != null">
+                #{OverTimeAction},
+            </if>
+            <if test="OverdueEmailDistributionGd != null">
+                #{OverdueEmailDistributionGd},
+            </if>
+            <if test="OverdueEmailMessageGd != null">
+                #{OverdueEmailMessageGd},
+            </if>
+            <if test="LastModifyMan != null">
+                #{LastModifyMan},
+            </if>
+            <if test="LastModifyTime != null">
+                #{LastModifyTime},
+            </if>
+            <if test="Remark != null">
+                #{Remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据在线物料有效期名字查询一条信息-->
+    <select id="selectAllMaPeriodName" parameterType="string" resultMap="OnLineMaPeriodInfo">
+        select * from tpm_onlinemaperiodinfo where MaPeriodName=#{MaPeriodName}
+    </select>
+
+    <!--删除在线物料有效期-->
+    <delete id="deleteMaPeriod" parameterType="int">
+        delete from tpm_onlinemaperiodinfo where Ruid=#{Ruid}
+    </delete>
+
+    <!--更新在线物料有效期-->
+    <update id="updateMaPeriod">
+        UPDATE `tpm_onlinemaperiodinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Guid != null">
+                Guid = #{ Guid },
+            </if>
+            <if test="MaPeriodName != null">
+                MaPeriodName = #{ MaPeriodName },
+            </if>
+            <if test="Description  != null">
+                Description = #{ Description },
+            </if>
+            <if test="PeriodTime  != null">
+                PeriodTime = #{ PeriodTime },
+            </if>
+
+            <if test="PresetTime  != null">
+                PresetTime = #{ PresetTime },
+            </if>
+            <if test="PresetEmailDistributionGd  != null">
+                PresetEmailDistributionGd = #{ PresetEmailDistributionGd },
+            </if>
+            <if test="PresetEmailMessageGd  != null">
+                PresetEmailMessageGd = #{ PresetEmailMessageGd },
+            </if>
+            <if test="OverTimeAction != null">
+                OverTimeAction = #{ OverTimeAction },
+            </if>
+
+            <if test="OverdueEmailDistributionGd  != null">
+                OverdueEmailDistributionGd = #{ OverdueEmailDistributionGd },
+            </if>
+            <if test="OverdueEmailMessageGd  != null">
+                OverdueEmailMessageGd = #{ OverdueEmailMessageGd },
+            </if>
+
+            <if test="Creator != null">
+                Creator = #{ Creator   },
+            </if>
+            <if test="CreateTime != null">
+                CreateTime = #{ CreateTime },
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{ LastModifyMan },
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{ LastModifyTime },
+            </if>
+            <if test="Remark != null">
+                Remark = #{ Remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ Ruid }
+    </update>
+</mapper>

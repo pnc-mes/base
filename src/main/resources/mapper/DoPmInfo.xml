@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DoPMInfoDAO">
+
+    <resultMap type="pnc.mesadmin.entity.DoPMInfo" id="DoPMInfoMap">
+        <id property="ruid" column="ruid"/>
+    </resultMap>
+
+    <!--查询工位信息-->
+    <select id="SelectByDotaskReq" resultMap="DoPMInfoMap">
+        SELECT * FROM tpm_dopminfo where PMType=#{PMType}
+        and PMObjType=#{PMObjType}
+        and PMObjGd=#{PMObjGd}
+        and Status=#{Status}
+    </select>
+
+    <insert id="InsertDoPm">
+        INSERT INTO tpm_dopminfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,PMName,PMType,PMObjType,PMObjGd,Status,Creator,CreateTime,
+
+            <if test="MaTime != null">
+                MaTime,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{PMName},#{PMType},#{PMObjType},#{PMObjGd},#{Status},#{creator},#{createTime},
+
+            <if test="MaTime != null">
+                #{MaTime},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="SelectDoPMInfoByPMObjTypeandPMObjGdandStatus" resultMap="DoPMInfoMap">
+        Select * from  tpm_dopminfo where Status='00' AND  PMObjType =#{PMObjType} AND  PMObjGd =#{PMObjGd}
+    </select>
+
+    <select id="SelectByPMTaskGd" resultMap="DoPMInfoMap">
+        select * from tpm_dopminfo where PMTaskGd =#{PMTaskGd} AND   Status='00'
+    </select>
+</mapper>
+

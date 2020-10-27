@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.FactoryDAO">
+    <resultMap id="factoryMapper" type="pnc.mesadmin.entity.FactoryInfo">
+        <id property="ruid" column="Ruid"></id>
+        <result property="guid" column="Guid"></result>
+        <result property="factoryName" column="FactoryName"></result>
+        <result property="contactor" column="Contactor"></result>
+        <result property="address" column="Address"></result>
+        <result property="companyGd" column="CompanyGd"></result>
+        <result property="creator" column="Creator"></result>
+        <result property="createTime" column="CreateTime"></result>
+        <result property="lastModifyMan" column="LastModifyMan"></result>
+        <result property="lastModifyTime" column="LastModifyTime"></result>
+        <result property="remark" column="Remark"></result>
+    </resultMap>
+
+    <insert id="InsertFactoryInfo">
+      INSERT INTO `tpm_factoryinfo`(Guid,FactoryName,Contactor,Address,CompanyGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+      VALUES (#{guid},#{factoryName},#{contactor},#{address},#{companyGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--删除工厂信息，根据工厂ID-->
+    <delete id="DeleteFactoryInfoByruid">
+        DELETE FROM `tpm_factoryinfo` WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新厂信息 张亮亮-->
+    <update id="UpdateFactoryInfoByruid">
+        UPDATE `tpm_factoryinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="factoryName != null">
+                FactoryName = #{ factoryName },
+            </if>
+            <if test="contactor != null">
+                Contactor = #{ contactor },
+            </if>
+            <if test="address != null">
+                Address = #{ address },
+            </if>
+            <if test="companyGd != null">
+                CompanyGd = #{ companyGd },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!--查询工厂信息 张亮亮-->
+    <select id="SelectAllFactoryInfo" resultMap="factoryMapper">
+        SELECT * FROM `tpm_factoryinfo`
+    </select>
+
+    <!--根据工厂ruid查询工厂信息 张亮亮-->
+    <select id="SelectFactoryInfoByruid" resultMap="factoryMapper" parameterType="int">
+        SELECT * FROM `tpm_factoryinfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--根据guid查询工厂信息 ,此查询是在工作中心中查询  张亮亮-->
+    <select id="SelectFactoryInfoByguid" resultMap="factoryMapper" parameterType="string">
+        SELECT * FROM `tpm_factoryinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--根据名称查询工厂信息 ,此查询是在工作中心中查询  张亮亮-->
+    <select id="SelectFactoryInfoByFactoryName" resultMap="factoryMapper" parameterType="string">
+        SELECT * FROM `tpm_factoryinfo` WHERE FactoryName=#{factoryName}
+    </select>
+</mapper>

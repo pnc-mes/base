@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MaterialDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.MaterialInfo" id="MaterialInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+        <result property="companyCode" column="companyCode" />
+		<result property="materialCode" column="materialCode" />
+        <result property="mapMaCode" column="mapMaCode" />
+		<result property="materialName" column="materialName" />
+        <result property="materialDes" column="materialDes" />
+		<result property="materialType" column="materialType" />
+		<result property="verGd" column="verGd" />
+        <result property="pdFamilyGd" column="pdFamilyGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+	<!-- 新增物料信息 (By-pjf)-->
+	<insert id="InsertMaterialInfo">
+        INSERT INTO tpm_materialinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,MaterialCode,MaterialName,MaterialType,VerGd,Creator,CreateTime,
+
+            <if test="materialDes != null">
+                materialDes,
+            </if>
+            <if test="pdFamilyGd != null">
+                pdFamilyGd,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+
+            <if test="companyCode != null">
+                companyCode,
+            </if>
+            <if test="mapMaCode != null">
+                mapMaCode,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{materialCode},#{materialName},#{materialType},#{verGd},#{creator},#{createTime},
+
+            <if test="materialDes != null">
+                #{materialDes},
+            </if>
+            <if test="pdFamilyGd != null">
+                #{pdFamilyGd},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+
+            <if test="companyCode != null">
+                #{companyCode},
+            </if>
+            <if test="mapMaCode != null">
+                #{mapMaCode},
+            </if>
+        </trim>
+	</insert>
+
+    <!-- 删除物料信息 (By-pjf) -->
+    <delete id="DeleteMaterialInfo">
+        DELETE FROM tpm_materialinfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+    <!-- 修改物料信息 (By-pjf) -->
+    <update id="UpdateMaterialInfo">
+        UPDATE tpm_materialinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="materialCode != null">
+                MaterialCode = #{ materialCode },
+            </if>
+            <if test="materialName != null">
+                materialName = #{ materialName },
+            </if>
+                materialDes = #{materialDes},
+            <if test="materialType != null">
+                MaterialType = #{ materialType },
+            </if>
+            <if test="verGd != null">
+                verGd = #{ verGd },
+            </if>
+            <if test="pdFamilyGd != null">
+                pdFamilyGd = #{ pdFamilyGd },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+
+            <if test="companyCode != null">
+                companyCode = #{companyCode},
+            </if>
+            <if test="mapMaCode != null">
+                mapMaCode = #{mapMaCode},
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 获取所有物料信息 (By-pjf)-->
+    <select id="SelectAllMaterialInfo" resultMap="MaterialInfoResult">
+        SELECT * FROM tpm_materialinfo
+    </select>
+
+    <!--查询物料的guid,materialDes-->
+    <select id="SelectAllMaterialInfoguidmaterialDes" resultMap="MaterialInfoResult">
+        SELECT m.ruid,m.guid,m.materialDes FROM tpm_materialinfo m
+    </select>
+
+    <!-- 根据物料分类获取物料信息 (By-pjf)-->
+    <select id="SelectByMaType" resultMap="MaterialInfoResult">
+        SELECT * FROM tpm_materialinfo WHERE MaterialType = #{ argMaType }
+    </select>
+
+    <!-- 根据Ruid获取物料信息 (By-pjf) -->
+    <select id="SelectMaterialInfo" resultMap="MaterialInfoResult">
+        SELECT * FROM tpm_materialinfo WHERE Ruid = #{ argRuid }
+    </select>
+
+    <!-- 根据Guid获取物料信息 (By-pjf) -->
+    <select id="SelectByGuid" resultMap="MaterialInfoResult">
+        SELECT * FROM tpm_materialinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <!-- 根据产品家族查询物料信息 (By-pjf) -->
+    <select id="SelectByPdFamilyGd" resultMap="MaterialInfoResult">
+        SELECT * FROM tpm_materialinfo WHERE PdFamilyGd = #{ argPdGd }
+    </select>
+
+    <!-- 根据MaName获取物料信息 (By-pjf) -->
+    <select id="SelectByMaName" resultMap="MaterialInfoResult">
+        SELECT * FROM tpm_materialinfo WHERE MaterialName = #{ argMaterialName }
+    </select>
+
+    <!-- 根据MaCode获取物料信息 (By-pjf) -->
+    <select id="SelectByMaCode" resultMap="MaterialInfoResult">
+        SELECT * FROM tpm_materialinfo WHERE MaterialCode = #{ argMaterialCode }
+    </select>
+
+</mapper>

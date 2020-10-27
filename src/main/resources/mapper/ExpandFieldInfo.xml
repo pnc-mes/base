@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ExpandFieldDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.ExpandFieldInfo" id="expandFieldInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="expandType" column="ExpandType" />
+        <result property="expandName" column="ExpandName" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <select id="SelectExpandFieldInfoByExpandType" parameterType="string" resultMap="expandFieldInfoMap">
+        select * from `tpm_expandfieldinfo` where expandType=#{expandType}
+    </select>
+
+
+    <!--查询列表-->
+    <select id="SelectAllExpandFieldInfo" resultMap="expandFieldInfoMap">
+        select * from `tpm_expandfieldinfo`
+    </select>
+
+    <!--删除-->
+    <delete id="DeleteExpandFieldInfo" parameterType="int" >
+        delete from  tpm_expandfieldinfo  where Ruid=#{ruid}
+    </delete>
+
+    <select id="SelectExpandFieldInfoByRuid" resultMap="expandFieldInfoMap" parameterType="string">
+        select * from `tpm_expandfieldinfo` where Ruid=#{ruid}
+    </select>
+
+    <!--新增-->
+    <insert id="InsertExpandFieldInfo">
+         INSERT INTO tpm_expandfieldinfo
+		(Guid,ExpandType,ExpandType,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES(#{guid},#{expandType},#{expandType},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+    <!--修改-->
+    <update id="UpdateExpandFieldInfo" parameterType="int">
+        UPDATE `tpm_expandfieldinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="expandType != null">
+                ExpandType = #{ expandType },
+            </if>
+
+            <if test="expandName != null">
+                ExpandName = #{ expandName },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+</mapper>

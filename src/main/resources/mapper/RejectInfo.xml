@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.RejectDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.RejectInfo" id="RejectInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="batch" column="batch" />
+		<result property="reaDes" column="reaDes" />
+		<result property="num" column="num" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<resultMap type="pnc.mesadmin.dto.GetAllRejectInfo.GetAllRejectInfoResD" id="RejectData">
+		<id property="Ruid" column="Ruid" />
+		<result property="Guid" column="Guid" />
+		<result property="Batch" column="Batch" />
+		<result property="ReaDes" column="ReaDes" />
+		<result property="MaName" column="MaName" />
+		<result property="Num" column="Num" />
+		<result property="SpecName" column="SpecName" />
+		<result property="BadNum" column="BadNum" />
+		<result property="UnitName" column="UnitName"/>
+	</resultMap>
+
+    <!-- 新增 (By-pjf)-->
+	<insert id="InsertReject">
+		INSERT INTO tpm_rejectinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,batch,reaDes,num,Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{batch},#{reaDes},#{num},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+	<!--查询不良原因-->
+	<select id="SelectAllRejectInfo" resultMap="RejectData">
+		SELECT * FROM tpm_rejectinfo WHERE Batch=#{batch}
+	</select>
+
+	<!--新增不良标记-->
+	<insert id="addReject">
+		INSERT INTO tpm_rejectinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="guid !=null and guid!=''">
+				Guid,
+			</if>
+			<if test="batch !=null and batch !=''">
+				Batch,
+			</if>
+			<if test="reaDes !=null and reaDes !=''">
+				ReaDes,
+			</if>
+			<if test="MaName !=null and MaName !=''">
+				MaName,
+			</if>
+			<if test="Num !=null and Num !=''">
+				Num,
+			</if>
+			<if test="SpecName !=null and SpecName !=''">
+				SpecName,
+			</if>
+			<if test="BadNum !=null and BadNum !=''">
+				BadNum,
+			</if>
+			<if test="UnitName !=null and UnitName!=''">
+				UnitName,
+			</if>
+			<if test="creator !=null and creator !=''">
+				Creator,
+			</if>
+			<if test="createTime !=null and createTime !=''">
+				CreateTime,
+			</if>
+			<if test="lastModifyMan  !=null and lastModifyMan  !=''">
+				LastModifyMan ,
+			</if>
+			<if test="lastModifyTime  !=null and lastModifyTime  !=''">
+				LastModifyTime ,
+			</if>
+			<if test="remark  !=null and remark  !=''">
+				Remark ,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="guid !=null and guid!=''">
+				#{guid},
+			</if>
+			<if test="batch !=null and batch !=''">
+				#{batch},
+			</if>
+			<if test="reaDes !=null and reaDes !=''">
+				#{reaDes},
+			</if>
+			<if test="MaName !=null and MaName !=''">
+				#{MaName},
+			</if>
+			<if test="Num !=null and Num !=''">
+				#{Num},
+			</if>
+			<if test="SpecName !=null and SpecName !=''">
+				#{SpecName},
+			</if>
+			<if test="BadNum !=null and BadNum !=''">
+				#{BadNum},
+			</if>
+			<if test="UnitName !=null and UnitName!=''">
+				#{UnitName},
+			</if>
+			<if test="creator !=null and creator !=''">
+				#{creator},
+			</if>
+			<if test="createTime !=null and createTime !=''">
+				#{createTime},
+			</if>
+			<if test="lastModifyMan  !=null and lastModifyMan  !=''">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime  !=null and lastModifyTime  !=''">
+				#{lastModifyTime},
+			</if>
+			<if test="remark  !=null and remark  !=''">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MsgCDAO" >
+    <resultMap type="pnc.mesadmin.entity.MsgCInfo" id="MsgCInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="msgName" column="msgName" />
+        <result property="msgValue" column="msgValue" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--查询消息配置信息列表-->
+    <select id="SelectAllMsgCInfo" resultMap="MsgCInfoResult">
+        select * from tpm_msgcinfo
+    </select>
+
+    <!--查询消息配置信息-->
+    <select id="SelectmsgName" resultMap="MsgCInfoResult">
+        select * from tpm_msgcinfo m WHERE m.msgName=#{msgName}
+    </select>
+
+    <!--保存消息配置信息-->
+    <insert id="InsertMsgCInfo">
+        INSERT INTO tpm_msgcinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,MsgName,MsgValue,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{msgName},#{msgValue},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新消息配置信息-->
+    <update id="UpdateMsgCInfo">
+        UPDATE tpm_msgcinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="msgName != null">
+                msgName = #{msgName},
+            </if>
+            <if test="msgValue != null">
+                msgValue = #{msgValue},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+</mapper>

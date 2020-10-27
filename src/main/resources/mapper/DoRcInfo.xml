@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DoRcDAO" >
+    <resultMap type="pnc.mesadmin.entity.DoRcInfo" id="doRCInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="guid" />
+        <result property="batch" column="Batch" />
+        <result property="specVerGd" column="SpecVerGd" />
+        <result property="specName" column="SpecName" />
+        <result property="devGd" column="DevGd" />
+        <result property="devName" column="DevName" />
+        <result property="reaCode" column="ReaCode" />
+        <result property="reaDes" column="ReaDes" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <insert id="InsertDoRC">
+        INSERT INTO tpm_dorcinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,batch,specVerGd,specName,devGd,devName,reaCode,reaDes,Creator,CreateTime,
+
+            <if test="num != null">
+                num,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{batch},#{specVerGd},#{specName},#{devGd},#{devName},#{reaCode},#{reaDes},#{creator},#{createTime},
+
+            <if test="num != null">
+                #{num},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据批次查询信息 张亮亮-->
+    <select id="SelectDoRcInfoBybatch" parameterType="string" resultMap="doRCInfoMap">
+        SELECT * FROM tpm_dorcinfo WHERE Batch=#{batch}
+    </select>
+
+
+    <!--根据批次信息查询数据采集信息返回的ItemName汇总的其他值 张亮亮-->
+    <select id="SelectDoRCInfoItemNameBybatchspecName" resultMap="doRCInfoMap" parameterType="string">
+        SELECT DISTINCT DevName,Creator FROM tpm_dorcinfo WHERE Batch=#{batch} AND SpecName=#{specName}
+    </select>
+    <!--张亮亮-->
+    <select id="SelectDoRCInfoItemNameBybatchReaCode" resultMap="doRCInfoMap" parameterType="string">
+        SELECT ReaCode ,ReaDes  FROM tpm_dorcinfo WHERE Batch=#{batch} AND SpecName=#{specName} GROUP BY ReaCode ,ReaDes
+    </select>
+
+
+
+
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PickBatchDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.PickBatchInfo" id="PickBatchInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="assCode" column="assCode" />
+		<result property="assSource" column="assSource" />
+		<result property="maVerGd" column="maVerGd" />
+		<result property="materialCode" column="materialCode" />
+		<result property="materialName" column="materialName" />
+		<result property="batch" column="batch" />
+		<result property="reML" column="reML" />
+		<result property="source" column="source" />
+		<result property="pickor" column="pickor" />
+		<result property="pickorTime" column="pickorTime" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<!--王怀龙-->
+	<insert id="InsertPickBatch">
+		INSERT INTO tpm_pickbatchinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			guid,assCode,assSource,batch,reML,source,pickor,pickorTime,creator,createTime,
+			maVerGd,materialCode,materialName,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			#{guid},#{assCode},#{assSource},#{batch},#{reML},#{source},#{pickor},#{pickorTime},#{creator},#{createTime},
+			#{maVerGd},#{materialCode},#{materialName},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+	<!--根据ID删除领料批次明细-->
+	<delete id="DeletePickBatchInfo" >
+		 DELETE FROM tpm_pickbatchinfo WHERE Ruid = #{ruid}
+	</delete>
+
+	<!--更新-->
+	<update id="UpdatePickBatchInfo">
+		UPDATE tpm_pickbatchinfo
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="assCode != null and assCode != ''">
+				assCode = #{assCode},
+			</if>
+			<if test="assSource != null and assSource != ''">
+				assSource = #{assSource},
+			</if>
+			<if test="maVerGd != null and maVerGd != ''">
+				maVerGd = #{maVerGd},
+			</if>
+			<if test="materialCode != null and materialCode != ''">
+				materialCode = #{materialCode},
+			</if>
+			<if test="materialName != null and materialName != ''">
+				materialName = #{materialName},
+			</if>
+			<if test="batch != null and batch != ''">
+				batch = #{batch},
+			</if>
+			<if test="reML != null and reML != ''">
+				reML = #{reML},
+			</if>
+			<if test="source != null and source != ''">
+				source = #{source},
+			</if>
+			<if test="pickor != null and pickor != ''">
+				pickor = #{pickor},
+			</if>
+			<if test="pickorTime != null and pickorTime != ''">
+				pickorTime = #{pickorTime},
+			</if>
+			<if test="lastModifyMan != null and lastModifyMan != ''">
+				lastModifyMan = #{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null and lastModifyTime != ''">
+				lastModifyTime = #{lastModifyTime},
+			</if>
+			<if test="remark != null and remark != ''">
+				remark = #{remark},
+			</if>
+		</trim>
+		WHERE guid = #{guid}
+	</update>
+
+    <!-- 根据关联单号+批次号查询  (By-pjf)-->
+    <select id="SelectByAB" resultMap="PickBatchInfoResult">
+        SELECT * FROM tpm_pickbatchinfo WHERE AssCode = #{ argAssCode } AND Batch = #{ argBatch }
+    </select>
+
+	<select id="SelectPBByAssCodeAndAssSource" resultMap="PickBatchInfoResult">
+		SELECT * FROM tpm_pickbatchinfo WHERE assCode = #{assCode} and assSource = #{assSource}
+	</select>
+
+	<!-- 根据批次号查询  (By-pjf)-->
+	<select id="SelectByBatch" resultMap="PickBatchInfoResult">
+		SELECT * FROM tpm_pickbatchinfo WHERE Batch = #{ argBatch }
+	</select>
+
+	<!-- 根据批次号查询领料批次明细信息  WHL-->
+	<select id="SelectPickBatchInfoByBatch" resultMap="PickBatchInfoResult">
+		SELECT * FROM tpm_pickbatchinfo WHERE Batch = #{ argBatch }
+	</select>
+
+	<!--产线余料报表查询-->
+	<select id="SelectPickBatchInfoByBaoBiao" resultMap="PickBatchInfoResult">
+
+		SELECT * FROM `tpm_pickbatchinfo` a WHERE a.`Batch` IN
+		(SELECT Batch FROM `tpm_binfo` b WHERE b.`MaVerGd` IN
+		(SELECT Guid FROM `tpm_maverinfo` c WHERE c.MaterialCode
+		<choose>
+		<when test="macode != null and macode!='' ">
+			LIKE CONCAT('%','${macode}','%')
+		</when>
+		<otherwise>
+			LIKE CONCAT('%','','%')
+		</otherwise>
+		</choose>
+		AND c.`MaterialName`
+		<choose>
+			<when test="maname != null and maname!='' ">
+				LIKE  CONCAT('%','${maname}','%')
+			</when>
+			<otherwise>
+				LIKE CONCAT('%','','%')
+			</otherwise>
+		</choose>
+
+		)
+		  AND b.`Status` = #{status}
+		)
+		<if test="createTime != null and createTime!=''">
+			AND a.`CreateTime` BETWEEN #{createTime}
+		</if>
+		<if test="createTime1 != null and createTime1!=''">
+			AND	#{createTime1}
+		</if>
+		AND a.AssCode
+		<choose>
+			<when test="wocode != null and wocode!='' ">
+				LIKE  CONCAT('%','${wocode}','%')
+			</when>
+			<otherwise>
+				LIKE CONCAT('%','','%')
+			</otherwise>
+		</choose>
+		AND a.Batch
+		<choose>
+			<when test="batch != null and batch!='' ">
+				LIKE  CONCAT('%','${batch}','%')
+			</when>
+			<otherwise>
+				LIKE CONCAT('%','','%')
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 根据关联单号+关联呢单号来源+物理版本GD查询 (pjf) -->
+	<select id="SelectByAssCodeMaVerGd" resultMap="PickBatchInfoResult">
+		SELECT * FROM tpm_pickbatchinfo WHERE AssCode = #{ argAssCode }
+		AND AssSource = #{ argAssSource }
+		AND MaVerGd = #{ argMaVerGd }
+		ORDER BY CreateTime
+	</select>
+
+	<!-- 根据批次删除领料明细 (pjf) -->
+	<delete id="DeleteByBatch">
+		DELETE FROM tpm_pickbatchinfo WHERE Batch = #{ argBatch }
+	</delete>
+
+</mapper>

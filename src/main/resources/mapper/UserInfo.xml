@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.UserDAO">
+        <resultMap id="userInfoMap" type="pnc.mesadmin.entity.UserInfo">
+            <id column="Ruid" property="ruid"/>
+            <result column="Guid" property="guid"></result>
+            <result column="UserName" property="userName"/>
+            <result column="Password" property="password"/>
+            <result column="ShiftGd" property="shiftGd"/>
+            <result column="Face" property="face"/>
+            <result column="RealName" property="realName"/>
+            <result column="Creator" property="creator"/>
+            <result column="CreateTime" property="createTime"/>
+            <result column="LastModifyMan" property="lastModifyMan"/>
+            <result column="LastModifyTime" property="lastModifyTime"/>
+            <result column="Remark" property="remark"/>
+            <result column="MobileNo" property="mobileNo"/>
+            <result column="EmailAddress" property="emailAddress"/>
+        </resultMap>
+
+
+
+    <!-- 根据用户名称查询用户信息 (By-pjf)-->
+    <select id="SelectUser" resultMap="userInfoMap">
+        select * from tpm_userinfo where UserName = #{ userName }
+    </select>
+
+    <!-- 根据guid查询用户信息 (By-pjf)-->
+    <select id="SelectUserRd" resultMap="userInfoMap">
+        select * from tpm_userinfo where guid = #{ guid }
+    </select>
+    <!-- 修改密码 (By-pjf)-->
+    <update id="UpdateUserPwd">
+        UPDATE tpm_userinfo SET `PassWord` = #{ password } WHERE Guid = #{ guid }
+    </update>
+
+
+    <!--更新用户表，即重置密码 张亮亮-->
+    <update id="UpdataUserInfoPassword">
+        UPDATE tpm_userinfo SET PASSWORD =#{password} WHERE Ruid=#{ruid}
+    </update>
+    <!--查询用户列表信息 张亮亮-->
+    <select id="SelectAllUserInfo" resultMap="userInfoMap">
+        SELECT * FROM tpm_userinfo
+    </select>
+    <!--根据用户的名字查询用户列表信息 张亮亮-->
+    <select id="SelectUserInfoByruid" parameterType="int" resultMap="userInfoMap">
+        SELECT * FROM tpm_userinfo WHERE Ruid=#{ruid}
+    </select>
+
+    <!--新增用户信息 张亮亮-->
+    <insert id="InsertUserInfo">
+        INSERT INTO tpm_userinfo(Guid,UserName,ShiftGd,EmailAddress,MobileNo,Password,Face,RealName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{userName},#{shiftGd},#{emailAddress},#{mobileNo},#{password},#{face},#{realName},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+    <!--删除用户信息 张亮亮-->
+    <delete id="DeleteUserInfo" parameterType="int">
+        DELETE  FROM tpm_userinfo WHERE Ruid=#{ruid}
+    </delete>
+    <!--更新用户信息 张亮亮-->
+    <update id="UpdateUserinfo">
+        UPDATE tpm_userinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userName != null">
+                UserName = #{ userName },
+            </if>
+            <if test="shiftGd != null">
+                ShiftGd = #{ shiftGd },
+            </if>
+            <if test="emailAddress != null">
+                EmailAddress = #{ emailAddress },
+            </if>
+
+            <if test="mobileNo != null">
+                MobileNo = #{ mobileNo },
+            </if>
+
+            <if test="password != null">
+                Password = #{ password },
+            </if>
+            <if test="face != null">
+                Face = #{ face },
+            </if>
+            <if test="realName != null">
+                RealName = #{ realName },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid=#{ruid}
+    </update>
+
+    <!--根据用户的名字查询用户信息 王怀龙-->
+    <select id="SelectUserInfoByUserName" parameterType="int" resultMap="userInfoMap">
+        SELECT * FROM tpm_userinfo WHERE UserName=#{argUserName}
+    </select>
+
+    <!--根据用户的真实名字查询用户信息 王怀龙-->
+    <select id="SelectAllUserInfoByRealName"  resultMap="userInfoMap">
+        SELECT * FROM tpm_userinfo
+        WHERE RealName
+        LIKE argRealName
+
+    </select>
+
+    <select id="SelectByGuids" resultMap="userInfoMap">
+        SELECT * FROM tpm_userinfo WHERE Guid in
+        <foreach collection="ids" item="id" index="list" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

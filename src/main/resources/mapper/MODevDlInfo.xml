@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MODevDlDAO" >
+
+	<resultMap type="pnc.mesadmin.entity.MODevDlInfo" id="MODevDlInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="mODevGd" column="mODevGd" />
+        <result property="assCode" column="assCode" />
+        <result property="assSource" column="assSource" />
+        <result property="batch" column="batch" />
+        <result property="reML" column="reML" />
+        <result property="ExecGd" column="ExecGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增物料上机明细信息 (By-pjf)-->
+    <insert id="InsertMODevDl">
+        INSERT INTO tpm_modevdlinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,mODevGd,batch,creator,createTime,assCode,assSource,reML,
+
+            <if test="ExecGd != null">
+                ExecGd,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{mODevGd},#{batch},#{creator},#{createTime},#{assCode},#{assSource},#{reML},
+            <if test="ExecGd != null">
+                #{ExecGd},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除物料上机明细信息 (By-pjf)-->
+    <delete id="DeleteByGuid">
+        DELETE FROM tpm_modevdlinfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 根据batch删除物料上机明细信息 (By-pjf)-->
+    <delete id="DeleteByBatch">
+        DELETE FROM tpm_modevdlinfo WHERE Batch = #{ argBatch }
+    </delete>
+
+    <!-- 根据设备标识查询物料上机明细信息  (By-pjf)-->
+    <select id="SelectByMODevGd" resultMap="MODevDlInfoResult">
+        SELECT * FROM tpm_modevdlinfo WHERE MODevGd = #{ argMODevGd }
+    </select>
+
+    <!-- 根据设备标识和批次查询物料上机明细信息  (By-pjf)-->
+    <select id="SelectByMB" resultMap="MODevDlInfoResult">
+        SELECT * FROM tpm_modevdlinfo WHERE MODevGd = #{ argMODevGd } AND Batch = #{ argBatch }
+    </select>
+
+    <!-- 根据关联单号+批次号查询 (By-pjf)-->
+    <select id="SelectByAB" resultMap="MODevDlInfoResult">
+        SELECT * FROM tpm_modevdlinfo WHERE AssCode = #{ argAssCode } AND Batch = #{ argBatch }
+    </select>
+
+    <!-- 根据batch查询物料上机明细信息 (By-pjf)-->
+    <select id="SelectByBatch" resultMap="MODevDlInfoResult">
+        SELECT * FROM tpm_modevdlinfo WHERE Batch = #{ argBatch }
+    </select>
+
+    <!-- 根据设备标识、关联单号查询物料上机信息 (pjf) -->
+    <select id="SelectByMOGdAssCode" resultMap="MODevDlInfoResult">
+        SELECT * FROM tpm_modevdlinfo WHERE MODevGd = #{ argMODevGd } AND AssCode = #{ argAssCode } AND AssSource = #{ argAssSource }
+    </select>
+
+    <!-- 根据物料上级标识删除物料上机明细信息-->
+    <delete id="DeleteByMODevGd">
+        DELETE FROM tpm_modevdlinfo WHERE MODevGd = #{ mODevGd }
+    </delete>
+
+
+    <!-- 根据物料上级标识和用户标识删除物料上机明细信息-->
+    <delete id="DeleteByMODevGdAndExecGd">
+        DELETE FROM tpm_modevdlinfo WHERE MODevGd = #{ mODevGd } and ExecGd=#{ExecGd}
+    </delete>
+
+    <select id="SelectByDevGd" resultMap="MODevDlInfoResult">
+        SELECT * FROM tpm_modevdlinfo md, tpm_modevinfo m
+        WHERE md.MODevGd = m.Guid AND m.devGd = #{ devGd }
+    </select>
+
+    <select id="SelectModevinfoByDevGdAndBatch" resultMap="MODevDlInfoResult">
+        SELECT md.* FROM tpm_modevinfo m ,tpm_modevdlinfo md
+        WHERE m.Guid=md.MODevGd
+        and m.DevGd=#{devGd}
+        and md.Batch=#{batch}
+    </select>
+
+</mapper>

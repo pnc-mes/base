@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PackSpPropertyDAO" >
+    <resultMap type="pnc.mesadmin.entity.PackSpPropertyInfo" id="PackSpPropertyResult">
+        <id property="ruid" column="ruid" />
+    </resultMap>
+
+    <insert id="InsertPackSpProperty">
+        INSERT INTO tpm_packsppropertyinfo(guid,packSpGd,propertyGd,propertyType)
+        VALUES(#{guid},#{packSpGd},#{propertyGd},#{propertyType})
+    </insert>
+
+    <delete id="DeleteByPackSpGd">
+        DELETE FROM tpm_packsppropertyinfo where packSpGd = #{ packSpGd }
+    </delete>
+    
+    <select id="SelectByPackSpGdAndType" resultMap="PackSpPropertyResult">
+        SELECT * FROM tpm_packsppropertyinfo where packSpGd = #{ packSpGd } and propertyType = #{ type }
+    </select>
+</mapper>

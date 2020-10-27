@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>作业管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+        .leftt{float:left;width:280px}
+        ul li {
+            margin-left: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">作业名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="operateName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+
+
+<div class="layui-fluid" id="oprateInfo" style="display: none;">
+    <form class="layui-form" action="" id="dcinfoform" lay-filter="component-form-group" >
+
+        <div class="layui-card">
+            <div class="layui-card-body" >
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">基础信息</li>
+                        <li>其他信息</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <input type="hidden" id="hidden" value="" hi="" a="" b=""/>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">作业名称</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="oprateName" name="oprateName" lay-verify="required" class="layui-input inputRead" style="width: 212px;">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">工作中心</label>
+                                    <div class="layui-input-block">
+                                        <select name="wokercenter" lay-filter="" lay-search></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">批次等级</label>
+                                    <div class="layui-input-block">
+                                        <select name="batchGrade" lay-filter="" lay-search></select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">原因代码组</label>
+                                    <div class="layui-input-block">
+                                        <select name="reasonGroup" lay-filter="" lay-search></select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="container clearfix border"  style="margin-top: 10px;">
+                                <!--****************************左侧********************************-->
+                                <div class="leftt">
+                                    <div class="margina">
+                                        <label>出入站操作</label>
+                                    </div>
+                                    <ul>
+                                        <li class="margina">
+                                            <label>
+                                                <input type="radio" name="SpecOption" lay-filter="SpecOption"  value="00" title="执行接收操作">
+                                            </label>
+                                        </li>
+                                        <li class="margina">
+                                            <label>
+                                                <input type="radio" name="SpecOption" lay-filter="SpecOption"  value="01" title="系统自动过站">
+                                            </label>
+                                        </li>
+                                        <li class="margina">
+                                            <label>
+                                                <input type="radio" name="SpecOption" lay-filter="SpecOption"  value="02" title="自动入站">
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--****************************中间********************************-->
+                                <div class="leftt">
+                                    <div class="margina ">
+                                        <input type="checkbox"  name="PackOpt" class="dabao"  lay-filter="dabao"   lay-skin="primary" value="1" title="打包作业" >
+                                    </div>
+                                    <ul>
+                                        <li class="margina a disabled">
+                                            <input type="checkbox"  name="CkWeight" id="CkWeight" lay-skin="primary" value="1" title="是否检验重量">
+                                        </li>
+                                        <li class="margina a disabled">
+                                            <input type="radio" name="PackType" lay-filter="PackType"   value="00" title="同产品，不同工单">
+                                        </li>
+                                        <li class="margina a disabled">
+                                            <input type="radio" name="PackType" lay-filter="PackType"  value="01" title="同产品同工单">
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!--****************************右侧********************************-->
+                                <div class="leftt">
+                                    <div class="checkbox">
+                                        <input type="checkbox" lay-filter="BadOutSpec"  name="BadOutSpec" lay-skin="primary" value="1" title="检验不良不出站" >
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <hr/>
+                            <legend style="font-size: 11pt;color: red;margin-top: 10px;">*当前工序出站时检验到下道工序是否系统自动过站的情况则直接出入站</legend>
+
+
+                            <div class="layui-form-item layui-hide">
+                                <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+                            </div>
+
+                        </div>
+
+
+                        <div class="layui-tab-item">
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">创建人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="tel" name="creator" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">创建时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="createTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">修改人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="tel" name="modifier" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">修改时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="modifyTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-text">
+                                    <label class="layui-form-label">备注</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="remark" placeholder="请输入内容" id="remark" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'element'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+          ;
+
+        //重新渲染表单函数
+        function renderForm() {
+            layui.use('form', function() {
+                var form = layui.form;
+                form.render();
+            });
+        }
+
+        //页面首次加载
+        load();
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                clear();
+                let index = layer.open({
+                    title: '添加作业',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#oprateInfo"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+
+//获取选中id
+                let OpertRd = data.OpertRd;
+                requests({url: "/Opert/GetOpertInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify({OpertRd: OpertRd})
+                    }}, function (res) {
+                    let data = res.Data;
+                    clear();
+
+                    $("#oprateName").val(data.OptName);
+                    if (data.WCRd <= 0) {
+                        $("select[name='wokercenter']").val('');
+                    } else {
+                        $("select[name='wokercenter']").val(data.WCRd);
+                    }
+                    if (data.ReaCGRd <= 0) {
+                        $("select[name='reasonGroup']").val('');
+                    } else {
+                        $("select[name='reasonGroup']").val(data.ReaCGRd);
+                    }
+                    if (data.BLRd <= 0) {
+                        $("select[name='batchGrade']").val('');
+                    } else {
+                        $("select[name='batchGrade']").val(data.BLRd);
+                    }
+
+                    renderForm();
+                    $("textarea[name='remark']").val(data.Remark);
+                    $("input[name='creator']").val(data.Creator);
+                    $("input[name='modifier']").val(data.LastModifyMan);
+                    $("input[name='modifyTime']").val(data.LastModifyTime);
+                    $("input[name='createTime']").val(data.CreateTime);
+
+                    if (data.BadOutSpec == "00") {
+                        $("input[name='BadOutSpec']").prop("checked", true);
+                    } else {
+                        $("input[name='BadOutSpec']").prop("checked", false);
+                    }
+                    $("input[name='SpecOption']").each(function () {
+                        if ($(this).attr("value") == data.SpecOption) {
+                            $(this).prop("checked", "checked");
+                        } else {
+                            $(this).removeAttr("checked");
+                        }
+                    });
+
+                    if (data.PackInfo.PackOpt == "00") {
+                        $(".dabao").prop("checked", true);
+
+                        if (data.PackInfo.CkWeight == "00") {
+
+                            $("#CkWeight").prop("checked", true);
+                        } else {
+                            $("#CkWeight").prop("checked", false);
+                        }
+                        $("input[name='PackType']").each(function () {
+                            if ($(this).attr("value") == data.PackInfo.PackType) {
+                                $(this).prop("checked", "checked");
+                            } else {
+                                $(this).removeAttr("checked");
+                            }
+                        });
+                    } else {
+                        $(".dabao").prop("checked", false);
+                        $(".CkWeight").prop("checked", false);
+                        $("input[name='PackType']").each(function () {
+                            $(this).prop("checked", false);
+                        });
+                    }
+
+                    renderForm();
+                    let index = layer.open({
+                        title: '编辑作业',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['50%', '70%'],
+                        content: $("#oprateInfo"),
+                        btn: ['确认保存'],
+                        yes: function (index, layero) {
+                            save(index, 2, data.OpertRd);
+                        }
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    requests({url: "/Opert/SaveOpertInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                            "BusData": JSON.stringify({OpertRd: data.OpertRd})
+                        }}, function (res) {
+                        layer.msg("删除成功", {icon: 1});
+                        table.reload('currentTableId');
+                    });
+
+                    layer.close(index);
+                });
+            } else if(obj.event === 'read') {
+                read(data);
+
+                return false;
+            }
+        });
+
+        //监听行双击事件
+        table.on('rowDouble(currentTableFilter)', function(obj){
+            read(obj.data);
+            return false;
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: [
+                        {
+                            fieldName: "optName",
+                            fieldOpt: "like",
+                            fieldVal: data.field.operateName
+                        },
+                        {
+                            fieldName: "Ruid",
+                            fieldOpt: "Order BY",
+                            fieldVal: ""
+                        }
+                    ]
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //查看
+        function read(data) {
+            //获取选中id
+            let OpertRd = data.OpertRd;
+            requests({url: "/Opert/GetOpertInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({OpertRd: OpertRd})
+                }}, function (res) {
+                let data = res.Data;
+                clear();
+
+                $("#oprateName").val(data.OptName);
+                if(data.WCRd<=0){
+                    $("select[name='wokercenter']").val('');
+                }else {
+                    $("select[name='wokercenter']").val(data.WCRd);
+                }
+                if(data.ReaCGRd<=0){
+                    $("select[name='reasonGroup']").val('');
+                }else {
+                    $("select[name='reasonGroup']").val(data.ReaCGRd);
+                }
+                if(data.BLRd<=0){
+                    $("select[name='batchGrade']").val('');
+                }else {
+                    $("select[name='batchGrade']").val(data.BLRd);
+                }
+
+                renderForm();
+                $("textarea[name='remark']").val(data.Remark);
+                $("input[name='creator']").val(data.Creator);
+                $("input[name='modifier']").val(data.LastModifyMan);
+                $("input[name='modifyTime']").val(data.LastModifyTime);
+                $("input[name='createTime']").val(data.CreateTime);
+
+                if (data.BadOutSpec == "00") {
+                    $("input[name='BadOutSpec']").prop("checked", true);
+                } else {
+                    $("input[name='BadOutSpec']").prop("checked", false);
+                }
+                $("input[name='SpecOption']").each(function () {
+                    if ($(this).attr("value") == data.SpecOption) {
+                        $(this).prop("checked", "checked");
+                    } else {
+                        $(this).removeAttr("checked");
+                    }
+                });
+
+                if (data.PackInfo.PackOpt == "00") {
+                    $(".dabao").prop("checked", true);
+                    if (data.PackInfo.CkWeight == "00") {
+
+                        $("#CkWeight").prop("checked", true);
+                    } else {
+                        $("#CkWeight").prop("checked", false);
+                    }
+                    $("input[name='PackType']").each(function () {
+                        if ($(this).attr("value") == data.PackInfo.PackType) {
+                            $(this).prop("checked", "checked");
+                        } else {
+                            $(this).removeAttr("checked");
+                        }
+                    });
+                } else {
+                    $(".dabao").prop("checked", false);
+                    $(".CkWeight").prop("checked", false);
+                    $("input[name='PackType']").each(function () {
+                        $(this).prop("checked", false);
+                    });
+                }
+
+                renderForm();
+
+
+                let index = layer.open({
+                    title: '查看作业',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#oprateInfo"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+        }
+
+        //保存
+        function save(index, type, id) {
+            if ($("input[name='BadOutSpec']").is(':checked') == true) {
+                $("input[name='BadOutSpec']").val("00")
+            } else {
+                $("input[name='BadOutSpec']").val("01")
+            }
+
+            //是否作业打包 01
+            var PackOpt='';
+            if ($("input[name='PackOpt']").is(':checked') == true) {
+                PackOpt = "00";
+            } else {
+                PackOpt = "01"
+            }
+
+            //是否检验 01
+            var CkWeight='';
+            if ($("input[name='CkWeight']").is(':checked') == true) {
+                CkWeight = "00"
+            } else {
+                CkWeight = "01"
+            }
+            if(type === 1){
+
+                let  data = {
+                    "OptName": $("#oprateName").val().trim(),
+                    "WCRd":  $("select[name='wokercenter']").val(),
+                    "BLRd": $("select[name='batchGrade']").val(),
+                    "Remark": $("textarea[name='remark']").val().trim(),
+                    "SpecOption": $("#hidden").val(),
+                    "BadOutSpec": $("input[name='BadOutSpec']").val(),
+                    "ReaCGRd":$("select[name='reasonGroup']").val(),
+                    "PackInfo": {
+                        "PackOpt": PackOpt,
+                        "CkWeight": CkWeight,
+                        "PackType": $("#hidden").attr("hi")
+                    }
+                };
+
+                requests({url: "/Opert/SaveOpertInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }else if(type === 2){
+                let  data = {
+                    "OpertRd": id,
+                    "OptName": $("#oprateName").val().trim(),
+                    "WCRd":  $("select[name='wokercenter']").val(),
+                    "BLRd": $("select[name='batchGrade']").val(),
+                    "Remark": $("textarea[name='remark']").val().trim(),
+                    "SpecOption": $("#hidden").val(),
+                    "BadOutSpec": $("input[name='BadOutSpec']").val(),
+                    "ReaCGRd":$("select[name='reasonGroup']").val(),
+                    "PackInfo": {
+                        "PackOpt": PackOpt,
+                        "CkWeight": CkWeight,
+                        "PackType": $("#hidden").attr("hi")
+                    }
+                };
+
+                requests({url: "/Opert/SaveOpertInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/Opert/GetAllOpertNew",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {field: 'OpertRd', title: 'ID', sort: true},
+                        {field: 'OptName', title: '作业名称'},
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        //清空
+        function clear() {
+            $("#oprateName").val('');
+            $("select[name='wokercenter']").val('')
+            $("select[name='batchGrade']").val('')
+            $("select[name='reasonGroup']").val('')
+            renderForm();
+
+            $("input[name='creator']").val('')
+            $("input[name='createTime']").val('')
+            $("input[name='modifier']").val('')
+            $("input[name='modifyTime']").val('')
+            $("textarea[name='remark']").val('')
+        }
+
+        //加载工作中心
+        function getAllWorkCenter(){
+            requests({url: "/WorkC/GetAllWCInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"
+                }}, function (res) {
+                var data=res.Data;
+                var selectData='<option></option>';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].WCRd+"'>"+data[i].WCName+"</option>"
+                    }
+                    $("select[name='wokercenter']").empty().html(selectData);
+                    renderForm();
+                }
+            })
+        }
+        getAllWorkCenter();
+
+        //加载批次等级
+        function getBatchGrade(){
+            requests({url: "/BatchL/GetAllBLInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"
+                }}, function (res) {
+                var data=res.Data;
+                var selectData='<option></option>';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].BLRd+"'>"+data[i].BLName+"</option>"
+                    }
+                    $("select[name='batchGrade']").empty().html(selectData);
+                    renderForm();
+                }
+            })
+        }
+        getBatchGrade();
+
+        //加载原因代码组
+        function getReasonGroup(){
+            requests({url: "/ReasonG/GetAllRCGInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"
+                }}, function (res) {
+                var data=res.Data;
+                var selectData='<option></option>';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].RCGRd+"'>"+data[i].RCGpName+"</option>"
+                    }
+                    $("select[name='reasonGroup']").empty().html(selectData);
+                    renderForm();
+                }
+            })
+        }
+        getReasonGroup();
+
+        form.on('checkbox(dabao)', function(data){
+            if(this.checked ){
+                $("input[name='PackType']").each(function () {
+                    $(this).prop("disabled", false)
+                })
+                $("#CkWeight").prop("disabled", false)
+
+            }else {
+                $("input[name='PackType']").each(function () {
+                    $(this).removeAttr("checked");
+                    $(this).prop("disabled", true);
+                    $(this).prop("checked", false);
+                })
+                $("#CkWeight").prop("checked", false);
+                $("#CkWeight").prop("disabled", true);
+            }
+            renderForm();
+        });
+
+
+
+        form.on('checkbox(BadOutSpec)', function(data){
+            if(this.checked ){
+                $("#hidden").val($(this).attr("value"));
+            }
+        });
+        $("#hidden").val("02");
+
+        form.on('radio(PackType)', function(data){
+            if(this.checked ){
+                $("#hidden").attr("hi", $(this).attr("value"));
+            }
+        });
+        $("#hidden").attr("hi", "00")
+
+        form.on('radio(SpecOption)', function(data){
+            if(this.checked ){
+                $("#hidden").val($(this).attr("value"));
+            }
+        });
+        $("#hidden").val("02");
+
+    });
+</script>
+</body>
+</html>

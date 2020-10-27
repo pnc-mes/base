@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.RMaNDAO">
+    <resultMap id="rMaNInfoMap" type="pnc.mesadmin.entity.RMaNInfo">
+        <id property="ruid" column="Ruid" ></id>
+        <result property="guid" column="Guid" />
+        <result property="rMaNCode" column="RMaNCode" />
+        <result property="assCode" column="AssCode" />
+        <result property="assSource" column="AssSource" />
+        <result property="exStatus" column="ExStatus"></result>
+        <result property="sStatus" column="SStatus" />
+        <result property="dSource" column="DSource" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--新增入库通知单信息-->
+    <insert id="InsertRMaNInfo">
+      INSERT INTO tpm_rmaninfo (guid,RMaNCode,AssCode,AssSource,ExStatus,SStatus,DSource,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{rMaNCode},#{assCode},#{assSource},#{exStatus},#{sStatus},#{dSource},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--删除入库通知单信息-->
+    <delete id="DeleteRMaNInfo">
+        DELETE FROM tpm_rmaninfo WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新入库通知单信息-->
+    <update id="UpdateRMaNInfo">
+        UPDATE `tpm_rmaninfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="rMaNCode != null">
+                RMaNCode = #{ rMaNCode },
+            </if>
+            <if test="assCode != null">
+                AssCode = #{ assCode },
+            </if>
+            <if test="assSource != null">
+                AssSource = #{ assSource },
+            </if>
+            <if test="exStatus != null">
+                ExStatus = #{ exStatus },
+            </if>
+            <if test="sStatus != null">
+                SStatus = #{ sStatus },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!--查询入库通知单列表信息表-->
+    <select id="SelectRMaNInfo" resultMap="rMaNInfoMap">
+        SELECT * FROM `tpm_rmaninfo`
+    </select>
+
+    <select id="SelectRMaNInfoGuid" resultMap="rMaNInfoMap">
+        SELECT * FROM `tpm_rmaninfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--查询入库通知单信息表-->
+    <select id="SelectRMaNInfoByRuid" resultMap="rMaNInfoMap" parameterType="int">
+        SELECT * FROM `tpm_rmaninfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--通过单号查询产成品入库通知单列表信息 WHL-->
+    <select id="SelectRMaNInfoByRMaNCode" resultMap="rMaNInfoMap">
+        SELECT * FROM `tpm_rmaninfo` WHERE RMaNCode=#{rMaNCode}
+    </select>
+
+
+</mapper>

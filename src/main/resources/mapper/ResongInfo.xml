@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ReasongDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.ReasongInfo" id="ReasongInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="ReaCGName" column="ReaCGName" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+	<!-- 原因代码组明细 -->
+	<resultMap type="pnc.mesadmin.entity.ReaCodeGdlInfo" id="ReaCodeGdlInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="ReaCGGd" column="ReaCGGd" />
+		<result property="ReaCGd" column="ReaCGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="Remark" column="Remark" />
+	</resultMap>
+
+	<insert id="InsertReasongInfo" >
+		INSERT INTO tpm_reacodeginfo (guid,ReaCGName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES (#{guid},#{ReaCGName},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+	</insert>
+
+	<insert id ="InsertReaCodeDlInfos" parameterType="java.util.List" >
+		INSERT INTO tpm_reacodegdlinfo (Guid,ReaCGGd,ReaCGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES
+		<foreach collection ="list" item="reaCodeDlInfo" index= "index" separator =",">
+			(
+			#{reaCodeDlInfo.guid}, #{reaCodeDlInfo.ReaCGGd},#{reaCodeDlInfo.ReaCGd},#{reaCodeDlInfo.creator},
+			#{reaCodeDlInfo.createTime},#{reaCodeDlInfo.lastModifyMan},#{reaCodeDlInfo.lastModifyTime},#{reaCodeDlInfo.Remark}
+			)
+		</foreach >
+	</insert >
+
+	<!--删除明细-->
+	<delete id="DeleteRCGpDlInfoByGuid" >
+		DELETE FROM tpm_reacodegdlinfo WHERE ReaCGGd = #{guid}
+	</delete>
+	<!--删除原因代码组-->
+	<delete id="DeleteRCGpInfoByGuid" >
+		DELETE FROM tpm_reacodeginfo WHERE Guid = #{guid}
+	</delete>
+
+	<update id="UpDateRCGpInfoByRuid">
+		UPDATE tpm_reacodeginfo SET ReaCGName = #{ReaCGName},LastModifyMan = #{lastModifyMan},LastModifyTime = #{lastModifyTime},Remark = #{remark}
+		WHERE Guid = #{guid}
+	</update>
+
+	<!--查询名称是否已存在-->
+	<select id="SelectReasongGByName" parameterType="string" resultMap="ReasongInfoResult">
+		SELECT * FROM tpm_reacodeginfo where ReaCGName = #{rcGpName}
+	</select>
+
+	<select id="selectAllReasongInfo" resultMap="ReasongInfoResult">
+		SELECT * FROM tpm_reacodeginfo
+	</select>
+
+	<select id="SelectReasongInfoByGuid" resultMap="ReasongInfoResult">
+		SELECT * FROM tpm_reacodeginfo where guid = #{argGuid}
+	</select>
+
+	<!--根据主键查询原因代码组 张亮亮-->
+	<select id="SelectReasongInfoByRuid" parameterType="int" resultMap="ReasongInfoResult">
+		SELECT * FROM tpm_reacodeginfo where ruid = #{argRuid}
+	</select>
+
+	<select id="SelectReaCodeGdlInfoByRCGGd" resultMap="ReaCodeGdlInfoResult">
+		SELECT * FROM tpm_reacodegdlinfo WHERE ReaCGGd = #{argGuid}
+	</select>
+
+	<select id="SelectCountByName" resultType="_int">
+		SELECT count(ruid) FROM tpm_reacodeginfo where ReaCGName = #{ReaCGName} and ruid != #{ruid}
+	</select>
+
+</mapper>

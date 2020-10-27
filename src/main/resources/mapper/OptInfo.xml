@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.OptDAO">
+    <resultMap id="OptInfoResult" type="pnc.mesadmin.entity.OptInfo">
+        <id column="Ruid" property="ruid"/>
+        <result column="Guid" property="guid" />
+        <result column="OptName" property="optName" />
+        <result column="Alias" property="alias" />
+        <result column="Creator" property="creator"/>
+        <result column="CreateTime" property="createTime"/>
+        <result column="LastModifyMan" property="lastModifyMan"/>
+        <result column="LastModifyTime" property="lastModifyTime"/>
+        <result column="Remark" property="remark"/>
+    </resultMap>
+
+    <!-- 查询所有的操作信息 (By-pjf)-->
+    <select id="SelectAllOptInfo" resultMap="OptInfoResult">
+        SELECT * FROM tpm_optinfo
+    </select>
+
+    <!-- 根据guid查操作信息 (By-pjf)-->
+    <select id="SelectOptInfo" resultMap="OptInfoResult">
+        SELECT * FROM tpm_optinfo WHERE Guid = #{ guid }
+    </select>
+
+    <!-- 根据ruid查操作信息 (By-pjf)-->
+    <select id="SelectOptInfoRuid" resultMap="OptInfoResult">
+        SELECT * FROM tpm_optinfo WHERE Ruid = #{ ruid }
+    </select>
+
+    <!-- 资源下面有的操作 (By-pjf)-->
+    <select id="SelectOptByResOpt" resultMap="OptInfoResult">
+        SELECT * FROM tpm_optinfo o, tpm_resoptinfo ro
+        WHERE o.Guid = ro.OptGd AND ro.Guid = #{ argResGd }
+    </select>
+
+</mapper>

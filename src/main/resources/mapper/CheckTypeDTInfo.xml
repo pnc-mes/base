@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckTypeDTDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CheckTypeDtlInfo" id="CheckTypeDtlInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAll" resultMap="CheckTypeDtlInfoMap">
+        SELECT * FROM tpm_checktypedtlinfo
+    </select>
+
+    <select id="SelectByRuid" resultMap="CheckTypeDtlInfoMap">
+        SELECT * FROM tpm_checktypedtlinfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="CheckTypeDtlInfoMap">
+        SELECT * FROM tpm_checktypedtlinfo where  Guid=#{guid}
+    </select>
+
+    <select id="SelectByTypeGuid" resultMap="CheckTypeDtlInfoMap">
+        SELECT * FROM tpm_checktypedtlinfo where  CheckTypeGd=#{typeGuid}
+    </select>
+
+    <select id="SelectByNameAndTypeGd" resultMap="CheckTypeDtlInfoMap">
+        SELECT * FROM tpm_checktypedtlinfo where  CheckTypeGd=#{checkTypeGd} and CheckItemName=#{checkItemName}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_checktypedtlinfo(Guid,CheckTypeGd,CheckItemName,CheckItemC,SureType,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{checkTypeGd},#{checkItemName},#{checkItemC},#{sureType},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <update id="UpdateByGuid">
+        UPDATE tpm_checktypedtlinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="CheckItemName != null">
+                CheckItemName = #{CheckItemName},
+            </if>
+            <if test="CheckItemC != null">
+                CheckItemC = #{CheckItemC},
+            </if>
+            <if test="SureType != null">
+                SureType = #{SureType},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+        </trim>
+        WHERE Guid =#{guid}
+    </update>
+
+    <delete id="DeleteByCheckTypeGd">
+        DELETE  FROM tpm_checktypedtlinfo WHERE CheckTypeGd =#{ckTypeGd}
+    </delete>
+
+</mapper>
+

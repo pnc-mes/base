@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.IQCBInfoDAO" >
+    <resultMap type="pnc.mesadmin.entity.IQCInfo" id="IQCInfoResult">
+        <id property="ruid" column="ruid" />
+       <result property="guid" column="guid"/>
+       <result property="batch" column="batch"/>
+       <result property="maVerGd" column="maVerGd"/>
+       <result property="materialCode" column="materialCode"/>
+       <result property="materialName" column="materialName"/>
+       <result property="version" column="version"/>
+       <result property="num" column="num"/>
+       <result property="ckResult" column="ckResult"/>
+       <result property="creator" column="creator"/>
+       <result property="createTime" column="createTime"/>
+       <result property="lastModifyMan" column="lastModifyMan"/>
+       <result property="lastModifyTime" column="lastModifyTime"/>
+       <result property="remark" column="remark"/>
+    </resultMap>
+    <insert id="InsertIQCBInfo" >
+        insert into tpm_iqcinfo(
+
+        <trim suffixOverrides=",">
+            guid,batch,maVerGd,materialCode,materialName,version,num,ckResult,creator,createTime,
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        ) values (
+            <trim suffixOverrides=",">
+                #{guid},#{batch},#{maVerGd},#{materialCode},#{materialName},
+                #{version},#{num},#{ckResult},#{creator},#{createTime},
+                <if test="lastModifyMan != null">
+                    #{lastModifyMan},
+                </if>
+                <if test="lastModifyTime != null">
+                    #{lastModifyTime},
+                </if>
+                <if test="remark != null">
+                    #{remark},
+                </if>
+            </trim>
+        )
+    </insert>
+
+    <delete id="DeleteIQCBInfoByRuid" >
+        delete  from tpm_iqcinfo where ruid=#{argRuid}
+    </delete>
+
+    <update id="UpdateIQCBInfo">
+        update tpm_iqcinfo set
+        <trim suffixOverrides=",">
+            <if test="guid != null">
+                guid=#{guid},
+            </if>
+            <if test="batch != null">
+                batch=#{batch},
+            </if>
+            <if test="maVerGd != null">
+                maVerGd=#{maVerGd},
+            </if>
+            <if test="materialCode != null">
+                materialCode=#{materialCode},
+            </if>
+            <if test="materialName != null">
+                materialName=#{materialName},
+            </if>
+            <if test="version != null">
+                version=#{version},
+            </if>
+            <if test="num != null">
+                num=#{num},
+            </if>
+            <if test="ckResult != null">
+                ckResult=#{ckResult},
+            </if>
+            <if test="creator != null">
+                creator=#{creator},
+            </if>
+            <if test="createTime != null">
+                createTime=#{createTime},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan=#{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime=#{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark=#{remark}
+            </if>
+        </trim>
+        where ruid=#{ruid}
+    </update>
+
+    <select id="SelectAllIQCBInfo" resultMap="IQCInfoResult">
+        select * from tpm_iqcinfo
+    </select>
+
+    <select id="SelectIQCBInfoByRuid" resultMap="IQCInfoResult">
+        select * from tpm_iqcinfo where ruid=#{argIqcRd}
+    </select>
+
+    <select id="SelectIQCBInfoByBatch" resultMap="IQCInfoResult">
+        select * from tpm_iqcinfo where batch=#{batch}
+    </select>
+</mapper>

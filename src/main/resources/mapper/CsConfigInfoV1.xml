@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSConfigDAOV1">
+    <resultMap id="CSConfigInfoMap" type="pnc.mesadmin.entity.CSConfigInfoV1">
+        <id column="Ruid" property="Ruid"></id>
+    </resultMap>
+
+    <select id="SelectCSConfigAll" resultMap="CSConfigInfoMap">
+        select * from  tpm_csconfiginfo
+    </select>
+
+    <select id="SelectCsConfigByRd" resultMap="CSConfigInfoMap">
+        select * from  tpm_csconfiginfo where Ruid=#{ruid}
+    </select>
+
+    <select id="SelectCsconfigByGD" resultMap="CSConfigInfoMap">
+        select * from  tpm_csconfiginfo where Guid=#{guid}
+    </select>
+
+    <select id="SelectCsconfigByName" resultMap="CSConfigInfoMap">
+        select * from  tpm_csconfiginfo where ConfigName=#{name}
+    </select>
+
+    <insert id="InsertCsconfig">
+        INSERT INTO tpm_csconfiginfo(Guid,ConfigName,SqlConfig,ResGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{ConfigName},#{SqlConfig},#{ResGd},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+
+    <update id="UpdateCsconfig">
+        UPDATE tpm_csconfiginfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="ConfigName != null">
+                ConfigName = #{ConfigName},
+            </if>
+            <if test="SqlConfig != null">
+                SqlConfig = #{SqlConfig},
+            </if>
+            <if test="ResGd != null">
+                ResGd = #{ResGd},
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{LastModifyMan},
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{LastModifyTime},
+            </if>
+            <if test="Remark != null">
+                Remark = #{Remark},
+            </if>
+        </trim>
+        WHERE Ruid =#{Ruid}
+    </update>
+
+    <delete id="DelCsconfigByGuid">
+          delete from tpm_csconfiginfo where Guid=#{guid}
+    </delete>
+
+</mapper>

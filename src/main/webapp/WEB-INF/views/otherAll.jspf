@@ -1,0 +1,37 @@
+<%@ page pageEncoding="UTF-8" %>
+<%--处理页面中的其他信息--%>
+<div class="box-body form-inline">
+    <div class="form-group">
+        <div class="block bBottom">
+            <div class="form-group">
+                <label for="creatPeople">创建人&nbsp;&nbsp;</label>
+                <input type="text" class="form-control read" id="creatPeople" readonly
+                       name="creator" placeholder=" ">
+            </div>
+            <div class="form-group">
+                <label for="creatTime">创建时间&nbsp;&nbsp;</label>
+                <input type="text" class="form-control read" id="creatTime" readonly
+                       name="createTime" placeholder=" ">
+            </div>
+        </div>
+        <div class="block ">
+            <div class="form-group">
+                <label for="modifyPeople">修改人&nbsp;&nbsp;</label>
+                <input type="text" class="form-control read" id="modifyPeople" readonly
+                       name="lastModifyMan" placeholder=" ">
+            </div>
+            <div class="form-group">
+                <label for="modifyTime">修改时间&nbsp;&nbsp;</label>
+                <input type="text" class="form-control read" id="modifyTime" readonly
+                       name="lastModifyTime" placeholder=" ">
+            </div>
+        </div>
+        <div class="form-group beizhu block">
+            <label>
+                <span class="beizhuspan">备&nbsp;&nbsp;&nbsp;&nbsp;注</span></label>
+            <textarea  style="margin-left: 6px;" id="beizhu" name="remark" maxlength="255" onchange="this.value=this.value.substring(0, 255)" onkeydown="this.value=this.value.substring(0, 255)" onkeyup="this.value=this.value.substring(0, 255)" >
+
+            </textarea>
+        </div>
+    </div>
+</div>

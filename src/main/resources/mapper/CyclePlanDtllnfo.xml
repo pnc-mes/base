@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CyclePlanDtlDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.CyclePlanDtllnfo" id="cyclePlanDtllnfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="cyclePlanGd" column="cyclePlanGd" />
+        <result property="taskGd" column="taskGd" />
+        <result property="taskName" column="taskName" />
+        <result property="taskItemName" column="taskItemName" />
+        <result property="sureType" column="sureType" />
+  <!--      <result property="minExCount" column="minExCount" />-->
+        <result property="maxExCount" column="maxExCount" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!--根据主表标识查询所有信息-->
+    <select id="selectCyclePlanDtllnfoByCyclePlanGd" parameterType="string" resultMap="cyclePlanDtllnfoResult">
+        select * from  tpm_cycleplandtlinfo where cyclePlanGd=#{cyclePlanGd}
+    </select>
+
+    <!--删除-->
+    <delete id="deleteCyclePlanDtllnfo">
+        delete from tpm_cycleplandtlinfo where ruid=#{ruid}
+    </delete>
+
+    <delete id="deleteCyclePlanDtlInfoByGuid">
+        delete from tpm_cycleplandtlinfo  where  CyclePlanGd =#{guid}
+    </delete>
+
+    <!--新增-->
+    <insert id="insertCyclePlanDtllnfo">
+        insert into tpm_cycleplandtlinfo (guid,cyclePlanGd,taskGd,taskName,taskItemName,sureType,maxExCount,creator,createTime,lastModifyMan,lastModifyTime,remark)
+        values (#{guid},#{cyclePlanGd},#{taskGd},#{taskName},#{taskItemName},#{sureType},#{maxExCount},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark}) ;
+    </insert>
+</mapper>

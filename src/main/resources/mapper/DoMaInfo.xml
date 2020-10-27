@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DoMaDAO" >
+    <resultMap type="pnc.mesadmin.entity.DoMaInfo" id="doMaInfoMap">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="batch" column="batch" />
+        <result property="lineGd" column="lineGd" />
+        <result property="specVerGd" column="specVerGd" />
+        <result property="specName" column="specName" />
+        <result property="devGd" column="devGd" />
+        <result property="devName" column="devName" />
+        <result property="conSMode" column="conSMode" />
+        <result property="doBatch" column="doBatch" />
+        <result property="maVerGd" column="maVerGd" />
+        <result property="materialCode" column="materialCode" />
+        <result property="materialName" column="materialName" />
+        <result property="materialDes" column="materialDes" />
+        <result property="doNum" column="doNum" />
+        <result property="unitName" column="unitName" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="f1" column="f1" />
+        <result property="f2" column="f2" />
+        <result property="f3" column="f3" />
+        <result property="f4" column="f4" />
+        <result property="f5" column="f5" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!-- 新增  (By-pjf)-->
+    <insert id="InsertDoMaInfo">
+        INSERT INTO tpm_domainfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,batch,specVerGd,specName,devGd,devName,doBatch,
+            maVerGd,materialCode,materialName,doNum,unitName,
+            Creator,CreateTime,conSMode,lineGd,
+
+            <if test="materialDes != null">
+                materialDes,
+            </if>
+            <if test="f1 != null">
+                f1,
+            </if>
+            <if test="f2 != null">
+                f2,
+            </if>
+            <if test="f3 != null">
+                f3,
+            </if>
+            <if test="f4 != null">
+                f4,
+            </if>
+            <if test="f5 != null">
+                f5,
+            </if>
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{batch},#{specVerGd},#{specName},#{devGd},#{devName},
+            #{doBatch},#{maVerGd},#{materialCode},#{materialName},#{doNum},
+            #{unitName},#{creator},#{createTime},#{conSMode},#{lineGd},
+
+            <if test="materialDes != null">
+                #{materialDes},
+            </if>
+            <if test="f1 != null">
+                #{f1},
+            </if>
+            <if test="f2 != null">
+                #{f2},
+            </if>
+            <if test="f3 != null">
+                #{f3},
+            </if>
+            <if test="f4 != null">
+                #{f4},
+            </if>
+            <if test="f5 != null">
+                #{f5},
+            </if>
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据批次信息查询批次用料信息表 张亮亮-->
+    <select id="SelectDoMaInfoBybatch" resultMap="doMaInfoMap" parameterType="string">
+        SELECT * FROM tpm_domainfo WHERE batch=#{batch}
+    </select>
+</mapper>

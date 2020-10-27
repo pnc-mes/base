@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PickDtlDAO_1" >
+    <resultMap type="pnc.mesadmin.entity.PickDtlInfo_1" id="pickDtlInfoResult">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="pickCode" column="PickCode" />
+        <result property="pickGd" column="PickGd" />
+        <result property="reMaVerGd" column="ReMaVerGd" />
+        <result property="maVerGd" column="MaVerGd" />
+        <result property="reML" column="reML" />
+        <result property="num" column="Num" />
+        <result property="unitName" column="UnitName" />
+        <result property="storeGd" column="StoreGd" />
+        <result property="createTime" column="CreateTime" />
+        <result property="creator" column="Creator" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <insert id="InsertPickDtlInfo_1">
+        INSERT INTO `tpm_pickdtlinfo_1`(Guid,PickCode,PickGd,reMaVerGd,MaVerGd,ReML,Num,UnitName,StoreGd,CreateTime,Creator,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{pickCode},#{pickGd},#{reMaVerGd},#{maVerGd},#{reML},#{num},#{unitName},#{storeGd},#{createTime},#{creator},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--根据领料单明细Guid查询领料单明细信息  王怀龙-->
+    <select id="SelectPickDtlInfoByPickGd_1" resultMap="pickDtlInfoResult">
+        SELECT * FROM tpm_pickdtlinfo_1 WHERE PickGd = #{argGuid}
+    </select>
+
+    <!--根据领料单明细ID更新领料单信息 pjf-->
+    <update id="UpdatePickDtlInfo_1" >
+        UPDATE tpm_pickdtlinfo_1
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pickGd != null">
+                PickGd = #{pickGd},
+            </if>
+            <if test="pickCode != null">
+                PickCode = #{pickCode},
+            </if>
+            <if test="reML != null">
+                ReML = #{reML},
+            </if>
+            <if test="reMaVerGd != null">
+                ReMaVerGd = #{reMaVerGd},
+            </if>
+            <if test="maVerGd != null">
+                MaVerGd = #{maVerGd},
+            </if>
+            <if test="num != null">
+                Num = #{num},
+            </if>
+            <if test="unitName != null">
+                UnitName = #{unitName},
+            </if>
+            <if test="storeGd != null">
+                StoreGd = #{storeGd},
+            </if>
+            <if test="creator != null">
+                Creator = #{creator},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        where Ruid = #{ruid}
+    </update>
+
+    <delete id="DeletePickDtlByPickGd">
+        DELETE FROM tpm_pickdtlinfo_1 WHERE PickGd = #{ argPickGd }
+    </delete>
+
+    <delete id="DeleteByGuid">
+        DELETE FROM tpm_pickdtlinfo_1 WHERE Guid = #{ argGuid }
+    </delete>
+
+    <select id="SelectByAssCodeAssSourceReMaVerGd" resultType="Float">
+        SELECT SUM(Num) from tpm_pickinfo p, tpm_pickdtlinfo_1 pd WHERE p.`AssCode` = #{ argAssCode }
+            AND p.`AssSource` = #{ argAssSource }
+            AND p.`Guid` = pd.`PickGd`
+            AND (pd.`ReMaVerGd` = #{ argReMaVerGd } OR pd.`MaVerGd` = #{ argReMaVerGd })
+    </select>
+</mapper>

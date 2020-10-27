@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CkTkDAO">
+    <resultMap id="ckTkInfoMap" type="pnc.mesadmin.entity.CkTkInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="CkType" property="ckType"></result>
+        <result column="CkCode" property="ckCode"></result>
+        <result column="AssCode" property="assCode"></result>
+        <result column="AssSource" property="assSource"></result>
+        <result column="ExStatus" property="exStatus"></result>
+        <!-- <result column="SubmitStore" property="submitStore"></result>-->
+        <result column="Execor" property="execor"></result>
+        <result column="ExecTime" property="execTime"></result>
+        <result column="Cancelor" property="cancelor"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime"></result>
+        <result column="CancelTime" property="cancelTime"></result>
+        <result column="Finishor" property="finishor"></result>
+        <result column="FinishTime" property="finishTime"></result>
+        <result column="Remark" property="remark"></result>
+        <result column="AssCodeGd" property="assCodeGd"></result>
+    </resultMap>
+    <!--新增出库信息-->
+    <insert id="InsertCkTkInfo" useGeneratedKeys="true" keyProperty="ruid" keyColumn="Ruid">
+        INSERT INTO `tpm_cktkinfo`(Guid,CkType,AssSource,CkCode,AssCode,ExStatus,Execor,ExecTime,Cancelor,Creator,CreateTime,CancelTime,Finishor,FinishTime,Remark,AssCodeGd)
+        VALUES (#{guid},#{ckType},#{assSource},#{ckCode},#{assCode},#{exStatus},#{execor},#{execTime},#{cancelor},#{creator},#{createTime},#{cancelTime},#{finishor},#{finishTime},#{remark},#{assCodeGd})
+    </insert>
+    <!--查询出库信息根据单号-->
+    <select id="SelectCkTkInfoByGuid" parameterType="string" resultMap="ckTkInfoMap">
+        SELECT * FROM `tpm_cktkinfo` WHERE Guid=#{guid}
+    </select>
+    <!--更新出库信息-->
+    <update id="UpdateCkTkInfo">
+        UPDATE `tpm_cktkinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="ckType != null">
+                CkType = #{ ckType },
+            </if>
+            <if test="ckCode != null">
+                CkCode = #{ ckCode },
+            </if>
+            <if test="assCode != null">
+                AssCode = #{ assCode },
+            </if>
+            <if test="assSource != null">
+                AssSource = #{ assSource },
+            </if>
+            <if test="exStatus != null">
+                ExStatus = #{ exStatus },
+            </if>
+            <!--   <if test="submitStore != null">
+                   SubmitStore = #{ submitStore },
+               </if>-->
+            <if test="execor != null">
+                Execor = #{ execor },
+            </if>
+            <if test="execTime != null">
+                ExecTime = #{ execTime },
+            </if>
+            <if test="cancelor != null">
+                Cancelor = #{ cancelor },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="cancelTime != null">
+                CancelTime = #{ cancelTime },
+            </if>
+            <if test="finishor != null">
+                Finishor = #{ finishor },
+            </if>
+            <if test="finishTime != null">
+                FinishTime = #{ finishTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="assCodeGd != null">
+                AssCodeGd = #{ assCodeGd },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据出库单号查询出库单信息  王怀龙-->
+    <select id="SelectCkTkInfoByCkCode" resultMap="ckTkInfoMap">
+        SELECT * from tpm_cktkinfo WHERE CkCode = #{argCkCode}
+    </select>
+
+    <select id="SelectCkTkInfoByAssCode" resultMap="ckTkInfoMap" parameterType="string">
+        SELECT * from tpm_cktkinfo WHERE AssCode = #{assCode}
+    </select>
+    <!-- 跟据是否有无工单查询出库信息-->
+    <select id="SelectCkTkInfoByAssCodeAndAssSource" resultMap="ckTkInfoMap" parameterType="string">
+        SELECT * from tpm_cktkinfo WHERE AssCode = #{assCode} AND AssSource=#{assSource}
+    </select>
+
+    <!--根据类型，代码，状态查询盘点信息 王怀龙-->
+    <select id="SelectCkTkInfoByOOS" resultMap="ckTkInfoMap">
+        SELECT * FROM `tpm_cktkinfo`
+        <where>
+            <if test="assCode!=null||assCode!=''">
+                and AssCode like #{assCode}
+            </if>
+            <if test="ckType!=null||ckType!=''">
+                AND CkType = #{ckType}
+            </if>
+            <if test="exStatus!=null||exStatus!=''">
+                AND ExStatus=#{exStatus}
+            </if>
+        </where>
+        ORDER BY CreateTime DESC
+    </select>
+
+    <!-- 根据出库单号查询出库单信息 -->
+    <select id="SelectCkTkInfoByCkType" resultMap="ckTkInfoMap" parameterType="string">
+        SELECT * from tpm_cktkinfo WHERE CkType = #{ckType}
+    </select>
+
+    <!-- 根据出库单号查询出库单信息 -->
+    <select id="SelectCkTkInfoByRuid" resultMap="ckTkInfoMap" parameterType="int">
+        SELECT * from tpm_cktkinfo WHERE Ruid = #{ruid}
+    </select>
+    <!-- 删除出库单号查询出库单信息 -->
+    <delete id="DeleteCkTkInfoByRuid" parameterType="int">
+        DELETE FROM tpm_cktkinfo WHERE Ruid = #{ruid}
+    </delete>
+
+    <!-- 筛选关联查询  (lfz) -->
+    <select id="SelectByCkShaixuan" resultMap="ckTkInfoMap">
+        SELECT * FROM `tpm_cktkinfo` b WHERE
+        <if test="ckType != null and ckType!=''">
+            b.`CkType`=#{ckType}
+        </if>
+        AND b.`AssCode`
+        <choose>
+            <when test="assCode != null and assCode!='' ">
+                LIKE CONCAT('%','${assCode}','%')
+            </when>
+            <otherwise>
+                LIKE CONCAT('%','','%')
+            </otherwise>
+        </choose>
+        <if test="execTime != null and execTime!=''">
+            AND b.`ExecTime` BETWEEN #{execTime}
+        </if>
+        <if test="execTime1 != null and execTime1!=''">
+            AND #{execTime1}
+        </if>
+    </select>
+
+    <!--根据出库类型，出库单号，执行状态查询出库任务-->
+    <select id="SelectCkTkInfoByCkCodeAndCkTypeAndExStatus" resultMap="ckTkInfoMap">
+        SELECT * FROM `tpm_cktkinfo` WHERE CkType = #{CkType} AND ExStatus =#{ExStatus}
+        <if test="AssCode!=null">
+            AND AssCode = #{AssCode}
+        </if>
+        ORDER BY CreateTime DESC
+    </select>
+
+</mapper>

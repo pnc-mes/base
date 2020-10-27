@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevTypeDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevTypeInfo" id="DevTypeInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="devType" column="devType" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--根据设备类型查询一条信息 zll-->
+    <select id="SelectAllDevTypeInfoByDevType" resultMap="DevTypeInfoResult" parameterType="string">
+      select * from tpm_devtypeinfo where DevType=#{DevType}
+  </select>
+
+    <!--查询设备类型信息列表-->
+    <select id="SelectAllDevTypeInfo" resultMap="DevTypeInfoResult">
+        select * from tpm_devtypeinfo
+    </select>
+
+    <!--查询设备类型信息-->
+    <select id="SelectByRuid" resultMap="DevTypeInfoResult">
+        SELECT * FROM tpm_devtypeinfo p WHERE p.`Ruid` = #{devTypeRd}
+    </select>
+
+    <!--查询设备类型信息guid-->
+    <select id="SelectByguid" resultMap="DevTypeInfoResult">
+        SELECT * FROM tpm_devtypeinfo p WHERE p.`guid` = #{guid}
+    </select>
+
+    <!--查询设备类型-->
+    <select id="SelectdevType" resultMap="DevTypeInfoResult">
+        SELECT * FROM tpm_devtypeinfo u WHERE u.`devType` = #{devType}
+    </select>
+
+    <!--保存设备类型信息-->
+    <insert id="InsertDevTypeInfo">
+        INSERT INTO tpm_devtypeinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,DevType,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{devType},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除设备类型信息-->
+    <delete id="DeleteDevTypeInfo">
+        DELETE FROM tpm_devtypeinfo WHERE Ruid = #{devTypeRd}
+    </delete>
+
+    <!--更新设备类型信息-->
+    <update id="UpdateDevTypeInfo">
+        UPDATE tpm_devtypeinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="devType != null">
+                devType = #{devType},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CommonPageDAO">
+    <resultMap id="commonPageDataMap" type="pnc.mesadmin.dto.CommonPageInfo.CommonPageData">
+        <result column="WoCode" property="WoCode"></result>
+        <result column="Batch" property="Batch"></result>
+        <result column="CZPCode" property="CZPCode"></result>
+        <result column="MaCode" property="MaCode"></result>
+        <result column="MaName" property="MaName"></result>
+        <result column="Eff" property="Eff"></result>
+        <result column="Grade" property="Grade"></result>
+        <result column="Color" property="Color"></result>
+        <result column="GradeName" property="GradeName"></result>
+        <result column="BadName" property="BadName"></result>
+        <result column="LocationName" property="LocationName"></result>
+        <result column="MaCode1" property="MaCode1"></result>
+        <result column="MaName1" property="MaName1"></result>
+        <result column="BomName" property="BomName"></result>
+        <result column="CreateTime" property="CreateTime"></result>
+        <result column="Creator" property="Creator"></result>
+    </resultMap>
+
+
+    <select id="selectAllcommonPageDataMap" resultMap="commonPageDataMap">
+        <if test="commonPageVo.id == 1">
+            select a.`WoCode`,a.`Batch` ,a.`CZPCode`,e.`MaterialCode` 'MaCode',e.`MaterialName` 'MaName',a.`MaterialCode` 'MaCode1',a.`MaterialName` 'MaName1',d.`BomName`,a.`CreateTime`,a.`Creator` from trt_createmcinfo a left join tpm_woinfo b on a.`WoCode`=b.`WoCode` left join tpm_maverinfo e on b.`MaVerGd`=e.`Guid` left join tpm_bomverinfo d on  b.`BomVerGd`=d.`Guid` where   a.`LineGd` =#{commonPageVo.lineGd}
+            <if test="commonPageVo.woGd.length>0">
+                AND a.`WoGd` IN <foreach collection="commonPageVo.woGd" item="woGd" index="index" open="(" close=")" separator=","> #{woGd} </foreach>
+            </if>
+             AND a.CreateTime <![CDATA[ <= ]]> #{commonPageVo.createTimeStart} AND a.CreateTime > #{commonPageVo.createTimeEnd} ORDER BY a.`CreateTime` DESC;
+        </if>
+        <if test="commonPageVo.id == 2">
+            SELECT a.`WoCode`,a.`Batch` ,f.`CZPCode`,e.`MaterialCode` 'MaCode',e.`MaterialName` 'MaName',a.Pmpp,a.Impp,a.Color,g.LocationName,d.`BomName`,a.`CreateTime`,a.`Creator` FROM trt_GearInfo a LEFT JOIN tpm_woinfo b ON a.`WoCode`=b.`WoCode` LEFT JOIN tpm_maverinfo e ON b.`MaVerGd`=e.`Guid` LEFT JOIN trt_createmcinfo f ON f.Batch= a.Batch  LEFT JOIN trt_ZJCheckDtlInfo g ON a.guid=g.ZJCheckGd LEFT JOIN tpm_bomverinfo d ON  b.`BomVerGd`=d.`Guid` where  f.`LineGd` =#{commonPageVo.lineGd}
+            <if test="commonPageVo.woGd.length>0">
+                AND a.`WoGd` IN <foreach collection="commonPageVo.woGd" item="woGd" index="index" open="(" close=")" separator=","> #{woGd} </foreach>
+            </if>
+            AND a.CreateTime <![CDATA[ <= ]]> #{commonPageVo.createTimeStart} AND a.CreateTime > #{commonPageVo.createTimeEnd} ORDER BY a.`CreateTime` DESC;
+        </if>
+        <if test="commonPageVo.id == 3">
+            select a.`WoCode`,a.`Batch` ,f.`CZPCode`,e.`MaterialCode` 'MaCode',e.`MaterialName` 'MaName',a.`MaterialCode` 'MaCode1',a.`MaterialName` 'MaName1',d.`BomName`,a.`CreateTime`,a.`Creator` from trt_CYMLogInfo a left join tpm_woinfo b on a.`WoCode`=b.`WoCode` left join tpm_maverinfo e on b.`MaVerGd`=e.`Guid` left join tpm_bomverinfo d on  b.`BomVerGd`=d.`Guid` left join trt_createmcinfo f on f.Batch= a.Batch where   a.`LineGd` =#{commonPageVo.lineGd}
+            <if test="commonPageVo.woGd.length>0">
+                AND a.`WoGd` IN <foreach collection="commonPageVo.woGd" item="woGd" index="index" open="(" close=")" separator=","> #{woGd} </foreach>
+            </if>
+            AND a.CreateTime <![CDATA[ <= ]]> #{commonPageVo.createTimeStart} AND a.CreateTime > #{commonPageVo.createTimeEnd} ORDER BY a.`CreateTime` DESC;
+        </if>
+
+        <if test="commonPageVo.id == 4">
+            SELECT a.`WoCode`,a.`Batch` ,f.`CZPCode`,e.`MaterialCode` 'MaCode',e.`MaterialName` 'MaName',g.BadName,g.LocationName,a.`MaterialCode` 'MaCode1',a.`MaterialName` 'MaName1',d.`BomName`,a.`CreateTime`,a.`Creator` FROM trt_yhcheckinfo a LEFT JOIN tpm_woinfo b ON a.`WoCode`=b.`WoCode` LEFT JOIN tpm_maverinfo e ON b.`MaVerGd`=e.`Guid` LEFT JOIN trt_createmcinfo f ON f.Batch= a.Batch LEFT JOIN tpm_bomverinfo d ON  b.`BomVerGd`=d.`Guid`  LEFT JOIN trt_YHCheckDtlInfo g ON a.guid=g.YHCheckGd where   a.`LineGd` =#{commonPageVo.lineGd}
+            <if test="commonPageVo.isChecked=='00'">
+                AND a.CreateTime IN
+                ( SELECT MAX( a.CreateTime ) AS TIME FROM trt_yhcheckinfo a GROUP BY a.Batch )
+            </if>
+            <if test="commonPageVo.woGd.length>0">
+                AND a.`WoGd` IN <foreach collection="commonPageVo.woGd" item="woGd" index="index" open="(" close=")" separator=","> #{woGd} </foreach>
+            </if>
+            AND a.CreateTime <![CDATA[ <= ]]> #{commonPageVo.createTimeStart} AND a.CreateTime > #{commonPageVo.createTimeEnd} ORDER BY a.`CreateTime` DESC;
+        </if>
+
+        <if test="commonPageVo.id == 5">
+            SELECT a.`WoCode`,a.`Batch` ,f.`CZPCode`,e.`MaterialCode` 'MaCode',e.`MaterialName` 'MaName',a.GradeName,g.BadName,'LocationName',a.`MaterialCode` 'MaCode1',a.`MaterialName` 'MaName1',d.`BomName`,a.`CreateTime`,a.`Creator` FROM trt_pelinfo a LEFT JOIN tpm_woinfo b ON a.`WoCode`=b.`WoCode` LEFT JOIN tpm_maverinfo e ON b.`MaVerGd`=e.`Guid` LEFT JOIN trt_createmcinfo f ON f.Batch= a.Batch left join trt_PTELBadInfo g on g.ELGd=a.guid LEFT JOIN tpm_bomverinfo d ON  b.`BomVerGd`=d.`Guid`  where   a.`LineGd` =#{commonPageVo.lineGd}
+            <if test="commonPageVo.isChecked=='00'">
+                AND a.CreateTime IN
+                ( SELECT MAX( a.CreateTime ) AS TIME FROM trt_pelinfo a GROUP BY a.Batch )
+            </if>
+            <if test="commonPageVo.woGd.length>0">
+                AND a.`WoGd` IN <foreach collection="commonPageVo.woGd" item="woGd" index="index" open="(" close=")" separator=","> #{woGd} </foreach>
+            </if>
+            AND a.CreateTime <![CDATA[ <= ]]> #{commonPageVo.createTimeStart} AND a.CreateTime > #{commonPageVo.createTimeEnd} ORDER BY a.`CreateTime` DESC;
+        </if>
+        <if test="commonPageVo.id == 6">
+            SELECT a.`Comment` ,f.`CZPCode`,e.`MaterialCode` 'MaCode',e.`MaterialName` 'MaName',a.Pmpp,a.Impp,d.`BomName`,a.`create_time` FROM trt_IVInfo a LEFT JOIN trt_GHInfo g ON g.Batch = a.Comment LEFT JOIN tpm_woinfo b ON g.`WoCode`=b.`WoCode` LEFT JOIN tpm_maverinfo e ON b.`MaVerGd`=e.`Guid` LEFT JOIN trt_createmcinfo f ON f.Batch= a.Comment LEFT JOIN tpm_bomverinfo d ON  b.`BomVerGd`=d.`Guid`   where   g.`LineGd` =#{commonPageVo.lineGd}
+            <if test="commonPageVo.isChecked=='00'">
+                AND a.create_time IN
+                ( SELECT MAX( a.create_time ) AS TIME FROM trt_IVInfo a GROUP BY a.Comment )
+            </if>
+            <if test="commonPageVo.woGd.length>0">
+                AND g.`WoGd` IN <foreach collection="commonPageVo.woGd" item="woGd" index="index" open="(" close=")" separator=","> #{woGd} </foreach>
+            </if>
+            AND a.create_time <![CDATA[ <= ]]> #{commonPageVo.createTimeStart} AND a.create_time > #{commonPageVo.createTimeEnd} ORDER BY a.`create_time` DESC;
+        </if>
+        <if test="commonPageVo.id == 7">
+            SELECT a.`WoCode`,a.`Batch` ,f.`CZPCode`,e.`MaterialCode` 'MaCode',e.`MaterialName` 'MaName',a.GradeName,g.BadName,'LocationName',a.`MaterialCode` 'MaCode1',a.`MaterialName` 'MaName1',d.`BomName`,a.`CreateTime`,a.`Creator` FROM trt_TELInfo a LEFT JOIN tpm_woinfo b ON a.`WoCode`=b.`WoCode` LEFT JOIN tpm_maverinfo e ON b.`MaVerGd`=e.`Guid` LEFT JOIN trt_createmcinfo f ON f.Batch= a.Batch left join trt_PTELBadInfo g on g.ELGd=a.guid LEFT JOIN tpm_bomverinfo d ON  b.`BomVerGd`=d.`Guid`  where   a.`LineGd` =#{commonPageVo.lineGd}
+            <if test="commonPageVo.isChecked=='00'">
+                AND a.CreateTime IN
+                ( SELECT MAX( a.CreateTime ) AS TIME FROM trt_TELInfo a GROUP BY a.Batch )
+            </if>
+            <if test="commonPageVo.woGd.length>0">
+                AND a.`WoGd` IN <foreach collection="commonPageVo.woGd" item="woGd" index="index" open="(" close=")" separator=","> #{woGd} </foreach>
+            </if>
+            AND a.CreateTime <![CDATA[ <= ]]> #{commonPageVo.createTimeStart} AND a.CreateTime > #{commonPageVo.createTimeEnd} ORDER BY a.`CreateTime` DESC;
+        </if>
+        <if test="commonPageVo.id == 8">
+            SELECT a.`WoCode`,a.`Batch` ,f.`CZPCode`,e.`MaterialCode` 'MaCode',e.`MaterialName` 'MaName',h.Pmpp,h.Impp,h.Color,a.GradeName,g.BadName,g.LocationName,a.`MaterialCode` 'MaCode1',a.`MaterialName` 'MaName1',d.`BomName`,a.`CreateTime`,a.`Creator` FROM trt_ZJCheckInfo a LEFT JOIN tpm_woinfo b ON a.`WoCode`=b.`WoCode` LEFT JOIN tpm_maverinfo e ON b.`MaVerGd`=e.`Guid` LEFT JOIN trt_createmcinfo f ON f.Batch= a.Batch  LEFT JOIN trt_ZJCheckDtlInfo g ON a.guid=g.ZJCheckGd  LEFT JOIN trt_GearInfo h ON h.Batch = a.Batch LEFT JOIN tpm_bomverinfo d ON  b.`BomVerGd`=d.`Guid`   where   a.`LineGd` =#{commonPageVo.lineGd}
+            <if test="commonPageVo.isChecked=='00'">
+                AND a.CreateTime IN
+                ( SELECT MAX( a.CreateTime ) AS TIME FROM trt_zjcheckinfo a GROUP BY a.Batch )
+            </if>
+            <if test="commonPageVo.woGd.length>0">
+                AND a.`WoGd` IN <foreach collection="commonPageVo.woGd" item="woGd" index="index" open="(" close=")" separator=","> #{woGd} </foreach>
+            </if>
+            AND a.CreateTime <![CDATA[ <= ]]> #{commonPageVo.createTimeStart} AND a.CreateTime > #{commonPageVo.createTimeEnd} ORDER BY a.`CreateTime` DESC;
+        </if>
+    </select>
+</mapper>

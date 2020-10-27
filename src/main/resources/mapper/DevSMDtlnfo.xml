@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevSMDtDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevSMDtlnfo" id="devSModeInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="devSMGd" column="devSMGd" />
+        <result property="souDSGd" column="souDSGd" />
+        <result property="tarDSGd" column="tarDSGd" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+    </resultMap>
+
+    <!--查询设备状态模型信息根据Ruid-->
+    <select id="SelectDevSMDtlnfoBydevSMGd" resultMap="devSModeInfoMap" parameterType="int">
+        select * from tpm_devsmdtlinfo WHERE devSMGd=#{guid}
+    </select>
+
+    <!--删除设备状态模型信息-->
+    <delete id="DeleteDevSMDtlnfodevSMGd">
+        DELETE from tpm_devsmdtlinfo WHERE devSMGd=#{guid}
+    </delete>
+
+    <!--新增设备状态模型信息-->
+    <insert id="InsertDevSMDtlnfo">
+        INSERT INTO tpm_devsmdtlinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,DevSMGd,SouDSGd,TarDSGd,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{devSMGd},#{souDSGd},#{tarDSGd},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevSModeDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevSModeInfo" id="devSModeInfoMap">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="modelName" column="modelName" />
+        <result property="DSGd" column="DSGd" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+    </resultMap>
+
+    <!--查询设备状态模型信息-->
+    <select id="SelectAllDevSModeInfo" resultMap="devSModeInfoMap">
+        select * from tpm_devsmodelinfo
+    </select>
+
+    <!--查询设备状态模型信息-->
+    <select id="SelectDevSModeInfo" resultMap="devSModeInfoMap">
+        select * from tpm_devsmodelinfo WHERE ruid=#{ruid}
+    </select>
+
+    <!--查询设备状态模型信息-->
+    <select id="SelectDevSModeInfoguid" resultMap="devSModeInfoMap">
+        select * from tpm_devsmodelinfo WHERE guid=#{guid}
+    </select>
+
+    <!--查询设备状态模型名称-->
+    <select id="SelectDevSModeInfomodelName" resultMap="devSModeInfoMap">
+        select * from tpm_devsmodelinfo WHERE modelName=#{modelName}
+    </select>
+
+    <!--删除设备状态模型信息-->
+    <delete id="DeleteDevSModeInfo">
+        DELETE from tpm_devsmodelinfo WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--新增设备状态模型信息-->
+    <insert id="InsertDevSModeInfo">
+        INSERT INTO tpm_devsmodelinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,ModelName,DSGd,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{modelName},#{DSGd},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新设备状态模型信息-->
+    <update id="UpdateDevSModeInfo" parameterType="int">
+        UPDATE `tpm_devsmodelinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="modelName != null">
+                modelName = #{ modelName },
+            </if>
+            <if test="DSGd != null">
+                DSGd = #{ DSGd },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+</mapper>

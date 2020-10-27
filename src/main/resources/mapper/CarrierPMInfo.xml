@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CarrierPMDAO" >
+    <resultMap type="pnc.mesadmin.entity.CarrierPMInfo" id="CarrierPMInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="carrierGd" column="carrierGd" />
+        <result property="pMGd" column="pMGd" />
+        <result property="pMType" column="pMType" />
+
+    </resultMap>
+
+    <select id="selectCarrierPMInfoByToolFamilyGd" parameterType="string" resultMap="CarrierPMInfoResult">
+        select * from tpm_carrierpminfo where carrierGd=#{carrierGd}
+    </select>
+
+    <insert id="insertCarrierPMInfo">
+          insert into tpm_carrierpminfo(guid,carrierGd,pMGd,pMType)
+          values (#{guid},#{carrierGd},#{pMGd},#{pMType});
+    </insert>
+
+    <delete id="deleteCarrierPMInfo">
+        delete from tpm_carrierpminfo where ruid=#{ruid}
+    </delete>
+
+    <select id="selectByCarrierGdPmType" resultMap="CarrierPMInfoResult">
+        SELECT  * FROM  tpm_carrierpminfo
+        WHERE  carrierGd=#{CarrierGd}  and pMType=#{pMType}
+    </select>
+
+    <select id="SelectByPMGd" resultMap="CarrierPMInfoResult">
+        SELECT  * FROM  tpm_carrierpminfo
+        WHERE  PMGd=#{PMGd}
+    </select>
+
+
+    <delete id="deleteByPMGd">
+        delete from tpm_carrierpminfo where PMGd=#{PMGd}
+    </delete>
+
+
+
+
+
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.RkTkIDAO">
+    <resultMap id="rKTkInfoMap" type="pnc.mesadmin.entity.RkDtlInfo">
+        <id column="Ruid" property="ruid"  ></id>
+        <result column="Guid" property="guid"  />
+        <result column="RkCode" property="rkCode"  />
+        <result column="BarCode" property="barCode"  />
+        <result  column="BarType" property="barType"></result>
+        <result column="Num" property="num"  />
+        <result  column="UnitName" property="unitName"></result>
+        <result  column="ProductDate" property="productDate"></result>
+        <result  column="ExpireDate" property="expireDate"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime" ></result>
+        <result column="LastModifyMan" property="lastModifyMan" ></result>
+        <result column="LastModifyTime" property="lastModifyTime" ></result>
+        <result column="Remark" property="remark" ></result>
+        <result column="RkTkDtlGd" property="rkTkDtlGd" ></result>
+        <result column="Batch" property="batch" ></result>
+        <result column="StoreGd" property="storeGd" ></result>
+        <result column="maVerGd" property="maVerGd"  />
+        <result  column="materialCode" property="materialCode"></result>
+        <result  column="materialName" property="materialName"></result>
+        <result  column="materialDes" property="materialDes"></result>
+    </resultMap>
+    <insert id="InsertRkDtlInfoList" useGeneratedKeys="true" parameterType="java.util.List">
+        insert into tpm_rkdtlinfo (Guid,RkCode,BarCode,BarType,Num,UnitName,ProductDate,
+        ExpireDate,Creator,CreateTime,RkTkDtlGd,Batch,StoreGd,maVerGd,materialCode,materialName,materialDes
+        )
+        values
+        <foreach collection="argRkDtlInfos" item="item" index="index" separator="," >
+            (#{item.guid},#{item.rkCode},#{item.barCode},#{item.barType},#{item.num},#{item.unitName},
+            #{item.productDate},#{item.expireDate},#{item.creator},#{item.createTime},#{item.rkTkDtlGd},#{item.batch},#{item.storeGd},
+            #{item.maVerGd},#{item.materialCode},#{item.materialName},#{item.materialDes}
+            )
+        </foreach>
+    </insert>
+    <insert id="InsertRkDtlInfo" >
+        insert into tpm_rkdtlinfo (Guid,RkCode,BarCode,BarType,Num,UnitName,ProductDate,
+        ExpireDate,Creator,CreateTime,RkTkDtlGd,Batch,StoreGd,maVerGd,materialCode,materialName,materialDes,Remark
+        )
+        values
+            (#{guid},#{rkCode},#{barCode},#{barType},#{num},#{unitName},
+            #{productDate},#{expireDate},#{creator},#{createTime},#{rkTkDtlGd},#{batch},#{storeGd},
+            #{maVerGd},#{materialCode},#{materialName},#{materialDes},#{remark}
+            )
+    </insert>
+    <!--根据入库任务明细查询入库单扫描信息-->
+    <select id="SelectRkDtlInfoByrkTkDtlGd" resultMap="rKTkInfoMap" parameterType="string">
+      SELECT * FROM tpm_rkdtlinfo WHERE RkTkDtlGd=#{rkTkDtlGd}
+    </select>
+
+    <select id="SelectRkDtlInfoByRkCodeAndBarCode" resultMap="rKTkInfoMap" parameterType="string">
+        SELECT * FROM tpm_rkdtlinfo WHERE RkCode=#{rkCode} and BarCode=#{barCode}
+    </select>
+
+ <select id="SelectRkDtlInfoByRkCode" resultMap="rKTkInfoMap" parameterType="string">
+        SELECT * FROM tpm_rkdtlinfo WHERE RkCode=#{rkCode}
+    </select>
+
+    <select id="SelectRkDtlInfoByRetMaDtlGuid" resultMap="rKTkInfoMap">
+        SELECT * FROM tpm_rkdtlinfo WHERE RkTkDtlGd=#{guid}
+    </select>
+
+    <!--查询所有入库信息-->
+    <select id="SelectAllRkDtlInfo" resultMap="rKTkInfoMap" parameterType="string">
+        SELECT * FROM tpm_rkdtlinfo
+    </select>
+
+    <select id="SelectRkDtlInfoguid" resultMap="rKTkInfoMap" parameterType="string">
+        SELECT * FROM tpm_rkdtlinfo WHERE Guid=#{guid}
+    </select>
+
+    <!--根据MaVerGd和StoreGd查询所有信息-->
+    <select id="SelectRkDtlInfoMaVerGdandStoreGd" resultMap="rKTkInfoMap" parameterType="string">
+        SELECT * FROM tpm_rkdtlinfo WHERE MaVerGd=#{argMaVerGd} AND StoreGd=#{argStoreGd}
+    </select>
+</mapper>

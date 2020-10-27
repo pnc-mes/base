@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MVTKDAO">
+    <resultMap type="pnc.mesadmin.entity.MVTKInfo" id="mVTkInfoMap">
+        <id property="ruid" column="ruid"/>
+        <result property="guid" column="guid"/>
+        <result property="mVCode" column="mVCode"/>
+        <result property="exStatus" column="exStatus"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="createTime"/>
+        <result property="execor" column="execor"/>
+        <result property="execTime" column="execTime"/>
+        <result property="cancelor" column="cancelor"/>
+        <result property="cancelTime" column="cancelTime"/>
+        <result property="finishor" column="finishor"/>
+        <result property="finishTime" column="finishTime"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!--zll-->
+    <select id="SelectMVTkInfo" resultMap="mVTkInfoMap">
+        SELECT * FROM `tpm_mvtkinfo`
+    </select>
+
+
+    <!--zll-->
+    <select id="SelectMVTkInfoByRuid" resultMap="mVTkInfoMap" parameterType="int">
+        SELECT * FROM `tpm_mvtkinfo` WHERE ruid=#{ruid}
+    </select>
+
+    <insert id="InsertMVKTInfo">
+         INSERT INTO tpm_mvtkinfo (Guid,MVCode,ExStatus,Creator,CreateTime,Execor,ExecTime,Cancelor,CancelTime,Finishor,FinishTime,Remark)
+         VALUES (#{guid},#{mVCode},#{exStatus},#{creator},#{createTime},#{execor},#{execTime},#{cancelor},#{cancelTime}, #{finishor},#{finishTime},#{remark})
+  </insert>
+
+    <update id="UpdateMVKTInfo">
+        UPDATE tpm_mvtkinfo
+
+        <trim suffixOverrides="," prefix="SET">
+
+            <if test="mVCode != null and mVCode!=''">mVCode = #{mVCode},</if>
+
+            <if test="exStatus != null and exStatus!=''">exStatus = #{exStatus},</if>
+
+            <if test="creator != null and creator!=''">creator = #{creator},</if>
+
+            <if test="createTime != null and createTime!=''">createTime = #{createTime},</if>
+
+            <if test="execor != null and execor!=''">execor = #{execor},</if>
+
+            <if test="execTime != null and execTime!=''">execTime = #{execTime},</if>
+
+            <if test="cancelor != null and cancelor!=''">cancelor = #{cancelor},</if>
+
+            <if test="cancelTime != null and cancelTime!=''">cancelTime = #{cancelTime},</if>
+
+            <if test="finishor != null and finishor!=''">finishor = #{finishor},</if>
+
+            <if test="finishTime != null and finishTime!=''">finishTime = #{finishTime},</if>
+
+            <if test="remark != null and remark!=''">remark = #{remark},</if>
+
+        </trim>
+        WHERE guid = #{guid}
+    </update>
+
+    <select id="SelectByGuid" resultMap="mVTkInfoMap"> SELECT * FROM tpm_mvtkinfo WHERE guid = #{guid} </select>
+</mapper>

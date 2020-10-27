@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>数据采集管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">采集名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="dcName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+
+
+<div class="layui-fluid" id="dcinfo" style="display: none;">
+    <input type="hidden" id="hidden"/>
+    <form class="layui-form" action="" id="dcinfoform" lay-filter="component-form-group" >
+
+        <div class="layui-card">
+            <div class="layui-card-body" >
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">基础信息</li>
+                        <li>明细信息</li>
+                        <li>其他信息</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">采集名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="dcNames"  autocomplete="off" placeholder="请输入采集名称" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">到期提醒(邮件通知组) </label>
+                                    <div class="layui-input-inline" lay-search>
+                                        <select name="emailGroup" lay-filter="" lay-search></select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">提醒(邮件内容) </label>
+                                    <div class="layui-input-inline" lay-search>
+                                        <select name="emailContent" lay-filter="" lay-search></select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="layui-form-item layui-hide">
+                                <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+                            </div>
+
+                        </div>
+
+                        <div class="layui-tab-item">
+                            <div class="layui-inline" id="buttonOprate">
+                                <div class="layui-input-inline">
+                                    <input class="layui-btn layui-btn-sm" type="button" value="添加" id="detailAdd"/>
+                                    <input class="layui-btn layui-btn-danger layui-btn-sm" type="button" value="删除" id="detailDelete"/>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <table class="layui-table">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 18px;"><input type="checkbox" id="selectAll" lay-skin="primary" lay-filter="selectAll"/></th>
+                                            <th style="width: 150px;">采集内容</th>
+                                            <th style="width: 150px;">数据别名</th>
+                                            <th style="width: 150px;">数据类型</th>
+                                            <th style="width: 150px;">标准值</th>
+                                            <th style="width: 150px;">上浮值</th>
+                                            <th style="width: 150px;">下浮值</th>
+                                            <th style="width: 150px;display: none;">默认值</th>
+                                            <th style="width: 50px;">是否检查</th>
+                                            <th style="width: 150px;">不良行为</th>
+                                            <th style="width: 50px;">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbody">
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+
+
+
+                        <div class="layui-tab-item">
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">创建人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="tel" name="creator" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">创建时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="createTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">修改人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="tel" name="modifier" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">修改时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="modifyTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-text">
+                                    <label class="layui-form-label">备注</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="remark" placeholder="请输入内容" id="remark" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'element'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        //页面首次加载
+        load();
+
+        //重新渲染表单函数
+        function renderForm() {
+            layui.use('form', function() {
+                var form = layui.form;
+                form.render();
+            });
+        }
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                clear();
+                $("#buttonOprate").show();
+                let index = layer.open({
+                    title: '添加数据采集',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['90%', '75%'],
+                    content: $("#dcinfo"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                $("#buttonOprate").show();
+                edit(data);
+            } else if (obj.event === 'delete') {
+                del(data);
+            } else if(obj.event === 'read') {
+                read(data);
+            }
+        });
+        function del(data){
+            layer.confirm('真的删除行么', function (index) {
+                requests({url: "/DC/SaveDcInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                        "BusData": JSON.stringify({DcRd: data.DcRd})
+                    }}, function (res) {
+                    layer.msg("删除成功", {icon: 1});
+                    table.reload('currentTableId');
+                });
+                layer.close(index);
+            });
+        }
+
+
+        //监听行双击事件
+        table.on('rowDouble(currentTableFilter)', function(obj){
+            read(obj.data);
+            return false;
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: [
+                        {
+                            fieldName: "DCName",
+                            fieldOpt: "like",
+                            fieldVal: data.field.dcName
+                        },
+                        {
+                            fieldName: "Ruid",
+                            fieldOpt: "Order BY",
+                            fieldVal: ""
+                        }
+                    ]
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //表格下拉框的数据类型
+        function getDataType(val) {
+            var getType='';
+            if(val=='00'){
+                getType="<option value='00' selected>数值类型</option><option value='01'>浮点类型</option><option value='02'>字符串类型</option>";
+            }else if(val=='01'){
+                getType="<option value='00' >数值类型</option><option value='01' selected>浮点类型</option><option value='02'>字符串类型</option>";
+            }else {
+                getType="<option value='00' >数值类型</option><option value='01' >浮点类型</option><option value='02' selected>字符串类型</option>";
+            }
+            renderForm();
+            return getType;
+        }
+        //表格下拉框的不良行为
+        function getDataBad(val) {
+            var getType='';
+
+            if(val=='00'){
+                getType="<option value='00' selected>冻结</option><option value='01'>允许流转</option>";
+            }else {
+                getType="<option value='00' >冻结</option><option value='01' selected>允许流转</option>";
+            }
+            renderForm();
+            return getType;
+        }
+
+        //表格下的checkbox
+        function  getDataCheck(val) {
+            var getType='';
+
+            if(val=='00'){
+                getType="<input type='checkbox' name='close' lay-skin='switch' lay-text='ON|OFF' a='00' checked>";
+            }else {
+                getType="<input type='checkbox' name='close' lay-skin='switch' lay-text='ON|OFF' a='01' >";
+            }
+            renderForm();
+            return getType;
+        }
+
+        //编辑
+        function edit(datas){
+            let DcRD = datas.DcRd;
+            requests({url: "/DC/GetDcInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({DcRd: DcRD})
+                }}, function (res) {
+                let data = res.Data;
+                $("input[name='dcNames']").val(data.DCName);
+                if(data.EmailDistributionInfo==null){
+                    $("select[name='emailGroup']").val('');
+                }else {
+                    $("select[name='emailGroup']").val(data.EmailDistributionInfo.EmailDistributionRd);
+                }
+                if(data.EmailMessageInfo==null){
+                    $("select[name='emailContent']").val('');
+                }else {
+                    $("select[name='emailContent']").val(data.EmailMessageInfo.EmailMessageRd);
+                }
+
+
+
+                var res=data.DCItemsInfo;
+                if(res.length>0){
+                    var tr_="";
+
+                    for(var i in res){
+                        var IsChecked=res[i].Checked;
+                        var Checked='';
+                        if(IsChecked=='00'){
+                            Checked='是';
+                        }else {
+                            Checked='否';
+                        }
+
+                        var DataAlias=res[i].ItemType.TypeVal;
+                        var DataAlia='';
+                        if(DataAlias=='00'){
+                            DataAlia='数值类型';
+                        }else if(DataAlias=='01'){
+                            DataAlia='浮点类型';
+                        }else if(DataAlias=='02'){
+                            DataAlia='字符串类型';
+                        }
+                        var Actions=res[i].Action;
+                        var Action='';
+                        if(Actions=='00'){
+                            Action='冻结';
+                        }else {
+                            Action='允许流转';
+                        }
+
+                        tr_+="<tr>" +
+                            "<td><input type='checkbox' class='layui-form'  lay-skin='primary' lay-filter='selectOne' class='selectPre'/></td>" +
+                            "<td><input type='text' name='a' value='"+res[i].ItemName+"' class='layui-input layui-form'/></td>" +
+                            "<td><input type='text' name='b' value='"+res[i].DataAlias+"' class='layui-input layui-form'/></td>" +
+                            "<td><select  name='c'> "+ getDataType(res[i].ItemType.TypeVal) + "</select></td>" +
+                            "<td><input type='text' name='d'value='"+res[i].SValue+"'  class='layui-input'/></td>" +
+                            "<td><input type='text'  name='e'value='"+res[i].UpLimit+"'  class='layui-input'/></td>" +
+                            "<td><input type='text' name='f' value='"+res[i].DwLimit+"'  class='layui-input'/></td>" +
+                            "<td style='display: none;'><input type='text'   name='g'value='"+res[i].DefValue+"'   class='layui-input'/></td>" +
+                            "<td>"+getDataCheck(res[i].Checked)+"</td>" +
+                            "<td><select  name='i'>" + getDataBad(res[i].Action) +  "</select></td>" +
+                            "<td><button type='button' id='detailDeletes' class='layui-btn layui-btn-primary layui-btn-sm'><i class='layui-icon'></i></button></td></tr>";
+                    }
+                    $("#tbody").empty(tr_).html(tr_);
+                }else {
+                    $("#tbody").empty(tr_).text("无数据");
+                }
+                $("#selectAll").prop("disabled", true);
+                renderForm();
+                $("textarea[name='remark']").val(data.Remark);
+                $("input[name='creator']").val(data.Creator);
+                $("input[name='modifier']").val(data.LastModifyMan);
+                $("input[name='modifyTime']").val(data.LastModifyTime);
+                $("input[name='createTime']").val(data.CreateTime);
+            });
+            layer.open({
+                type: 1
+                ,title: '修改数据采集信息'
+                ,content:$("#dcinfo")
+                ,maxmin: true
+                ,area: ['90%', '75%']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero){
+                    var DCName=$("input[name='dcNames']").val().trim();
+                    if(DCName==''){
+                        layer.msg("采集名称不能为空");
+                        return ;
+                    }
+                    var Remark=$("textarea[name='remark']").val();
+                    var data=[];
+                    var i=1;
+                    $("#tbody tr").each(function(){
+                        var tdArr = $(this).children();
+                        var Column={
+                            "ItemName":tdArr.eq(1).find("input[name='a']").val().trim(),
+                            "DataAlias":tdArr.eq(2).find("input[name='b']").val(),
+                            "ItemType":tdArr.eq(3).find("select[name='c']").val(),
+                            "SValue":tdArr.eq(4).find("input[name='d']").val(),
+                            "UpLimit":tdArr.eq(5).find("input[name='e']").val(),
+                            "DwLimit":tdArr.eq(6).find("input[name='f']").val(),
+                            "DefValue":tdArr.eq(7).find("input[name='g']").val(),
+                            "Checked":tdArr.eq(8).find("input[name='close']").attr('a'),
+                            "Action":tdArr.eq(9).find("select[name='i']").val()
+                        }
+                        data.push(Column);
+                        i++;
+                    });
+                    if(data.length<=0){
+                        layer.msg("明细信息不能为空");
+                        return false;
+                    }
+                    var EmailDistributionRd= $("select[name='emailGroup']").val();
+                    var EmailMessageRd= $("select[name='emailContent']").val();
+                    var newData = {
+                        "DCRd":datas.DcRd,
+                        "DCVerRd":'',
+                        "DCName": DCName,
+                        "Version": 1,
+                        "Status": '00',
+                        "Remark": Remark,
+                        "IsDef": '00',
+                        "EmailDistributionRd":EmailDistributionRd,
+                        "EmailMessageRd":EmailMessageRd,
+                        "DCItemsInfo": data
+                    }
+
+                    requests({url: "/DC/SaveDcInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02",
+                            "BusData": JSON.stringify(newData)
+                        }}, function (res) {
+                        layer.msg("保存成功", {icon: 1});
+                        layer.close(index);
+                        table.reload('currentTableId');
+                    });
+                }
+            });
+
+        }
+
+        //查看
+        function read(data) {
+            $("#buttonOprate").hide();
+            //获取选中id
+            let DcRD = data.DcRd;
+
+            let index = layer.open({
+                title: '查看数据采集',
+                type: 1,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['50%', '70%'],
+                content: $("#dcinfo"),
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+
+            requests({url: "/DC/GetDcInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({DcRd: DcRD})
+                }}, function (res) {
+                let data = res.Data;
+                $("input[name='dcNames']").val(data.DCName);
+                if(data.EmailDistributionInfo==null){
+                    $("select[name='emailGroup']").val('');
+                }else {
+                    $("select[name='emailGroup']").val(data.EmailDistributionInfo.EmailDistributionRd);
+                }
+                if(data.EmailMessageInfo==null){
+                    $("select[name='emailContent']").val('');
+                }else {
+                    $("select[name='emailContent']").val(data.EmailMessageInfo.EmailMessageRd);
+                }
+
+                var res=data.DCItemsInfo;
+                if(res.length>0){
+                    var tr_="";
+
+                    for(var i in res){
+                        var IsChecked=res[i].Checked;
+                        var Checked='';
+                        if(IsChecked=='00'){
+                            Checked='是';
+                        }else {
+                            Checked='否';
+                        }
+
+                        var DataAlias=res[i].ItemType.TypeVal;
+                        var Type='';
+                        if(DataAlias=='00'){
+                            Type='数值类型';
+                        }else if(DataAlias=='01'){
+                            Type='浮点类型';
+                        }else if(DataAlias=='02'){
+                            Type='字符串类型';
+                        }
+                        var Actions=res[i].Action;
+                        var Action='';
+                        if(Actions=='00'){
+                            Action='冻结';
+                        }else {
+                            Action='允许流转';
+                        }
+
+                        tr_+="<tr>" +
+                            "<td><input type='checkbox' class='layui-form'  lay-skin='primary' lay-filter='selectOne' class='selectPre'/></td>" +
+                            "<td>"+res[i].ItemName+"</td>" +
+                            "<td>"+res[i].DataAlias+"</td>" +
+                            "<td>"+Type+"</td>" +
+                            "<td>"+res[i].SValue+"</td>" +
+                            "<td>"+res[i].UpLimit+"</td>" +
+                            "<td>"+res[i].DwLimit+"</td>" +
+                            "<td style='display: none;'>"+res[i].DefValue+"</td>" +
+                            "<td>"+Checked+"</td>" +
+                            "<td>"+Action+"</td>" +
+                            "<td>无操作</td></tr>"
+                    }
+                    $("#tbody").empty(tr_).html(tr_);
+                }else {
+                    $("#tbody").empty(tr_).text("无数据");
+                }
+                $("#selectAll").prop("disabled", true);
+                renderForm();
+                $("textarea[name='remark']").val(data.Remark);
+                $("input[name='creator']").val(data.Creator);
+                $("input[name='modifier']").val(data.LastModifyMan);
+                $("input[name='modifyTime']").val(data.LastModifyTime);
+                $("input[name='createTime']").val(data.CreateTime);
+            });
+        }
+
+        //保存
+        function save(index, type, id) {
+
+
+
+
+
+            var DCName=$("input[name='dcNames']").val().trim();
+            if(DCName==''){
+                layer.msg("采集名称不能为空");
+                return ;
+            }
+            var Remark=$("textarea[name='remark']").val();
+
+
+            var EmailDistributionRd= $("select[name='emailGroup']").val();
+            var EmailMessageRd= $("select[name='emailContent']").val();
+            var data=[];
+            var i=1;
+            $("#tbody tr").each(function(){
+                var tdArr = $(this).children();
+                var Column={
+                    "ItemName":tdArr.eq(1).find("input[name='a']").val().trim(),
+                    "DataAlias":tdArr.eq(2).find("input[name='b']").val(),
+                    "ItemType":tdArr.eq(3).find("select[name='c']").val(),
+                    "SValue":tdArr.eq(4).find("input[name='d']").val(),
+                    "UpLimit":tdArr.eq(5).find("input[name='e']").val(),
+                    "DwLimit":tdArr.eq(6).find("input[name='f']").val(),
+                    "DefValue":tdArr.eq(7).find("input[name='g']").val(),
+                    "Checked":tdArr.eq(8).find("input[name='close']").attr('a'),
+                    "Action":tdArr.eq(9).find("select[name='i']").val()
+                }
+                data.push(Column);
+                i++;
+            });
+            if(data.length<=0){
+                layer.msg("明细信息不能为空");
+                return false;
+            }
+
+            var newData = {
+                "DCName": DCName,
+                "Version": 1,
+                "Status": '00',
+                "Remark": Remark,
+                "IsDef": '00',
+                "EmailDistributionRd":EmailDistributionRd,
+                "EmailMessageRd":EmailMessageRd,
+                "DCItemsInfo": data
+            }
+
+            requests({url: "/DC/SaveDcInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify(newData)
+                }}, function (res) {
+                layer.msg("新增成功", {icon: 1});
+                layer.close(index);
+                table.reload('currentTableId');
+            });
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/DC/GetAllNewDcInfo",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {field: 'DcRd', title: 'ID', sort: true},
+                        {field: 'DcName', title: '采集名称'},
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        //清空
+        function clear() {
+
+            $("input[name='dcContent']").val("");
+
+            $("input[name='dataName']").val("");
+
+            $("input[name='bzValue']").val("");
+
+            $("input[name='sfValue']").val("");
+
+            $("input[name='xfValue']").val("");
+
+            $("input[name='defaultValue']").val("");
+            $("#tbody").empty();
+            $("input[name='dcNames']").val("")
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+            $("textarea[name='remark']").val("");
+        }
+
+
+        //加载邮件组
+        function getAllEmailGroup(){
+            requests({url: "/EmailDis/GetAllEmailDisInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"
+                }}, function (res) {
+                var data=res.Data;
+                var selectData='<option></option>';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].EmailDisRd+"'>"+data[i].EmailDisName+"</option>"
+                    }
+                    $("select[name='emailGroup']").empty().html(selectData);
+                    renderForm();
+                }
+            })
+        }
+        getAllEmailGroup();
+
+        //加载邮件内容
+        function getAllEmailContent(){
+            requests({url: "/Email/GetAllEmailInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"
+                }}, function (res) {
+                var data=res.Data;
+                var selectData='<option></option>';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].EmailRd+"'>"+data[i].EmailName+"</option>"
+                    }
+                    $("select[name='emailContent']").empty().html(selectData);
+                    renderForm();
+                }
+            })
+        }
+        getAllEmailContent();
+
+        //明细添加事件
+        $("#detailAdd").click(function () {
+            $("#tbody").append("<tr>" +
+                "<td><input type='checkbox' class='layui-form'  lay-skin='primary' lay-filter='selectOne' class='selectPre'/></td>" +
+                "<td><input type='text' name='a' class='layui-input layui-form'/></td>" +
+                "<td><input type='text' name='b' class='layui-input layui-form'/></td>" +
+                "<td><select  name='c'><option value='00'>数值类型</option><option value='01'>浮点类型</option><option value='02'>字符串类型</option></select></td>" +
+                "<td><input type='text' name='d' class='layui-input'/></td>" +
+                "<td><input type='text'  name='e' class='layui-input'/></td>" +
+                "<td><input type='text' name='f'  class='layui-input'/></td>" +
+                "<td style='display: none;'><input type='text'  name='g'   class='layui-input'/></td>" +
+                "<td><input type='checkbox' name='close' a='01' lay-skin='switch' lay-text='ON|OFF' ></td>" +
+                "<td><select  name='i'><option value='00'>冻结</option><option value='01'>允许流转</option></select></td>" +
+                "<td><button type='button' id='detailDeletes' class='layui-btn layui-btn-primary layui-btn-sm'><i class='layui-icon'></i></button>       </td></tr>");
+            $("#selectAll").prop("checked", false);
+            renderForm();
+
+            /*layui.use('form', function() {
+                var form = layui.form;
+                form.render("checkbox");
+                form.render("select");
+            });*/
+
+
+
+
+            /*let ItemName=$("input[name='dcContent']").val().trim();
+            if(ItemName==""){
+                layer.msg("采集内容不能为空");
+                return;
+            }
+            let DataAlias=$("input[name='dataName']").val().trim();
+            if(DataAlias==""){
+                layer.msg("数据别名不能为空");
+                return;
+            }
+            let ItemType=$("select[name='dateType']").find("option:selected").text();
+            if(ItemType==""){
+                layer.msg("数据类型不能为空");
+                return;
+            }
+            let SValue=$("input[name='bzValue']").val().trim();
+            if(SValue==""){
+                layer.msg("标准值不能为空");
+                return;
+            }
+            let UpLimit=$("input[name='sfValue']").val().trim();
+            if(UpLimit==""){
+                layer.msg("上浮值不能为空");
+                return;
+            }
+            let DwLimit=$("input[name='xfValue']").val().trim();
+            if(DwLimit==""){
+                layer.msg("下浮值不能为空");
+                return;
+            }
+            let DefValue=$("input[name='defaultValue']").val().trim();
+            if(DefValue==""){
+                layer.msg("默认值不能为空");
+                return;
+            }
+            let Checked=$("input[name='sfCheck']").prop("checked");
+            let IsChecked='';
+            if(Checked){
+                IsChecked='是';
+            }else {
+                IsChecked='否';
+            }
+
+            let Action=$("select[name='blxw']").find("option:selected").text();
+            if(Action==""){
+                layer.msg("不良行为不能为空");
+                return;
+            }
+
+
+            var index = layer.load(2, { //icon支持传入0-2
+                shade: [0.5, 'gray'], //0.5透明度的灰色背景
+                content: '加载中...',
+                success: function (layero) {
+                    layero.find('.layui-layer-content').css({
+                        'padding-top': '39px',
+                        'width': '60px'
+                    });
+                }
+            });
+
+            var flag=false;
+
+            $("#tbody").find("tr").each(function(){
+                var tdArr = $(this).children();
+                var ItemNames=tdArr.eq(1).text();
+                if(ItemName==ItemNames){
+                    flag=true;
+                }
+            });
+            if(flag){
+               layer.close(index);
+                layer.msg("新增失败，该采集名称:"+ItemName+"已存在");
+                return;
+            }
+
+            $("#tbody").append("<tr>" +
+                "<td><input type='checkbox' class='layui-form'  lay-skin='primary' lay-filter='selectOne' class='selectPre'/></td>" +
+                "<td><input type='hidden' value='"+ItemName+"'/>"+ItemName+"</td>" +
+                "<td>"+DataAlias+"</td>" +
+                "<td>"+ItemType+"</td>" +
+                "<td>"+SValue+"</td>" +
+                "<td>"+UpLimit+"</td>" +
+                "<td>"+DwLimit+"</td>" +
+                "<td>"+DefValue+"</td>" +
+                "<td>"+IsChecked+"</td>" +
+                "<td>"+Action+"</td>" +
+                "<td><a id='detailDeletes'>删除</a></td></tr>");
+            layer.close(index);
+            $("#selectAll").prop("checked", false);
+            layui.use('form', function() {
+                var form = layui.form;
+                form.render("checkbox");
+
+            });*/
+        });
+
+        //明细的删除
+        $(document).on('click', '#detailDelete', function (){
+            var checklength=$("#tbody input[type='checkbox']:checked");
+            if (checklength.length == 0) {
+                $("#selectAll").prop("checked", false);
+                layer.alert("删除失败，请选择你要删除的数据");
+                return false;
+            }
+
+            $("#tbody input[type='checkbox']").each(function(){
+                if($(this).is(":checked")){
+                    $(this).closest('tr').remove();
+                }
+            });
+            $("#selectAll").prop("checked", false);
+
+
+
+        });
+
+        //明细表格的删除
+        $(document).on('click', '#detailDeletes', function () {
+            $(this).closest('tr').remove();
+        });
+        //明细表格的单选
+        layui.use('form', function () {
+            var form = layui.form;
+            //全选
+            form.on('checkbox(selectAll)', function (data) {
+                var a = data.elem.checked;
+                if (a == true) {
+                    $("#tbody input[type='checkbox']").each(function(){
+                        $(this).prop("checked",true);
+                    });
+                    form.render('checkbox');
+                } else {
+                    $("#tbody input[type='checkbox']").each(function(){
+                        $(this).prop("checked",false);
+                    });
+                    form.render('checkbox');
+                }
+
+            });
+
+
+            //有一个未选中全选取消选中
+            form.on('checkbox(selectOne)', function (data) {
+                var item = $(".selectPre");
+                for (var i = 0; i < item.length; i++) {
+                    if (item[i].checked == false) {
+                        $("#selectAll").prop("checked", false);
+                        form.render('checkbox');
+                        break;
+                    }
+                }
+                //如果都勾选了  勾上全选
+                var  all=item.length;
+                for (var i = 0; i < item.length; i++) {
+                    if (item[i].checked == true) {
+                        all--;
+                    }
+                }
+                if(all==0){
+                    $("#selectAll").prop("checked", false);
+                    form.render('checkbox');}
+            });
+        });
+        form.on('switch()', function(data){
+            if(this.checked ){
+                $(this).attr("a","00")
+            }
+            if(!this.checked ) {
+                $(this).attr("a","01")
+            }
+           /* layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)*/
+        });
+
+
+    });
+</script>
+</body>
+</html>

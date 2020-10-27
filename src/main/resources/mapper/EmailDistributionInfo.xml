@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.EmailDistributionDAO" >
+    <resultMap type="pnc.mesadmin.entity.EmailDistributionInfo" id="EmailDistributionInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="distributionName" column="distributionName" />
+        <result property="description" column="description" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--查询所有的邮件分发列表 zll-->
+    <select id="SelectEmailDistributionInfo" resultMap="EmailDistributionInfoResult">
+        select * from tpm_emaildistributioninfo
+    </select>
+    <!--查询所有的邮件分发列表 zll-->
+    <select id="SelectEmailDistributionInfoByGuid" resultMap="EmailDistributionInfoResult">
+        select * from tpm_emaildistributioninfo WHERE guid = #{guid}
+    </select>
+
+    <!--查询单条邮件信息根据distributionName-->
+    <select id="SelectEmailDistributionInfoBydistributionName" resultMap="EmailDistributionInfoResult" parameterType="string">
+        select * from tpm_emaildistributioninfo where distributionName=#{distributionName}
+    </select>
+    <!--查询单条邮件信息-->
+    <select id="SelectEmailDistributionInfoByRuid" resultMap="EmailDistributionInfoResult" parameterType="int">
+        select * from tpm_emaildistributioninfo where ruid=#{ruid}
+    </select>
+
+    <!--新增-->
+    <insert id="InsertEmailDistributionInfo">
+        <selectKey resultType="int" keyProperty="ruid" order="AFTER" >
+            SELECT @@IDENTITY
+        </selectKey>
+        INSERT INTO tpm_emaildistributioninfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            guid,distributionName,description,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{distributionName},#{description},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除-->
+    <delete id="DeleteEmailDistributionInfo">
+         DELETE  FROM `tpm_emaildistributioninfo` WHERE ruid = #{ruid}
+    </delete>
+
+
+    <!--修改-->
+    <update id="UpdateEmailDistributionInfo">
+        UPDATE `tpm_emaildistributioninfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="distributionName != null">
+                distributionName = #{ distributionName },
+            </if>
+            <if test="description != null">
+                description = #{ description },
+            </if>
+
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+</mapper>

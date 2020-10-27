@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSConfigInfoDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CSConfigInfo" id="CSConfigInfoResult">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAll" resultMap="CSConfigInfoResult">
+        SELECT * FROM tpm_csconfiginfo
+    </select>
+
+    <select id="SelectCsConfigByRd" resultMap="CSConfigInfoResult">
+        select * from tpm_csconfiginfo where Ruid=#{ruid}
+    </select>
+
+    <select id="SelectCsconfigByName" resultMap="CSConfigInfoResult">
+        select * from  tpm_csconfiginfo where ConfigName=#{name}
+    </select>
+
+    <insert id="InsertCSConfigInfo">
+        INSERT INTO tpm_csconfiginfo(Guid,ConfigName,ResGd,Creator,CreateTime,Remark)
+        VALUES (#{Guid},#{ConfigName},#{ResGd},#{Creator},#{CreateTime},#{Remark})
+    </insert>
+
+    <update id="UpdateCsconfig">
+        UPDATE tpm_csconfiginfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="ConfigName != null">
+                ConfigName = #{ConfigName},
+            </if>
+            <if test="ResGd != null">
+                ResGd = #{ResGd},
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{LastModifyMan},
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{LastModifyTime},
+            </if>
+            <if test="Remark != null">
+                Remark = #{Remark},
+            </if>
+        </trim>
+        WHERE Ruid =#{Ruid}
+    </update>
+
+    <delete id="DelCsconfigByGuid">
+          delete from tpm_csconfiginfo where Guid=#{guid}
+    </delete>
+
+</mapper>

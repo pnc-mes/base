@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CarrierBZDtlDao" >
+    <resultMap type="pnc.mesadmin.entity.CarrierBZDtlInfo" id="carrierBZDtlMap">
+        <id property="ruid" column="Ruid" />
+        <result property="CarrierBZGd" column="CarrierBZGd" />
+        <result property="KeyName" column="KeyName" />
+        <result property="KeyValue" column="KeyValue" />
+    </resultMap>
+
+<select id="SelectCarrierBZDtlInfoCarrierBZGd" resultMap="carrierBZDtlMap">
+    select * from tpm_carrierbzdtlinfo where CarrierBZGd=#{CarrierBZGd}
+</select>
+
+    <select id="SelectCarrierBZDtlInfoargruid" resultMap="carrierBZDtlMap">
+    select * from tpm_carrierbzdtlinfo where Ruid=#{argruid}
+</select>
+
+
+    <insert id="InsertCarrierBZDtlInfo">
+                  INSERT INTO `tpm_carrierbzdtlinfo`(
+            CarrierBZGd,KeyName,KeyValue)
+            VALUES (
+            #{CarrierBZGd},#{KeyName},#{KeyValue})
+</insert>
+
+    <update id="UpdateCarrierBZDtlInfo">
+        UPDATE `tpm_carrierbzdtlinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="CarrierBZGd != null">
+                CarrierBZGd = #{ CarrierBZGd },
+            </if>
+            <if test="KeyName != null">
+                KeyName = #{ KeyName },
+            </if>
+            <if test="KeyValue != null">
+                KeyValue = #{ KeyValue },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <delete id="DeleteAllCarrierBZDtlToolBZGd">
+      DELETE  FROM tpm_carrierbzdtlinfo  WHERE CarrierBZGd = #{CarrierBZGd}
+    </delete>
+</mapper>

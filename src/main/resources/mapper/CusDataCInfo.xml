@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CusDataCDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.CusDataCInfo" id="cusDataCInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="cusDataName" column="CusDataName" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--查询列表-->
+    <select id="SelectAllCusDataCInfo" resultMap="cusDataCInfoMap">
+        select * from `tpm_cusdatacinfo`
+    </select>
+
+    <!--查询单个-->
+    <select id="SelectCusDataCInfo" resultMap="cusDataCInfoMap" parameterType="int">
+        select * from `tpm_cusdatacinfo` where Ruid=#{ruid}
+    </select>
+
+    <!--查询单个根据Guid-->
+    <select id="SelectCusDataCInfoByGuid" resultMap="cusDataCInfoMap" parameterType="string">
+        select * from `tpm_cusdatacinfo` where Guid=#{guid}
+    </select>
+
+    <!--根据名字查询单个-->
+    <select id="SelectCusDataCInfoByCusDataName" resultMap="cusDataCInfoMap" parameterType="string">
+        select * from `tpm_cusdatacinfo` where CusDataName=#{cusDataName}
+    </select>
+
+    <!--新增-->
+    <insert id="InsertCusDataCInfo">
+         INSERT INTO tpm_cusdatacinfo
+		(Guid,CusDataName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES(#{guid},#{cusDataName},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--删除-->
+    <delete id="DeleteCusDataCInfo" parameterType="int">
+        delete  from  `tpm_cusdatacinfo` where Ruid=#{ruid}
+    </delete>
+
+    <!--修改-->
+    <update id="UpdateCusDataCInfo" parameterType="int">
+        UPDATE `tpm_cusdatacinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="cusDataName != null">
+                CusDataName = #{ cusDataName },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+</mapper>

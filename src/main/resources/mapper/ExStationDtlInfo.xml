@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ExStationDtlDao">
+
+    <resultMap type="pnc.mesadmin.entity.ExStationDtlInfo" id="ExStationDtlInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <!--根据工位标识查询工位明细信息-->
+    <select id="SelectAllExStationDtlInfoBySGD" resultMap="ExStationDtlInfoMap">
+        SELECT * FROM tpm_exstationdtlinfo where StationGd=#{stationGuid}
+    </select>
+
+    <!--根据工位标识查询工位明细信息-->
+    <select id="SelectAllExStationDtlInfoBySGD1" resultMap="ExStationDtlInfoMap">
+        SELECT ExecGGd FROM tpm_exstationdtlinfo where StationGd=#{stationGuid} GROUP BY ExecGGd
+    </select>
+
+
+    <delete id="delExStationDtlInfoByStationGuid" parameterType="int">
+        DELETE FROM tpm_exstationdtlinfo WHERE StationGd=#{stationGd}
+    </delete>
+
+    <insert id="InsertExStationDtlInfo">
+        INSERT INTO tpm_exstationdtlinfo(Guid,StationGd,ExecGd,ExecGGd,ExecType,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{stationGd},#{execGd},#{execGGd},#{execType},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+
+    <!--根据设备标识查询设备明细信息-->
+    <select id="SelectAllByExecGd" resultMap="ExStationDtlInfoMap">
+        SELECT * FROM tpm_exstationdtlinfo where ExecGd=#{ExecGd} and  ExecType=00
+    </select>
+
+
+    <!--根据用户标识查询设备明细信息-->
+    <select id="SelectAllByExecGdByUSer" resultMap="ExStationDtlInfoMap">
+        SELECT * FROM tpm_exstationdtlinfo where ExecGd=#{ExecGd} and  ExecType=01
+    </select>
+
+    <!--根据工位标识和ExecGd查询工位信息-->
+    <select id="SelectExStationDtlInfo" resultMap="ExStationDtlInfoMap">
+         SELECT * FROM tpm_exstationdtlinfo where StationGd=#{StationGd}
+        <if test="ExecGd !=null and ExecGd !=''">
+            AND  ExecGd=#{ExecGd}
+        </if>
+    </select>
+
+    <select id="SelectSIDEID" resultMap="ExStationDtlInfoMap">
+         SELECT * FROM tpm_exstationdtlinfo where StationGd=#{StationGd} AND ExecGd=#{ExecGd}
+    </select>
+
+    <!--修改执行实体的工位标识StationGd-->
+    <update id="UpdataStationGd">
+        UPDATE tpm_exstationdtlinfo SET StationGd=#{StationGd},LastModifyTime=#{LastModifyTime},LastModifyMan=#{LastModifyMan}
+          <if test="Remark!=''">
+              ,Remark=#{Remark}
+          </if>
+         WHERE ExecGd=#{ExecGd}
+    </update>
+
+    <select id="SelectExecGd" resultMap="ExStationDtlInfoMap">
+       Select * From tpm_ExStationDtlInfo
+        where StationGd in(select Guid from tpm_StationInfo t where t.status="00")
+        and ExecGd=#{ExecGd}
+
+    </select>
+
+    <select id="SelectAllByDevGd" resultMap="ExStationDtlInfoMap">
+       Select * From tpm_ExStationDtlInfo
+        where  ExecGd=#{devGd} and ExecType='00'
+    </select>
+
+    <select id="SelectAllByResGdAndLineGd" resultMap="ExStationDtlInfoMap">
+       Select e.* From tpm_ExStationDtlInfo e LEFT JOIN tpm_StationInfo s ON e.StationGd=s.Guid
+        where  e.ExecGd=#{resGd} and e.ExecType='02' AND s.LineGd=#{lineGd}
+    </select>
+
+</mapper>
+

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SOPDlDAO" >
+    <resultMap type="pnc.mesadmin.entity.SOPDlInfo" id="SOPDlInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="maVerGd" column="maVerGd"/>
+        <result property="SOPGd" column="SOPGd" />
+        <result property="specVerGd" column="specVerGd" />
+        <result property="specName" column="specName" />
+        <result property="fileGrGd" column="fileGrGd" />
+        <result property="devGrGd" column="devGrGd" />
+        <result property="DCVerGd" column="DCVerGd" />
+        <result property="AfDCVerGd" column="AfDCVerGd" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!-- 查询工艺文件明细所有信息-->
+    <select id="SelectAllSOPDlInfo" resultMap="SOPDlInfoResult">
+        SELECT * FROM tpm_sopdlinfo
+    </select>
+
+    <!-- 查询关联工艺文件表 -->
+    <select id="SelectByguid" resultMap="SOPDlInfoResult">
+        SELECT * FROM tpm_sopdlinfo s WHERE s.SOPGd = #{guid}
+    </select>
+
+    <!-- 关联查询关联物料版本表 -->
+    <select id="SelectBySOPGd" resultMap="SOPDlInfoResult">
+        SELECT * FROM tpm_sopdlinfo s WHERE s.SOPGd = #{guid}
+    </select>
+
+    <!--删除工序工艺文件信息-LFZ-->
+    <delete id="DeleteSOPDlInfo">
+         DELETE FROM tpm_sopdlinfo WHERE Ruid = #{maVerRd}
+    </delete>
+
+    <!--新增工序工艺文件信息-->
+    <insert id="InsertSOPDlInfo">
+        INSERT INTO tpm_sopdlinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,MaVerGd,SOPGd,SpecVerGd,SpecName,FileGrGd,DevGrGd,DCVerGd,AfDCVerGd,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{maVerGd},#{SOPGd},#{specVerGd},#{specName},#{fileGrGd},#{devGrGd},#{DCVerGd},#{AfDCVerGd},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!-- 根据MaVerGd和SpecVerGd查询工序工艺文件信息  (By-pjf) -->
+    <select id="SelectByMS" resultMap="SOPDlInfoResult">
+         SELECT * FROM tpm_sopdlinfo WHERE MaVerGd = #{ argMaVerGd } AND SpecVerGd = #{ argSpecVerGd }
+    </select>
+</mapper>

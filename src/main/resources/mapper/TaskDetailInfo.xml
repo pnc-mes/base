@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.TaskDetailDAO" >
+    <resultMap type="pnc.mesadmin.entity.TaskDetailInfo" id="taskDetailInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="taskGd" column="taskGd" />
+        <result property="taskItemName" column="taskItemName" />
+        <result property="sureType" column="sureType" />
+        <result property="maxExCount" column="maxExCount" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!--根据主表标识taskListGd 查询明细信息-->
+    <select id="selectTaskDetailInfoBytaskGd" parameterType="string" resultMap="taskDetailInfoResult">
+        select * from tpm_taskdetailinfo where taskGd=#{taskGd}
+    </select>
+
+    <!--新增明细信息-->
+    <insert id="insertTaskDetailInfo">
+        insert into  tpm_taskdetailinfo
+        <trim  prefix="(" suffix=")" suffixOverrides=",">
+            guid,taskGd,taskItemName,sureType,maxExCount,creator,createTime,lastModifyMan,lastModifyTime,remark
+        </trim>
+        values
+        <trim  prefix="(" suffix=")" suffixOverrides=",">
+           #{guid}, #{taskGd},#{taskItemName},#{sureType},#{maxExCount}, #{creator},#{createTime},#{lastModifyMan}, #{lastModifyTime},#{remark}
+        </trim>
+    </insert>
+
+    <!--删除任务明细-->
+    <delete id="deleteTaskDetailInfo">
+        delete from tpm_taskdetailinfo where ruid=#{ruid}
+    </delete>
+</mapper>

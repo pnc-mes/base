@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.FileGpDtlDAO" >
+    <resultMap type="pnc.mesadmin.entity.FileGpDtlInfo" id="FileGpDtlInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="fileGpGd" column="fileGpGd" />
+        <result property="fileGd" column="fileGd" />
+        <result property="fileVerGd" column="fileVerGd" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--查询文件列表信息-->
+    <select id="SelectAllFileGpDtlInfo" resultMap="FileGpDtlInfoResult">
+        SELECT * FROM tpm_filegpdtlinfo
+    </select>
+
+    <!--查询文件列表信息-->
+    <select id="SelectBygPDtlRd" resultMap="FileGpDtlInfoResult">
+        SELECT * FROM tpm_filegpdtlinfo f WHERE f.`Ruid` = #{gPDtlRd}
+    </select>
+
+    <!--查询关联文件组明细信息-->
+    <select id="SelectByfileVerGd" resultMap="FileGpDtlInfoResult">
+        SELECT * FROM tpm_filegpdtlinfo f WHERE f.fileVerGd = #{fileVerGd}
+    </select>
+
+    <!--查询关联文件组明细信息-->
+    <select id="SelectByguid" resultMap="FileGpDtlInfoResult">
+        SELECT * FROM tpm_filegpdtlinfo f WHERE f.FileGpGd = #{guid}
+    </select>
+
+    <!--新增绑定文件信息-->
+    <insert id="InsertFileGpDtlInfo">
+        INSERT INTO tpm_filegpdtlinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,FileGpGd,FileGd,FileVerGd,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{fileGpGd},#{fileGd},#{fileVerGd},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除绑定文件信息-->
+    <delete id="DeleteFileGpDtlInfo">
+        DELETE FROM tpm_filegpdtlinfo WHERE Guid = #{guid}
+    </delete>
+
+    <!--删除绑定文件信息-->
+    <delete id="DeleteFileGpGd">
+        DELETE FROM tpm_filegpdtlinfo WHERE FileGpGd = #{fileGpGd}
+    </delete>
+
+    <!--更新绑定文件信息信息-->
+    <update id="UpdateFileGpDtlInfo">
+        UPDATE tpm_filegpdtlinfo
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="fileGd != null">
+                fileGd = #{fileGd},
+            </if>
+            <if test="fileVerGd != null">
+                fileVerGd = #{fileVerGd},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+</mapper>

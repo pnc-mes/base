@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.StationIntegratedDAO">
+
+    <resultMap type="pnc.mesadmin.entity.StationIntegratedInfo" id="StationIntegratedInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <!--根据工位标识查询信息-->
+    <select id="selectStationGD" resultMap="StationIntegratedInfoMap">
+        SELECT * FROM tpm_stationintegratedinfo WHERE StationGd=#{StationGd}
+    </select>
+    <!--插入信息-->
+    <insert id="insertStationIntegratedInfo">
+        INSERT INTO tpm_stationintegratedinfo (Guid,StationGd,DevGd,DevMapGd,TriggerType,CmdText,CmdType,CmdVal,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{StationGd},#{DevGd},#{DevMapGd},#{TriggerType},#{CmdText},#{CmdType},#{CmdVal},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+    <!--根据工位标识删除-->
+    <delete id="delectStationIntegratedInfo">
+        DELETE FROM tpm_stationintegratedinfo WHERE StationGd=#{StationGd}
+    </delete>
+
+    <!--根据工位标识和类型查询信息-->
+    <select id="selectStationGDAndTriggerType" resultMap="StationIntegratedInfoMap">
+        SELECT * FROM tpm_stationintegratedinfo WHERE StationGd=#{StationGd} and TriggerType in
+        <foreach collection="TriggerType" item="id" index="list" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectStationIntegratedByDevGd" resultMap="StationIntegratedInfoMap">
+        SELECT * FROM tpm_stationintegratedinfo WHERE DevGd=#{devGd}
+    </select>
+
+    <select id="selectStationIntegratedByDevMapGd" resultMap="StationIntegratedInfoMap">
+        SELECT * FROM tpm_stationintegratedinfo WHERE DevMapGd=#{devMapGd}
+    </select>
+
+
+</mapper>
+

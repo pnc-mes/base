@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SparePartDAO" >
+    <resultMap id="sparePartInfoMap" type="pnc.mesadmin.entity.SparePartInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="PartName" property="partName"></result>
+        <result column="SupplierGd" property="supplierGd"></result>
+        <result column="VenderSN" property="venderSN"></result>
+        <result column="FaGd" property="faGd"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime" ></result>
+        <result column="LastModifyMan" property="lastModifyMan" ></result>
+        <result column="LastModifyTime" property="lastModifyTime" ></result>
+        <result column="Remark" property="remark" ></result>
+    </resultMap>
+
+    <!--增加-->
+    <insert id="InsertSparePartInfo">
+        INSERT INTO tpm_sparepartinfo(Guid,PartName,SupplierGd,VenderSN,FaGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{partName},#{supplierGd},#{venderSN},#{faGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--删除-->
+    <delete id="DeleteSparePartInfoByruid">
+        DELETE FROM `tpm_sparepartinfo` WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新-->
+    <update id="UpdateSparePartInfo">
+        UPDATE `tpm_sparepartinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="partName != null">
+                PartName = #{ partName },
+            </if>
+            <if test="supplierGd != null">
+                SupplierGd = #{ supplierGd },
+            </if>
+            <if test="venderSN != null">
+                VenderSN = #{ venderSN },
+            </if>
+            <if test="faGd != null">
+                FaGd = #{ faGd },
+            </if>
+
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <!--查询-->
+    <select id="SelectSparePartInfo" resultMap="sparePartInfoMap">
+        SELECT * FROM`tpm_sparepartinfo`
+    </select>
+
+
+    <!--查询根据ruid-->
+    <select id="SelectSparePartInfoByruid" resultMap="sparePartInfoMap" parameterType="int">
+        SELECT * FROM `tpm_sparepartinfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--查询根据ruid -->
+    <select id="SelectSparePartInfoByguid" resultMap="sparePartInfoMap" parameterType="string">
+        SELECT * FROM `tpm_sparepartinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--查询名称-->
+    <select id="SelectSparePartInfoByPartName" resultMap="sparePartInfoMap">
+        SELECT * FROM `tpm_sparepartinfo` WHERE PartName=#{partName}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.RkTkDAO">
+    <resultMap id="rKTkInfoMap" type="pnc.mesadmin.entity.RkTkInfo">
+        <id property="ruid" column="Ruid" ></id>
+        <result property="guid" column="Guid" />
+        <result property="rkType" column="RkType" />
+        <result property="rkCode" column="RkCode" />
+        <result property="assCode" column="AssCode" />
+        <result property="assCodeGd" column="AssCodeGd" />
+        <result property="assSource" column="AssSource" />
+        <result property="exStatus" column="ExStatus"></result>
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="execor" column="Execor" />
+        <result property="execTime" column="ExecTime" />
+        <result property="cancelor" column="Cancelor" />
+        <result property="cancelTime" column="CancelTime" />
+        <result property="finishor" column="Finishor" />
+        <result property="finishTime" column="FinishTime" />
+        <result property="submitStore" column="SubmitStore" />
+
+
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--新增入库单信息 张亮亮-->
+    <insert id="InsertRKTkInfo">
+        INSERT INTO `tpm_rktkinfo`(Guid,RkType,RkCode,AssCode,AssSource,assCodeGd,ExStatus,Creator,CreateTime,Execor,ExecTime,Cancelor,CancelTime,Finishor,FinishTime,
+        <trim suffixOverrides=",">
+          <if test="submitStore != null">
+              SubmitStore,
+          </if>
+          Remark
+        </trim>
+        )
+		VALUES (#{guid},#{rkType},#{rkCode},#{assCode},#{assSource},#{assCodeGd},#{exStatus},#{creator},#{createTime},#{execor},#{execTime},#{cancelor},#{cancelTime},#{finishor},#{finishTime},
+        <trim suffixOverrides=",">
+            <if test="submitStore != null">
+                #{submitStore},
+            </if>
+            #{remark}
+        </trim>
+        )
+    </insert>
+
+    <!--删除入库单号 张亮亮-->
+    <delete id="DeleteRKTkInfo" parameterType="int">
+        DELETE FROM tpm_rktkinfo WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新入库单号 张亮亮-->
+<update id="UpdateRKTkInfo">
+    UPDATE tpm_rktkinfo
+    <trim prefix="set" suffixOverrides=",">
+        <if test="guid != null">
+            Guid = #{ guid },
+        </if>
+        <if test="rkType != null">
+            RkType = #{ rkType },
+        </if>
+
+        <if test="rkCode != null">
+            RkCode = #{ rkCode },
+        </if>
+        <if test="assCode != null">
+            AssCode = #{ assCode },
+        </if>
+        <if test="assCodeGd != null">
+            AssCodeGd = #{ assCodeGd },
+        </if>
+        <if test="assSource != null">
+            AssSource = #{ assSource },
+        </if>
+        <if test="exStatus != null">
+            ExStatus = #{ exStatus },
+        </if>
+        <if test="creator != null">
+            Creator = #{ creator },
+        </if>
+        <if test="createTime != null">
+            CreateTime = #{ createTime },
+        </if>
+        <if test="execor != null">
+            Execor = #{ execor },
+        </if>
+        <if test="execTime != null">
+            ExecTime = #{ execTime },
+        </if>
+        <if test="cancelor != null">
+            Cancelor = #{ cancelor },
+        </if>
+        <if test="cancelTime != null">
+            CancelTime = #{ cancelTime },
+        </if>
+        <if test="finishor != null">
+            Finishor = #{ finishor },
+        </if>
+        <if test="finishTime != null">
+            FinishTime = #{ finishTime },
+        </if>
+        <if test="submitStore != null">
+            SubmitStore = #{ submitStore },
+        </if>
+        <if test="remark != null">
+            Remark = #{ remark },
+        </if>
+    </trim>
+    WHERE Ruid = #{ ruid }
+</update>
+    <!--查询入库单信息 张亮亮-->
+    <select id="SelectRKTkInfo" resultMap="rKTkInfoMap">
+          SELECT * FROM `tpm_rktkinfo`
+    </select>
+
+    <!--根据入库类型查询信息 张亮亮-->
+    <select id="SelectRKTkInfoByrkType" resultMap="rKTkInfoMap" parameterType="string">
+        SELECT * FROM `tpm_rktkinfo` WHERE RkType=#{rkType}
+    </select>
+
+    <!--根据入库代码查询信息 张亮亮-->
+    <select id="SelectRKTkInfoByrkCode" resultMap="rKTkInfoMap" parameterType="string">
+        SELECT * FROM `tpm_rktkinfo` WHERE RkCode=#{rkCode}
+    </select>
+
+    <!--根据ruid查询入库信息-->
+    <select id="SelectRKTkInfoByruid" resultMap="rKTkInfoMap" parameterType="int" >
+        SELECT * FROM `tpm_rktkinfo` WHERE Ruid=#{ruid}
+    </select>
+    <!--根据guid查询入库信息-->
+    <select id="SelectRKTkInfoByguid" resultMap="rKTkInfoMap" parameterType="string" >
+        SELECT * FROM `tpm_rktkinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--Scanner端 根据单号、操作类型、状态等查询任务单查询信息 张亮亮-->
+    <select id="SelectRKTkInfoByOOS" resultMap="rKTkInfoMap"  parameterType="string" >
+         SELECT * FROM `tpm_rktkinfo`
+        <where>
+            <if test="assCode!=null||assCode!=''">
+               AND AssCode like #{assCode}
+            </if>
+            <if test="rkType!=null||rkType!=''">
+                AND RkType = #{rkType}
+            </if>
+            <if test="exStatus!=null||exStatus!=''">
+                AND ExStatus=#{exStatus}
+            </if>
+
+        </where>
+        ORDER BY  CreateTime DESC
+    </select>
+
+    <!-- 根据关联单号查询入库单信息  (pjf) -->
+    <select id="SelectByAssCode" resultMap="rKTkInfoMap">
+        SELECT * FROM `tpm_rktkinfo` WHERE AssCode = #{ argAssCode }
+    </select>
+
+    <!--根据关联单号查询入库-->
+    <select id="SelectByAssCodes" resultMap="rKTkInfoMap">
+        SELECT * FROM `tpm_rktkinfo` WHERE AssCode = #{ argAssCode }
+    </select>
+
+    <!-- 筛选关联查询  (lfz) -->
+    <select id="SelectByRkShaixuan" resultMap="rKTkInfoMap">
+        SELECT *  FROM  `tpm_rktkinfo` b  WHERE
+        <if test="rkType != null and rkType!=''">
+        b.`RkType`=#{rkType}
+        </if>
+        AND b.`AssCode`
+        <choose>
+            <when test="assCode != null and assCode!='' ">
+                LIKE CONCAT('%','${assCode}','%')
+            </when>
+            <otherwise>
+                LIKE CONCAT('%','','%')
+            </otherwise>
+        </choose>
+        <if test="execTime != null and execTime!=''">
+        AND b.`ExecTime` BETWEEN  #{execTime}
+        </if>
+        <if test="execTime1 != null and execTime1!=''">
+            AND #{execTime1}
+        </if>
+    </select>
+
+
+</mapper>

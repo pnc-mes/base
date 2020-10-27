@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevStateDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevStateInfo" id="devStateInfoMapper">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="status" column="Status" />
+        <result property="devSName" column="DevSName" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--查询设备状态列表-->
+    <select id="SelectDevStateInfo" resultMap="devStateInfoMapper">
+        SELECT * FROM tpm_devstateinfo
+    </select>
+
+    <!--查询设备状态信息-->
+    <select id="SelectDevStateInfoByRuid" resultMap="devStateInfoMapper" parameterType="int">
+        SELECT * FROM tpm_devstateinfo WHERE Ruid=#{ruid}
+    </select>
+
+    <!--查询设备状态信息根据guid-->
+    <select id="SelectDevStateInfoByGuid" resultMap="devStateInfoMapper" parameterType="string">
+        SELECT * FROM tpm_devstateinfo WHERE Guid=#{guid}
+    </select>
+
+    <!--查询设备状态信息根据名称-->
+    <select id="SelectDevStateInfoByDevSName" resultMap="devStateInfoMapper" parameterType="string">
+        SELECT * FROM tpm_devstateinfo WHERE DevSName=#{devSName}
+    </select>
+
+    <!--增加设备状态信息-->
+    <insert id="InsertDevStateInfo">
+        INSERT INTO `tpm_devstateinfo`(Guid,Status,DevSName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{status},#{devSName},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--删除设备状态信息-->
+    <delete id="DeleteDevStateInfoByRuid" parameterType="int">
+      DELETE FROM  tpm_devstateinfo WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新设别状态信息-->
+    <update id="UpdateDevStateInfo">
+        UPDATE `tpm_devstateinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="status != null">
+                Status = #{ status },
+            </if>
+            <if test="devSName != null">
+                DevSName = #{ devSName },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据设备状态模型Guid查询 -->
+    <select id="SelectByDevGd" resultMap="devStateInfoMapper">
+        SELECT ds.* FROM tpm_devstateinfo ds, tpm_devsmdtlinfo dsd
+        WHERE dsd.`TarDSGd` = ds.`Guid` AND dsd.`Guid` = #{ argDevSMDtGd }
+    </select>
+</mapper>

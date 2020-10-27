@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DoCheckDtInfoDAO">
+
+    <resultMap type="pnc.mesadmin.entity.DoCheckDtlInfo" id="DoCheckDtlInfoMap">
+        <id property="ruid" column="ruid"/>
+    </resultMap>
+
+    <!--查询工位信息-->
+    <select id="SelectDoCheckInfoBy" resultMap="DoCheckDtlInfoMap">
+        SELECT * FROM tpm_docheckdtlinfo where DoCheckGd=#{doCheckGd}
+    </select>
+
+    <select id="SelectDoCheckInfoByRuid" resultMap="DoCheckDtlInfoMap">
+        SELECT * FROM tpm_docheckdtlinfo where Ruid=#{ruid}
+    </select>
+
+    <update id="UpdaDoCheckDtlInfoByRuid">
+        UPDATE tpm_docheckdtlinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="execResult00 != null">
+                ExecResult00 = #{execResult00},
+            </if>
+            <if test="execResult02 != null">
+                ExecResult02 = #{execResult02},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+        </trim>
+        WHERE Ruid =#{ruid}
+    </update>
+
+    <insert id="InsertDoCheckDtlInfo">
+        INSERT INTO tpm_docheckdtlinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,DoCheckGd,TaskItemName,SureType,Creator,CreateTime,
+
+            <if test="ExecResult00 != null">
+                ExecResult00,
+            </if>
+            <if test="ExecResult02 != null">
+                ExecResult02,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{DoCheckGd},#{TaskItemName},#{SureType},#{creator},#{createTime},
+
+            <if test="ExecResult00 != null">
+                #{ExecResult00},
+            </if>
+            <if test="ExecResult02 != null">
+                #{ExecResult02},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>
+

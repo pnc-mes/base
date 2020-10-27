@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PackRelDAO">
+    <resultMap id="packInfoMap" type="pnc.mesadmin.entity.PackRelInfo">
+        <id column="Ruid" property="ruid"/>
+        <result column="Guid" property="guid"/>
+        <result column="PackGd" property="packGd"/>
+        <result column="BarType" property="barType"/>
+        <result column="BarCode" property="barCode"/>
+        <result column="Creator" property="creator"/>
+        <result column="CreateTime" property="createTime"/>
+        <result column="LastModifyMan" property="lastModifyMan"/>
+        <result column="LastModifyTime" property="lastModifyTime"/>
+        <result column="Remark" property="remark"/>
+    </resultMap>
+
+    <!-- 新增包装关系 (By-pjf) -->
+    <insert id="InsertPackRel">
+        INSERT INTO tpm_packrelinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,PackGd,BarType,BarCode,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{packGd},#{barType},#{barCode},
+            #{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="Delete">
+        DELETE FROM tpm_packrelinfo WHERE ruid = #{ruid}
+    </delete>
+
+    <select id="SelectByPackGd" resultMap="packInfoMap">
+        SELECT * FROM tpm_packrelinfo pr, tpm_packinfo p
+        WHERE p.guid = #{packGd} AND pr.barCode = p.barCode
+    </select>
+
+    <select id="SelectByBarCode" resultMap="packInfoMap">
+        SELECT * FROM tpm_packrelinfo WHERE barCode = #{barCode}
+    </select>
+
+    <select id="SelectListByPackGd" resultMap="packInfoMap">
+        SELECT * FROM tpm_packrelinfo WHERE packGd = #{packGd}
+    </select>
+
+    <select id="SelectByRuid" resultMap="packInfoMap">
+        SELECT * FROM tpm_packrelinfo WHERE ruid = #{ruid}
+    </select>
+
+    <select id="SelectBacthByPackGd" resultType="String">
+        SELECT BarCode FROM tpm_packrelinfo WHERE packGd = #{packGd}
+    </select>
+
+    <select id="selectAllPackRelInfoByPackGd" resultMap="packInfoMap" parameterType="string">
+        SELECT * FROM tpm_packrelinfo WHERE packGd = #{packGd}
+    </select>
+</mapper>

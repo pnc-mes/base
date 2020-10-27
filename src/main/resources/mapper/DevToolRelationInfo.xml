@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevToolRelationDAO">
+
+    <resultMap type="pnc.mesadmin.entity.DevToolRelationInfo" id="DevToolRelationInfoResult">
+        <id property="ruid" column="ruid"/>
+    </resultMap>
+
+    <select id="selectByDevGd" resultMap="DevToolRelationInfoResult">
+        SELECT * FROM tpm_devtoolrelationinfo where DevGd=#{devGd}
+    </select>
+</mapper>
+

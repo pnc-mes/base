@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MaTypeDAO" >
+    <resultMap type="pnc.mesadmin.entity.MaTypeInfo" id="MaTypeInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="pMaTGd" column="pMaTGd" />
+        <result property="maTCode" column="maTCode" />
+        <result property="maTName" column="maTName" />
+        <result property="materialType" column="materialType" />
+        <result property="expandGd" column="expandGd" />
+        <result property="dSource" column="dSource" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--查询物料类别信息列表-->
+    <select id="SelectAllMaTypeInfo" resultMap="MaTypeInfoResult">
+    select * from tpm_matypeinfo
+    </select>
+
+    <!--根据物料代码查询信息-->
+    <select id="SelectMaTypeInfoByMaTCode" resultMap="MaTypeInfoResult">
+      select * from tpm_matypeinfo where maTCode=#{maTCode}
+    </select>
+
+    <select id="SelectAllMaTypeInfoByPMaTGdAndMaTName" resultMap="MaTypeInfoResult" parameterType="string">
+      select * from tpm_matypeinfo  where  PMaTGd=#{pMaTGd} and MaTName=#{maTName}
+    </select>
+    <select id="SelectrootMaTypeInfo" resultMap="MaTypeInfoResult">
+       SELECT * FROM tpm_matypeinfo WHERE pMaTGd ="" AND  MaterialType=#{MaterialType}
+    </select>
+
+    <select id="SelectrootMaTypeInfoByMaTCode" resultMap="MaTypeInfoResult" parameterType="string">
+       SELECT * FROM tpm_matypeinfo WHERE pMaTGd ="" AND  MaterialType=#{materialType} and MaTCode=#{maTCode}
+    </select>
+    <select id="SelectMaTypeChildrenInfo" resultMap="MaTypeInfoResult">
+        select * from tpm_matypeinfo where pMaTGd=#{pMaTGd}
+    </select>
+    <select id="SelectMaTypeChildrenInfoAndMaTCode" resultMap="MaTypeInfoResult">
+        select * from tpm_matypeinfo where pMaTGd=#{pMaTGd}  and MaTCode=#{maTCode}
+    </select>
+    <!--查询物料类别信息-->
+    <select id="SelectByRuid" resultMap="MaTypeInfoResult">
+        SELECT * FROM tpm_matypeinfo m WHERE m.`Ruid` = #{mTRd}
+    </select>
+
+    <!--查询物料类别信息-->
+    <select id="SelectByRuidmTRd" resultMap="MaTypeInfoResult">
+        SELECT * FROM tpm_matypeinfo m WHERE m.`Ruid` = #{mTRd}
+    </select>
+
+    <!--通过guid查询物料类别信息-->
+    <select id="SelectByGuid" resultMap="MaTypeInfoResult">
+        SELECT * FROM tpm_matypeinfo m WHERE m.`pMaTGd` = #{guid}
+    </select>
+
+    <!--查询物料类别名称-->
+    <select id="SelectBymaTName" resultMap="MaTypeInfoResult">
+        SELECT * FROM tpm_matypeinfo m WHERE m.`MaTName` = #{maTName}
+    </select>
+
+    <!--查询物料类别代码-->
+    <select id="SelectBymaTCode" resultMap="MaTypeInfoResult">
+        SELECT * FROM tpm_matypeinfo m WHERE m.`MaTCode` = #{maTCode}
+    </select>
+
+    <!--查询物料类别-->
+    <select id="SelectBypMaTGd" resultMap="MaTypeInfoResult">
+        SELECT * FROM tpm_matypeinfo
+    </select>
+
+    <select id="SelectOneByGuid" resultMap="MaTypeInfoResult">
+        SELECT * FROM tpm_matypeinfo WHERE Guid = #{mTGd}
+    </select>
+
+    <!--保存物料类别信息-->
+    <insert id="InsertMaTypeInfo">
+        INSERT INTO tpm_matypeinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,PMaTGd,ExpandGd,MaTCode,MaTName,MaterialType,DSource,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{pMaTGd},#{expandGd},#{maTCode},#{maTName},#{materialType},#{dSource},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除物料类别信息-->
+    <delete id="DeleteMaTypeInfo">
+        DELETE FROM tpm_matypeinfo WHERE Ruid = #{mTRd}
+    </delete>
+
+    <!--删除物料类别子信息-->
+    <delete id="Deleteguid">
+        DELETE FROM tpm_matypeinfo WHERE guid = #{guid}
+    </delete>
+
+    <!--更新物料类别信息-->
+    <update id="UpdateMaTypeInfo">
+        UPDATE tpm_matypeinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="maTCode != null">
+                maTCode = #{maTCode},
+            </if>
+            <if test="maTName != null">
+                maTName = #{maTName},
+            </if>
+            <if test="expandGd != null">
+                expandGd = #{expandGd},
+            </if>
+            <if test="pMaTGd != null">
+                pMaTGd = #{pMaTGd},
+            </if>
+            <if test="materialType != null">
+                materialType = #{materialType},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+    <!--通过guid查询物料类别信息-->
+    <select id="SelectGuid" resultMap="MaTypeInfoResult">
+        SELECT * FROM tpm_matypeinfo WHERE  Guid = #{guid}
+    </select>
+</mapper>

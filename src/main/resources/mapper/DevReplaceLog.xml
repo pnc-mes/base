@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevReplaceLogDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevReplaceLogInfo" id="devReplaceLogInfoMapper">
+        <id property="Ruid" column="Ruid" />
+    </resultMap>
+
+    <insert id="InsertDevReplaceLog">
+        INSERT INTO tpm_devreplaceloginfo(Guid,DevGd,SPartGd,Num,CreateTime,Creator,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{DevGd},#{SPartGd},#{Num},#{CreateTime},#{Creator},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+
+</mapper>

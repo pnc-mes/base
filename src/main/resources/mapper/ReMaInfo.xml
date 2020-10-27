@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ReMaDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.ReMaInfo" id="ReMaInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="maVerGd" column="maVerGd" />
+        <result property="reMaVerGd" column="reMaVerGd" />
+        <result property="materialCode" column="materialCode" />
+        <result property="materialName" column="materialName" />
+        <result property="version" column="version" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+	<!-- 新增物料替代料信息 (By-pjf)-->
+	<insert id="InsertReMaInfo">
+        INSERT INTO tpm_remainfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,maVerGd,reMaVerGd,materialCode,materialName,version,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{maVerGd},#{reMaVerGd},#{materialCode},#{materialName},#{version},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+	</insert>
+
+    <!-- 删除物料替代料信息 (By-pjf)-->
+    <delete id="DeleteReMaInfo">
+        DELETE FROM tpm_remainfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 根据物料版本Guid删除物料替代料信息 (By-pjf)-->
+    <delete id="DeleteByMaVerGd">
+        DELETE FROM tpm_remainfo WHERE MaVerGd = #{ argMaVerGd }
+    </delete>
+
+    <!-- 修改物料替代料信息 (By-pjf)-->
+    <update id="UpdateByRuid">
+        UPDATE tpm_remainfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="maVerGd != null">
+                maVerGd = #{ maVerGd },
+            </if>
+            <if test="reMaVerGd != null">
+                reMaVerGd = #{ reMaVerGd },
+            </if>
+            <if test="materialCode != null">
+                materialCode = #{ materialCode },
+            </if>
+            <if test="materialName != null">
+                materialName = #{ materialName },
+            </if>
+            <if test="version != null">
+                version = #{ version },
+            </if>
+
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据物料版本标识查询物料替代料 (By-pjf)-->
+    <select id="SelectByMaVerGd" resultMap="ReMaInfoResult">
+        SELECT * FROM tpm_remainfo WHERE MaVerGd = #{ argMaVerGd }
+    </select>
+
+    <!-- 根据物料版本标识查询物料替代料 (By-pjf)-->
+    <select id="SelectByRuid" resultMap="ReMaInfoResult">
+        SELECT * FROM tpm_remainfo WHERE Ruid = #{ argRuid }
+    </select>
+
+</mapper>

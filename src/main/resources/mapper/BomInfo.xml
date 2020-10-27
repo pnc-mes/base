@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.BomDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.BomInfo" id="BomInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="bomCode" column="bomCode" />
+		<result property="bomName" column="bomName" />
+		<result property="verGd" column="verGd" />
+		<result property="versionNo" column="versionNo" />
+		<result property="status" column="status" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增BOM清单信息  (By-pjf)-->
+	<insert id="InsertBomInfo">
+		INSERT INTO tpm_bominfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,BomCode,BomName,VerGd,Creator,CreateTime,
+
+			<if test="versionNo != null">
+				versionNo,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{bomCode},#{bomName},#{verGd},#{creator},#{createTime},
+
+			<if test="versionNo != null">
+				#{versionNo},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+    <!-- 删除BOM清单信息  (By-pjf)-->
+    <delete id="DeleteBomInfo">
+        DELETE FROM tpm_bominfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+    <!-- 修改Bom清单信息(ruid)  (By-pjf)-->
+    <update id="UpdateBomInfo">
+        UPDATE tpm_bominfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="bomCode != null">
+                BomCode = #{ bomCode },
+            </if>
+            <if test="bomName != null">
+                BomName = #{ bomName },
+            </if>
+            <if test="verGd != null">
+                VerGd = #{ verGd },
+            </if>
+			<if test="versionNo != null">
+				versionNo = #{versionNo},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+	<!-- 修改Bom清单信息根据(guid) (By-pjf)-->
+	<update id="UpdateByGuid">
+		UPDATE tpm_bominfo
+		<trim prefix="set" suffixOverrides=",">
+			<if test="bomCode != null">
+				BomCode = #{ bomCode },
+			</if>
+			<if test="bomName != null">
+				BomName = #{ bomName },
+			</if>
+			<if test="verGd != null">
+				VerGd = #{ verGd },
+			</if>
+			<if test="versionNo != null">
+				versionNo = #{versionNo},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="lastModifyMan != null">
+				LastModifyMan = #{ lastModifyMan },
+			</if>
+			<if test="lastModifyTime != null">
+				LastModifyTime = #{ lastModifyTime },
+			</if>
+			<if test="remark != null">
+				Remark = #{ remark },
+			</if>
+		</trim>
+		WHERE Guid = #{ guid }
+	</update>
+
+    <!-- 查询所有BOM清单信息  (By-pjf)-->
+	<select id="SelectAllBomInfo" resultMap="BomInfoResult">
+		SELECT * FROM tpm_bominfo
+	</select>
+
+    <!-- 查询BOM清单信息  (By-pjf)-->
+    <select id="SelectBomInfo" resultMap="BomInfoResult">
+        SELECT * FROM tpm_bominfo WHERE Ruid = #{ argRuid }
+    </select>
+
+    <!-- 根据Guid查询BOM清单信息  (By-pjf)-->
+    <select id="SelectByGuid" resultMap="BomInfoResult">
+        SELECT * FROM tpm_bominfo WHERE Guid = #{ argGuid }
+    </select>
+
+	<!-- 根据BomName查询BOM清单信息  (By-pjf)-->
+	<select id="SelectByName" resultMap="BomInfoResult">
+		SELECT * FROM tpm_bominfo WHERE BomName = #{ argBomName }
+	</select>
+
+    <!-- 根据BomCode查询BOM清单信息  (By-pjf)-->
+    <select id="SelectByCode" resultMap="BomInfoResult">
+        SELECT * FROM tpm_bominfo WHERE BomCode = #{ argBomCode }
+    </select>
+
+</mapper>

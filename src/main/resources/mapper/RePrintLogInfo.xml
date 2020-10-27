@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.RePrintLogDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.RePrintLogInfo" id="RePrintLogInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="pTCode" column="pTCode" />
+		<result property="rePTCode" column="rePTCode" />
+		<result property="orderType" column="orderType" />
+		<result property="barCode" column="barCode" />
+		<result property="barType" column="barType" />
+		<result property="printCount" column="printCount" />
+		<result property="printCopy" column="printCopy" />
+		<result property="printerName" column="printerName" />
+		<result property="pTFileName" column="pTFileName" />
+		<result property="printData" column="printData" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增重打记录信息  (By-pjf)-->
+	<insert id="InsertRePrintLog">
+		INSERT INTO tpm_reprintloginfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,pTCode,rePTCode,barCode,printCount,printCopy,printerName,Creator,CreateTime,
+			orderType,barType,pTFileName,printData,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{pTCode},#{rePTCode},#{barCode},#{printCount},#{printCopy},#{printerName},#{creator},#{createTime},
+			#{orderType},#{barType},#{pTFileName},#{printData},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

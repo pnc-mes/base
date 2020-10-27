@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevBZDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevBZInfo" id="devBZInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="DevGd" column="DevGd" />
+        <result property="Reference" column="Reference" />
+    </resultMap>
+
+ <select id="SelectDevBZInfoDevGd" resultMap="devBZInfoMap">
+     select * from tpm_devbzinfo where DevGd=#{DevGd}
+ </select>
+
+ <select id="SelectDevBZInfoGuid"   resultMap="devBZInfoMap">
+          select * from tpm_devbzinfo where Guid=#{argguid}
+ </select>
+    <select id="SelectDevBZInfoRuid"   resultMap="devBZInfoMap">
+          select * from tpm_devbzinfo where Ruid=#{argRuid}
+ </select>
+<insert id="InsertDevBZInfo">
+                  INSERT INTO `tpm_devbzinfo`(
+            Guid,DevGd,Reference)
+            VALUES (
+            #{guid},#{DevGd},#{Reference})
+</insert>
+
+
+    <update id="UpdateDevBZInfo">
+        UPDATE `tpm_devbzinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="DevGd != null">
+                DevGd = #{ DevGd },
+            </if>
+            <if test="Reference != null">
+                Reference = #{ Reference },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <delete id="DeleteAllDevBZInfoRuid">
+      DELETE  FROM tpm_devbzinfo  WHERE DevGd = #{DevGd}
+    </delete>
+
+</mapper>

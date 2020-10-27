@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.OnRWDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.OnRWInfo" id="OnRWInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="batch" column="batch" />
+		<result property="wFVerGd" column="wFVerGd" />
+		<result property="wFName" column="wFName" />
+		<result property="sSpecVerGd" column="sSpecVerGd" />
+		<result property="sSpecVerName" column="sSpecVerName" />
+		<result property="tSpecVerGd" column="tSpecVerGd" />
+		<result property="tSpecName" column="tSpecName" />
+		<result property="reaDes" column="reaDes" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+    <!-- 新增在线重工日志信息 (By-pjf)-->
+	<insert id="InsertOnRW">
+		INSERT INTO tpm_onrwinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,batch,wFVerGd,wFName,sSpecVerGd,sSpecVerName,tSpecVerGd,tSpecName,reaDes,Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{batch},#{wFVerGd},#{wFName},#{sSpecVerGd},#{sSpecVerName},
+            #{tSpecVerGd},#{tSpecName},#{reaDes},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+</mapper>

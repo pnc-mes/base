@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MinTimeWindowDao" >
+	<resultMap type="pnc.mesadmin.entity.MinTimeWindowInfo" id="MinTimeWindowInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="minTimeWindowName" column="minTimeWindowName" />
+		<result property="description" column="description" />
+        <result property="maVerGd" column="maVerGd" />
+		<result property="wFVerGd" column="wFVerGd" />
+		<result property="specVerGd" column="specVerGd" />
+		<result property="devGd" column="devGd" />
+        <result property="minTime" column="minTime" />
+        <result property="overTimeAction" column="overTimeAction" />
+        <result property="overdueEmailDistributionGd" column="overdueEmailDistributionGd" />
+        <result property="overdueEmailMessageGd" column="overdueEmailMessageGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+        <select id="SelectMinTimeWindowInfo" resultMap="MinTimeWindowInfoResult">
+			SELECT * from tpm_mintimewindowinfo
+		</select>
+       <select id="SelectMinTimeWindowInfoByruid" resultMap="MinTimeWindowInfoResult">
+		   SELECT * from tpm_mintimewindowinfo WHERE Ruid = #{ruid}
+	   </select>
+	<select id="SelectMinTimeWindowInfoByName" resultMap="MinTimeWindowInfoResult">
+           SELECT * from tpm_mintimewindowinfo WHERE MinTimeWindowName = #{minTimeWindowName}
+	</select>
+	<insert id="InsertMinTimeWindowInfo">
+		INSERT INTO tpm_mintimewindowinfo(guid,minTimeWindowName,description,maVerGd,wFVerGd,specVerGd,devGd,minTime,overTimeAction,overdueEmailDistributionGd,overdueEmailMessageGd,creator,createTime,lastModifyMan,lastModifyTime,remark)
+		VALUES (#{guid},#{minTimeWindowName},#{description},#{maVerGd},#{wFVerGd},#{specVerGd},#{devGd},#{minTime},#{overTimeAction},#{overdueEmailDistributionGd},#{overdueEmailMessageGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+	</insert>
+	<delete id="DeleteMinTimeWindowInfo">
+		DELETE FROM tpm_mintimewindowinfo WHERE Ruid=#{ruid}
+	</delete>
+	<update id="UpdateMinTimeWindowInfo">
+		UPDATE tpm_mintimewindowinfo
+		<trim prefix="set" suffixOverrides=",">
+			<if test="guid != null">
+				Guid = #{ guid },
+			</if>
+			<if test="minTimeWindowName != null">
+				MinTimeWindowName = #{ minTimeWindowName },
+			</if>
+			<if test="description != null">
+				Description = #{ description },
+			</if>
+			<if test="maVerGd != null">
+				MaVerGd = #{ maVerGd },
+			</if>
+			<if test="wFVerGd != null">
+				WFVerGd = #{ wFVerGd },
+			</if>
+			<if test="specVerGd != null">
+				SpecVerGd = #{ specVerGd },
+			</if>
+			<if test="devGd != null">
+				DevGD = #{ devGd },
+			</if>
+			<if test="minTime != null">
+				MinTime = #{ minTime },
+			</if>
+			<if test="overTimeAction != null">
+				OverTimeAction = #{overTimeAction},
+			</if>
+			<if test="overdueEmailDistributionGd != null">
+				OverdueEmailDistributionGd = #{overdueEmailDistributionGd},
+			</if>
+			<if test="overdueEmailMessageGd != null">
+				OverdueEmailMessageGd = #{overdueEmailMessageGd},
+			</if>
+			<if test="creator != null">
+				Creator = #{ creator },
+			</if>
+			<if test="createTime != null">
+				CreateTime = #{ createTime },
+			</if>
+			<if test="lastModifyMan != null">
+				LastModifyMan = #{ lastModifyMan },
+			</if>
+			<if test="lastModifyTime != null">
+				LastModifyTime = #{ lastModifyTime },
+			</if>
+			<if test="remark != null">
+				Remark = #{ remark },
+			</if>
+		</trim>
+		WHERE Ruid = #{ ruid }
+	</update>
+
+	<!-- 根据物料、工艺流程、工序查询 -->
+	<select id="SelectByMaWfSpecGd" resultMap="MinTimeWindowInfoResult">
+		SELECT * FROM tpm_mintimewindowinfo WHERE MaVerGd = #{ maVerGd }
+		AND WFVerGd = #{ wFVerGd }
+		AND SpecVerGd = #{ specVerGd }
+		<if test="devGd != null">
+            AND DevGd = #{ devGd }
+        </if>
+	</select>
+
+
+	<!-- 根据物料、工艺流程、工序查询 -->
+	<select id="SelectByMaWfSpecGdRd" resultMap="MinTimeWindowInfoResult">
+		SELECT * FROM tpm_mintimewindowinfo WHERE MaVerGd = #{ maVerGd }
+		AND WFVerGd = #{ wFVerGd }
+		AND SpecVerGd = #{ specVerGd }
+		<if test="devGd != null">
+			AND DevGd = #{ devGd }
+		</if>
+		<if test="ruid != null">
+			AND Ruid = #{ ruid }
+		</if>
+	</select>
+</mapper>

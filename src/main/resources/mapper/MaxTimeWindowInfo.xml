@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MaxTimeWindowDAO" >
+    <resultMap type="pnc.mesadmin.entity.MaxTimeWindowInfo" id="maxTimeWindowInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="maxTimeWindowName" column="maxTimeWindowName" />
+        <result property="description" column="description" />
+        <result property="maVerGd" column="maVerGd" />
+        <result property="wFVerGd" column="wFVerGd" />
+        <result property="startSpecVerGd" column="startSpecVerGd" />
+        <result property="endSpecVerGd" column="endSpecVerGd" />
+        <result property="maxTime" column="maxTime" />
+        <result property="presetTime" column="presetTime" />
+        <result property="presetEmailDistributionGd" column="presetEmailDistributionGd" />
+        <result property="presetEmailMessageGd" column="presetEmailMessageGd" />
+        <result property="overTimeAction" column="overTimeAction" />
+        <result property="overdueEmailDistributionGd" column="overdueEmailDistributionGd" />
+        <result property="overdueEmailMessageGd" column="overdueEmailMessageGd" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--根据四个条件查询-->
+    <select id="selectFourMaxTimeWindowInfo" resultMap="maxTimeWindowInfoResult" parameterType="string">
+        select * from tpm_maxtimewindowinfo where maVerGd=#{maVerGd} and wFVerGd=#{wFVerGd} and startSpecVerGd=#{startSpecVerGd} and endSpecVerGd=#{endSpecVerGd}
+    </select>
+    <!--查询最大时间列表-->
+    <select id="selectAllMaxTimeWindowInfo" resultMap="maxTimeWindowInfoResult">
+        select * from tpm_maxtimewindowinfo
+    </select>
+
+    <!--根据id查询 最大时间信息-->
+    <select id="selectMaxTimeWindowInfoByRuid" parameterType="int" resultMap="maxTimeWindowInfoResult">
+        select * from tpm_maxtimewindowinfo where ruid=#{ruid}
+    </select>
+
+    <!--新增最大时间-->
+    <insert id="insertMaxTimeWindowInfo">
+        INSERT INTO tpm_maxtimewindowinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            guid,maxTimeWindowName,maVerGd,wFVerGd,startSpecVerGd,endSpecVerGd,maxTime,overTimeAction,creator,createTime,
+
+            <if test="description != null">
+                description,
+            </if>
+            <if test="presetTime != null">
+                presetTime,
+            </if>
+            <if test="presetEmailDistributionGd != null">
+                presetEmailDistributionGd,
+            </if>
+            <if test="presetEmailMessageGd != null">
+                presetEmailMessageGd,
+            </if>
+            <if test="overdueEmailDistributionGd != null">
+                overdueEmailDistributionGd,
+            </if>
+            <if test="overdueEmailMessageGd != null">
+                overdueEmailMessageGd,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{maxTimeWindowName},#{maVerGd},#{wFVerGd},#{startSpecVerGd},#{endSpecVerGd},#{maxTime},#{overTimeAction},#{creator},#{createTime},
+            <if test="description != null">
+                #{description},
+            </if>
+            <if test="presetTime != null">
+                #{presetTime},
+            </if>
+            <if test="presetEmailDistributionGd != null">
+                #{presetEmailDistributionGd},
+            </if>
+            <if test="presetEmailMessageGd != null">
+                #{presetEmailMessageGd},
+            </if>
+            <if test="overdueEmailDistributionGd != null">
+                #{overdueEmailDistributionGd},
+            </if>
+            <if test="overdueEmailMessageGd != null">
+                #{overdueEmailMessageGd},
+            </if>
+
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+
+
+        </trim>
+    </insert>
+
+    <!--根据最大时间名字查询一条信息-->
+    <select id="selectAllMaxTimeWindowInfoByMaxTimeWindowName" parameterType="string" resultMap="maxTimeWindowInfoResult">
+        select * from tpm_maxtimewindowinfo where maxTimeWindowName=#{maxTimeWindowName}
+    </select>
+
+    <!--删除最大信息-->
+    <delete id="deleteMaxTimeWindowInfo" parameterType="int">
+        delete from tpm_maxtimewindowinfo where ruid=#{ruid}
+    </delete>
+
+    <!--修改最大信息-->
+    <update id="updateMaxTimeWindowInfo">
+        UPDATE `tpm_maxtimewindowinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                guid = #{ guid },
+            </if>
+            <if test="maxTimeWindowName != null">
+                maxTimeWindowName = #{ maxTimeWindowName },
+            </if>
+            <if test="maVerGd  != null">
+                maVerGd = #{ maVerGd },
+            </if>
+            <if test="wFVerGd  != null">
+                wFVerGd = #{ wFVerGd },
+            </if>
+
+            <if test="startSpecVerGd  != null">
+                startSpecVerGd = #{ startSpecVerGd },
+            </if>
+            <if test="endSpecVerGd  != null">
+                endSpecVerGd = #{ endSpecVerGd },
+            </if>
+            <if test="maxTime  != null">
+                maxTime = #{ maxTime },
+            </if>
+            <if test="presetTime != null">
+                presetTime = #{ presetTime },
+            </if>
+
+            <if test="presetEmailDistributionGd  != null">
+                presetEmailDistributionGd = #{ presetEmailDistributionGd },
+            </if>
+            <if test="presetEmailMessageGd  != null">
+                presetEmailMessageGd = #{ presetEmailMessageGd },
+            </if>
+            <if test="overTimeAction  != null">
+                overTimeAction = #{ overTimeAction },
+            </if>
+            <if test="overdueEmailDistributionGd  != null">
+                overdueEmailDistributionGd = #{ overdueEmailDistributionGd },
+            </if>
+            <if test="overdueEmailMessageGd != null">
+                overdueEmailMessageGd = #{ overdueEmailMessageGd },
+            </if>
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+        </trim>
+        WHERE ruid = #{ ruid }
+    </update>
+</mapper>

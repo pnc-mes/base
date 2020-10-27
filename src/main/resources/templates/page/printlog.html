@@ -1,0 +1,408 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：打印记录查询
+* 创建人：蒋鑫韡
+* 创建时间：2020-10-13
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>打印记录查询</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+        .dPanel{
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">条码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="BarCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">单号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="ReCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">物料代码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="MaCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">物料名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="MaName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">条码类型</label>
+                            <div class="layui-input-inline">
+                                <select name="status">
+                                    <option value=""></option>
+                                    <option value="02">成品</option>
+                                    <option value="04">原材料</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <!--<div class="layui-inline">
+                                <label class="layui-form-label">生产线别</label>
+                                <div class="layui-input-inline" style="width: 190px">
+                                    <select id="Lines_query" xm-select-width="300px" xm-select="select_LineQuery"
+                                            xm-select-radio
+                                            xm-select-search-type="dl" xm-select-search>
+                                        <option value="">请选择生产线别</option>
+                                    </select>
+                                </div>
+                            </div>-->
+
+                            <div class="layui-inline" style="width: 420px;">
+                                <label class="layui-form-label">日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="date" class="layui-input" style="width: 300px;" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-sm layui-btn-danger data-count-edit" lay-event="edit">重打</a>
+        </script>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 重打 </button>
+            </div>
+        </script>
+    </div>
+</div>
+
+<!--- 子页面 -->
+<div id="content" style="display: none;">
+    <div class="layui-form layuimini-form">
+        <div class="layui-col-xs12 layui-col-sm8 layui-col-md8">
+            <div class="dPanel">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">打印机</label>
+                    <div class="layui-input-block">
+                        <div id="print" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">打印模板</label>
+                    <div class="layui-input-block">
+                        <div id="printT" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">打印数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="printCount"  autocomplete="off" placeholder="请输入打印数量" value="1" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">打印份数</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="printCopy"  autocomplete="off" placeholder="请输入打印份数" value="1" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="laydate.js"></script>
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'laydate', 'element', 'xmSelect'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            xmSelect = layui.xmSelect,
+            laydate = layui.laydate;
+
+        //加载时间
+        laydate.render({
+            elem: '#date'
+            ,type: 'datetime'
+            ,range: "~"
+        });
+
+        //页面首次加载
+        load();
+
+        //单选通用设置
+        let radioSetting = {
+            radio: true
+            ,clickClose: true
+            ,theme: {
+                color: '#5FB878',
+            },model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            },toolbar: {
+                show: true,
+            },
+            filterable: true
+        }
+
+        //加载打印模板信息
+        let ptS = xmSelect.render({
+            el: '#printT'
+            ,...radioSetting
+            ,prop: {
+                name: 'PtName',
+                value: 'PtRd',
+            }
+            ,data: []
+        });
+        requests({url: "/PrintT/GetAllPtNew"}, function (res) {
+            ptS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载打印机信息
+        let pS = xmSelect.render({
+            el: '#print'
+            ,...radioSetting
+            ,prop: {
+                name: 'PrName',
+                value: 'PrRd',
+            }
+            ,data: []
+        });
+        requests({url: "/Printer/GetAllPrNew"}, function (res) {
+            pS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //重打
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {
+                let data = obj.data;
+
+                //获取选中行
+                let arr = table.checkStatus('currentTableId');
+                if(arr === undefined || arr.data.length <= 0){
+                    layer.msg('请选择需要打印行', {icon: 2});
+                    return;
+                }
+
+                let index = layer.open({
+                    title: '重打',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#content"),
+                    btn: ['重打'],
+                    yes: function (index, layero) {
+                        //获取打印机
+                        let printRd = pS.getValue("valueStr");
+                        if(printRd == undefined || printRd === ""){
+                            layer.msg('打印机不能为空', {icon: 2});
+                            return;
+                        }
+
+                        //获取打印模板
+                        let printTRd = ptS.getValue("valueStr");
+                        if(printTRd == undefined || printTRd === ""){
+                            layer.msg('打印模板不能为空', {icon: 2});
+                            return;
+                        }
+
+                        //打印数量
+                        let printCount = $("#printCount").val();
+                        if (printCount === undefined || printCount.trim() === ''|| !(/(^[1-9]\d*$)/).test(printCount.trim())){
+                            layer.msg('打印数量不能为空且需为正整数', {icon: 2});
+                            return;
+                        }
+
+                        //打印份数
+                        let printCopy = $("#printCopy").val();
+                        if (printCopy === undefined || printCopy.trim() === ''|| !(/(^[1-9]\d*$)/).test(printCopy.trim())){
+                            layer.msg('打印份数不能为空且需为正整数', {icon: 2});
+                            return;
+                        }
+
+                        let reqData = {
+                            RePrInfo: arr.data.map(o => {return {ReCode: o.BarCode}}),
+                            PrintRd: printRd,
+                            PrintTRd: printTRd,
+                            PrintCount: printCount,
+                            PrintCopy: printCopy
+                        }
+
+                        requests({url: "/HisPrintLog/SaveRePrintLogInfo", data: JSON.stringify(reqData)}, function (res) {
+                            layer.msg('成功', {icon: 1});
+                            layer.close(index);
+                        });
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //日期
+            let dates = $("#date").val().split("~");
+            let startDate = '', endDate = '', date = '';
+            if(dates.length == 2){
+                startDate = dates[0];
+                endDate = dates[1];
+                date = startDate + "," + endDate;
+            }
+
+            let field=[{
+                fieldName: "BarCode",
+                fieldOpt: "like",
+                fieldVal: data.field.BarCode
+            },{
+                fieldName: "ReCode",
+                fieldOpt: "like",
+                fieldVal: data.field.ReCode
+            },{
+                fieldName: "MaterialCode",
+                fieldOpt: "like",
+                fieldVal: data.field.MaCode
+            },{
+                fieldName: "MaterialName",
+                fieldOpt: "like",
+                fieldVal: data.field.MaName
+            },{
+                fieldName: "createTime",
+                fieldOpt: "between",
+                fieldVal: date
+            },{
+                fieldName: "barType",
+                fieldOpt: "like",
+                fieldVal: data.field.status
+            },{
+                fieldName: "ruid",
+                fieldOpt: "Order By",
+                fieldVal: "DESC"
+            }];
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: field
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/HisPrintLog/GetPrintTaskInfo",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: "DESC"
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {type:'checkbox'},
+                        {field: 'BarCode', title: '条码'},
+                        {field: 'MaCode', title: '物料代码'},
+                        {field: 'MaName', title: '物料名称'},
+                        {field: 'ReCode', title: '单号'},
+                        {field: 'OrderType', title: '单据类型', templet: function (d) {
+                            return d.OrderType == '00' ? '采购单' : d.OrderType == '01' ? '来料收货通知单'
+                                    : d.OrderType == '02' ? '生产工单' : d.OrderType == '03' ? '盘点单'
+                                    : d.OrderType == '04' ? '无源单' : d.OrderType == '05' ? '领料单'
+                                    : d.OrderType == '06' ? '批次拆分': d.OrderType
+                        }},
+                        /*{field: 'PrintCount', title: '打印数量'},
+                        {field: 'PrintCopy', title: '打印份数'},*/
+                        {field: 'LastPTime', title: '最近打印时间'}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+    });
+</script>
+</body>
+</html>

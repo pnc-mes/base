@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.RolePmDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.RolePmInfo" id="RolePmInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="roleGd" column="roleGd" />
+		<result property="moduleGd" column="moduleGd" />
+		<result property="resGd" column="resGd" />
+		<result property="resOptGd" column="resOptGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+	<!-- 增加一条角色权限信息 (By-pjf)-->
+	<insert id="InsertRolePmInfo">
+		INSERT INTO tpm_rolepminfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,RoleGd,ModuleGd,resGd,ResOptGd,Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{roleGd},#{moduleGd},#{resGd},#{resOptGd},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 删除某个角色相关的权限信息（根据roleRd） (By-pjf)-->
+	<delete id="DeleteRolePmInfo">
+		delete from tpm_rolepminfo where RoleGd = #{ roleGd }
+	</delete>
+
+	<!-- 删除某个权限信息 (By-pjf)-->
+	<delete id="DeleteByGuid">
+		DELETE FROM tpm_rolepminfo WHERE Guid = #{ guid }
+	</delete>
+
+	<!-- 根据角色Guid查询当前角色所拥有的所有权限信息 (By-pjf)-->
+	<select id="SelectRolePmInfo" resultMap="RolePmInfoResult">
+		select * from tpm_rolepminfo where roleGd = #{ roleGd }
+	</select>
+
+	<!-- 根据角色Guid查询当前角色所拥有的所有权限信息，并分组输出 (By-pjf)-->
+	<select id="SelectAllRolePmInfoModule" resultMap="RolePmInfoResult">
+		SELECT ModuleGd,ModuleName FROM tpm_rolepminfo WHERE RoleGd = #{ roleGd }  GROUP BY ModuleGd, ModuleName
+	</select>
+
+    <!-- 查询该用户该模块下的所有资源 (By-pjf) -->
+	<select id="SelectAllRolePmInfoRes" resultMap="RolePmInfoResult">
+        SELECT * FROM tpm_rolepminfo WHERE RoleGd = #{ objERoleGd } AND ModuleGd = #{ objEModuleGd } AND ResGd = #{ objEResOptGd }
+    </select>
+
+	<!-- 根据角色Guid和资源操作标识来查某一特定权限信息 (By-pjf)-->
+	<select id="SelectOptGd" resultMap="RolePmInfoResult">
+		SELECT * FROM tpm_rolepminfo WHERE ResOptGd = #{ resOptGd } AND RoleGd = #{ roleGd }
+	</select>
+
+	<!-- 根据ruid查询角色权限信息 (By-pjf)-->
+	<select id="SelectByRuid" resultMap="RolePmInfoResult">
+		SELECT * FROM tpm_rolepminfo WHERE Ruid = #{ ruid }
+	</select>
+
+	<!-- 删除模块下用户权限信息 (By-pjf)-->
+	<delete id="DeleteRolePmInfoByModuleGd">
+		DELETE FROM tpm_rolepminfo WHERE ModuleGd = #{ argModuleGd }
+	</delete>
+
+	<!-- 删除角色操作信息 (By-pjf)-->
+	<delete id="DeleteRPByResGdResOptGd">
+		DELETE FROM tpm_rolepminfo WHERE ResOptGd = #{ argResOptGd }
+	</delete>
+
+	<!-- 根据资源标识删除角色操作信息 (By-pjf)-->
+	<delete id="DeleteRPByResGd">
+		DELETE FROM tpm_rolepminfo WHERE ResGd = #{ argResGd }
+	</delete>
+
+</mapper>

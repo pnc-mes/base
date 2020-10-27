@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.IQCBadBInfoDAO" >
+    <resultMap type="pnc.mesadmin.entity.IQCBadBInfo" id="IQCBadInfoResult">
+        <id property="ruid" column="ruid" />
+       <result property="guid" column="guid"/>
+       <result property="iqcGd" column="iQCGd"/>
+       <result property="reaCode" column="reaCode"/>
+       <result property="reaDes" column="reaDes"/>
+       <result property="creator" column="creator"/>
+       <result property="createTime" column="createTime"/>
+       <result property="lastModifyMan" column="lastModifyMan"/>
+       <result property="lastModifyTime" column="lastModifyTime"/>
+       <result property="remark" column="remark"/>
+    </resultMap>
+
+     <insert id="InsertBadBInfo">
+    insert into tpm_iqcbadinfo (
+        <trim suffixOverrides=",">
+            guid,iqcGd,reaCode,reaDes,creator,createTime,
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark
+            </if>
+        </trim>
+    )values(
+    <trim suffixOverrides=",">
+        #{guid}, #{iqcGd}, #{reaCode}, #{reaDes}, #{creator}, #{createTime},
+        <if test="lastModifyMan != null">
+            #{lastModifyMan},
+        </if>
+        <if test="lastModifyTime != null">
+            #{lastModifyTime},
+        </if>
+        <if test="remark != null">
+            #{remark}
+        </if>
+    </trim>
+    )
+</insert>
+
+    <delete id="DeleteBadBInfoByIqcGd">
+        DELETE FROM tpm_iqcbadinfo WHERE iqcGd = #{argIqcGd}
+    </delete>
+
+    <delete id="DeleteBadBInfoByGuid">
+        DELETE FROM tpm_iqcbadinfo WHERE guid = #{argGuid}
+    </delete>
+
+    <update id="UpdateBadBInfo" parameterType="pnc.mesadmin.entity.IQCBadBInfo">
+        update tpm_iqcbadinfo set
+        <trim suffixOverrides=",">
+            <if test="guid != null">
+                guid=#{guid},
+            </if>
+            <if test="iqcGd != null">
+                iQCGd=#{iqcGd},
+            </if>
+            <if test="reaCode != null">
+                reaCode=#{reaCode},
+            </if>
+            <if test="reaDes != null">
+                reaDes=#{reaDes},
+            </if>
+            <if test="creator != null">
+                creator=#{creator},
+            </if>
+            <if test="createTime != null">
+                createTime=#{createTime},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan=#{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime=#{lastModifyTime},
+           </if>
+            <if test="remark != null">
+                remark=#{remark},
+           </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+    <!--查询不良批次信息-->
+    <select id="SelectBadBInfoByIQCGd" resultMap="IQCBadInfoResult">
+        select * from tpm_iqcbadinfo where IQCGd=#{argIQCGd}
+    </select>
+
+    <!--查询不良批次信息-->
+    <select id="SelectIQCBadInfoByRuid" resultMap="IQCBadInfoResult">
+        select * from tpm_iqcbadinfo where Ruid=#{argRuid}
+    </select>
+
+</mapper>

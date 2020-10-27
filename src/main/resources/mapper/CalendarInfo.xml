@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CalendarDAO" >
+    <resultMap type="pnc.mesadmin.entity.CalendarInfo" id="CalendarInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="calendarName" column="calendarName" />
+        <result property="description" column="description" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModiryTime" column="lastModiryTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!-- 获取生产日历列表信息 zll-->
+    <select id="SelectAllCalendarInfo" resultMap="CalendarInfoResult">
+		select * from `tpm_calendarinfo`
+	</select>
+
+    <!-- 获取生产日历信息 zll-->
+    <select id="SelectCalendarInfoByRuid" resultMap="CalendarInfoResult" parameterType="int">
+		select * from `tpm_calendarinfo` where ruid=#{ruid}
+	</select>
+
+    <!--新增生产日历信息 zll-->
+    <insert id="InsertCalendarInfo">
+        <selectKey resultType="int" keyProperty="ruid" order="AFTER" >
+            SELECT @@IDENTITY
+        </selectKey>
+        INSERT INTO `tpm_calendarinfo`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            guid,calendarName,description,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{calendarName},#{description},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除生产日历信息 zll-->
+    <delete id="DeleteCalendarInfoByRuid">
+         DELETE  FROM `tpm_calendarinfo` WHERE ruid = #{ruid}
+    </delete>
+
+    <!--根据生产日历名字查询一条信息 zll-->
+    <select id="SelectCalendarInfoByCalendarName" parameterType="string" resultMap="CalendarInfoResult">
+         SELECT * FROM `tpm_calendarinfo` WHERE calendarName = #{calendarName}
+    </select>
+
+    <!--修改生产日历信息 zll-->
+    <update id="UpdateCalendarInfo">
+        UPDATE `tpm_calendarinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="calendarName != null">
+                calendarName = #{ calendarName },
+            </if>
+            <if test="description != null">
+                description = #{ description },
+            </if>
+
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+
+</mapper>

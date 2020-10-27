@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DoPMDTInfoDAO">
+
+    <resultMap type="pnc.mesadmin.entity.DoPMDtlInfo" id="DoPMDtlInfoMap">
+        <id property="ruid" column="ruid"/>
+        <result property="guid" column="guid" />
+        <result property="DoPMGd" column="DoPMGd" />
+        <result property="TaskItemName" column="TaskItemName" />
+        <result property="SureType" column="SureType" />
+        <result property="ExecResult00" column="ExecResult00" />
+        <result property="ExecResult02" column="ExecResult02" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!--查询根据主表Guid查询信息-->
+    <select id="SelectDoPMDtlInfoByDoPMGd" resultMap="DoPMDtlInfoMap">
+        SELECT * FROM tpm_dopmdtlinfo where DoPMGd=#{doPMGd}
+    </select>
+
+    <select id="SelectDoPMDtlInfoByRuid" resultMap="DoPMDtlInfoMap">
+        SELECT * FROM tpm_dopmdtlinfo where Ruid=#{ruid}
+    </select>
+
+
+    <update id="UpdateDoPMDtlInfoByRuid">
+        UPDATE tpm_dopmdtlinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="execResult00 != null">
+                ExecResult00 = #{execResult00},
+            </if>
+            <if test="execResult02 != null">
+                ExecResult02 = #{execResult02},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+        </trim>
+        WHERE Ruid =#{ruid}
+    </update>
+
+    <insert id="InsertDoPMDtl">
+        INSERT INTO tpm_dopmdtlinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,DoPMGd,TaskItemName,SureType,Creator,CreateTime,
+
+            <if test="ExecResult00 != null">
+                ExecResult00,
+            </if>
+            <if test="ExecResult02 != null">
+                ExecResult02,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{DoPMGd},#{TaskItemName},#{SureType},#{creator},#{createTime},
+
+            <if test="ExecResult00 != null">
+                #{ExecResult00},
+            </if>
+            <if test="ExecResult02 != null">
+                #{ExecResult02},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+</mapper>
+

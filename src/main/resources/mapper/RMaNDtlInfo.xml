@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.RMaNDtlDAO">
+    <resultMap id="rMaNDtlInfoMap" type="pnc.mesadmin.entity.RMaNDtlInfo">
+        <id property="ruid" column="Ruid" ></id>
+        <result property="guid" column="Guid" />
+        <result property="rMaNGd" column="RMaNGd" />
+        <result property="rMaNCode" column="RMaNCode" />
+        <result property="maVerGd" column="MaVerGd" />
+        <result property="num" column="Num" />
+        <result property="scanNum" column="ScanNum" />
+        <result property="unitName" column="UnitName"></result>
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--zll-->
+    <select id="SelectRMaNDtlInfoByRMaNCode" parameterType="string" resultMap="rMaNDtlInfoMap">
+        SELECT * FROM tpm_rmandtlinfo WHERE RMaNCode=#{rMaNCode}
+    </select>
+
+    <!--新增入库通知单明细信息-->
+    <insert id="InsertRMaNDtlInfo">
+        INSERT INTO tpm_rmandtlinfo (guid,RMaNGd,RMaNCode,MaVerGd,Num,ScanNum,UnitName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{rMaNGd},#{rMaNCode},#{maVerGd},#{num},#{scanNum},#{unitName},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--删除入库通知单明细信息-->
+    <delete id="DeleteRMaNDtlInfo">
+        DELETE FROM tpm_rmandtlinfo WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新入库通知单明细信息-->
+    <update id="UpdateRMaNInfo">
+        UPDATE `tpm_rmandtlinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="rMaNGd != null">
+                RMaNGd = #{ rMaNGd },
+            </if>
+            <if test="rMaNCode != null">
+                RMaNCode = #{ rMaNCode },
+            </if>
+            <if test="maVerGd != null">
+                MaVerGd = #{ maVerGd },
+            </if>
+            <if test="num != null">
+                Num = #{ num },
+            </if>
+            <if test="scanNum != null">
+                ScanNum = #{ scanNum },
+            </if>
+            <if test="unitName != null">
+                UnitName = #{ unitName },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!--查询产成品入库列表信息根据主表的Guid-->
+    <select id="SelectRMaNDtlInfoByRMaNGd" resultMap="rMaNDtlInfoMap" parameterType="string">
+        SELECT *  FROM `tpm_rmandtlinfo` WHERE RMaNGd=#{rMaNGd}
+    </select>
+
+    <!--查询产成品入库列表信息根据主表的Guid-->
+    <select id="SelectRMaNDtlInfoByRuid" resultMap="rMaNDtlInfoMap">
+        SELECT *  FROM `tpm_rmandtlinfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--查询产成品入库列表信息根据主表的Guid-->
+    <select id="SelectRMaNDtlInfoByGuid" resultMap="rMaNDtlInfoMap">
+        SELECT *  FROM `tpm_rmandtlinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--根据主表的Guid和物料guid查询明细信息-->
+    <select id="SelectRMaNDtlInfoByRMaNGdAndMaVerGd" resultMap="rMaNDtlInfoMap">
+        SELECT * FROM `tpm_rmandtlinfo` WHERE RMaNGd=#{rMaNGd} AND MaVerGd=#{maVerGd}
+    </select>
+
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PurChDtlDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.PurChDtlInfo" id="purChDtlInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="purChGd" column="PurChGd" />
+        <result property="maVerGd" column="MaVerGd" />
+        <result property="arrivalTime" column="ArrivalTie" />
+        <result property="purChCode" column="PurChCode" />
+        <result property="num" column="Num" />
+        <result property="scanNum" column="ScanNum" />
+        <result property="unitName" column="UnitName" />
+        <result property="aFeed" column="AFeed" />
+        <result property="storeGd" column="StoreGd" />
+        <result property="cIEFlag" column="CIEFlag" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--新增采购单明细信息-->
+    <insert id="InsertPurChDtlInfo">
+        INSERT INTO `tpm_purchdtlinfo`(Guid,MaVerGd,PurChGd,ArrivalTime,PurChCode,Num,ScanNum,UnitName,AFeed,StoreGd,CIEFlag,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{maVerGd},#{purChGd},#{arrivalTime},#{purChCode},#{num},#{scanNum},#{unitName},#{aFeed},#{storeGd},#{cIEFlag},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--查询所有的采购单明细信息-->
+    <select id="SelectPurChDtlInfo" resultMap="purChDtlInfoMap">
+        SELECT * FROM `tpm_purchdtlinfo`
+    </select>
+
+    <!--根据采购单号查询明细信息-->
+    <select id="SelectPurChDtlInfoByPurChCode" resultMap="purChDtlInfoMap" parameterType="string">
+        SELECT * FROM `tpm_purchdtlinfo` WHERE PurChCode=#{purChCode}
+    </select>
+
+    <!--根据guid查询明细信息-->
+    <select id="SelectPurChDtlInfoByGuid" resultMap="purChDtlInfoMap" parameterType="string">
+        SELECT * FROM `tpm_purchdtlinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--根据guid查询明细信息-->
+    <select id="SelectPurChDtlInfoBypurChGd" resultMap="purChDtlInfoMap" parameterType="string">
+        SELECT * FROM `tpm_purchdtlinfo` WHERE PurChGd=#{purChGd}
+    </select>
+
+
+    <!--根据ruid查询明细信息-->
+    <select id="SelectPurChDtlInfoByRuid" resultMap="purChDtlInfoMap" parameterType="int">
+        SELECT * FROM `tpm_purchdtlinfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--更新采购单明细信息-->
+    <update id="UpdatePurChDtlInfo">
+        UPDATE `tpm_purchdtlinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="purChGd != null">
+                PurChGd = #{ purChGd },
+            </if>
+            <if test="purChCode != null">
+                PurChCode = #{ purChCode },
+            </if>
+            <if test="arrivalTime != null">
+                ArrivalTime = #{ arrivalTime },
+            </if>
+            <if test="maVerGd != null">
+                MaVerGd = #{ maVerGd },
+            </if>
+            <if test="num != null">
+                Num = #{ num },
+            </if>
+            <if test="scanNum != null">
+                ScanNum = #{ scanNum },
+            </if>
+            <if test="unitName != null">
+                UnitName = #{ unitName },
+            </if>
+            <if test="aFeed != null">
+                AFeed = #{ aFeed },
+            </if>
+            <if test="storeGd != null">
+                StoreGd = #{ storeGd },
+            </if>
+            <if test="cIEFlag != null">
+                CIEFlag = #{ cIEFlag },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!--删除采购单明细信息-->
+    <delete id="deletePurChDtlInfo">
+        DELETE  FROM tpm_purchdtlinfo WHERE Ruid=#{ruid}
+    </delete>
+
+    <select id="SelectPurChDtlInfoByPurChCodeAndMaVerGd" resultMap="purChDtlInfoMap">
+         SELECT * FROM `tpm_purchdtlinfo` WHERE PurChCode=#{argPurChCode} AND MaVerGd=#{argMaVerGd}
+    </select>
+
+</mapper>

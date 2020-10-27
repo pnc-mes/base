@@ -1,0 +1,84 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /baseline
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:static/,file:static/
+  application:
+    name: base_line
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB
+  datasource:
+    druid:
+      url: jdbc:mysql://114.118.13.93:3306/pnc_newmes_gy?useUnicode=true&characterEncoding=utf-8&useSSL=true&nullCatalogMeansCurrent=true&serverTimezone=UTC
+      username: test
+      password: 737682302
+#      url: jdbc:mysql://10.4.1.62:3306/pnc_newmes_baseline?useUnicode=true&characterEncoding=utf-8&useSSL=true&nullCatalogMeansCurrent=true&serverTimezone=UTC
+#      username: devmes
+#      password: devmes
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+  thymeleaf:
+    enabled: true
+    encoding: UTF-8
+    prefix: classpath:/templates/ #前缀
+    cache: false #是否使用缓存
+    mode: HTML #严格的HTML语法
+    suffix: .html #后缀
+    view-names: page/*
+    content-type: text/html
+  devtools:
+    restart:
+     enabled: true
+     exclude: templates/page/**
+  activemq:
+    broker-url: tcp://114.118.13.93:61616
+    user: admin
+    password: admin
+    pool:
+      enabled: false
+      #连接池最大连接数
+      max-connections: 10
+      #空闲的连接过期时间，默认为30秒
+      idle-timeout: 30000
+    in-memory: false
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  # 如果是放在src/main/java目录下 classpath:/com/yourpackage/*/mapper/*Mapper.xml
+  # 如果是放在resource目录 classpath:/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: pnc.mesadmin.entity
+  global-config:
+    db-config:
+      #主键类型  auto:"数据库ID自增" 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+      id-type: auto
+      #字段策略 IGNORED:"忽略判断"  NOT_NULL:"非 NULL 判断")  NOT_EMPTY:"非空判断"
+      field-strategy: NOT_EMPTY
+      #数据库类型
+      db-type: MYSQL
+  configuration:
+    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+    map-underscore-to-camel-case: false
+    #开启Mybatis二级缓存
+    cache-enabled: false
+    autoMappingBehavior: partial
+    #开启sql日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+##文件系统
+minio:
+  endpoint: http://81.68.126.28:9000
+  accessKey: f1308241eb02418033bca0183ceda2f65c40923e3b3210b87b057b492a3d1fbf
+  secretKey: 79db7be35de815e745203b6958e1abf27e0582391e6f7fcef4fa277accde8222
+  bucketName: pncmes

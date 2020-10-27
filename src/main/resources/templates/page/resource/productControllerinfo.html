@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>生产工艺控制管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">物料代码</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline">
+                                    <select name="materialRds" lay-filter="materialRds" lay-search></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工艺名称</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline">
+                                    <select name="WokeFloorRds" lay-filter="WokeFloorRds" lay-search></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+    </div>
+</script>
+<div class="layui-fluid" id="productControllerinfo" style="display: none;">
+    <input type="hidden" id="hidden"/>
+    <form class="layui-form" action="" id="productControllerform" lay-filter="component-form-group" >
+
+        <div class="layui-card">
+            <div class="layui-card-body" >
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">基础信息</li>
+                        <li>明细信息</li>
+                        <li>其他信息</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">物料代码</label>
+                                    <div class="layui-input-inline">
+                                        <select name="materialRdss" lay-filter="materialRdss" lay-search></select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">物料名称</label>
+                                    <div class="layui-input-inline" lay-search>
+                                        <input type="text" name="materialName"  autocomplete="off" class="layui-input" title="">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">物料描述</label>
+                                    <div class="layui-input-inline" lay-search>
+                                        <input type="text" name="materialDes" title="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">工艺流程</label>
+                                    <div class="layui-input-inline">
+
+                                        <div class="layui-input-inline">
+                                            <select name="wokerFllo" lay-filter="wokerFllo" lay-search></select>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-hide">
+                                <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+                            </div>
+
+                        </div>
+
+                        <div class="layui-tab-item">
+                            <div class="layui-form-item">
+                                <form>
+                                    <table class="layui-table" id="test-table-operate" lay-filter="test-table-operate">
+
+                                        <thead>
+                                        <tr>
+                                            <th>工序版本</th>
+                                            <th style="width: 200px;">文件组</th>
+                                            <th style="width: 200px;">设备组</th>
+                                            <th style="width: 200px;">上机前数据采集</th>
+                                            <th style="width: 200px;">下机后数据采集</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbody">
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+
+
+
+                        <div class="layui-tab-item">
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">创建人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="tel" name="creator" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">创建时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="createTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">修改人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="tel" name="modifier" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">修改时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="modifyTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-text">
+                                    <label class="layui-form-label">备注</label>
+                                    <div class="layui-input-block">
+                                        <textarea name="remark" placeholder="请输入内容" id="remark" class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'element'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+        var commonMaVerRd='';
+        var WFVerRd='';
+        //页面首次加载
+        load();
+        //重新渲染表单函数
+        function renderForm() {
+            layui.use('form', function() {
+                var form = layui.form;
+                form.render();
+            });
+        }
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                clear();
+                $(".hideDetail").show();
+                let index = layer.open({
+                    title: '添加工艺控制',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#productControllerinfo"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //保存
+        function save(index, type, id) {
+            //type-> 1.新增 2.编辑
+
+            if(type === 1){
+                var SpecInfo=[];
+                //var MaVerRd=$("select[name='materialRdss']").val();
+
+                var MaVerRd=$("select[name='materialRdss']").find("option:selected").attr('a')
+                if(MaVerRd==null||MaVerRd==''){
+                    layer.msg("物料不能为空");
+                    return false;
+                }
+
+               var WFVerRd = $("select[name='wokerFllo']").find("option:selected").attr('a');;
+
+                var Remark=$("textarea[name='remark']").val().trim();
+                $("#tbody").find("tr").each(function() {
+                    var tdArr = $(this).children();
+                    var data={
+                        SpecVerRd:tdArr.eq(0).text(),
+                        FileGrRd:tdArr.eq(2).find("option:selected").val(),
+                        DevGpRd:tdArr.eq(3).find("option:selected").val(),
+                        DCVerRd:tdArr.eq(4).find("option:selected").val(),
+                        AfDCVerRd:tdArr.eq(5).find("option:selected").val()
+                    }
+                    SpecInfo.push(data);
+                });
+                var data={
+                    MaVerRd:MaVerRd,
+                    Remark:Remark,
+                    WFVerRd:WFVerRd,
+                    SpecInfo:SpecInfo
+                }
+                requests({url: "/SpecFile/SaveSOPInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+
+            }else if(type === 2){
+
+            }
+        }
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                edit(data);
+            } else if (obj.event === 'delete') {
+                del(data);
+            } else if(obj.event === 'read') {
+                read(data);
+            }
+        });
+
+        //删除
+        function del(data){
+            layer.confirm('真的删除行么', function (index) {
+                requests({url: "/SpecFile/SaveSOPInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                        "BusData": JSON.stringify({MaVerRd: data.materialRd,WFVerRd:data.workFoolRd})
+                    }}, function (res) {
+                    layer.msg("删除成功", {icon: 1});
+                    table.reload('currentTableId');
+                });
+                layer.close(index);
+            });
+        }
+
+
+        //监听行双击事件
+        table.on('rowDouble(currentTableFilter)', function(obj){
+            read(obj.data);
+            return false;
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+
+            let field=[];
+            if(data.field.WokeFloorRds!=''){
+                let   fields={
+                    fieldName: "WFVerGd",
+                    fieldOpt: "=",
+                    fieldVal: data.field.WokeFloorRds
+                }
+                field.push(fields);
+            }
+            if(data.field.materialRds!=''){
+                let   fields={
+                    fieldName: "MaVerGd",
+                    fieldOpt: "=",
+                    fieldVal: data.field.materialRds
+                }
+                field.push(fields);
+            }
+            field.push({
+                fieldName: "Ruid",
+                fieldOpt: "Order BY",
+                fieldVal: ""
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: field
+                }
+            }, 'data');
+
+            return false;
+        });
+        //编辑
+        function edit(datas){
+            getAllWokerFools();
+            $(".productControllerform").hide();
+            $("select[name='materialRdss']").val(datas.maRd);
+            $("select[name='wokerFllo']").val(datas.wfRd);
+            $("input[name='materialName']").val(datas.materialName);
+            $("input[name='materialDes']").val(datas.materialDes);
+            $("textarea[name='remark']").val(datas.Remark);
+            loadDetail(datas.materialRd,datas.workFoolRd);
+            commonMaVerRd=datas.materialRd;
+            layer.open({
+                type: 1
+                ,title: '修改生产工艺控制'
+                ,content: $("#productControllerinfo")
+                ,maxmin: true
+                ,area: ['90%', '75%']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero){
+
+                    var SpecInfo=[];
+                    var MaVerRd=$("select[name='materialRdss']").val();
+
+                    //var MaVerRd=$("select[name='materialRdss']").find("option:selected").attr('a')
+                    if(MaVerRd==null||MaVerRd==''){
+                        layer.msg("物料不能为空");
+                        return false;
+                    }
+
+                    var WFVerRd = $("select[name='wokerFllo']").find("option:selected").attr('a');
+
+                    var Remark=$("textarea[name='remark']").val().trim();
+                    $("#tbody").find("tr").each(function() {
+                        var tdArr = $(this).children();
+                        var data={
+                            SpecVerRd:tdArr.eq(0).text(),
+                            FileGrRd:tdArr.eq(2).find("option:selected").val(),
+                            DevGpRd:tdArr.eq(3).find("option:selected").val(),
+                            DCVerRd:tdArr.eq(4).find("option:selected").val(),
+                            AfDCVerRd:tdArr.eq(5).find("option:selected").val()
+                        }
+                        SpecInfo.push(data);
+                    });
+                    var data={
+                        MaVerRd:MaVerRd,
+                        Remark:Remark,
+                        WFVerRd:WFVerRd,
+                        SpecInfo:SpecInfo
+                    }
+
+
+                    requests({url: "/SpecFile/SaveSOPInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02",
+                            "BusData": JSON.stringify(data)
+                        }}, function (res) {
+                        layer.msg("保存成功", {icon: 1});
+                        table.reload('currentTableId');
+                        layer.close(index);
+                    });
+
+                }
+            });
+        }
+
+        //查看
+        function read(datas) {
+            clear();
+            getAllWokerFools();
+            $(".productControllerform").hide();
+            $("select[name='materialRdss']").val(datas.maRd);
+            $("input[name='materialName']").val(datas.materialName);
+            $("input[name='materialDes']").val(datas.materialDes);
+            $("select[name='wokerFllo']").val(datas.wfRd);
+            $("textarea[name='remark']").val(datas.Remark);
+            $("input[name='creator']").val(datas.creator);
+            $("input[name='modifier']").val(datas.lastModifyMan);
+            $("input[name='modifyTime']").val(datas.lastModifyTime);
+            $("input[name='createTime']").val(datas.createTime);
+            loadDetail(datas.materialRd,datas.workFoolRd);
+
+
+            let index = layer.open({
+                title: '查看生产工艺控制',
+                type: 1,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['50%', '70%'],
+                content: $("#productControllerinfo"),
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/SpecFile/GetAllWorkFoolControllerInfo",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {field: 'materialGd', title: 'MaGuid', hide: true},
+                        {field: 'materialRd', title: 'MaRd', hide: true},
+                        {field: 'maRd', title: 'maRd', hide: true},
+                        {field: 'wfRd', title: 'wfRd', hide: true},
+                        {field: 'materialCode', title: '物料代码' },
+                        {field: 'materialName', title: '物料名称' },
+                        {field: 'materialDes', title: '物料描述' },
+                        {field: 'workFoolGd', title: 'WKGd', hide: true},
+                        {field: 'workFoolRd', title: 'WKGRd', hide: true},
+                        {field: 'Creator', title: 'Creator', hide: true},
+                        {field: 'Remark', title: 'Remark', hide: true},
+                        {field: 'LastModifyMan', title: 'LastModifyMan', hide: true},
+                        {field: 'CreateTime', title: 'CreateTime', hide: true},
+                        {field: 'LastModifyTime', title: 'LastModifyTime', hide: true},
+
+                        {field: 'workFoolName', title: '工艺名称' },
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        function clear() {
+            $("select[name='materialRdss']").val('');
+            $("input[name='materialName']").val('');
+            $("input[name='materialDes']").val('');
+            $("select[name='wokerFllo']").val('');
+            $("#tbody").empty();
+            renderForm();
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+            $("textarea[name='remark']").val("")
+
+        }
+
+        //加载所有产品信息
+        function getAllMaterial(){
+
+            var fields=[];
+            fields.push({
+                fieldName:'MaterialType',
+                fieldOpt:'in',
+                fieldVal:'00,01'
+            })
+            var urlData={
+                fields
+            }
+            requests({url:'/Material/GetAllMaNew', contentType: "application/json; charset=utf-8", data: JSON.stringify(urlData)}, function (res) {
+                var data=res.data.list;
+                var selectData='<option selected></option>';
+                if(data.length>0){
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].MaRd+"' a='"+data[i].MaVerRd+"'>"+data[i].MaCode+"</option>"
+                    }
+                    $("select[name='materialRds']").empty().html(selectData);
+                    $("select[name='materialRdss']").empty().html(selectData);
+                    renderForm()
+                }
+            });
+
+
+        }
+        getAllMaterial();
+
+        //加载工艺流程
+        function getAllWokerFools(){
+            requests({url: "/WF/GetAllWfInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"
+                }}, function (res) {
+                var data=res.Data;
+                var selectData='<option value=""></option>';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option a='"+data[i].WfVerRd+"' value='"+data[i].WfRd+"'>"+data[i].WfName+"</option>"
+
+                    }
+                    $("select[name='wokerFllo']").empty().html(selectData);
+                    $("select[name='WokeFloorRds']").empty().html(selectData);
+                    renderForm();
+                }
+            })
+        }
+        getAllWokerFools();
+        form.on('select(materialRdss)', function(data){
+            getAllWokerFool( $("select[name='materialRdss']").find("option:selected").attr('a'));
+            commonMaVerRd=$("select[name='materialRdss']").find("option:selected").attr('a');
+        });
+        form.on('select(wokerFllo)', function(data){
+            loadDetail(commonMaVerRd,$("select[name='wokerFllo']").find("option:selected").attr('a'))
+        });
+
+        //调用时加载物料对应的工艺流程
+        function getAllWokerFool(MVerRd){
+            requests({url: "/Commom/GetCMWFInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({MVerRd})
+                }}, function (res) {
+                if(res.Data.WFInfo.length>0){
+                    $("input[name='materialName']").val(res.Data.MaInfo.MaName);
+                    $("input[name='materialDes']").val(res.Data.MaInfo.MaDes);
+                    $("input[name='materialName']").attr('title',res.Data.MaInfo.MaName);
+                    $("input[name='materialDes']").attr('title',res.Data.MaInfo.MaDes);
+                    var data=res.Data.WFInfo.length;
+                    var str='';
+                    if(data>0){
+                        for(var i in  res.Data.WFInfo){
+                            str+='<option a='+res.Data.WFInfo[i].WFVerRd+' value='+res.Data.WFInfo[i].WFRd+'>'+res.Data.WFInfo[i].WFName+'</option>';
+                        }
+                    }
+                    $("select[name='wokerFllo']").empty().html(str);
+                    renderForm();
+                   // alert(+'----------'+MVerRd)
+                    loadDetail(MVerRd,res.Data.WFInfo[0].WFVerRd);
+                }else {
+                    layer.msg("无工艺流程", {icon: 1});
+                    $("#tbody").empty().html('');
+                    $("select[name='wokerFllo']").empty().html('');
+                }
+
+            });
+
+        }
+
+
+        //获取所有数据采集前后接口
+        let commonAftDCData=[];
+        requests({url:'/DC/GetAllNewDcInfo'}, function (res) {
+            var data=res.data.list;
+            let commonAftDCDatas='';
+            if(data.length>0){0
+                for(var i in data){
+                    commonAftDCDatas={
+                        DCVerRd:data[i].DCVerRd,
+                        DcName:data[i].DcName
+                    }
+                    commonAftDCData.push(commonAftDCDatas);
+                    //selectDcData+="<option value='"+data[i].DCVerRd+"'>"+data[i].DcName+"</option>"
+                }
+            }
+        });
+
+        //明细行数据采集前接口
+        function getDC(val) {
+            var selectDcData='<option value=""></option>';
+            if(val==null){
+                /*requests({url:'/DC/GetAllNewDcInfo'}, function (res) {
+                    var data=res.data.list;
+                    //var selectDcData='<option selected></option>';
+                    if(data.length>0){0
+                        for(var i in data){
+                            selectDcData+="<option value='"+data[i].DCVerRd+"'>"+data[i].DcName+"</option>"
+                        }
+                    }
+                });*/
+                if(commonAftDCData.length>0){
+                    for(var i in commonAftDCData){
+                        selectDcData+="<option value='"+commonAftDCData[i].DCVerRd+"'>"+commonAftDCData[i].DcName+"</option>"
+                    }
+                }else {
+                    selectDcData+='';
+                }
+                renderForm();
+            }else {
+                /*requests({url:'/DC/GetAllNewDcInfo'}, function (res) {
+                    var data=res.data.list;
+                    //var selectDcData='<option selected></option>';
+                    if(data.length>0){0
+                        for(var i in data){
+                        var selected;
+                        if(data[i].DCVerRd==val){
+                            selectDcData+="<option value='"+data[i].DCVerRd+"' selected>"+data[i].DcName+"</option>"
+                        }else {
+                            selectDcData+="<option value='"+data[i].DCVerRd+"'>"+data[i].DcName+"</option>"
+                        }
+
+                        }
+                    }
+                });*/
+
+                if(commonAftDCData.length>0){
+                    for(var i in commonAftDCData){
+                        var selected;
+                        if(commonAftDCData[i].DCVerRd==val){
+                            selectDcData+="<option value='"+commonAftDCData[i].DCVerRd+"' selected>"+commonAftDCData[i].DcName+"</option>"
+                        }else {
+                            selectDcData+="<option value='"+commonAftDCData[i].DCVerRd+"'>"+commonAftDCData[i].DcName+"</option>"
+                        }
+                    }
+                }
+                renderForm();
+
+            }
+            return selectDcData;
+        }
+        getDC(null);
+
+
+        //明细行数据采集后接口
+        function getAftDC(val) {
+            var selectDcData='<option value=""></option>';
+            if(val==null){
+                if(commonAftDCData.length>0){
+                    for(var i in commonAftDCData){
+                        selectDcData+="<option value='"+commonAftDCData[i].DCVerRd+"'>"+commonAftDCData[i].DcName+"</option>"
+                    }
+                }else {
+                    selectDcData+='';
+                }
+                /*requests({url:'/DC/GetAllNewDcInfo'}, function (res) {
+                    var data=res.data.list;
+                    //var selectDcData='<option selected></option>';
+                    if(data.length>0){0
+                        for(var i in data){
+                            selectDcData+="<option value='"+data[i].DCVerRd+"'>"+data[i].DcName+"</option>"
+                        }
+                    }
+                });*/
+                renderForm();
+            }else {
+                if(commonAftDCData.length>0){
+                    for(var i in commonAftDCData){
+                        var selected;
+                        if(commonAftDCData[i].DCVerRd==val){
+                            selectDcData+="<option value='"+commonAftDCData[i].DCVerRd+"' selected>"+commonAftDCData[i].DcName+"</option>"
+                        }else {
+                            selectDcData+="<option value='"+commonAftDCData[i].DCVerRd+"'>"+commonAftDCData[i].DcName+"</option>"
+                        }
+                    }
+                }
+                renderForm();
+               /* requests({url:'/DC/GetAllNewDcInfo'}, function (res) {
+                    var data=res.data.list;
+                    //var selectDcData='<option selected></option>';
+                    if(data.length>0){0
+                        for(var i in data){
+                            var selected;
+                            if(data[i].DCVerRd==val){
+                                selectDcData+="<option value='"+data[i].DCVerRd+"' selected>"+data[i].DcName+"</option>"
+                            }else {
+                                selectDcData+="<option value='"+data[i].DCVerRd+"'>"+data[i].DcName+"</option>"
+                            }
+
+                        }
+                    }
+                });*/
+            }
+            return selectDcData;
+        }
+        getAftDC(null);
+
+        //获取所有设备组接口数据
+        let commonDevDatas=[];
+        requests({url: "/DeviceG/GetAllDevGInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"}}, function (res) {
+            let data = res.Data;
+            let commonDevData='';
+            if(data.length>0){0
+                for(var i in data){
+                    commonDevData={
+                        DevGRd:data[i].DevGRd,
+                        DevGpName:data[i].DevGpName
+                    }
+                    commonDevDatas.push(commonDevData);
+                }
+            }
+        });
+
+        //明细行设备组接口
+        function getDev(val) {
+            var selectDevData='<option value=""></option>';
+            if(val==null){
+                if(commonDevDatas.length>0){
+                    for(var i in commonDevDatas){
+                        selectDevData+="<option value='"+commonDevDatas[i].DevGRd+"'>"+commonDevDatas[i].DevGpName+"</option>"
+                    }
+                }else {
+                    selectDevData+='';
+                }
+                /*requests({url: "/DeviceG/GetAllDevGInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"}}, function (res) {
+                    let data = res.Data;
+                    if(data.length>0){
+                        for(var i in data){
+                            selectDevData+="<option value='"+data[i].DevGRd+"'>"+data[i].DevGpName+"</option>"
+                        }
+                    }
+
+                });*/
+                renderForm();
+            }else {
+
+                if(commonDevDatas.length>0){
+                    for(var i in commonDevDatas){
+                        var selected;
+                        if(commonDevDatas[i].DevGRd==val){
+                            selectDevData+="<option value='"+commonDevDatas[i].DevGRd+"' selected>"+commonDevDatas[i].DevGpName+"</option>"
+                        }else {
+                            selectDevData+="<option value='"+commonDevDatas[i].DevGRd+"'>"+commonDevDatas[i].DevGpName+"</option>"
+                        }
+                    }
+                }
+                renderForm();
+                /*requests({url: "/DeviceG/GetAllDevGInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"}}, function (res) {
+                    let data = res.Data;
+                    if(data.length>0){0
+                        for(var i in data){
+                            var selected;
+                            if(data[i].DevGRd==val){
+                                selectDevData+="<option value='"+data[i].DevGRd+"' selected>"+data[i].DevGpName+"</option>"
+                            }else {
+                                selectDevData+="<option value='"+data[i].DevGRd+"'>"+data[i].DevGpName+"</option>"
+                            }
+                        }
+                    }
+
+                });*/
+            }
+            return selectDevData;
+        }
+        getDev(null);
+
+        //获取所有文件组接口数据
+        let commonFGDatas=[];
+        requests({url: "/FileGroup/GetAllFileGInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"}}, function (res) {
+            let data = res.Data;
+            let commonFGData='';
+            if(data.length>0){
+                for(var i in data){
+                    commonFGData={
+                        FileGRd:data[i].FileGRd,
+                        FileGpName:data[i].FileGpName
+                    }
+                    commonFGDatas.push(commonFGData)
+                }
+            }
+        });
+
+        //明细行文件组接口
+        function getFG(val) {
+            var selectFileGData='<option value=""></option>';
+            if(val==null){
+               /* requests({url: "/FileGroup/GetAllFileGInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"}}, function (res) {
+                    let data = res.Data;
+                    if(data.length>0){0
+                        for(var i in data){
+                            selectFileGData+="<option value='"+data[i].FileGRd+"'>"+data[i].FileGpName+"</option>"
+                        }
+                        renderForm();
+                    }
+                });*/
+                if(commonFGDatas.length>0){
+                    for(var i in commonFGDatas){
+                        selectFileGData+="<option value='"+commonFGDatas[i].FileGRd+"'>"+commonFGDatas[i].FileGpName+"</option>"
+                    }
+                }else {
+                    selectFileGData+=""
+                }
+                renderForm();
+            }else {
+                /*requests({url: "/FileGroup/GetAllFileGInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"}}, function (res) {
+                    let data = res.Data;
+                    if(data.length>0){
+                        for(var i in data){
+                            var selected;
+                            if(data[i].FileGRd==val){
+                                selectFileGData+="<option value='"+data[i].FileGRd+"'selected >"+data[i].FileGpName+"</option>"
+                            }else {
+                                selectFileGData+="<option value='"+data[i].FileGRd+"' >"+data[i].FileGpName+"</option>"
+                            }
+                        }
+                        renderForm();
+                    }
+                });*/
+                if(commonFGDatas.length>0){
+                    for(var i in commonFGDatas){
+                        if(commonFGDatas[i].FileGRd==val){
+                            var selected;
+                            selectFileGData+="<option value='"+commonFGDatas[i].FileGRd+"'selected >"+commonFGDatas[i].FileGpName+"</option>"
+                        }else {
+                            selectFileGData+="<option value='"+commonFGDatas[i].FileGRd+"' >"+commonFGDatas[i].FileGpName+"</option>"
+                        }
+                        //selectFileGData+="<option value='"+commonFGDatas[i].FileGRd+"'>"+commonFGDatas[i].FileGpName+"</option>"
+                    }
+                }
+
+                renderForm();
+            }
+
+
+            return selectFileGData;
+        }
+        getFG(null);
+
+
+        function loadDetail(MVerRd,WFVerRd) {
+            requests({url: "/SpecFile/GetMWFInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({MaRd: MVerRd,WFVerRd:WFVerRd})
+                }}, function (res) {
+                let data = res.Data.SpecInfo;
+                var tr_="";
+
+                if(data.length>0){
+                    for(var i in data){
+                        tr_ += "<tr>" +
+                            "<td style='display: none;'>"+data[i].SpecVerRd+"</td>" +
+                            "<td>"+data[i].SpecName+"</td>" +
+                            "<td><select lay-search >"+getFG(data[i].FileGrInfo.FileGrRd)   +"</select></td>" +
+                            "<td><select lay-search >"+getDev(data[i].Device.DevGpRd)+"</select></td>"+
+                            "<td><select lay-search >"+getDC(data[i].DC.DCVerRd)+"</select></td>"+
+                            "<td><select lay-search >"+getAftDC(data[i].DCEnd.DCVerRd)+"</select></td>"
+                    }
+                    $("#tbody").empty().html(tr_);
+                    renderForm();
+                   // layui.form.render('select');
+                }else {
+                    $("#tbody").empty().text("无数据");
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

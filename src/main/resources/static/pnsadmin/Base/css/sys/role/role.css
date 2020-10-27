@@ -1,0 +1,66 @@
+td {
+    padding-left: 10px
+}
+
+.aa > input {
+    margin-left: 20px
+}
+
+.checkBox {
+    position: absolute;
+    top: 5px;
+    left: 36px;
+    cursor: pointer
+}
+
+.table2 {
+    width: 100%;
+    border:0;
+    cellspacing:0;
+    cellpadding:0;
+    font-size: 15px
+}
+
+.table2, tr {
+    border: 0;
+}
+
+td {
+    padding: 0 5px;
+    height: 25px;
+    line-height: 25px
+}
+
+.table2 > thead > tr > td, .table2 > thead > tr > th {
+    padding: 0 0 0 20px;
+    height: 28px;
+    cursor: pointer
+}
+
+.xinxiushan {
+    margin-left: 50px;
+    width: 30%
+}
+
+.guanli {
+    padding-left: 20px;
+    width: 300px;
+    border-right: 1px solid #a59d9d
+}
+
+.spann {
+    border-left: 0px dashed #000
+}
+
+#table4 {
+    overflow: auto;
+    height: 20pc
+}
+
+.mrht {
+    margin-right: 20px
+}
+
+.aa label {
+    margin-left: 15px
+}

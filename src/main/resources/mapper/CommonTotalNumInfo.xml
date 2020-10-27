@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CommonTotalNumDAO">
+
+
+    <select id="selectAllCZPInfo" resultType="int">
+         SELECT COUNT(*) FROM trt_czpinfo a ,trt_createmcinfo b  WHERE a.`CZPCode`=b.`CZPCode` AND b.`LineGd`=#{lineGd} AND a.createtime<![CDATA[ <= ]]> #{endTime} and a.createtime> #{startTime}
+    </select>
+
+    <select id="selectAllYHCheckInfo" resultType="int">
+        select count(*) from trt_yhcheckinfo a where a.LineGd=#{lineGd} and a.createtime<![CDATA[ <= ]]> #{endTime} and a.createtime> #{startTime}
+    </select>
+
+    <select id="selectAllZJCheckInfo" resultType="int">
+        select count(*) from trt_ZJCheckInfo a where a.LineGd=#{lineGd} and a.createtime<![CDATA[ <= ]]> #{endTime} and a.createtime> #{startTime}
+    </select>
+
+
+    <select id="reselectAllYHCheckInfo" resultType="int">
+        select COUNT(DISTINCT(a.`Batch`)) from trt_yhcheckinfo a where a.LineGd=#{lineGd} and a.createtime<![CDATA[ <= ]]> #{endTime} and a.createtime> #{startTime}
+    </select>
+    <select id="reselectAllZJCheckInfo" resultType="int">
+        select COUNT(DISTINCT(a.`Batch`)) from trt_ZJCheckInfo a where a.LineGd=#{lineGd} and  a.createtime<![CDATA[ <= ]]> #{endTime} and a.createtime> #{startTime}
+    </select>
+
+
+
+
+</mapper>

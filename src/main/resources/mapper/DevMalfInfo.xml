@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevMalfInfoDAO" >
+    <resultMap id="devMalfInfoMap" type="pnc.mesadmin.entity.DevMalfInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="DevMalfCode" property="devMalfCode"></result>
+        <result column="DevMalfName" property="devMalfName"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime" ></result>
+        <result column="LastModifyMan" property="lastModifyMan" ></result>
+        <result column="LastModifyTime" property="lastModifyTime" ></result>
+        <result column="Remark" property="remark" ></result>
+    </resultMap>
+
+    <!--增加-->
+    <insert id="InsertDevMalfInfo">
+        INSERT INTO tpm_devmalfinfo(Guid,DevMalfCode,DevMalfName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{devMalfCode},#{devMalfName},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--删除-->
+    <delete id="DeleteDevMalfInfoByruid">
+        DELETE FROM `tpm_devmalfinfo` WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新-->
+    <update id="UpdateDevMalfInfo">
+        UPDATE `tpm_devmalfinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="devMalfCode != null">
+                DevMalfCode = #{ devMalfCode },
+            </if>
+            <if test="devMalfName != null">
+                DevMalfName = #{ devMalfName },
+            </if>
+
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <!--查询-->
+    <select id="SelectAllDevMalfInfo" resultMap="devMalfInfoMap">
+        SELECT * FROM`tpm_devmalfinfo`
+    </select>
+
+
+    <!--查询根据ruid-->
+    <select id="SelectDevMalfInfoByruid" resultMap="devMalfInfoMap" parameterType="int">
+        SELECT * FROM `tpm_devmalfinfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--查询根据ruid -->
+    <select id="SelectDevMalfInfoByguid" resultMap="devMalfInfoMap" parameterType="string">
+        SELECT * FROM `tpm_devmalfinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--查询名称-->
+    <select id="SelectDevMalfInfoByDevMalfCode" resultMap="devMalfInfoMap">
+        SELECT * FROM `tpm_devmalfinfo` WHERE DevMalfCode=#{devMalfCode}
+    </select>
+
+
+</mapper>

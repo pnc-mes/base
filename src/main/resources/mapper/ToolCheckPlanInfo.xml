@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ToolCheckPlanInfoDAO">
+    <resultMap type="pnc.mesadmin.entity.ToolCheckPlanInfo" id="ToolCheckPlanInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="ToolGd" column="ToolGd" />
+        <result property="CheckPlanGd" column="CheckPlanGd" />
+    </resultMap>
+
+
+    <insert id="AddToolCheckPlanInfo">
+        INSERT INTO tpm_ToolCheckPlanInfo(Guid,ToolGd,CheckPlanGd)
+        VALUES (#{Guid},#{ToolGd},#{CheckPlanGd})
+    </insert>
+
+    <select id="SelectToolCheckPlanInfoByGd" resultMap="ToolCheckPlanInfoMap">
+        select * from tpm_toolcheckplaninfo where ToolGd=#{Guid}
+    </select>
+
+    <select id="SelectToolCheckPlanInfoByToolGd" resultMap="ToolCheckPlanInfoMap" parameterType="String">
+        select * from tpm_toolcheckplaninfo where ToolGd=#{ToolGd}
+    </select>
+
+    <delete id="deleteByToolCheckPlanInfoToolGd">
+        delete from  tpm_ToolCheckPlanInfo where ToolGd=#{ToolGd}
+    </delete>
+
+    <select id="SelectToolByCheckPlanGd" resultMap="ToolCheckPlanInfoMap" parameterType="String">
+        select * from tpm_toolcheckplaninfo where CheckPlanGd=#{CheckPlanGd}
+    </select>
+
+
+    <delete id="deleteByCheckPlanGd">
+        delete from  tpm_ToolCheckPlanInfo where CheckPlanGd=#{CheckPlanGd}
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSConfigColumnDAO">
+    <resultMap id="CSConfigColumnInfoMap" type="pnc.mesadmin.entity.CSConfigColumnInfo">
+        <id column="Ruid" property="Ruid"></id>
+    </resultMap>
+
+    <select id="SelectCSConfigColumnInfoByRd" resultMap="CSConfigColumnInfoMap">
+        select * from  tpm_csconfigcolumninfo where Ruid=#{ruid}
+    </select>
+
+    <select id="SelectCSConfigColumnInfoByGD" resultMap="CSConfigColumnInfoMap">
+        select * from  tpm_csconfigcolumninfo where Guid=#{guid}
+    </select>
+
+    <select id="SelectAllByConfigGD" resultMap="CSConfigColumnInfoMap">
+        select * from  tpm_csconfigcolumninfo where CSConfigGd=#{configGuid}
+    </select>
+
+    <insert id="InsertCSConfigColumnInfo">
+        INSERT INTO tpm_csconfigcolumninfo(Guid,CSConfigGd,ColumnName,AliasName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{CSConfigGd},#{ColumnName},#{AliasName},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+
+    <update id="UpdateCsConfigColumnInfo">
+        UPDATE tpm_csconfigcolumninfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="ColumnName != null">
+                ColumnName = #{ColumnName},
+            </if>
+            <if test="AliasName != null">
+                AliasName = #{AliasName},
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{LastModifyMan},
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{LastModifyTime},
+            </if>
+            <if test="Remark != null">
+                Remark = #{Remark},
+            </if>
+        </trim>
+        WHERE Ruid =#{Ruid}
+    </update>
+
+    <delete id="DeleteCsConfigColumnInfoByConfigGuid">
+        delete  from tpm_csconfigcolumninfo where CSConfigGd=#{configGuid}
+    </delete>
+</mapper>

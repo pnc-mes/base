@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>在线追踪</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+        .dPanel{
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- content -->
+<div class="layui-row">
+    <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
+        <div class="layuimini-container" style="margin: 0 5px 5px 0;">
+            <div class="layuimini-main">
+                <div class="layui-form-item">
+                    <button type="button" class="layui-btn layui-btn-primary" id="query">查询</button>
+                </div>
+            </div>
+        </div>
+        <div class="layuimini-container" style="margin-right: 5px;">
+            <div class="layuimini-main">
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">批次号</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="batch" name="batch" lay-verify="required" class="layui-input" placeholder="请输入批次号" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">来源批次号</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="resourceNum" name="resourcebatch" lay-verify="required" class="layui-input inputRead" readonly />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-col-xs12 layui-col-sm8 layui-col-md8">
+        <div class="layuimini-container" style="margin-left: 5px;">
+            <div class="layuimini-main">
+                <div class="layui-tab layui-tab-brief" lay-filter="tab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this" lay-id="1" id="li_1">批次信息</li>
+                        <li lay-id="2" id="li_2">事务操作</li>
+                        <li lay-id="3" id="li_3">消耗物料</li>
+                        <li lay-id="4" id="li_4">采集数据</li>
+                        <li lay-id="5" id="li_5">不良原因</li>
+                        <li lay-id="6" id="li_6">工序异常</li>
+                        <li lay-id="7" id="li_7">后道信息</li>
+                    </ul>
+                    <div class="layui-form layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <!-- 批次信息 -->
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">批次</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="pici" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">线体名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="xiantiname" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">物料代码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="materialcode" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">物料名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="materialname" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">物料类型</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="materialtype" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">数量</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="num" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">工单号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="wocode" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">工艺流程</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="gongyiliucheng" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">BOM信息</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="bom" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">批次状态</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="picistatus" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">是否包装</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="isPack" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 事务操作 -->
+                            <table class="layui-hide" id="swTable" style="height: 700px;"></table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 消耗物料 -->
+                            <table class="layui-hide" id="xhTable" lay-filter="maTableFilter"></table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 采集数据 -->
+                            <table class="layui-hide" id="cjTable" lay-filter="maTableFilter"></table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 不良原因 -->
+                            <table class="layui-hide" id="blTable" lay-filter="maTableFilter"></table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 工序异常 -->
+                            <table class="layui-hide" id="gxycTable" lay-filter="maTableFilter"></table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 后道信息 -->
+                            <table class="layui-hide" id="hdTable" lay-filter="maTableFilter"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['laytpl','form','element','table'], function () {
+        let $ = layui.jquery,
+            laytpl = layui.laytpl,
+            form = layui.form,
+            table = layui.table,
+            element = layui.element;
+
+        //页面首次加载
+        load();
+        //初始化表格数据
+        function load() {
+            $("input").attr('readonly',true);
+            $("input[name='batch']").attr('readonly',false);
+            //事务操作
+            table.render({
+                elem: '#swTable',
+                cols: [
+                    [
+                        {field: 'LineName', title: '线体名称' },
+                        {field: 'SpecName', title: '工序' },
+                        {field: 'OptType', title: '事务操作' },
+                        {field: 'Optor', title: '操作者' },
+                        {field: 'OptTime', title: '操作时间' }
+                    ]
+                ],
+                data: [],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+            //消耗物料
+            table.render({
+                elem: '#xhTable',
+                cols: [
+                    [
+                        {field: 'LineName', title: '线体' },
+                        {field: 'SpecName', title: '工序' },
+                        {field: 'DevName', title: '设备'},
+                        {field: 'ConSMode', title: '消耗方式' },
+                        {field: 'Batch', title: '批次' },
+                        {field: 'SuppBatch', title: '供应商'},
+                        {field: 'MaName', title: '消耗物料'},
+                        {field: 'DoNum', title: '数量' },
+                        {field: 'UnitName', title: '单位' },
+                        {field: 'Optor', title: '操作人'}
+                    ]
+                ],
+                data: [],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+            //不良原因
+            table.render({
+                elem: '#blTable',
+                cols: [
+                    [
+                        {field: 'SpecName', title: '工序' },
+                        {field: 'DevName', title: '采集设备'},
+                        {field: 'RCContent', title: '不良原因' },
+                        {field: 'Optor', title: '操作人'}
+                    ]
+                ],
+                data: [],
+                skin: 'row '
+            });
+            //采集数据
+            table.render({
+                elem: '#cjTable',
+                cols: [
+                    [
+                        {field: 'LineName', title: '线体名称' },
+                        {field: 'SpecName', title: '工序' },
+                        {field: 'DevName', title: '采集设备'},
+                        {field: 'DCContent', title: '上机前数据采集' },
+                        {field: 'AftDCContent', title: '下机后数据采集' },
+                        {field: 'Optor', title: '操作人'}
+                    ]
+                ],
+                data: [],
+                skin: 'row '
+            });
+            //工序异常
+            table.render({
+                elem: '#gxycTable',
+                cols: [
+                    [
+                        {field: 'LineName', title: '线体名称' },
+                        {field: 'SpecName', title: '工序' },
+                        {field: 'Msg', title: '原因' },
+                        {field: 'OptTime', title: '操作时间' },
+                        {field: 'Execor', title: '操作人' },
+                    ]
+                ],
+                data: [],
+                skin: 'row '
+            });
+            //后道信息
+            table.render({
+                elem: '#hdTable',
+                cols: [
+                    [
+                        {field: 'LineName', title: '工位信息' },
+                        {field: 'SpecName', title: '等级' },
+                        {field: 'Msg', title: '不良代码'},
+                        {field: 'Msg', title: '不良名称'},
+                        {field: 'OptTime', title: '操作时间'},
+                        {field: 'Execor', title: '操作人'},
+                    ]
+                ],
+                data: [],
+                skin: 'row '
+            });
+        }
+
+        //查询事件
+        $("#query").click(function (obj) {
+            let batch = $("#batch").val().trim();
+            query(batch);
+        });
+        //回车事件
+        $(document).on('keydown', function (event) {
+            if (event.keyCode == 13) {
+                if($("#batch").is(":focus")) {
+                    query($("#batch").val().trim());
+                }
+            }
+        });
+
+        //查询
+        function query(batch) {
+            if(batch === undefined || batch === ''){
+                layer.msg("批次信息不能为空");
+                return;
+            }
+            requests({url: "/Batch/GetSUBInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({Batch: batch})}}, function (res) {
+                    let data = res.Data;
+                     $("#resourceNum").val(batch);
+                     $("input[name='pici']").val(batch);
+
+                $("input[name='materialcode']").val(data.MaCode);
+                $("input[name='materialname']").val(data.MaName);
+
+
+
+                $("input[name='materialtype']").val(data.MaName);
+                $("input[name='num']").val(data.Num);
+                $("input[name='wocode']").val(data.WoCode);
+                });
+            requests({url: "/Report/GetOTInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({Batch: batch})}}, function (res) {
+                let data = res.Data;
+
+                var str="";
+                if(data.BaseInfo.MaterialType=="00"){
+                    str= "产成品";
+                }
+                else if(data.BaseInfo.MaterialType=="01"){
+                    str= "半成品";
+                }
+                else if(data.BaseInfo.MaterialType=="02"){
+                    str= "原料";
+                }
+                else {
+                    str= "其他";
+                }
+
+                $("input[name='materialtype']").val(str);
+                $("input[name='xiantiname']").val(data.BaseInfo.LineName);
+
+                var stat="";
+                if(data.BaseInfo.Status=="00"){
+                    stat= "待处理";
+                }
+                if(data.BaseInfo.Status=="01"){
+                    stat= "处理中";
+                }
+                if(data.BaseInfo.Status=="02"){
+                    stat= "冻结";
+                }
+                if(data.BaseInfo.Status=="03"){
+                    stat= "报废";
+                }
+                if(data.BaseInfo.Status=="04"){
+                    stat= "完工";
+                }
+                $("input[name='picistatus']").val(stat);
+                var package="";
+                if(data.BaseInfo.IsPack=="00"){
+                    package= "是";
+                }
+                if(data.BaseInfo.IsPack=="01"){
+                    package= "否";
+                }
+                $("input[name='gongyiliucheng']").val(data.BaseInfo.WFName);
+                $("input[name='bom']").val(data.BaseInfo.BOMName);
+                $("input[name='isPack']").val(package);
+
+                //事务操作
+                table.reload('swTable', {
+                    data: data.AffairInfo.length>0?data.AffairInfo:[]
+                });
+
+                //消耗物料
+                table.reload('xhTable', {
+                    data: data.DoMaInfo.length>0?data.DoMaInfo:[]
+                });
+                //采集数据
+                table.reload('cjTable', {
+                    data: data.DoDCInfo.length>0?data.DoDCInfo:[]
+                });
+                //不良原因
+                table.reload('blTable', {
+                    data: data.DoRCInfo.length>0?data.DoRCInfo:[]
+                });
+                //工序异常
+                table.reload('gxycTable', {
+                    data: data.DoExcpInfo.length>0?data.DoExcpInfo:[]
+                });
+                //后道信息
+                table.reload('hdTable', {
+                    data: data.EndData.length>0?data.EndData:[]
+                });
+            });
+
+        };
+
+
+
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PdFamilyDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.PdFamilyInfo" id="PdFamilyInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="familyName" column="familyName" />
+        <result property="serialRuleGd" column="serialRuleGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+        <result property="printTGd" column="PrintTGd" />
+	</resultMap>
+
+    <!-- 新增产品家族信息 (By-pjf)-->
+    <insert id="InsertPdFamilyInfo">
+        INSERT INTO tpm_pdfamilyinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,FamilyName,SerialRuleGd,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="printTGd != null">
+                printTGd,
+            </if>
+
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{familyName},#{serialRuleGd},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="printTGd != null">
+                #{printTGd},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 根据ruid删除产品家族信息 (By-pjf)-->
+    <delete id="DeletePdFamilyInfo">
+      DELETE FROM tpm_pdfamilyinfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+    <!-- 根据ruid修改产品家族信息 (By-pjf)-->
+    <update id="UpdatePdFamilyInfo">
+        UPDATE tpm_pdfamilyinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="familyName != null">
+                FamilyName = #{ familyName },
+            </if>
+            <if test="printTGd != null">
+                PrintTGd = #{ printTGd },
+            </if>
+
+            <if test="serialRuleGd != null">
+                SerialRuleGd = #{ serialRuleGd },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 获取所有产品家族信息 (By-pjf)-->
+	<select id="SelectAllPdFamilyInfo" resultMap="PdFamilyInfoResult">
+        SELECT * FROM tpm_pdfamilyinfo
+    </select>
+
+    <!-- 根据ruid获取产品家族信息 (By-pjf)-->
+    <select id="SelectPdFamilyInfo" resultMap="PdFamilyInfoResult">
+        SELECT * FROM tpm_pdfamilyinfo WHERE Ruid = #{ argRuid }
+    </select>
+
+    <!-- 根据guid获取产品家族信息 (By-pjf)-->
+    <select id="SelectByGuid" resultMap="PdFamilyInfoResult">
+        SELECT * FROM tpm_pdfamilyinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <!-- 查询产品家族名称-LFZ-->
+    <select id="SelectfamilyName" resultMap="PdFamilyInfoResult">
+        SELECT * FROM tpm_pdfamilyinfo WHERE familyName = #{ familyName }
+    </select>
+
+</mapper>

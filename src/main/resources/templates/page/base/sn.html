@@ -1,0 +1,621 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：序号管理
+* 创建人：pjf
+* 创建时间：2020-09-14
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>序号管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+
+        /*!* 防止下拉框的下拉列表被隐藏---必须设置--- *!
+        .layui-table-cell {
+            overflow: visible !important;
+        }
+        !* 使得下拉框与单元格刚好合适 *!
+        td .layui-form-select{
+            margin-top: -10px;
+            margin-left: -15px;
+            margin-right: -15px;
+        }*/
+
+        .layui-table-cell, .layui-table-tool-panel li {
+            overflow: visible !important;
+        }
+
+        .layui-form-select .layui-input {
+            height: 30px;
+        }
+
+        .layui-table-box {
+            overflow: visible !important;
+        }
+
+        .layui-table-body {
+            overflow: visible !important;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">序号名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="snName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+        <script type="text/html" id="toolbarScript">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="del"> 删除 </button>
+            </div>
+        </script>
+
+        <script type="text/html" id="editSelect">
+            <select name="editSelectS" lay-filter="editSelectS" id="editSelectS" >
+
+            </select>
+        </script>
+    </div>
+</div>
+
+<!--- 子页面 -->
+<div id="content" style="display: none;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基本资料</li>
+            <li>其它</li>
+        </ul>
+        <div class="layui-form layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-row">
+                    <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                        <div class="dPanel">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label required">规则名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="snName" name="snName" lay-verify="required" class="layui-input" lay-reqtext="名称不能为空" placeholder="请输入规则名称" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text isHide">
+                                <label class="layui-form-label required">前缀</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="prefix" name="prefix" lay-verify="required" class="layui-input" placeholder="请输入前缀" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text isHide">
+                                <label class="layui-form-label required">流水长度</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="sNLength" name="sNLength" lay-verify="required" class="layui-input" placeholder="请输入流水号长度" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text isHide">
+                                <label class="layui-form-label required">步长</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="step" name="step" lay-verify="required" class="layui-input" placeholder="请输入步长" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text isHide">
+                                <div class="layui-input-block">
+                                    <input id="minCheckbox" type="checkbox" lay-filter="checkbox" title="达到最大流水号的时候重置">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                        <div class="dPanel">
+                            <div class="layui-form-item layui-form-text">
+                                <div class="layui-input-block">
+                                    <input id="isScript" type="checkbox" lay-filter="checkScript" title="启用脚本">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text isHide">
+                                <label class="layui-form-label">后缀</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="suffix" name="suffix" lay-verify="required" class="layui-input" placeholder="请输入后缀" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text isHide">
+                                <label class="layui-form-label">起始位</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="start" name="start" lay-verify="required" class="layui-input" placeholder="请输入起始位" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text isHide">
+                                <label class="layui-form-label">最后流水号</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="lastLevel" name="lastLevel" lay-verify="required" class="layui-input inputRead" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-row" id="sTable">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label required">脚本名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="scName" name="scName" lay-verify="required" class="layui-input" lay-reqtext="脚本名称不能为空" placeholder="请输入脚本名称" />
+                        </div>
+                    </div>
+
+                    <!-- 脚本实现表格 -->
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>详情</legend>
+                    </fieldset>
+                    <div class="layui-form-item">
+                        <div id="script" class="xm-select-demo" style="width: 360px;"></div>
+                    </div>
+                    <table class="layui-hide" id="scriptTableId" lay-filter="scriptTableFilter"></table>
+                </div>
+            </div>
+
+            <div class="layui-tab-item" id="other">
+                <!-- 其它 -->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="creator" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="createTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyMan" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea id="remark" name="remark" class="layui-textarea inputRead" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'element', 'xmSelect'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            xmSelect = layui.xmSelect;
+
+        //页面首次加载
+        load();
+        loadScript();
+
+        //加载预设脚本字段
+        let scriptS = xmSelect.render({
+            el: '#script'
+            ,prop: {
+                name: 'BFName',
+                value: 'BFCode',
+            }
+            ,model: {
+                label: {
+                    type: 'block',
+                    block: {
+                        showCount: 2,
+                        showIcon: true,
+                    }
+                }
+            }
+            ,data: []
+            ,on: function (data) {
+                table.reload('scriptTableId', {
+                    data: data.arr
+                });
+            }
+            ,toolbar: {
+                show: true,
+            },
+            filterable: true
+        });
+        requests({url: "/PrintT/GetPtBFInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"}}, function (res) {
+            scriptS.update({
+                data: res.Data
+            })
+        });
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {
+                clear();
+                let index = layer.open({
+                    title: '添加序号规则',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['60%', '80%'],
+                    content: $("#content"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    },
+                    success: function (layro, index) {
+                        table.reload('scriptTableId', {
+                            data: []
+                        });
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                //获取选中id
+                let snRd = data.SNRd;
+                requests({url: "/SN/GetSNInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify({"SNRd": snRd})
+                    }}, function (res) {
+                    let data = res.Data;
+
+                    clear();
+
+                    loadData(data);
+
+                    let index = layer.open({
+                        title: '编辑序号规则',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin:true,
+                        shadeClose: true,
+                        area: ['60%', '80%'],
+                        content: $("#content"),
+                        btn: ['确认保存'],
+                        yes: function (index, layero) {
+                            save(index, 2, snRd);
+                        },
+                        success: function (layro, index) {
+                            table.reload('scriptTableId', {
+                                data: data.BFInfo
+                            });
+                        }
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                });
+
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    requests({url: "/SN/SaveSNInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                            "BusData": JSON.stringify({SNRd: data.SNRd})
+                        }}, function (res) {
+                        layer.msg("删除成功", {icon: 1});
+                        table.reload('currentTableId');
+                    });
+
+                    layer.close(index);
+                });
+            } else if(obj.event === 'read') {
+                read(data);
+
+                $("#content input").addClass("inputRead").prop("disabled", true);
+                $("#remark").addClass("inputRead").prop("disabled", true);
+                scriptS.update({ disabled: true });
+
+                return false;
+            }
+        });
+
+        //监听行双击事件
+        table.on('rowDouble(currentTableFilter)', function(obj){
+            read(obj.data);
+            return false;
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: [
+                        {
+                            fieldName: "ruleName",
+                            fieldOpt: "like",
+                            fieldVal: data.field.snName
+                        },
+                        {
+                            fieldName: "Ruid",
+                            fieldOpt: "Order BY",
+                            fieldVal: ""
+                        }
+                    ]
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //checkbox触发事件
+        form.on("checkbox(checkScript)", function (data) {
+            if(data.elem.checked){
+                $(".isHide").hide();
+                $("#sTable").show();
+            }else{
+                $(".isHide").show();
+                $("#sTable").hide();
+            }
+        });
+
+        //查看
+        function read(data) {
+            //获取选中id
+            let snRd = data.SNRd;
+            requests({url: "/SN/GetSNInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({SNRd: snRd})
+                }}, function (res) {
+                let data = res.Data;
+
+                clear();
+
+                loadData(data);
+
+                let index = layer.open({
+                    title: '查看序号规则',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['60%', '80%'],
+                    content: $("#content"),
+                    success: function (layro, index) {
+                        table.reload('scriptTableId', {
+                            data: data.BFInfo
+                        });
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+        }
+
+        //保存
+        function save(index, type, id) {
+            //type-> 1.新增 2.编辑
+            let data = {
+                SNName: $("#snName").val(),
+                Remark: $("#remark").val()
+            };
+            if($("#isScript").prop("checked")){
+                data.IsScript = "00";
+                data.ScriptName = $("#scName").val();
+                data.BFInfo = scriptS.getValue();
+            }else{
+                data.IsScript = "01";
+                data.Prefix = $("#prefix").val();
+                data.Suffix = $("#suffix").val();
+                data.SNLength = $("#sNLength").val();
+                data.Start = $("#start").val();
+                data.Step = $("#step").val();
+                data.Reset = $("#minCheckbox").prop("checked") ? "00" : "01";
+            }
+
+            if(type === 1){
+                requests({url: "/SN/SaveSNInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }else if(type === 2){
+                data.SNRd = id;
+                requests({url: "/SN/SaveSNInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/SN/GetAllSNNew",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {field: 'SNRd', title: 'ID', sort: true},
+                        {field: 'SNName', title: '序号名称'},
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        //初始化脚本数据
+        function loadScript() {
+            table.render({
+                elem: '#scriptTableId',
+                cols: [
+                    [
+                        {field: 'BFName', title: '绑定名称'},
+                        {field: 'BFCode', title: '绑定代码'}
+                    ]
+                ],
+                data: [],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        function loadData(data){
+            $("#snName").val(data.SNName);
+
+            //是否启用脚本
+            if("00" === data.IsScript){
+                $("#isScript").prop("checked", true);
+                $(".isHide").hide();
+                $("#sTable").show();
+
+                scriptS.setValue(data.BFInfo)
+            }else{
+                $("#isScript").prop("checked", false);
+                $(".isHide").show();
+                $("#sTable").hide();
+
+                $("#prefix").val(data.Prefix);
+                $("#sNLength").val(data.SNLength);
+                $("#step").val(data.Step);
+
+                $("#minCheckbox").prop("checked", data.Reset === '00')
+                $("#suffix").val(data.Suffix);
+                $("#start").val(data.Start);
+                $("#lastLevel").val(data.LastLevel);
+            }
+
+            $("#creator").val(data.Creator);
+            $("#createTime").val(data.CreateTime);
+            $("#lastModifyMan").val(data.LastModifyMan);
+            $("#lastModifyTime").val(data.LastModifyTime);
+            $("#remark").val(data.Remark);
+            form.render();
+        }
+
+        //清空
+        function clear() {
+            $("#snName").val("");
+            $("#prefix").val("");
+            $("#suffix").val("");
+            $("#sNLength").val("");
+            $("#start").val("");
+            $("#step").val("");
+            $("#lastLevel").val("");
+            $("#isScript").prop("checked", false);
+            $(".isHide").show();
+            $("#sTable").hide();
+            $("#minCheckbox").prop("checked", true);
+
+            scriptS.setValue([]);
+
+            $("#remark").val("");
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+
+            $("#content input").removeClass("inputRead").prop("disabled", false);
+            $("#other input").addClass("inputRead").prop("disabled", true);
+            $("#remark").removeClass("inputRead").prop("disabled", false);
+            scriptS.update({ disabled: false });
+            $("#lastLevel").addClass("inputRead").prop("disabled", true);
+
+            form.render();
+        }
+    });
+</script>
+</body>
+</html>

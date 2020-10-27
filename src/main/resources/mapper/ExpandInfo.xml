@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ExpandDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.ExpandInfo" id="expandCInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="expandType" column="ExpandType" />
+        <result property="expandName" column="ExpandName" />
+        <result property="isSettleObj" column="IsSettleObj" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <select id="selectEE" resultMap="expandCInfoMap">
+        select * from `tpm_expandinfo`
+    </select>
+    <select id="selectExpandInfoByExpandName" resultMap="expandCInfoMap">
+        select * from `tpm_expandinfo` where ExpandName=#{expandName}
+    </select>
+
+    <select id="selectExpandInfoByExpandTypeAndIsSettleObj" resultMap="expandCInfoMap">
+        select * from `tpm_expandinfo` where  ExpandType=#{expandType} and IsSettleObj="00"
+    </select>
+    <select id="selectExpandInfoByExpandByGuid" resultMap="expandCInfoMap">
+        select * from `tpm_expandinfo` where Guid=#{guid}
+    </select>
+    <select id="selectExpandInfoByExpandByGuids" resultMap="expandCInfoMap">
+        select * from `tpm_expandinfo` where Guid=#{guid}
+    </select>
+    <!--查询列表-->
+    <select id="SelectAllExpandCInfo" resultMap="expandCInfoMap">
+        select * from `tpm_expandinfo`
+    </select>
+
+    <!--查询列表根据ExpandType-->
+    <select id="SelectAllExpandCInfoByExpandType" resultMap="expandCInfoMap">
+        select * from tpm_expandinfo where ExpandType=#{expandType} AND IsSettleObj=#{IsSettleObj}
+    </select>
+    <!--删除-->
+    <delete id="DeleteExpandCInfo" parameterType="int" >
+        delete from  tpm_expandinfo  where Ruid=#{ruid}
+    </delete>
+
+    <select id="SelectExpandCInfoByRuid" resultMap="expandCInfoMap">
+        select * from `tpm_expandinfo` where Ruid=#{ruid}
+    </select>
+
+    <!--新增-->
+    <insert id="InsertExpandCInfo">
+         INSERT INTO tpm_expandinfo
+		(Guid,ExpandType,ExpandName,IsSettleObj,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES(#{guid},#{expandType},#{expandName},#{isSettleObj},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+    <!--修改-->
+    <update id="UpdateExpandCInfo" parameterType="int">
+        UPDATE `tpm_expandinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="expandType != null">
+                ExpandType = #{ expandType },
+            </if>
+
+            <if test="expandName != null">
+                ExpandName = #{ expandName },
+            </if>
+            <if test="isSettleObj != null">
+                IsSettleObj = #{ isSettleObj },
+            </if>
+
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!--与物料特性表关联查询扩展字段-->
+    <select id="SelectAllMaRuid" resultMap="expandCInfoMap">
+        SELECT t1.Ruid,t1.Guid,t1.ExpandName,t1.ExpandType,t1.IsSettleObj,t1.Creator,t1.CreateTime,t1.LastModifyMan,
+         t1.LastModifyTime,t1.Remark FROM tpm_matypeinfo t,tpm_expandinfo t1
+        WHERE
+         t.`Ruid`=#{maRuid} AND t1.`IsSettleObj`='01'
+         AND t1.`ExpandType`='00' AND t.ExpandGd=t1.Guid
+    </select>
+
+</mapper>

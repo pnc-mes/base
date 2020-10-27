@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CarrierRelationLogDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.CarrierreLationInfo" id="CarrierreLationResult">
+		<id property="ruid" column="ruid" />
+		<result property="carrierGd" column="carrierGd" />
+		<result property="batch" column="batch" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增打印任务信息  (By-pjf)-->
+	<insert id="InsertCarrierRelationLog">
+		INSERT INTO tpm_carrierrelationloginfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			carrierGd,batch,
+
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			#{carrierGd},#{batch},
+
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

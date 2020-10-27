@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.LocationDAO" >
+    <resultMap type="pnc.mesadmin.entity.LocationInfo" id="LocationInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="lCode" column="lCode" />
+        <result property="lName" column="lName" />
+        <result property="storeGd" column="storeGd" />
+        <result property="num" column="num" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--查询库位信息列表genju storeGd-->
+    <select id="SelectAllLocationInfoBystoreGd" resultMap="LocationInfoResult" parameterType="string">
+        SELECT * FROM tpm_locationinfo WHERE storeGd=#{storeGd}
+    </select>
+
+    <!--查询库位信息列表-->
+    <select id="SelectAllLocationInfo" resultMap="LocationInfoResult">
+        SELECT * FROM tpm_locationinfo
+    </select>
+
+    <!--查询库位信息-->
+    <select id="SelectLocationInfo" resultMap="LocationInfoResult">
+        SELECT * FROM tpm_locationinfo l WHERE l.`Ruid` = #{lRd}
+    </select>
+
+    <!--查询库位代码-->
+    <select id="SelectlCode" resultMap="LocationInfoResult">
+        SELECT * FROM tpm_locationinfo l WHERE l.`lCode` = #{lCode}
+    </select>
+
+    <select id="SelectByBatch" resultMap="LocationInfoResult">
+        SELECT * FROM tpm_locationinfo WHERE batch = #{batch}
+    </select>
+
+    <!--查询库位名称-->
+    <select id="SelectlName" resultMap="LocationInfoResult">
+        SELECT * FROM tpm_locationinfo l WHERE  l.`lName` = #{lName}
+    </select>
+
+    <!--查询关联仓库信息-->
+    <select id="Selectguid" resultMap="LocationInfoResult">
+        SELECT * FROM tpm_locationinfo l WHERE l.`StoreGd` = #{guid} order by lName
+    </select>
+
+    <!--查询关联仓库信息-->
+    <select id="SelectlocationGd" resultMap="LocationInfoResult">
+        SELECT * FROM tpm_locationinfo l WHERE l.`Guid` = #{locationGd}
+    </select>
+
+    <!--保存库位信息-->
+    <insert id="InsertLocationInfo">
+        INSERT INTO tpm_locationinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,LCode,LName,StoreGd,Num,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{lCode},#{lName},#{storeGd},#{num},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除库位信息-->
+    <delete id="DeleteLocationInfo">
+        DELETE FROM tpm_locationinfo WHERE Ruid = #{lRd}
+    </delete>
+
+    <!--删除库位信息-->
+    <delete id="DeleteStoreGd">
+        DELETE FROM tpm_locationinfo WHERE StoreGd = #{storeGd}
+    </delete>
+
+    <!--更新库位信息-->
+    <update id="UpdateLocationInfo">
+        UPDATE tpm_locationinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="lName != null">
+                lName = #{lName},
+            </if>
+            <if test="lCode != null">
+                lCode = #{lCode},
+            </if>
+            <if test="storeGd != null">
+                storeGd = #{storeGd},
+            </if>
+            <if test="num != null">
+                num = #{num},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+</mapper>

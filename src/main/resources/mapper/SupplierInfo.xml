@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SupplierDAO" >
+    <resultMap type="pnc.mesadmin.entity.SupplierInfo" id="SupplierInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="supplierCode" column="supplierCode" />
+        <result property="supplierName" column="supplierName" />
+        <result property="supplierFName" column="supplierFName" />
+        <result property="contactor" column="contactor" />
+        <result property="mobile" column="mobile" />
+        <result property="address" column="address" />
+        <result property="dSource" column="dSource" />
+        <result property="status" column="status" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!-- 查询供应商名称 -->
+    <select id="SelectBysupplierName" resultMap="SupplierInfoResult">
+        SELECT * FROM tpm_supplierinfo s WHERE s.SupplierName = #{supplierName}
+    </select>
+
+    <!-- 查询供应商列表信息 -->
+    <select id="SelectAllSupplierInfo" resultMap="SupplierInfoResult">
+        select * from tpm_supplierinfo
+    </select>
+
+    <!-- 查询供应商信息 -->
+    <select id="SelectBySuppId" resultMap="SupplierInfoResult">
+        SELECT * FROM tpm_supplierinfo s WHERE s.ruid = #{supRd}
+    </select>
+
+    <!-- 查询关联资源表 -->
+    <select id="SelectsupplierGd" resultMap="SupplierInfoResult">
+        SELECT * FROM tpm_supplierinfo s WHERE s.guid = #{supplierGd}
+    </select>
+
+    <!-- 保存供应商信息 -->
+    <insert id="InsertSupplierInfo">
+        INSERT INTO tpm_supplierinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        Guid,SupplierCode,SupplierName,SupplierFName,Contactor,Mobile,Address,DSource,Status,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{guid},#{supplierCode},#{supplierName},#{supplierFName},#{contactor},#{mobile},#{address},#{dSource},#{status},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除供应商信息 -->
+    <delete id="DeleteSupplierInfo">
+        DELETE FROM tpm_supplierinfo WHERE Ruid = #{supRd}
+    </delete>
+
+    <!-- 更新供应商信息 -->
+    <update id="UpdateSupplierInfo">
+        UPDATE tpm_supplierinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="supplierName != null">
+                supplierName = #{supplierName},
+            </if>
+            <if test="supplierFName != null">
+                supplierFName = #{supplierFName},
+            </if>
+            <if test="contactor != null">
+                contactor = #{contactor},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="dSource != null">
+                dSource = #{dSource},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+    <!-- 根据Guid查询供应商信息  (By-pjf) -->
+    <select id="SelectByGuid" resultMap="SupplierInfoResult">
+        SELECT * FROM tpm_supplierinfo  WHERE Guid = #{ argGuid }
+    </select>
+
+    <!-- 根据代码查询供应商信息  (By-pjf) -->
+    <select id="SelectBySupplierCode" resultMap="SupplierInfoResult">
+        SELECT * FROM tpm_supplierinfo  WHERE SupplierCode = #{ argSupplierCode }
+    </select>
+
+</mapper>

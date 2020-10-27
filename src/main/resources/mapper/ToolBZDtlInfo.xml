@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ToolBZDtllDao" >
+    <resultMap type="pnc.mesadmin.entity.ToolBZDtlInfo" id="toolBZDtlMap">
+        <id property="ruid" column="Ruid" />
+        <result property="ToolBZGd" column="ToolBZGd" />
+        <result property="KeyName" column="KeyName" />
+        <result property="KeyValue" column="KeyValue" />
+    </resultMap>
+
+<select id="SelectToolBZDtlInfoToolBZGd" resultMap="toolBZDtlMap">
+    select * from tpm_toolbzdtlinfo where ToolBZGd=#{ToolBZGd}
+</select>
+
+    <select id="SelectToolBZDtlInfoargruid" resultMap="toolBZDtlMap">
+    select * from tpm_toolbzdtlinfo where Ruid=#{argruid}
+</select>
+
+
+    <insert id="InsertToolBZDtlInfo">
+                  INSERT INTO `tpm_toolbzdtlinfo`(
+            ToolBZGd,KeyName,KeyValue)
+            VALUES (
+            #{ToolBZGd},#{KeyName},#{KeyValue})
+</insert>
+
+    <update id="UpdateDevBZDtlInfo">
+        UPDATE `tpm_toolbzdtlinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="DevBZGd != null">
+                ToolBZGd = #{ ToolBZGd },
+            </if>
+            <if test="KeyName != null">
+                KeyName = #{ KeyName },
+            </if>
+            <if test="KeyValue != null">
+                KeyValue = #{ KeyValue },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <delete id="DeleteAllToolBZDtlInfoToolBZGd">
+      DELETE  FROM tpm_toolbzdtlinfo  WHERE ToolBZGd = #{ToolBZGd}
+    </delete>
+</mapper>

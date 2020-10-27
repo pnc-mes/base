@@ -1,0 +1,5 @@
+<%@ page pageEncoding="UTF-8" %>
+<span class="sysinfo">
+     <label class="sysLabel" >系统信息:</label>
+    <span class="sysSpan"></span>
+</span>

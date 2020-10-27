@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ExpandDtlDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.ExpandDtlInfo" id="expandDtlCInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="expandGd" column="ExpandGd" />
+        <result property="fieldName" column="FieldName" />
+        <result property="filedType" column="FiledType" />
+        <result property="displayName" column="DisplayName" />
+        <result property="cusData" column="CusData" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--新增-->
+    <insert id="InsertExpandDtlCInfo">
+         INSERT INTO tpm_expanddtlinfo
+		(Guid,ExpandGd,FieldName,FiledType,DisplayName,CusData,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES(#{guid},#{expandGd},#{fieldName},#{filedType},#{displayName},#{cusData},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--根据主表标识查询细表信息-->
+    <select id="SelectExpandDtlCInfoByExpandGd" parameterType="string" resultMap="expandDtlCInfoMap">
+        select * from  tpm_expanddtlinfo where ExpandGd=#{expandGd}
+    </select>
+
+    <!--删除-->
+    <delete id="DeleteExpandDtlCInfo" parameterType="int">
+        delete from tpm_expanddtlinfo where Ruid=#{ruid}
+    </delete>
+
+    <!--查询列表-->
+    <select id="selectEE" resultMap="expandDtlCInfoMap">
+     SELECT * FROM tpm_expanddtlinfo t1,tpm_ExpandInfo t2
+     WHERE t2.ExpandType=#{ExpandType} AND t1.ExpandGd=t2.Guid;
+    </select>
+
+    <select id="SelectExpandDtlCInfoByExpandGdAndDisplayName" parameterType="string" resultMap="expandDtlCInfoMap">
+        select * from  tpm_expanddtlinfo where ExpandGd=#{expandGd} and DisplayName=#{DisplayName}
+    </select>
+</mapper>

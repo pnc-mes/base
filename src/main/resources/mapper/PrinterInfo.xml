@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PrinterDAO" >
+<resultMap type="pnc.mesadmin.entity.PrinterInfo" id="PrinterInfoResult">
+    <id property="ruid" column="ruid" />
+    <result property="guid" column="guid" />
+    <result property="printerName" column="printerName" />
+    <result property="printerSer" column="printerSer" />
+    <result property="creator" column="creator" />
+    <result property="createTime" column="createTime" />
+    <result property="lastModifyMan" column="lastModifyMan" />
+    <result property="lastModifyTime" column="lastModifyTime" />
+    <result property="remark" column="Remark" />
+</resultMap>
+    <!--查询打印机信息列表-->
+    <select id="SelectAllPrinterInfo" resultMap="PrinterInfoResult">
+        select * from tpm_printerinfo
+    </select>
+
+    <!--查询打印机信息-->
+    <select id="SelectByRuid" resultMap="PrinterInfoResult">
+        SELECT * FROM tpm_printerinfo p WHERE p.`Ruid` = #{prRd}
+    </select>
+
+    <!--查询打印机名称信息-->
+    <select id="SelectprinterName" resultMap="PrinterInfoResult">
+        SELECT * FROM tpm_printerinfo p WHERE p.`printerName` = #{printerName}
+    </select>
+
+    <!--查询打印机所有名称信息-->
+    <select id="SelectprinterNames" resultMap="PrinterInfoResult">
+        SELECT * FROM tpm_printerinfo p WHERE p.`printerName` = #{printerName}
+    </select>
+
+    <!--查询打印机信息-->
+    <select id="SelectprinterSer" resultMap="PrinterInfoResult">
+        SELECT * FROM tpm_printerinfo p WHERE p.`printerSer` = #{printerSer}
+    </select>
+
+<!--保存打印机信息-->
+<insert id="InsertPrinterInfo">
+    INSERT INTO tpm_printerinfo
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        Guid,PrinterName,PrinterSer,Creator,CreateTime,
+
+        <if test="lastModifyMan != null">
+            lastModifyMan,
+        </if>
+        <if test="lastModifyTime != null">
+            lastModifyTime,
+        </if>
+        <if test="remark != null">
+            remark,
+        </if>
+    </trim>
+    VALUES
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{guid},#{printerName},#{printerSer},#{creator},#{createTime},
+
+        <if test="lastModifyMan != null">
+            #{lastModifyMan},
+        </if>
+        <if test="lastModifyTime != null">
+            #{lastModifyTime},
+        </if>
+        <if test="remark != null">
+            #{remark},
+        </if>
+    </trim>
+</insert>
+
+<!--删除打印机信息-->
+<delete id="DeletePrinterInfo">
+    DELETE FROM tpm_printerinfo WHERE Ruid = #{prRd}
+</delete>
+
+<!--更新打印机信息-->
+<update id="UpdatePrinterInfo">
+    UPDATE tpm_printerinfo
+    <trim prefix="set" suffixOverrides=",">
+        <if test="printerName != null">
+            printerName = #{printerName},
+        </if>
+        <if test="printerSer != null">
+            printerSer = #{printerSer},
+        </if>
+        <if test="lastModifyMan != null">
+            lastModifyMan = #{lastModifyMan},
+        </if>
+        <if test="lastModifyTime != null">
+            lastModifyTime = #{lastModifyTime},
+        </if>
+        <if test="remark != null">
+            remark = #{remark}
+        </if>
+    </trim>
+    where ruid = #{ruid}
+</update>
+
+    <!--根据Guid查询打印机信息  王怀龙-->
+    <select id="SelectByGuid" resultMap="PrinterInfoResult">
+        SELECT * FROM tpm_printerinfo p WHERE p.`Guid` = #{guid}
+    </select>
+
+</mapper>

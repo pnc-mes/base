@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.InCDtlDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.InCDtlInfo" id="inCDtlInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="purChDtlGd" column="PurChDtlGd" />
+        <result property="inChGd" column="InChGd" />
+        <result property="maVerGd" column="MaVerGd" />
+        <result property="inCCode" column="InCCode" />
+        <result property="num" column="Num" />
+        <result property="scanNum" column="ScanNum" />
+        <result property="unitName" column="UnitName" />
+        <result property="aFeed" column="AFeed" />
+        <result property="storeGd" column="StoreGd" />
+        <result property="isPrint" column="IsPrint" />
+        <result property="f1" column="f1" />
+        <result property="f2" column="f2" />
+        <result property="f3" column="f3" />
+        <result property="f4" column="f4" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--新增来料单明细信息-->
+    <insert id="InsertInCDtlInfo">
+        INSERT INTO `tpm_incdtlinfo`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,PurChDtlGd,MaVerGd,InChGd,InCCode,Num,ScanNum,UnitName,AFeed,StoreGd,
+            Creator,CreateTime,LastModifyMan,LastModifyTime,Remark,
+            <if test="isPrint != null">
+              isPrint,
+            </if>
+            <if test="f1 != null">
+                f1,
+            </if>
+            <if test="f2 != null">
+                f2,
+            </if>
+            <if test="f3 != null">
+                f3,
+            </if>
+            <if test="f4 != null">
+                f4,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{purChDtlGd},#{maVerGd},#{inChGd},#{inCCode},#{num},#{scanNum},#{unitName},#{aFeed},#{storeGd},
+            #{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark},
+            <if test="isPrint != null">
+                #{ isPrint },
+            </if>
+            <if test="f1 != null">
+                #{f1},
+            </if>
+            <if test="f2 != null">
+                #{f2},
+            </if>
+            <if test="f3 != null">
+                #{f3},
+            </if>
+            <if test="f4 != null">
+                #{f4},
+            </if>
+        </trim>
+    </insert>
+
+    <!--查询所有的来料单明细信息-->
+    <select id="SelectInCDtlInfo" resultMap="inCDtlInfoMap">
+        SELECT * FROM `tpm_incdtlinfo`
+    </select>
+
+    <!--根据来料单单号查询所有的来料单明细信息-->
+    <select id="SelectInCDtlInfoByInCCode" resultMap="inCDtlInfoMap" parameterType="string">
+        SELECT * FROM `tpm_incdtlinfo` WHERE InCCode=#{inCCode}
+    </select>
+
+    <!--根据guid查询所有的来料单明细信息-->
+    <select id="SelectInCDtlInfoByGuid" resultMap="inCDtlInfoMap" parameterType="string">
+        SELECT * FROM `tpm_incdtlinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--根据ruid查询所有的来料单明细信息-->
+    <select id="SelectInCDtlInfoByRuid" resultMap="inCDtlInfoMap" parameterType="int">
+        SELECT * FROM `tpm_incdtlinfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--根据InChGd查询所有的来料单明细信息-->
+    <select id="SelectInCDtlInfoByInChGd" resultMap="inCDtlInfoMap" parameterType="string">
+        SELECT * FROM `tpm_incdtlinfo` WHERE InChGd=#{inChGd}
+    </select>
+    <!--更新来料单明细信息-->
+    <update id="UpdateInChDtlInfo">
+        UPDATE `tpm_incdtlinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="inChGd != null">
+                InChGd = #{ inChGd },
+            </if>
+            <if test="purChDtlGd != null">
+                PurChDtlGd = #{ purChDtlGd },
+            </if>
+            <if test="inCCode != null">
+                InCCode = #{ inCCode },
+            </if>
+            <if test="maVerGd != null">
+                MaVerGd = #{ maVerGd },
+            </if>
+            <if test="num != null">
+                Num = #{ num },
+            </if>
+            <if test="scanNum != null">
+                ScanNum = #{ scanNum },
+            </if>
+            <if test="unitName != null">
+                UnitName = #{ unitName },
+            </if>
+            <if test="aFeed != null">
+                AFeed = #{ aFeed },
+            </if>
+            <if test="storeGd != null">
+                StoreGd = #{ storeGd },
+            </if>
+            <if test="isPrint != null">
+                IsPrint = #{ isPrint },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="f1 != null">
+                f1 = #{ f1 },
+            </if>
+            <if test="f2 != null">
+                f2 = #{ f2 },
+            </if>
+            <if test="f3 != null">
+                f3 = #{ f3 },
+            </if>
+            <if test="f4 != null">
+                f4 = #{ f4 },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!--删除来料单明细-->
+    <delete id="DeleteInChDtlInfo">
+      DELETE FROM  tpm_incdtlinfo WHERE Ruid=#{ruid}
+    </delete>
+
+    <select id="SelectInCDtlInfoByInCCodeAndMaVerGd"  resultMap="inCDtlInfoMap">
+        SELECT * FROM `tpm_incdtlinfo` WHERE InCCode=#{argInCCode} AND MaVerGd=#{argMaVerGd}
+    </select>
+
+    <select id="SelectIncDtlNumsByPurGd" resultType="Float">
+        SELECT SUM(Num) FROM tpm_incdtlinfo WHERE PurChDtlGd = #{ argPurChDtlGd }
+    </select>
+</mapper>

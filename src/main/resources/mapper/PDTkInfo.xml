@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PDTkDAO" >
+    <resultMap type="pnc.mesadmin.entity.PDTkInfo" id="PDTkInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="pDCode" column="pDCode" />
+        <result property="storeGd" column="storeGd" />
+        <result property="exStatus" column="exStatus" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="execor" column="execor" />
+        <result property="execTime" column="execTime" />
+        <result property="cancelor" column="cancelor" />
+        <result property="cancelTime" column="cancelTime" />
+        <result property="finishor" column="finishor" />
+        <result property="finishTime" column="finishTime" />
+        <result property="checkor" column="checkor" />
+        <result property="checkTime" column="checkTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--查询盘点单列表信息-->
+    <select id="SelectAllPDTkInfo" resultMap="PDTkInfoResult">
+        select * from tpm_pdtkinfo
+    </select>
+
+    <!--查询盘点单信息-->
+    <select id="SelectByRuid" resultMap="PDTkInfoResult">
+        SELECT * FROM tpm_pdtkinfo p WHERE p.`Ruid` = #{PDRd}
+    </select>
+
+    <!--查询盘点单信息-->
+    <select id="SelectByguid" resultMap="PDTkInfoResult">
+        SELECT * FROM tpm_pdtkinfo p WHERE p.`guid` = #{guid}
+    </select>
+
+    <!--查询盘点单信息关联仓库的标识信息-->
+    <select id="SelectBystoreGd" resultMap="PDTkInfoResult" parameterType="string">
+        SELECT * FROM tpm_pdtkinfo p WHERE p.`Guid` = #{storeGd}
+    </select>
+
+    <!--查询盘点单信息关联仓库的标识信息-->
+    <select id="SelectstoreGdguid" resultMap="PDTkInfoResult" parameterType="string">
+        SELECT * FROM tpm_pdtkinfo p WHERE p.`storeGd` = #{guid}
+    </select>
+
+    <!--保存盘点单信息-->
+    <insert id="InsertPDTkInfo">
+        INSERT INTO tpm_pdtkinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,PDCode,StoreGd,ExStatus,Creator,CreateTime,
+
+            <if test="execor != null">
+                execor,
+            </if>
+            <if test="execTime != null">
+                execTime,
+            </if>
+            <if test="cancelor != null">
+                cancelor,
+            </if>
+            <if test="cancelTime != null">
+                cancelTime,
+            </if>
+            <if test="finishor != null">
+                finishor,
+            </if>
+            <if test="finishTime != null">
+                finishTime,
+            </if>
+            <if test="checkor != null">
+                checkor,
+            </if>
+            <if test="checkTime != null">
+                checkTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{pDCode},#{storeGd},#{exStatus},#{creator},#{createTime},
+
+            <if test="execor != null">
+                #{execor},
+            </if>
+            <if test="execTime != null">
+                #{execTime},
+            </if>
+            <if test="cancelor != null">
+                #{cancelor},
+            </if>
+            <if test="cancelTime != null">
+                #{cancelTime}
+            </if>
+            <if test="finishor != null">
+                #{finishor},
+            </if>
+            <if test="finishTime != null">
+                #{finishTime},
+            </if>
+            <if test="checkor != null">
+                #{checkor},
+            </if>
+            <if test="checkTime != null">
+                #{checkTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除盘点单信息-->
+    <delete id="DeletePDTkInfo">
+        DELETE FROM tpm_pdtkinfo WHERE Ruid = #{PDRd}
+    </delete>
+
+    <!--更新盘点单信息-->
+    <update id="UpdatePDTkInfo">
+        UPDATE tpm_pdtkinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pDCode != null">
+                pDCode = #{pDCode},
+            </if>
+            <if test="storeGd != null">
+                storeGd = #{storeGd},
+            </if>
+            <if test="exStatus != null">
+                exStatus = #{exStatus},
+            </if>
+            <if test="execor != null">
+                execor = #{execor},
+            </if>
+            <if test="execTime != null">
+                execTime = #{execTime},
+            </if>
+            <if test="cancelor != null">
+                cancelor = #{cancelor},
+            </if>
+            <if test="cancelTime != null">
+                cancelTime = #{cancelTime},
+            </if>
+            <if test="finishor != null">
+                finishor = #{finishor},
+            </if>
+            <if test="finishTime != null">
+                finishTime = #{finishTime},
+            </if>
+            <if test="checkor != null">
+                checkor = #{checkor},
+            </if>
+            <if test="checkTime != null">
+                checkTime = #{checkTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+    <!--根据类型，代码，状态查询盘点信息 张亮亮-->
+    <select id="SelectPDTkInfoByOOS" resultMap="PDTkInfoResult"  parameterType="string" >
+        SELECT * FROM `tpm_pdtkinfo`
+        <where>
+            <if test="pDCode!=null||pDCode!=''">
+                and pDCode like #{pDCode}
+            </if>
+            <if test="exStatus!=null||exStatus!=''">
+                AND exStatus=#{exStatus}
+            </if>
+
+        </where>
+        ORDER BY  createTime DESC
+    </select>
+
+    <!--根据单号查询盘点信息 张亮亮-->
+    <select id="SelectPDTkInfoBypDCode" resultMap="PDTkInfoResult"  parameterType="string">
+        SELECT * FROM `tpm_pdtkinfo`WHERE pDCode=#{pDCode}
+    </select>
+</mapper>

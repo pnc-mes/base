@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ResDAO">
+
+    <resultMap type="pnc.mesadmin.entity.ResInfo" id="ResInfoResult">
+        <id property="ruid" column="ruid"/>
+        <result property="guid" column="guid"/>
+        <result property="moduleGd" column="moduleGd"/>
+        <result property="moduleName" column="moduleName"/>
+        <result property="resName" column="resName"/>
+        <result property="resUrl" column="resUrl"/>
+        <result property="linkType" column="linkType"/>
+        <result property="pos" column="pos"/>
+        <result property="isClose" column="isClose"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lastModifyMan" column="lastModifyMan"/>
+        <result property="lastModiryTime" column="lastModiryTime"/>
+        <result property="remark" column="Remark"/>
+    </resultMap>
+
+    <!-- 查询所有的资源信息 (By-pjf)-->
+    <select id="SelectAllResInfo" resultMap="ResInfoResult">
+		select * from tpm_resinfo
+	</select>
+
+    <!-- 查询某个模块下的所有资源信息 (By-pjf)-->
+    <select id="SelectAllModule" resultMap="ResInfoResult">
+		SELECT * FROM tpm_resinfo WHERE ModuleGd = #{ moduleGd } AND isClose = #{ argisClose } ORDER BY Pos
+	</select>
+
+    <!-- 查询某个模块下的所有资源信息 (By-pjf)-->
+    <select id="SelectAllModuleAdmin" resultMap="ResInfoResult">
+		SELECT * FROM tpm_resinfo WHERE ModuleGd = #{ moduleGd } ORDER BY Pos
+	</select>
+
+    <!-- 根据资源名称查询资源信息 (By-pjf)-->
+    <select id="SelectResInfoName" resultMap="ResInfoResult">
+		SELECT * FROM tpm_resinfo WHERE ResName = #{ resName }
+	</select>
+
+    <select id="SelectResByRuid" resultMap="ResInfoResult">
+		SELECT * FROM tpm_resinfo WHERE Ruid = #{ objRuid }
+	</select>
+
+    <select id="SelectByGuid" resultMap="ResInfoResult">
+		SELECT * FROM tpm_resinfo WHERE Guid = #{ argGuid }
+	</select>
+
+    <!-- 新增资源信息 (pjf) -->
+    <insert id="InsertRes">
+        INSERT INTO tpm_resinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,moduleGd,moduleName,resName,resUrl,linkType,pos,isClose,creator,createTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{moduleGd},#{moduleName},#{resName},#{resUrl},#{linkType},#{pos},#{isClose},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除模块下所有资源 (pjf) -->
+    <delete id="DeleteResInfoByModuleGd">
+		DELETE FROM tpm_resinfo WHERE ModuleGd = #{ argModuleGd }
+	</delete>
+
+    <!-- 修改资源信息 (pjf) -->
+    <update id="UpdateResInfo">
+        UPDATE tpm_resinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="moduleGd != null">
+                moduleGd = #{ moduleGd },
+            </if>
+            <if test="moduleName != null">
+                moduleName = #{ moduleName },
+            </if>
+            <if test="resName != null">
+                resName = #{ resName },
+            </if>
+            <if test="resUrl != null">
+                resUrl = #{ resUrl },
+            </if>
+            <if test="linkType != null">
+                linkType = #{ linkType },
+            </if>
+            <if test="pos != null">
+                pos = #{ pos },
+            </if>
+            <if test="isClose != null">
+                isClose = #{ isClose },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 删除资源信息 (pjf) -->
+    <delete id="DeleteResByGuid">
+        DELETE FROM tpm_resinfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 获取模块下MaxPos (pjf) -->
+    <select id="SelectResPosByModuleGd" resultType="int">
+        SELECT MAX(pos) FROM tpm_resinfo WHERE ModuleGd = #{ argModuleGd }
+    </select>
+
+    <select id="SelectAllResInfoByGW" resultMap="ResInfoResult">
+        SELECT Ruid,ResName FROM  tpm_resinfo WHERE IsClose ='01' AND ResUrl is not null AND ResUrl <![CDATA[<>]]> ''
+    </select>
+
+</mapper>

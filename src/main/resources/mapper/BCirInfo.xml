@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.BCirDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.BCirInfo" id="BCirInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="woBGd" column="woBGd" />
+		<result property="batch" column="batch" />
+		<result property="maVerGd" column="maVerGd" />
+		<result property="materialCode" column="materialCode" />
+		<result property="materialName" column="materialName" />
+		<result property="version" column="version" />
+		<result property="num" column="num" />
+		<result property="unitName" column="unitName" />
+		<result property="wFVerGd" column="wFVerGd" />
+        <result property="lLineGd" column="lLineGd" />
+		<result property="lSpecVerGd" column="lSpecVerGd" />
+		<result property="lSpecName" column="lSpecName" />
+		<result property="lOpertGd" column="lOpertGd" />
+		<result property="lOptName" column="lOptName" />
+        <result property="lineGd" column="lineGd" />
+		<result property="specVerGd" column="specVerGd" />
+		<result property="specName" column="specName" />
+		<result property="opertGd" column="opertGd" />
+		<result property="optName" column="optName" />
+        <result property="mVTime" column="mVTime" />
+        <result property="cKInTime" column="cKInTime" />
+		<result property="status" column="status" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+        <result property="devGd" column="devGd" />
+	</resultMap>
+
+    <!-- 新增生产流转信息  (By-pjf)-->
+    <insert id="InsertBCir">
+        INSERT INTO tpm_bcirinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,woBGd,batch,maVerGd,materialCode,materialName,
+            version,num,unitName,wFVerGd,lSpecVerGd,lSpecName,
+            lOpertGd,lOptName,status,Creator,CreateTime,
+
+            <if test="lLineGd != null">
+                lLineGd,
+            </if>
+            <if test="lineGd != null">
+                lineGd,
+            </if>
+            <if test="specVerGd != null">
+                specVerGd,
+            </if>
+            <if test="specName != null">
+                specName,
+            </if>
+            <if test="opertGd != null">
+                opertGd,
+            </if>
+            <if test="optName != null">
+                optName,
+            </if>
+            <if test="mVTime != null">
+                mVTime,
+            </if>
+            <if test="cKInTime != null">
+                cKInTime,
+            </if>
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="devGd != null">
+                devGd,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{woBGd},#{batch},#{maVerGd},#{materialCode},
+            #{materialName},#{version},#{num},#{unitName},#{wFVerGd},
+            #{lSpecVerGd},#{lSpecName},#{lOpertGd},#{lOptName},#{status},#{creator},#{createTime},
+
+            <if test="lLineGd != null">
+                #{lLineGd},
+            </if>
+            <if test="lineGd != null">
+                #{lineGd},
+            </if>
+            <if test="specVerGd != null">
+                #{specVerGd},
+            </if>
+            <if test="specName != null">
+                #{specName},
+            </if>
+            <if test="opertGd != null">
+                #{opertGd},
+            </if>
+            <if test="optName != null">
+                #{optName},
+            </if>
+            <if test="mVTime != null">
+                #{mVTime},
+            </if>
+            <if test="cKInTime != null">
+                #{cKInTime},
+            </if>
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            <if test="devGd != null">
+                #{devGd},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 修改生产流转信息  (By-pjf)-->
+    <update id="UpdateBCir">
+        UPDATE tpm_bcirinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="woBGd != null">
+                woBGd = #{ woBGd },
+            </if>
+            <if test="batch != null">
+                batch = #{ batch },
+            </if>
+            <if test="maVerGd != null">
+                maVerGd = #{ maVerGd },
+            </if>
+            <if test="materialCode != null">
+                materialCode = #{ materialCode },
+            </if>
+            <if test="materialName != null">
+                materialName = #{ materialName },
+            </if>
+            <if test="version != null">
+                version = #{ version },
+            </if>
+            <if test="num != null">
+                num = #{ num },
+            </if>
+            <if test="unitName != null">
+                unitName = #{ unitName },
+            </if>
+            <if test="wFVerGd != null">
+                wFVerGd = #{ wFVerGd },
+            </if>
+            <if test="specVerGd != null">
+                specVerGd = #{ specVerGd },
+            </if>
+            <if test="specName != null">
+                specName = #{ specName },
+            </if>
+            <if test="opertGd != null">
+                opertGd = #{ opertGd },
+            </if>
+            <if test="optName != null">
+                optName = #{ optName },
+            </if>
+
+            <if test="lSpecVerGd != null">
+                lSpecVerGd = #{ lSpecVerGd },
+            </if>
+            <if test="lSpecName != null">
+                lSpecName = #{ lSpecName },
+            </if>
+            <if test="lOpertGd != null">
+                lOpertGd = #{ lOpertGd },
+            </if>
+            <if test="lOptName != null">
+                lOptName = #{ lOptName },
+            </if>
+            <if test="mVTime != null">
+                mVTime = #{ mVTime },
+            </if>
+            <if test="cKInTime != null">
+                cKInTime = #{ cKInTime },
+            </if>
+
+            <if test="status != null">
+                status = #{ status },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="devGd != null">
+                devGd = #{ devGd },
+            </if>
+            <if test="lLineGd != null">
+                lLineGd = #{ lLineGd },
+            </if>
+            <if test="lineGd != null">
+                lineGd = #{ lineGd },
+            </if>
+        </trim>
+        WHERE Guid = #{ guid }
+    </update>
+
+    <!-- 根据Ruid查询生产流转信息  (By-pjf)-->
+    <select id="SelectByRuid" resultMap="BCirInfoResult">
+        SELECT * FROM tpm_bcirinfo WHERE Ruid = #{ argRuid }
+    </select>
+
+    <!-- 根据Guid查询BOM清单信息  (By-pjf)-->
+    <select id="SelectByGuid" resultMap="BCirInfoResult">
+        SELECT * FROM tpm_bcirinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <!-- 根据Guid查询BOM清单信息  (By-pjf)-->
+    <select id="SelectSByGuid" resultMap="BCirInfoResult">
+        SELECT * FROM tpm_bcirinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <!-- 根据Batch查询生产流转信息  (By-pjf) -->
+    <select id="SelectByBatch" resultMap="BCirInfoResult">
+        SELECT * FROM tpm_bcirinfo WHERE Batch = #{ argBatch }
+    </select>
+
+    <!-- 判断当前工序是否被使用  (By-pjf) -->
+    <select id="SelectByWFVerGdSpecVerGd" resultType="int">
+        SELECT count(Ruid) FROM tpm_bcirinfo WHERE WFVerGd = #{ argWFVerGd } AND SpecVerGd = #{ argSpecVerGd }
+    </select>
+</mapper>

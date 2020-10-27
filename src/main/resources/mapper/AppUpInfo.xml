@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.AppUpDAO" >
+    <resultMap type="pnc.mesadmin.entity.AppUpInfo" id="appUpMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="appID" column="AppID" />
+        <result property="appName" column="AppName" />
+        <result property="sAppVer" column="SAppVer" />
+        <result property="appVer" column="AppVer" />
+        <result property="provider" column="Provider" />
+        <result property="appUrl" column="AppUrl" />
+        <result property="forUpApp" column="ForUpApp" />
+        <result property="upDes" column="UpDes" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <!--根据应用标识查询应用更新 张亮亮-->
+    <select id="SelectAppUpInfoGByappID" parameterType="string" resultMap="appUpMap">
+       SELECT * FROM `tpm_appupinfo` WHERE AppID=#{appID}
+    </select>
+
+    <!-- 获取所有发布App信息 (pjf) -->
+    <select id="SeectAllAppUp" resultMap="appUpMap">
+        SELECT * FROM `tpm_appupinfo`
+    </select>
+
+    <!-- 新增发布App信息 (pjf) -->
+    <insert id="InsertAppUp">
+        INSERT INTO tpm_appupinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,appID,appName,sAppVer,appVer,provider,appUrl,forUpApp,upDes,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{appID},#{appName},#{sAppVer},#{appVer},#{provider},
+            #{appUrl},#{forUpApp},#{upDes},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 根据Guid删除发布App信息 (pjf) -->
+    <delete id="DeleteByGuid">
+        DELETE FROM tpm_appupinfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 修改发布App信息 (pjf) -->
+    <update id="UpdateAppUp">
+        UPDATE tpm_appupinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="appID != null">
+                appID = #{ appID },
+            </if>
+            <if test="appName != null">
+                appName = #{ appName },
+            </if>
+            <if test="sAppVer != null">
+                sAppVer = #{ sAppVer },
+            </if>
+            <if test="appVer != null">
+                appVer = #{ appVer },
+            </if>
+            <if test="provider != null">
+                provider = #{ provider },
+            </if>
+            <if test="appUrl != null">
+                appUrl = #{ appUrl },
+            </if>
+            <if test="forUpApp != null">
+                forUpApp = #{ forUpApp },
+            </if>
+            <if test="upDes != null">
+                upDes = #{ upDes },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+</mapper>

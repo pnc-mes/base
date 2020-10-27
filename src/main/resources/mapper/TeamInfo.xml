@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.TeamDAO" >
+    <resultMap type="pnc.mesadmin.entity.TeamInfo" id="TeamInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="teamName" column="teamName" />
+        <result property="description" column="description" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!-- 获取团队列表信息 zll-->
+    <select id="SelectAllTeamInfo" resultMap="TeamInfoResult">
+		select * from tpm_teaminfo
+	</select>
+
+    <!-- 获取团队信息 zll-->
+    <select id="SelectTeamInfoByRuid" resultMap="TeamInfoResult" parameterType="int">
+		select * from tpm_teaminfo where ruid=#{ruid}
+	</select>
+
+    <!--新增团队信息 zll-->
+    <insert id="InsertTeamInfo">
+        <selectKey resultType="int" keyProperty="ruid" order="AFTER" >
+            SELECT @@IDENTITY
+        </selectKey>
+        INSERT INTO tpm_teaminfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            guid,teamName,description,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{teamName},#{description},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除团队信息 zll-->
+    <delete id="DeleteTeamInfoByRuid">
+         DELETE  FROM `tpm_teaminfo` WHERE ruid = #{ruid}
+    </delete>
+
+    <!--根据团队名字查询一条信息 zll-->
+    <select id="SelectTeamInfoByTeamName" parameterType="string" resultMap="TeamInfoResult">
+         SELECT * FROM `tpm_teaminfo` WHERE teamName = #{teamName}
+    </select>
+
+    <!--根据团队guid查询一条信息 zll-->
+    <select id="SelectTeamInfoByGuid" parameterType="string" resultMap="TeamInfoResult">
+         SELECT * FROM `tpm_teaminfo` WHERE guid = #{guid}
+    </select>
+
+    <!--修改团队信息 zll-->
+    <update id="UpdateTeamInfo">
+        UPDATE `tpm_teaminfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="teamName != null">
+                teamName = #{ teamName },
+            </if>
+            <if test="description != null">
+                description = #{ description },
+            </if>
+
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+        </trim>
+        WHERE ruid = #{ ruid }
+    </update>
+
+
+
+</mapper>

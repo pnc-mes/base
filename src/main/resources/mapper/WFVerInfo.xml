@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.WFVerDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.WFVerInfo" id="WFVerInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="wfGd" column="wfGd" />
+        <result property="wFName" column="wFName" />
+        <result property="version" column="version" />
+        <result property="isDef" column="isDef" />
+        <result property="status" column="status" />
+        <result property="wFJson" column="wFJson" />
+        <result property="sSpecVerGd" column="sSpecVerGd" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModiryTime" column="lastModiryTime" />
+        <result property="remark" column="Remark" />
+        <result property="wFType" column="wFType" />
+    </resultMap>
+
+    <!-- 新增工艺版本信息 (By-pjf) -->
+    <insert id="InsertWFVerInfo">
+        INSERT INTO tpm_wfverinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,wfGd,wFName,version,isDef,status,wFJson,sSpecVerGd,Creator,CreateTime,wFType,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{wfGd},#{wFName},#{version},#{isDef},#{status},#{wFJson},#{sSpecVerGd},#{creator},#{createTime},#{wFType},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除工艺版本信息 (By-pjf) -->
+    <delete id="DeleteWFVerInfo">
+        DELETE FROM tpm_wfverinfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+    <!-- 根据WFGd删除 (By-pjf) -->
+    <delete id="DeleteByWFGd">
+        DELETE FROM tpm_wfverinfo WHERE WFGd = #{ argWFGd }
+    </delete>
+
+    <!-- 修改工艺版本信息 (By-pjf) -->
+    <update id="UpdateWFVerInfo">
+        UPDATE tpm_wfverinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="wFName != null">
+                wFName = #{ wFName },
+            </if>
+            <if test="version != null">
+                version = #{ version },
+            </if>
+            <if test="isDef != null">
+                isDef = #{ isDef },
+            </if>
+            <if test="status != null">
+                status = #{ status },
+            </if>
+            <if test="wFJson != null">
+                wFJson = #{ wFJson },
+            </if>
+            <if test="sSpecVerGd != null">
+                sSpecVerGd = #{ sSpecVerGd },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="wFType != null">
+                wFType = #{ wFType },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据工艺信息修改工艺版本信息  (By-pjf) -->
+    <update id="UpdateWFVerInfoByWFGd">
+        UPDATE tpm_wfverinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="wFName != null">
+                wFName = #{ wFName },
+            </if>
+            <if test="isDef != null">
+                isDef = #{ isDef },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="wFType != null">
+                wFType = #{ wFType },
+            </if>
+        </trim>
+        WHERE WFGd = #{ wfGd }
+    </update>
+
+    <!-- 根据WFGd查询工艺版本信息 (By-pjf) -->
+    <select id="SelectByWFGd" resultMap="WFVerInfoResult">
+        SELECT * FROM tpm_wfverinfo WHERE WfGd = #{ argWFGd }
+    </select>
+
+    <!-- 根据Guid查询工艺版本信息  (By-pjf) -->
+    <select id="SelectByGuid" resultMap="WFVerInfoResult">
+        SELECT * FROM tpm_wfverinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <!-- 根据Ruid查询工艺版本信息  (By-pjf) -->
+    <select id="SelectByRuid" resultMap="WFVerInfoResult">
+        SELECT * FROM tpm_wfverinfo WHERE Ruid = #{ argRuid }
+    </select>
+
+    <!-- 根据Version+WFGd查询工艺版本信息  (By-pjf) -->
+    <select id="SelectByVersion" resultMap="WFVerInfoResult">
+        SELECT * FROM tpm_wfverinfo WHERE WFGd = #{ argWFGd } AND Version = #{ argVersion }
+    </select>
+
+</mapper>

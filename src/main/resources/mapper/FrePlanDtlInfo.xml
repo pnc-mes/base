@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.FrePlanDtlDAO">
+    <resultMap id="FrePlanDtlInfo" type="pnc.mesadmin.entity.FrePlanDtlDataInfo">
+        <id property="Ruid" column="Ruid"></id>
+        <result property="Guid" column="Guid"></result>
+        <result property="FrePlanGd" column="FrePlanGd"></result>
+        <result property="TaskGd" column="TaskGd"></result>
+        <result property="TaskName" column="TaskName"></result>
+        <result property="TaskItemName" column="TaskItemName"></result>
+        <result property="SureType" column="SureType"></result>
+       <!-- <result property="MinExCount" column="MinExCount"></result>-->
+        <result property="MaxExCount" column="MaxExCount"></result>
+        <result property="Creator" column="Creator"></result>
+        <result property="CreateTime" column="CreateTime"></result>
+        <result property="LastModifyMan" column="LastModifyMan"></result>
+        <result property="LastModifyTime" column="LastModifyTime"></result>
+        <result property="Remark" column="Remark"></result>
+    </resultMap>
+
+    <!--次数保养计划明细信息-->
+    <select id="selectAllFrePlanDtlInfo" resultMap="FrePlanDtlInfo">
+        SELECT * FROM tpm_freplandtlinfo WHERE FrePlanGd=#{FrePlanGd}
+    </select>
+
+    <!--添加次数保养计划明细信-->
+    <insert id="insertFrePlanDtlDataInfo">
+        INSERT INTO tpm_freplandtlinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,FrePlanGd,TaskGd,TaskName,TaskItemName,SureType,MaxExCount,Creator,CreateTime,
+            <if test="LastModifyMan !=null">
+                LastModifyMan,
+            </if>
+            <if test="LastModifyTime !=null">
+                LastModifyMan,
+            </if>
+            <if test="Remark !=null">
+                LastModifyMan,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{Guid},#{FrePlanGd},#{TaskGd},#{TaskName},#{TaskItemName},#{SureType},#{MaxExCount},#{Creator},#{CreateTime},
+            <if test="LastModifyMan !=null">
+                #{ LastModifyMan},
+            </if>
+            <if test="LastModifyTime !=null">
+                #{LastModifyMan},
+            </if>
+            <if test="Remark !=null">
+                #{LastModifyMan},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除次数保养明细信息-->
+    <delete id="deleteFrePlanDtlInfo">
+        DELETE FROM tpm_freplandtlinfo WHERE Ruid=#{Ruid}
+    </delete>
+
+</mapper>

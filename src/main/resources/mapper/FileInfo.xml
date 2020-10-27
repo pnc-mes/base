@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.FileDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.FileInfo" id="fileInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="fileName" column="fileName" />
+		<result property="verGd" column="verGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!--查询文件列表信息-->
+    <select id="SelectAllFileInfo" resultMap="fileInfoResult">
+        select * from tpm_fileinfo
+    </select>
+
+    <!--查询文件信息-->
+    <select id="SelectfileName" resultMap="fileInfoResult">
+        select * from tpm_fileinfo  f WHERE  f.fileName=#{fileName}
+    </select>
+
+    <!--查询文件名称-->
+    <select id="SelectByfileRd" resultMap="fileInfoResult">
+        select * from tpm_fileinfo  f WHERE  f.ruid=#{fileRd}
+    </select>
+
+    <!--查询关联文件版本表信息-->
+    <select id="SelectByguid" resultMap="fileInfoResult">
+        SELECT * FROM tpm_fileinfo f WHERE f.guid = #{fileGd}
+    </select>
+
+    <!--保存文件信息-->
+    <insert id="InsertFileInfo">
+        INSERT INTO tpm_fileinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,FileName,VerGd,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{fileName},#{verGd},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除文件信息-->
+    <delete id="DeleteFileInfo">
+        DELETE FROM tpm_fileinfo WHERE Ruid = #{fileRd}
+    </delete>
+
+    <!--更新文件信息-->
+    <update id="UpdateFileInfo">
+        UPDATE tpm_fileinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="fileName != null">
+                fileName = #{fileName},
+            </if>
+
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+</mapper>

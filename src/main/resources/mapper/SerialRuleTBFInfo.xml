@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SerialRuleTBFDAO" >
+    <resultMap id="serialRuleTBInfoMap" type="pnc.mesadmin.entity.SerialRuleTBFInfo">
+        <id column="Ruid" property="Ruid"></id>
+        <result column="Guid" property="Guid"></result>
+        <result column="SerialGd" property="SerialGd"></result>
+        <result column="FieldCode" property="FieldCode"></result>
+        <result column="FieldName" property="FieldName"></result>
+        <result column="Creator" property="Creator"></result>
+        <result column="CreateTime" property="createTime" ></result>
+        <result column="LastModifyMan" property="lastModifyMan" ></result>
+        <result column="LastModifyTime" property="lastModifyTime" ></result>
+        <result column="Remark" property="remark" ></result>
+    </resultMap>
+
+    <!--插入数据-->
+    <insert id="InsertTBF" >
+        INSERT INTO tpm_serialruletbfinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,SerialGd,FieldCode,FieldName,Creator,CreateTime,
+            <if test="lastModifyMan != null and lastModifyMan!=''">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null and lastModifyTime!=''">
+                lastModifyTime,
+            </if>
+            <if test="remark != null and remark!=''">
+                remark,
+            </if>
+        </trim>
+       VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{Guid}, #{SerialGd}, #{FieldCode}, #{FieldName}, #{Creator}, #{CreateTime},
+            <if test="lastModifyMan != null and lastModifyMan!=''">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null and lastModifyTime!=''">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null and remark!=''">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据序号管理Guid查询-->
+    <select id="selectS" resultMap="serialRuleTBInfoMap">
+        SELECT * FROM tpm_serialruletbfinfo WHERE SerialGd=#{guid}
+    </select>
+    <!--删除-->
+    <delete id="del">
+        DELETE FROM tpm_serialruletbfinfo WHERE SerialGd=#{guid}
+    </delete>
+</mapper>

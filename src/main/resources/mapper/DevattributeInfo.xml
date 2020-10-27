@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevattributeDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.DevattributeInfo" id="devattributeInfoMap">
+        <id property="ruid" column="ruid" />
+        <result property="devGd" column="devGd" />
+        <result property="lineGD" column="lineGD" />
+    </resultMap>
+
+    <!--根据线体id查询所有信息-->
+    <select id="selectDevattributeInfoBylineGD" resultMap="devattributeInfoMap" parameterType="string">
+          select * from tpm_devattributeinfo where lineGD=#{lineGD}
+    </select>
+
+    <!--根据设备Gd查询所有信息-->
+    <select id="selectDevattributeInfoBydevGd" resultMap="devattributeInfoMap" parameterType="string">
+          select * from tpm_devattributeinfo where devGd=#{devGd}
+    </select>
+    <!---新增-->
+    <insert id="inserteDevattributeInfo">
+		INSERT INTO tpm_devattributeinfo
+		(DevGd,LineGD)
+		VALUES(#{devGd},#{lineGD})
+	</insert>
+    <!--删除-->
+    <delete id="deleteDevattributeInfoByruid" parameterType="int">
+        delete from tpm_devattributeinfo where ruid=#{ruid}
+    </delete>
+</mapper>

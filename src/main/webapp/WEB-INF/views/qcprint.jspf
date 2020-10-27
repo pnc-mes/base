@@ -1,0 +1,81 @@
+<%@ page pageEncoding="UTF-8" %>
+<%--处理页面中的其他信息--%>
+<div class="box-body form-inline">
+
+    <div id="print-content" style="width: 649px;height: 160px; margin-left: 30px; margin-top: 20px;">
+        <div>
+            <span style="height: 60px;width: 150px;font-size: 40px;font-weight: 900;">
+                <img id="images" style="height: 60px;width: 150px;"
+                     src="${pageContext.request.contextPath}/static/pnsadmin/Base/images/admin/sunprotlogo.png">
+            </span>
+        </div>
+        <div style="font-size:18px;height: 60px; text-align: center">
+            <span style="font-size: 25px; font-weight: bold"> Inspection Report</span>
+            <br>
+            <span class="chain" style="font-size: 25px; font-weight: bold"> 检验报告</span>
+        </div>
+    </div>
+    <table id="print-content1" border="1" cellpadding="0" cellspacing="0"
+           style='border-collapse:collapse; width: 550px;height: 400px;margin-left: 75px;'>
+        <tr style='width: 649px;height: 133px;'>
+            <td align="center" style='width: 140px;height: 133px'><span>Name</span><br><span class="chain">产品名称</span>
+            </td>
+            <td align="center" style='width: 258px;height: 133px;font-size: 13px;'><span
+                    id="ProductType"></span><br><span>Module</span><br><span id="ProductName"></span></td>
+            <td align="center" style='width: 130px;height: 133px'><span>Model</span><br><span class="chain">型号</span>
+            </td>
+            <td align="center" style='width: 130px;height: 133px ;font-size: 13px;'><span id="Model"></span></td>
+        </tr>
+        <tr style='width: 649px;height: 133px;'>
+            <td align="center" style='width: 140px;height: 133px'><span>CTN No</span><br><span class="chain">箱号</span>
+            </td>
+            <td align="center" style='width: 258px;height: 133px;font-size: 13px;'><span id="CTNNo"></span></td>
+            <td align="center" style='width: 130px;height: 133px'><span>Serial No.</span><br><span
+                    class="chain">序列号</span></td>
+            <td align="center" style='width: 130px;height: 133px ;font-size: 13px;'><span>Shipping Mark</span><br><span
+                    class="chain">见唛头</span>
+            </td>
+        </tr>
+        <tr style='width: 649px;height: 133px;'>
+            <td align="center" style='width: 140px;height: 133px'><span>Production Date</span><br><span class="chain">生产日期</span>
+            </td>
+            <td align="center" style='width: 258px;height: 133px ;font-size: 13px;'><span id="ProductionDate"></span>
+            </td>
+            <td align="center" style='width: 130px;height: 133px'><span>Qty</span><br><span class="chain">数量</span></td>
+            <td align="center" style='width: 130px;height: 133px;font-size: 13px;'><span id="Qty"></span></td>
+        </tr>
+        <tr style='width: 649px;height: 133px;'>
+            <td align="center" style='width: 140px;height: 133px'><span>Inspection Date</span><br><span class="chain">检验日期</span>
+            </td>
+            <td align="center" style='width: 258px;height: 133px ;font-size: 13px;'><span id="InspectionDate"></span>
+            </td>
+            <td align="center" style='width: 130px;height: 133px'><span>Inspection Method</span><br><span class="chain">检验方式</span>
+            </td>
+            <td align="center" style='width: 130px;height: 133px ;font-size: 13px;'>
+                <span>Full Inspection</span><br><span class="chain">全检</span></td>
+        </tr>
+        <tr style='width: 649px;height: 133px;'>
+            <td align="center" style='width: 140px;height: 133px'><span>Visual Inspection</span><br><span class="chain">外观检验</span>
+            </td>
+            <td align="center" style='width: 258px;height: 133px ;font-size: 13px;'><span>Pass</span><br><span
+                    class="chain">合格</span>
+            </td>
+            <td align="center" style='width: 130px;height: 133px'><span>Performance Test</span><br><span class="chain">性能测试</span>
+            </td>
+            <td align="center" style='width: 130px;height: 133px ;font-size: 13px;'>
+                <span>PowerPass</span><br><span class="chain">功率合格</span></td>
+        </tr>
+        <tr style='width: 649px;height: 133px;'>
+            <td align="center" style='width: 140px;height: 133px'><span>Inspector</span><br><span
+                    class="chain">质检员</span></td>
+            <td align="center" style='width: 258px;height: 133px;font-size: 13px;'><span id="Inspector1"></span></td>
+            <td align="center" style='width: 130px;height: 133px'><span>Approval</span><br><span class="chain">核准</span>
+            </td>
+            <td align="center" style='width: 130px;height: 133px ;font-size: 13px;'><span id="Approval"></span></td>
+        </tr>
+    </table>
+
+    <div id="print-content2" style='width: 149px;height: 25px; margin-left: 500px;margin-top: 42px;'>
+        <span style="font-size: 12px;"> www.sunportpower.com</span>
+    </div>
+</div>

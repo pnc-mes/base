@@ -1,0 +1,74 @@
+﻿<%@ page pageEncoding="UTF-8" language="java" %>
+
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/pnsadmin/Base/css/toastr.css" />
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/static/pnsadmin/Base/css/filter/jquery-ui-1.9.2.custom.css">
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/static/pnsadmin/Base/css/filter/filter.css"/>
+<%--bootstrap-select css--%>
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/static/adminlte/bootstrap/css/bootstrap-select.min.css"/>
+<div class="containerr" >
+    <div class="selectBox">
+        <div id="moveDiv" class="col-sm-4">
+            <div class="topTitle" style="background-color: #3c8dbc">
+                <span style="color: white">过滤条件</span><img class="imgClose" src="${pageContext.request.contextPath}/static/pnsadmin/Base/images/ui_close.png" width="30px" height="30px" style="cursor: pointer;float: right" />
+            </div>
+            <div class='tableDiv'>
+                <form id="filterForms">
+                    <table class="table table-bordered" id="filterTable">
+                        <tbody></tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="text-right">
+                <button class="sure">确认</button>&emsp;<button class="unSure">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="datakj" >
+    <input type="text" class="ui-datepicker-time" readonly value=""/>
+    <div class="ui-datepicker-css">
+        <div class="ui-datepicker-choose">
+            <span style="position: absolute;top: 0px;right: 0px;display: block">
+                <img class="minClose" src="${pageContext.request.contextPath}/static/pnsadmin/Base/images/ui_close.png" width="20px" height="20px" style="cursor: pointer"/>
+            </span>
+            <div class="ui-datepicker-date" id="dateStyle">
+                <input name="startDate" id="startDate" class="startDate" readonly value="2017/08/20" type="text">—
+                <input name="endDate" id="endDate" class="endDate" readonly value="2017/08/20" type="text" disabled onchange="datePickers()">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%--<script type="text/javascript" src="${pageContext.request.contextPath}/static/ui/global/jQuery/jquery.min.js"></script>--%>
+<script src="${pageContext.request.contextPath}/static/ui/global/bootstrap/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/ui/global/layer/layer.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/pnsadmin/Base/js/user.js"></script>
+<script src="${pageContext.request.contextPath}/static/pnsadmin/Base/js/mainPage.js"></script>
+<script src="${pageContext.request.contextPath}/static/pnsadmin/Base/js/confirm.js"></script>
+<script src='${pageContext.request.contextPath}/static/min/js/supershopui.common.js'></script>
+<!-- 树开始 -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/pnsadmin/Base/js/JstreeEx.js"></script>
+<script type="" src='${pageContext.request.contextPath}/static/plugins/jstree/dist/jstree.min.js'></script>
+<!-- 树结束 -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/pnsadmin/Base/js/jquery-ui-1.9.2.custom.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/pnsadmin/Base/js/share.js"></script>
+<%--<script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>--%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/ui/global/jquery-ui/jquery-ui.min.js"></script>
+<!-- jqgrid表格开始 -->
+<script src="${pageContext.request.contextPath}/static/plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="${pageContext.request.contextPath}/static/plugins/jqgrid/jqgrid.min.js"></script>
+<!-- jqgrid表格结束 -->
+<%--系统消息--%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/pnsadmin/Base/js/toastr.min.js"></script>
+<%--下拉框插件--%>
+<script src='${pageContext.request.contextPath}/static/plugins/selectpage/selectpage.js'></script>
+<script type="text/javascript" src='${pageContext.request.contextPath}/static/pnsadmin/Base/js/commons.js?v=1'></script>
+<%--过滤控件--%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/pnsadmin/Base/js/custom.js"></script>
+<%--bootstrap-select js--%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/static/adminlte/bootstrap/js/bootstrap-select.min.js"></script>
+<%--<script type="text/javascript" src="${pageContext.request.contextPath}/static/pnsadmin/Base/js/filter.js"></script>--%>
+

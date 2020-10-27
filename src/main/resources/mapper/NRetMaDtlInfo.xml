@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.NRetMaDtlDAO" >
+    <resultMap type="pnc.mesadmin.entity.NRetMaDtlInfo" id="RetMaDtlInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="retGd" column="retGd" />
+        <result property="retCode" column="retCode" />
+        <result property="maVerGd" column="maVerGd" />
+        <result property="unitName" column="unitName" />
+        <result property="num" column="num" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <insert id="Insert">
+        INSERT INTO
+        tpm_nretmadtlinfo(Guid,RetGd,RetCode,MaVerGd,Num,UnitName,Creator,CreateTime)
+        VALUES
+            (#{guid},#{retGd},#{retCode},#{maVerGd},#{num},#{unitName},#{creator}
+            ,#{createTime})
+    </insert>
+
+    <!-- 新增退料单明细 -->
+    <insert id="InsertRetMaDtlInfo" parameterType="java.util.List">
+        INSERT INTO
+        tpm_nretmadtlinfo(Guid,RetGd,RetCode,MaVerGd,Num,UnitName,Creator,CreateTime)
+        VALUES
+        <foreach collection="list" item="retMaDtlInfo" index="i" separator=",">
+            (#{retMaDtlInfo.guid},#{retMaDtlInfo.retGd},#{retMaDtlInfo.retCode},#{retMaDtlInfo.maVerGd}
+            ,#{retMaDtlInfo.num},#{retMaDtlInfo.unitName},#{retMaDtlInfo.creator}
+            ,#{retMaDtlInfo.createTime})
+        </foreach>
+    </insert>
+
+    <!-- 通过guid查询关联的所有退料明细信息 ZC -->
+    <select id="SelectRetMaDtlInfoByRetGd" resultMap="RetMaDtlInfoResult">
+        SELECT * from tpm_nretmadtlinfo where RetGd = #{guid}
+    </select>
+
+    <!-- 通过ruid查询退料明细信息 ZC -->
+    <select id="SelectRetMaDtlInfoByRuid" resultMap="RetMaDtlInfoResult">
+        SELECT * from tpm_nretmadtlinfo where ruid = #{ruid}
+    </select>
+
+    <!-- 通过退料单号查询退料单明细信息 WHL -->
+    <select id="SelectRetMaDtlInfoByRetCode" resultMap="RetMaDtlInfoResult">
+        SELECT * from tpm_nretmadtlinfo where retCode = #{retCode}
+    </select>
+
+    <select id="SelectAllMaVerInfo" parameterType="java.util.List" resultType="java.util.HashMap">
+        SELECT MaVerGd,SUM(num) num FROM tpm_nretmadtlinfo
+        <foreach collection="list" index="i" item="guid" open="WHERE RetGd IN (" close=")" separator=",">
+            #{guid}
+        </foreach>
+        GROUP BY MaVerGd
+    </select>
+
+</mapper>

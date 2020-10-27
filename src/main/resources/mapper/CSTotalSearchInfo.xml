@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSTotalSearchDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CSTotalSearchInfo" id="resuCSTotalSearchInfo">
+        <id property="Ruid" column="Ruid"/>
+
+    </resultMap>
+
+    <select id="SelectAllInfo" resultMap="resuCSTotalSearchInfo">
+        select * from tpm_cstotalsearchinfo
+    </select>
+
+    <select id="SelectCSTotalSearchInfo" resultMap="resuCSTotalSearchInfo">
+        select * from tpm_cstotalsearchinfo where CSTotalGd=#{CSTotalGd}
+    </select>
+
+    <insert id="InsertCSTotalSearchInfo">
+    INSERT INTO tpm_cstotalsearchinfo(Guid,CSTotalGd,CdName,AliasName,Creator,CreateTime,Remark)
+        VALUES (#{Guid},#{CSTotalGd},#{CdName},#{AliasName},#{Creator},#{CreateTime},#{Remark})
+    </insert>
+
+</mapper>

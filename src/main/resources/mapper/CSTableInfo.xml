@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSTableDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CSTableInfo" id="resuCSTableInfo">
+        <id property="Ruid" column="Ruid"/>
+
+    </resultMap>
+
+    <select id="SelectAllInfo" resultMap="resuCSTableInfo">
+        select * from tpm_cstableinfo
+    </select>
+
+    <select id="SelectCSTableInfo" resultMap="resuCSTableInfo">
+        select * from tpm_cstableinfo WHERE Guid=#{Guid}
+    </select>
+
+    <insert id="InsertCSTableInfo">
+        INSERT INTO tpm_cstableinfo(Guid,SqlConfig,Creator,CreateTime,Remark)
+        VALUES (#{Guid},#{SqlConfig},#{Creator},#{CreateTime},#{Remark})
+    </insert>
+
+    <select id="SelectSQL" resultType="HashMap">
+        ${value}
+    </select>
+    <select id="SelectSQL1" resultType="HashMap">
+        ${value}
+    </select>
+
+</mapper>

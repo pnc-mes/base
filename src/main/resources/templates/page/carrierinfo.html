@@ -1,0 +1,730 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：工具信息
+* 创建人：蒋顾毅
+* 创建时间：2020-10-14
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>载具信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+        .dPanel{
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">载具名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="CarrierName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+        <script type="text/html" id="toolbarScript">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-count-delete" lay-event="delete">删除</button>
+            </div>
+        </script>
+    </div>
+</div>
+
+<!--- 子页面 -->
+<div id="content" style="display: none;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基本信息</li>
+            <li>载具标准值</li>
+            <li>其他信息</li>
+        </ul>
+        <div class="layui-form layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">载具名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="CarrierName" lay-verify="required" class="layui-input" lay-reqtext="名称不能为空" placeholder="请输入模板名称" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">工厂</label>
+                    <div class="layui-input-block">
+                        <div id="FaName" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">供应商</label>
+                    <div class="layui-input-block">
+                        <div id="SupName" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">序列号</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="VenderSN" name="VenderSN" lay-verify="required" class="layui-input" placeholder="请输入序列号" />
+                    </div>
+                </div>
+
+                <!--
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">保养计划</label>
+                    <div class="layui-input-block">
+                        <div id="FrePlanName" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">点检计划</label>
+                    <div class="layui-input-block">
+                        <div id="CheckPlanName" class="xm-select-demo"></div>
+                    </div>
+                </div>
+                -->
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">载具家族</label>
+                    <div class="layui-input-block">
+                        <div id="CarrierFamilyName" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">状态模型</label>
+                    <div class="layui-input-block">
+                        <div id="ModelName" class="xm-select-demo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-tab-item">
+                <!-- 载具标准值 -->
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">参考信息</label>
+                    <div class="layui-input-block">
+                        <textarea id="reference" name="reference" class="layui-textarea" ></textarea>
+                    </div>
+                </div>
+
+                <!--div class="layui-form-item">
+                    <label class="layui-form-label required">标准值名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="KeyName" lay-verify="required" class="layui-input" placeholder="请输入标准值名称" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">标准值</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="KeyValue" lay-verify="required" class="layui-input" placeholder="请输入标准值" />
+                    </div>
+                </div>-->
+
+                <table class="layui-hide" id="inParamsTableId" lay-filter="inTableFilter"></table>
+            </div>
+
+            <div class="layui-tab-item" id="other">
+                <!-- 其它 -->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="creator" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="createTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyMan" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea id="remark" name="remark" class="layui-textarea inputRead" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'element','xmSelect'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            xmSelect = layui.xmSelect,
+            table = layui.table;
+
+        //页面首次加载
+        load();
+
+        //单选通用设置
+        let radioSetting = {
+            radio: true
+            ,clickClose: true
+            ,theme: {
+                color: '#5FB878',
+            },model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            },toolbar: {
+                show: true,
+            },
+            filterable: true
+        }
+
+        //tree通用设置
+        let treeSetting = {
+            show: true,
+            showFolderIcon: true,
+            showLine: true,
+            indent: 20,
+            expandedKeys: true,
+            strict: false,
+            simple: false
+        }
+
+        //加载工厂
+        let FaNameS = xmSelect.render({
+            el: '#FaName'
+            ,...radioSetting
+            ,prop: {
+                name: 'FaName',
+                value: 'FaRd',
+            }
+            ,data: []
+        });
+        requests({url: "/Factory/GetAllFaNew"}, function (res) {
+            FaNameS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载工具家族
+        let CarrierFamilyNameS = xmSelect.render({
+            el: '#CarrierFamilyName'
+            ,...radioSetting
+            ,prop: {
+                name: 'CarrierFamilyName',
+                value: 'CarrierFamilyRd',
+            }
+            ,data: []
+        });
+        requests({url: "/CarrierFamily/GetAllCarrierFamilyNew"}, function (res) {
+            CarrierFamilyNameS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载状态模型
+        let ModelNameS = xmSelect.render({
+            el: '#ModelName'
+            ,...radioSetting
+            ,prop: {
+                name: 'ModelName',
+                value: 'DSMRd',
+            }
+            ,data: []
+        });
+        requests({url: "/DevSM/GetAllDevSMNew"}, function (res) {
+            ModelNameS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载供应商
+        let SupNameS = xmSelect.render({
+            el: '#SupName'
+            ,...radioSetting
+            ,prop: {
+                name: 'SupName',
+                value: 'SupRd',
+            }
+            ,data: []
+        });
+        requests({url: "/Supplier/GetAllSupNew"}, function (res) {
+            SupNameS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        /*//加载保养计划
+        let FrePlanNameS = xmSelect.render({
+            el: '#FrePlanName'
+            ,...radioSetting
+            ,prop: {
+                name: 'FrePlanName',
+                value: 'FrePlanRd',
+            }
+            ,data: []
+        });
+        requests({url: "/FrePlan/GetAllFrePlanNew"}, function (res) {
+            FrePlanNameS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        let CyclePlanNameS = xmSelect.render({
+            el: '#CyclePlanName'
+            ,...radioSetting
+            ,prop: {
+                name: 'CyclePlanName',
+                value: 'CyclePlanRd',
+            }
+            ,data: []
+        });
+        requests({url: "/CyclePlan/GetAllCyclePlanNew"}, function (res) {
+            FrePlanNameS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载点检计划
+        let CheckPlanNameS = xmSelect.render({
+            el: '#CheckPlanName'
+            ,...radioSetting
+            ,prop: {
+                name: 'CheckPlanName',
+                value: 'CheckPlanRd',
+            }
+            ,data: []
+        });
+        requests({url: "/CheckPlan/GetAllCheckPlanNew"}, function (res) {
+            CheckPlanNameS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });*/
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                clear();
+                let index = layer.open({
+                    title: '添加载具信息',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['90%', '75%'],
+                    content: $("#content"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                //获取选中id
+                let carrierId = data.CarrierRd;
+                requests({url: "/Carrier/GetCarrierInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify({"CarrierRd": carrierId})
+                    }}, function (res) {
+                    let data = res.Data;
+
+                    clear();
+
+                    loadData(data, false);
+
+                    let index = layer.open({
+                        title: '编辑载具信息',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin:true,
+                        shadeClose: true,
+                        area: ['50%', '70%'],
+                        content: $("#content"),
+                        btn: ['确认保存'],
+                        yes: function (index, layero) {
+                            save(index, 2, carrierId);
+                        }
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                });
+
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    requests({url: "/Carrier/SaveCarrierInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                            "BusData": JSON.stringify({CarrierRd: data.CarrierRd})
+                        }}, function (res) {
+                        layer.msg("删除成功", {icon: 1});
+                        table.reload('currentTableId');
+                    });
+
+                    layer.close(index);
+                });
+            } else if(obj.event === 'read') {
+                read(data);
+
+                return false;
+            }
+        });
+
+        //监听行双击事件
+        table.on('rowDouble(currentTableFilter)', function(obj){
+            read(obj.data);
+            return false;
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: [
+                        {
+                            fieldName: "CarrierName",
+                            fieldOpt: "like",
+                            fieldVal: data.field.CarrierName
+                        },
+                        {
+                            fieldName: "Ruid",
+                            fieldOpt: "Order BY",
+                            fieldVal: ""
+                        }
+                    ]
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //script toolbar监听事件
+        table.on('toolbar(inTableFilter)', function (obj) {
+            if (obj.event === 'add') {
+                let data = table.cache['inParamsTableId'];
+                data.push({
+                    KeyName: '',
+                    KeyValue: ''
+                });
+                table.reload("inParamsTableId", {data: data});
+            }else if(obj.event === 'delete'){
+                let data = table.cache['inParamsTableId'].filter(item => !item.LAY_CHECKED);
+                table.reload("inParamsTableId", {data: data});
+            }
+        });
+
+        //查看
+        function read(data) {
+            //获取选中id
+            let carrierId = data.CarrierRd;
+            requests({url: "/Carrier/GetCarrierInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({"CarrierRd": carrierId})
+                }}, function (res) {
+                let data = res.Data;
+
+                clear();
+
+                loadData(data, true);
+
+                let index = layer.open({
+                    title: '查看载具信息',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#content"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+        }
+
+        //保存
+        function save(index, type, carrierId) {
+            //type-> 1.新增 2.编辑
+            let data = {
+                CarrierName: $("#CarrierName").val(),
+                VenderSN: $("#VenderSN").val(),
+
+                FaRd: FaNameS.getValue("valueStr"),
+                CarrierFamilyRd: CarrierFamilyNameS.getValue("valueStr"),
+                DSMRd: ModelNameS.getValue("valueStr"),
+                SupplierRd: SupNameS.getValue("valueStr"),
+                PMInfo: [],
+                CheckPlanInfo: [],
+
+                CarrierBZInfo: {
+                    Reference: $("#reference").val(),
+                    BZDtl: table.cache['inParamsTableId'].map(o => {return {KeyName: o.KeyName, KeyValue: o.KeyValue}})
+                }
+            };
+            if(type === 1){
+                requests({url: "/Carrier/SaveCarrierInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }else if(type === 2){
+                data.CarrierRd = carrierId;
+                requests({url: "/Carrier/SaveCarrierInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/Carrier/GetAllCarriersNew",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {field: 'CarrierRd', title: 'ID', sort: true},
+                        {field: 'CarrierName', title: '载具名称'},
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+
+
+            //输入表格
+            table.render({
+                elem: '#inParamsTableId',
+                toolbar: '#toolbarScript',
+                cols: [
+                    [
+                        {type:'checkbox'},
+                        {field: 'KeyName', title: '标准值名称', edit: true},
+                        {field: 'KeyValue', title: '标准值', edit: true}
+                    ]
+                ],
+                data: [],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row ',
+                defaultToolbar: []
+            });
+        }
+
+        //赋值渲染
+        function loadData(data, type) {
+            $("#CarrierName").val(data.CarrierName);
+            $("#VenderSN").val(data.VenderSN);
+
+            FaNameS.setValue(data.Factory == undefined ? [] : [data.Factory.FaRd]);
+            CarrierFamilyNameS.setValue(data.CarrierFamily.CarrierFamilyRd == undefined ? [] : [data.CarrierFamily.CarrierFamilyRd]);
+            ModelNameS.setValue(data.Model == undefined ? [] : [data.Model.DSMRd]);
+            SupNameS.setValue(data.Suppier == undefined ? [] : [data.Suppier.SupRd]);
+           // FrePlanNameS.setValue(data.PMInfo == undefined ? [] : [{}]/*data.PMInfo*/);
+           // CheckPlanNameS.setValue(data.CheckPlanInfo.CheckPlanRd == undefined ? [] : [data.CheckPlanInfo.CheckPlanRd]);
+           // CyclePlanNameS.setValue(data.CheckPlanInfo.CyclePlanRd == undefined ? [] : [data.CheckPlanInfo.CyclePlanRd]);
+
+            if(data.CarrierBZInfo){
+                $("#reference").val(data.CarrierBZInfo.Reference);
+                table.reload("inParamsTableId", {data: data.CarrierBZInfo.BZDtl});
+            }
+
+
+            $("#creator").val(data.Creator);
+            $("#createTime").val(data.CreateTime);
+            $("#lastModifyMan").val(data.LastModifyMan);
+            $("#lastModifyTime").val(data.LastModifyTime);
+            $("#remark").val(data.Remark);
+
+            $("#content input").prop("disabled", type);
+            //true->禁用
+            if(type){
+                $("#content input").addClass("inputRead");
+                $("#remark").addClass("inputRead");
+                $("#remark").prop("disabled", true);
+                $("#reference").addClass("inputRead");
+                $("#reference").prop("disabled", true);
+            }else{
+                $("#content input").removeClass("inputRead");
+                $("#remark").removeClass("inputRead");
+                $("#remark").prop("disabled", false);
+                $("#reference").removeClass("inputRead");
+                $("#reference").prop("disabled", false);
+                $("#creator").addClass("inputRead");
+                $("#createTime").addClass("inputRead");
+                $("#lastModifyMan").addClass("inputRead");
+                $("#lastModifyTime").addClass("inputRead");
+                $("#creator").prop("disabled", true);
+                $("#createTime").prop("disabled", true);
+                $("#lastModifyMan").prop("disabled", true);
+                $("#lastModifyTime").prop("disabled", true);
+            }
+
+            FaNameS.update({disabled: type});
+            CarrierFamilyNameS.update({disabled: type});
+            ModelNameS.update({disabled: type});
+            SupNameS.update({disabled: type});
+            //FrePlanNameS.update({disabled: type});
+            //CheckPlanNameS.update({disabled: type});
+            form.render("select");
+        }
+
+        //清空
+        function clear() {
+            $("#CarrierName").val("");
+            $("#VenderSN").val("");
+
+            FaNameS.setValue([]);
+            CarrierFamilyNameS.setValue([]);
+            ModelNameS.setValue([]);
+            SupNameS.setValue([]);
+            //FrePlanNameS.setValue([]);
+            //CheckPlanNameS.setValue([]);
+            form.render("select");
+
+            table.reload('inParamsTableId', {
+                toolbar: '#toolbarScript'
+            });
+
+            $("#reference").val("");
+            table.reload("inParamsTableId", {data: []});
+
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+            $("#remark").val("");
+
+            $("#content input").prop("disabled", false);
+
+            $("#content input").removeClass("inputRead");
+            $("#remark").removeClass("inputRead");
+            $("#remark").prop("disabled", false);
+            $("#reference").removeClass("inputRead");
+            $("#reference").prop("disabled", false);
+            $("#creator").addClass("inputRead");
+            $("#createTime").addClass("inputRead");
+            $("#lastModifyMan").addClass("inputRead");
+            $("#lastModifyTime").addClass("inputRead");
+            $("#creator").prop("disabled", true);
+            $("#createTime").prop("disabled", true);
+            $("#lastModifyMan").prop("disabled", true);
+            $("#lastModifyTime").prop("disabled", true);
+
+            FaNameS.update({disabled: false});
+            CarrierFamilyNameS.update({disabled: false});
+            ModelNameS.update({disabled: false});
+            SupNameS.update({disabled: false});
+            //FrePlanNameS.update({disabled: false});
+            //CheckPlanNameS.update({disabled: false});
+            form.render("select");
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CarrierCheckPlanInfoDAO">
+    <resultMap type="pnc.mesadmin.entity.CarrierCheckPlanInfo" id="CarrierCheckPlanInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="CarrierGd" column="CarrierGd" />
+        <result property="CheckPlanGd" column="CheckPlanGd" />
+    </resultMap>
+
+
+    <insert id="AddCarrierCheckPlanInfo">
+        INSERT INTO tpm_carriercheckplaninfo(Guid,CarrierGd,CheckPlanGd)
+        VALUES (#{Guid},#{CarrierGd},#{CheckPlanGd})
+    </insert>
+
+    <select id="SelectCarrierCheckPlanInfoByGd" resultMap="CarrierCheckPlanInfoMap">
+        select * from tpm_carriercheckplaninfo where CarrierGd=#{Guid}
+    </select>
+
+    <delete id="deleteByCarrierCheckPlanInfoGd">
+        delete from  tpm_carriercheckplaninfo where CarrierGd=#{CarrierGd}
+    </delete>
+
+    <select id="SelectCarrierCheckPlanInfoByCheckPlanGd" resultMap="CarrierCheckPlanInfoMap">
+        select * from tpm_carriercheckplaninfo where CheckPlanGd=#{CheckPlanGd}
+    </select>
+
+
+    <delete id="deleteByCheckPlanGd">
+        delete from  tpm_carriercheckplaninfo where CheckPlanGd=#{CheckPlanGd}
+    </delete>
+
+
+</mapper>

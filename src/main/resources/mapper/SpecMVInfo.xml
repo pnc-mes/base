@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SpecMVDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.SpecMVInfo" id="SpecMVInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="batch" column="batch" />
+		<result property="lineGd" column="lineGd" />
+		<result property="wFVerGd" column="wFVerGd" />
+		<result property="wFName" column="wFName" />
+		<result property="sSpecVerGd" column="sSpecVerGd" />
+		<result property="sSpecVerName" column="sSpecVerName" />
+		<result property="tSpecVerGd" column="tSpecVerGd" />
+		<result property="tSpecName" column="tSpecName" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+    <!-- 新增非标准移动信息 (By-pjf)-->
+	<insert id="InsertSpecMV">
+		INSERT INTO tpm_specmvinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,batch,lineGd,wFVerGd,wFName,sSpecVerGd,sSpecVerName,tSpecVerGd,tSpecName,Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{batch},#{lineGd},#{wFVerGd},#{wFName},#{sSpecVerGd},#{sSpecVerName},
+            #{tSpecVerGd},#{tSpecName},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+</mapper>

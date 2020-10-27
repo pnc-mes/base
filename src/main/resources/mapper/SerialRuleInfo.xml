@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SerialRuleDAO" >
+    <resultMap id="serialRuleInfoMap" type="pnc.mesadmin.entity.SerialRuleInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="AliasCode" property="aliasCode"></result>
+        <result column="RuleName" property="ruleName"></result>
+        <result column="IsScript" property="isScript"></result>
+        <result column="ScriptName" property="scriptName"></result>
+        <result column="Prefix" property="prefix"></result>
+        <result column="Suffix" property="suffix"></result>
+        <result column="SNLength" property="sNLength"></result>
+        <result column="Start" property="start"></result>
+        <result column="Step" property="step"></result>
+        <result column="LastLevel" property="lastLevel"></result>
+        <result column="Reset" property="reset"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime" ></result>
+        <result column="LastModifyMan" property="lastModifyMan" ></result>
+        <result column="LastModifyTime" property="lastModifyTime" ></result>
+        <result column="Remark" property="remark" ></result>
+    </resultMap>
+    <!--增加序号管理信息 张亮亮-->
+    <insert id="InsertSerialRuleInfo">
+        INSERT INTO `tpm_serialruleinfo`(Guid,AliasCode,RuleName,IsScript,ScriptName,Prefix,Suffix,SNLength,Start,Step,LastLevel,Reset,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{aliasCode},#{ruleName},#{isScript},#{scriptName},#{prefix},#{suffix},#{sNLength},#{start},#{step},#{lastLevel},#{reset},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+    <!--删除序号管理信息 张亮亮-->
+    <delete id="DeleteSerialRuleInfo">
+           DELETE  FROM `tpm_serialruleinfo` WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新序号管理信息 张亮亮-->
+    <update id="UpdataSerialRuleInfo">
+        UPDATE `tpm_serialruleinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+                AliasCode = #{ aliasCode },
+
+            <if test="ruleName != null">
+                RuleName = #{ ruleName },
+            </if>
+
+            <if test="isScript != null">
+                IsScript = #{ isScript },
+            </if>
+                ScriptName = #{ scriptName },
+
+
+                Prefix = #{ prefix },
+
+
+                Suffix = #{ suffix },
+
+                SNLength = #{ sNLength },
+
+                Start = #{ start },
+
+                Step = #{ step },
+
+                LastLevel = #{ lastLevel },
+
+                Reset = #{ reset },
+
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+    <!--查询序号管理信息 张亮亮-->
+    <select id="SelectSerialRuleInfo" resultMap="serialRuleInfoMap">
+        SELECT * FROM `tpm_serialruleinfo`
+    </select>
+
+    <!--根据ruid查询序号管理信息 张亮亮-->
+    <select id="SelectSerialRuleInfoByruid" parameterType="int" resultMap="serialRuleInfoMap">
+         SELECT * FROM `tpm_serialruleinfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--根据guid查询序号管理信息 张亮亮-->
+    <select id="SelectSerialRuleInfoByguid" parameterType="string" resultMap="serialRuleInfoMap">
+        SELECT * FROM `tpm_serialruleinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--根据名称查询序号管理信息 张亮亮-->
+    <select id="SelectSerialRuleInfoByRuleName" parameterType="string" resultMap="serialRuleInfoMap">
+        SELECT * FROM `tpm_serialruleinfo` WHERE RuleName=#{ruleName}
+    </select>
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SpecDAO" >
+    <resultMap id="specInfoMap" type="pnc.mesadmin.entity.SpecInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="SpecName" property="specName"></result>
+        <result column="VerGd" property="verGd"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime" ></result>
+        <result column="LastModifyMan" property="lastModifyMan" ></result>
+        <result column="LastModifyTime" property="lastModifyTime" ></result>
+        <result column="Remark" property="remark" ></result>
+    </resultMap>
+
+    <!--增加工序信息 张亮亮-->
+    <insert id="InsertSpecInfo">
+        INSERT INTO `tpm_specinfo`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,SpecName,Creator,CreateTime,
+            <if test="verGd!=null and verGd!=''">
+                VerGd,
+            </if>
+            <if test="lastModifyMan!=null and lastModifyMan!=''">
+                LastModifyMan,
+            </if>
+            <if test="lastModifyTime!=null and lastModifyTime!=''">
+                LastModifyTime,
+            </if>
+            <if test="remark!=null and remark!=''">
+                Remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")"  suffixOverrides=",">
+            #{guid},#{specName}, #{creator},#{createTime},
+            <if test="verGd!=null and verGd!=''">
+                #{verGd},
+            </if>
+            <if test="lastModifyMan!=null and lastModifyMan!=''">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime!=null and lastModifyTime!=''">
+                #{lastModifyTime},
+            </if>
+            <if test="remark!=null and remark!=''">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除工序信息 张亮亮-->
+    <delete id="DeleteSpecInfoByruid">
+        DELETE FROM `tpm_specinfo` WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新工序信息 张亮亮-->
+    <update id="UpdateSpecInfo">
+        UPDATE `tpm_specinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="specName != null">
+                SpecName = #{ specName },
+            </if>
+            <if test="verGd != null">
+                VerGd = #{ verGd },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+
+
+
+
+
+    <!--查询工序信息 张亮亮-->
+    <select id="SelectSpecInfo" resultMap="specInfoMap">
+        SELECT * FROM`tpm_specinfo`
+    </select>
+
+
+    <!--查询工序信息根据ruid 张亮亮-->
+    <select id="SelectSpecInfoByruid" resultMap="specInfoMap" parameterType="int">
+        SELECT * FROM`tpm_specinfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--查询工序信息根据ruid 张亮亮-->
+    <select id="SelectSpecInfoByguid" resultMap="specInfoMap" parameterType="string">
+        SELECT * FROM`tpm_specinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--查询工序名称 LFZ-->
+    <select id="SelectSpecName" resultMap="specInfoMap">
+        SELECT * FROM`tpm_specinfo`WHERE SpecName=#{specName}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,448 @@
+<!--
+* @Description 设备信息
+* @Author yin.yang
+* @Param
+* @Return
+* @Exception
+*-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>工厂管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工厂管理</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" name="FaName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加</button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="factoryList" lay-filter="factoryList" style="font-size: 5px"></table>
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+
+<!--- 新增页 -->
+<div id="content" style="display: none;">
+    <form class="layui-form" lay-filter="addContent" id="addContent" style="width: 90%;margin-top: 20px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">工厂名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="FaName" required lay-verify="required" lay-reqtext="工厂名称不能为空"
+                       placeholder="请输入工厂名称"
+                       value="" class="layui-input">
+                <input type="text" name="FaRd" value="" class="layui-input" style="display: none">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系人</label>
+            <div class="layui-input-block">
+                <input type="text" id="Contactor" name="Contactor" required lay-verify="required" lay-reqtext="联系人不能为空"
+                       placeholder="请输入联系人"
+                       value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地址</label>
+            <div class="layui-input-block">
+                <input type="text" id="Address" name="Address" required lay-verify="required" lay-reqtext="地址不能为空" placeholder="请输入地址" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属企业</label>
+            <div class="layui-input-block">
+                <select xm-select-width="300px" lay-verify="required" name="CpRd"  xm-select="select_Company" xm-select-radio
+                        xm-select-search-type="dl" xm-select-search>
+                    <option value="">请选择设备类型</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注信息</label>
+            <div class="layui-input-block">
+                <textarea name="Remark" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="addFactory">提交
+                </button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 详情页 -->
+<form class="layui-form layuimini-form" id="readContent" lay-filter="readContent" style="display: none;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基础信息</li>
+            <li>其它</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">工厂名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="FaName" disabled class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Contactor" disabled class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Address" disabled value="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所属企业</label>
+                    <div class="layui-input-block">
+                        <select xm-select-width="300px" name="CpRd" disabled required xm-select="select_Company" xm-select-radio
+                                xm-select-search-type="dl" xm-select-search>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注信息</label>
+                    <div class="layui-input-block">
+                        <textarea name="Remark" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!--其它信息-->
+            <div class="layui-tab-item">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="creator" name="creator" lay-verify="required" disabled
+                               class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="createTime" name="createTime" lay-verify="required" disabled
+                               class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyMan" name="lastModifyMan" lay-verify="required" disabled
+                               class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyTime" name="lastModifyTime" lay-verify="required" disabled
+                               class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea id="remark_detail" name="remark_detail" class="layui-textarea inputRead"
+                                  disabled></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'formSelects', 'element', 'laydate', 'util'], function () {
+        var table = layui.table,
+            form = layui.form,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            util = layui.util,
+            laydate = layui.laydate,
+            $ = layui.jquery;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#entryTime' //指定元素
+        });
+
+        /**
+         * 列表分页
+         * */
+        table.render({
+            id: 'factoryList',
+            height: 650,
+            elem: '#factoryList',
+            url: getBasePath() + '/Factory/GetAllFaInfoV2', //数据接口
+            method: 'post', //类型
+            title: '设备信息',
+            toolbar: '#toolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            totalRow: true, //开启合计
+            page: true,  //开启分页
+            limits: [10, 30, 50, 100, 500],
+            cols: [
+                [
+                    {field: 'factoryName', title: '工厂名称', width: 300, sort: true, fixed: 'left'}
+                    , {field: 'contactor', title: '联系人', width: 160}
+                    , {field: 'address', title: '地址', width: 200}
+                    , {
+                    field: 'createTime', title: '时间', sort: true, width: 180, templet: function (d) {
+                        return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                    , {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                ]
+            ],
+            parseData: function (res) {
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.body.msgDes, //解析提示文本
+                    "count": res.body.data == null ? 0 : res.body.data.total, //解析数据长度
+                    "data": res.body.data == null ? "" : res.body.data.records //解析数据列表
+                };
+            }
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('factoryList', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    "FaName": data.field.FaName,
+                }
+            }, 'data');
+
+            return false;
+        });
+
+
+        /**
+         * 表格操作项
+         * */
+        //表格中按钮事件
+        table.on('tool(factoryList)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                $("#addContent")[0].reset();
+                formSelects.value('select_Company', []);
+                requests({
+                    url: "/Factory/GetFaInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00","BusData": JSON.stringify({"FaRd":data.ruid})}
+                }, function (res) {
+                    let data = res.Data;
+                    form.val('addContent', {
+                        "FaRd": data.FaRd,
+                        "FaName": data.FaName,
+                        "Contactor": data.Contactor,
+                        "Address": data.Address,
+                        "Remark": data.Remark,
+                    });
+                    layui.formSelects.value('select_Company', [data.CpRd]);
+
+                    let index = layer.open({
+                        title: '查看设备详情',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['55%', '55%'],
+                        content: $("#content"),
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('确定删除！', function (index) {
+                    requests({
+                        url: "/Factory/SaveFaInfo",
+                        contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01","BusData": JSON.stringify({"FaRd":data.ruid})}
+                    }, function (res) {
+                        layer.msg("删除成功", {icon: 1});
+                        obj.del();
+                    });
+
+                    layer.close(index);
+                });
+            } else if (obj.event === 'read') {
+                read(data);
+
+                return false;
+            }
+        });
+
+        //查看
+        function read(data) {
+            //获取选中id
+            requests({
+                url: "/Factory/GetFaInfo", contentType: "application/x-www-form-urlencoded",data: {"ExecType": "00","BusData": JSON.stringify({"FaRd":data.ruid})}
+            }, function (res) {
+                let data = res.Data;
+                form.val('readContent', {
+                    "FaName": data.FaName,
+                    "Contactor": data.Contactor,
+                    "Address": data.Address,
+                    "Remark": data.Remark,
+
+                    "creator": data.creator,
+                    "createTime": util.toDateString(data.createTime, "yyyy-MM-dd HH:mm:ss"),
+                    "lastModifyMan": data.lastModifyMan,
+                    "lastModifyTime": data.lastModifyTime,
+                    "remark_detail": data.Remark
+                });
+                layui.formSelects.value('select_Company', [data.CpRd]);
+
+                let index = layer.open({
+                    title: '查看设备详情',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['55%', '55%'],
+                    content: $("#readContent"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+        }
+
+
+        /**
+         * 新增操作
+         * */
+        //toolbar监听事件
+        table.on('toolbar(factoryList)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                $("#addContent")[0].reset();
+                formSelects.value('select_Company', []);
+                let index = layer.open({
+                    title: '工厂新增',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['55%', '55%'],
+                    content: $("#content"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //提交操作
+        form.on('submit(addFactory)', function (data) {
+            if (data.field.FaRd != "") {
+                save(layer.index, 2, data.field.FaRd);
+            } else {
+                save(layer.index, 1);
+            }
+            return;
+        });
+
+        //保存
+        function save(index, type, id) {
+            //type-> 1.新增 2.编辑
+            let data=form.val('addContent');
+            if (type === 1) {
+                requests({url: "/Factory/SaveFaInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00","busData": JSON.stringify(data)}}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('factoryList');
+                });
+            } else if (type === 2) {
+                requests({url: "/Factory/SaveFaInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02","busData": JSON.stringify(data)}}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('factoryList');
+                });
+            }
+        }
+
+        //select查询
+        formSelects.config('select_Company', {
+            type: 'post',
+            head: 'application/json;charset=UTF-8',
+        }, true);
+
+        formSelects.data('select_Company', 'server', {
+            url: getBasePath() + '/BaseRequestSelect/GetAllCompany',
+            beforeSuccess: function (id, url, searchVal, result) {
+                result = result.body.data;
+                $.each(result, function (index, item) {
+                    item.name = item.companyName;
+                    item.value = item.ruid;
+                });
+                return result;
+            }
+        });
+
+        //清空
+        function clear() {
+            $("#addContent")[0].reset();
+            $("#readContent")[0].reset();
+            table.reload('factoryList', {
+                data: []
+            });
+            formSelects.value('select_Company', []);
+            form.render();
+        }
+    });
+
+</script>
+</html>

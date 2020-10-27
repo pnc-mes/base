@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SysVerDao">
+    <resultMap type="pnc.mesadmin.entity.SysVerInfo" id="SysVerInfoResult">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+
+    <select id="SelectSysVerInfoByRuid" resultMap="SysVerInfoResult">
+        select * from tpm_sysverinfo where Ruid=#{ruid}
+    </select>
+
+    <select id="SelectSysVerInfoByGuid" resultMap="SysVerInfoResult">
+        select * from tpm_sysverinfo where Guid=#{guid}
+    </select>
+
+    <select id="SelectAllByStatus" resultMap="SysVerInfoResult">
+        select * from tpm_sysverinfo where Status=#{status}
+    </select>
+
+    <select id="SelectSysVerInfoAll" resultMap="SysVerInfoResult">
+        select * from tpm_sysverinfo
+    </select>
+
+    <select id="SelectSysVerInfoBySysVerName" resultMap="SysVerInfoResult">
+        select * from tpm_sysverinfo where sysVerName=#{sysVerName}
+    </select>
+
+    <insert id="InsertSysverInfo">
+        insert into tpm_sysverinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            guid,creator,createTime,sysVerName,status,
+            <if test="sourceSysVGd!=null">
+                sourceSysVGd,
+            </if>
+            <if test="lastModifyMan!=null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime!=null">
+                lastModifyTime,
+            </if>
+            <if test="remark!=null">
+                remark
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{creator},#{createTime},#{sysVerName},#{status},
+            <if test="sourceSysVGd!=null">
+                #{sourceSysVGd},
+            </if>
+            <if test="lastModifyMan!=null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime!=null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark!=null">
+                #{remark}
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除历史任务信息-->
+    <delete id="DelSysverInfo">
+        delete from tpm_sysverinfo where ruid=#{ruid}
+    </delete>
+
+    <update id="UpSysverInfo">
+        update tpm_sysverinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="status != null">
+                Status = #{status},
+            </if>
+        </trim>
+        WHERE Ruid = #{ruid}
+    </update>
+
+</mapper>

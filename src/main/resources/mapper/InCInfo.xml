@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.InCDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.InCInfo" id="inCInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="inCCode" column="InCCode" />
+        <result property="purChCode" column="PurChCode" />
+        <result property="sourceType" column="sourceType" />
+        <result property="status" column="Status" />
+        <result property="sStatus" column="sStatus" />
+        <result property="dSource" column="dSource" />
+        <result property="f1" column="f1" />
+        <result property="f2" column="f2" />
+        <result property="f3" column="f3" />
+        <result property="f4" column="f4" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--查询来料单信息-->
+    <select id="SelectInCInfo" resultMap="inCInfoMap">
+        SELECT * FROM tpm_incinfo
+    </select>
+
+    <!--新增来料单信息是不允许重复-->
+    <select id="SelectInCInfoByInCCode"  resultType="_int">
+        SELECT COUNT(ruid) FROM tpm_incinfo WHERE InCCode=#{inCCode}
+    </select>
+
+    <!--新增来料单信息-->
+    <insert id="InsertInCInfo">
+        INSERT INTO `tpm_incinfo`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,InCCode,PurChCode,sourceType,Status,sStatus,dSource,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark,
+
+            <if test="f1 != null">
+                f1,
+            </if>
+            <if test="f2 != null">
+                f2,
+            </if>
+            <if test="f3 != null">
+                f3,
+            </if>
+            <if test="f4 != null">
+                f4,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{inCCode},#{purChCode},#{sourceType},#{status},#{sStatus},#{dSource},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark},
+
+            <if test="f1 != null">
+                #{f1},
+            </if>
+            <if test="f2 != null">
+                #{f2},
+            </if>
+            <if test="f3 != null">
+                #{f3},
+            </if>
+            <if test="f4 != null">
+                #{f4},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新来料单明细信息-->
+    <update id="UpdateInCInfoByRuid">
+        UPDATE `tpm_incinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="inCCode != null">
+                InCCode = #{ inCCode },
+            </if>
+            <if test="purChCode != null">
+                PurChCode = #{ purChCode },
+            </if>
+            <if test="sourceType != null">
+                sourceType = #{ sourceType },
+            </if>
+            <if test="status != null">
+                Status = #{ status },
+            </if>
+            <if test="sStatus != null">
+                sStatus = #{ sStatus },
+            </if>
+            <if test="dSource != null">
+                DSource = #{ dSource },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="f1 != null">
+                f1 = #{ f1 },
+            </if>
+            <if test="f2 != null">
+                f2 = #{ f2 },
+            </if>
+            <if test="f3 != null">
+                f3 = #{ f3 },
+            </if>
+            <if test="f4 != null">
+                f4 = #{ f4 },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <!--根据来料单单号获取来料单信息 王怀龙-->
+    <select id="SelectByInCCode"  resultMap="inCInfoMap">
+        SELECT * FROM tpm_incinfo WHERE InCCode=#{inCCode}
+    </select>
+
+
+    <!-- 根据Ruid查询来料单信息  (pjf) -->
+    <select id="SelectByRuid" resultMap="inCInfoMap">
+        SELECT * FROM tpm_incinfo WHERE Ruid = #{ argRuid }
+    </select>
+
+    <!-- 根据Guid查询来料单信息  (pjf) -->
+    <select id="SelectByGuid" resultMap="inCInfoMap">
+        SELECT * FROM tpm_incinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <delete id="DeleteInCInfo">
+        DELETE FROM tpm_incinfo WHERE Ruid=#{ruid}
+    </delete>
+
+    <select id="SelectByInCCodeDSource" resultMap="inCInfoMap">
+        SELECT * FROM tpm_incinfo WHERE InCCode = #{ argInCCode } AND DSource = #{ argDSource }
+    </select>
+
+    <select id="SelectByF3" resultMap="inCInfoMap">
+        SELECT * FROM tpm_incinfo WHERE F3 = #{ argF3 }
+    </select>
+</mapper>

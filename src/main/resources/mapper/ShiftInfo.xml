@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ShiftDAO" >
+    <resultMap id="serialRuleInfoMap" type="pnc.mesadmin.entity.ShiftInfo">
+        <id column="Ruid" property="Ruid"></id>
+        <result column="Guid" property="Guid"></result>
+        <result column="ShiftName" property="ShiftName"></result>
+        <result column="Description" property="Description"></result>
+        <result column="StartTime" property="StartTime"></result>
+        <result column="EndTime" property="EndTime"></result>
+        <result column="Creator" property="Creator"></result>
+        <result column="CreateTime" property="CreateTime"></result>
+        <result column="LastModifyMan" property="LastModifyMan"></result>
+        <result column="LastModifyTime" property="LastModifyTime"></result>
+        <result column="Remark" property="Remark"></result>
+    </resultMap>
+
+    <!--根据ShiftName查询一条信息 zll-->
+  <select id="SelectAllShiftInfoByShiftName" resultMap="serialRuleInfoMap" parameterType="string">
+      select * from tpm_shiftinfo where ShiftName=#{ShiftName}
+  </select>
+
+  <select id="SelectAllShiftInfo" resultMap="serialRuleInfoMap">
+      select * from tpm_shiftinfo
+  </select>
+    <select id="SelectShiftByID" resultMap="serialRuleInfoMap">
+        select * from tpm_shiftinfo WHERE Ruid= #{ShiftRd}
+    </select>
+    <insert id="InsertShiftInfo">
+        INSERT INTO tpm_shiftinfo (Guid,ShiftName,Description,StartTime,EndTime,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{ShiftName},#{Description},#{StartTime},#{EndTime},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+    <select id="SelectByGuid" resultMap="serialRuleInfoMap">
+        select * from tpm_shiftinfo WHERE Guid= #{Guid}
+    </select>
+
+    <update id="UpdateShiftInfo">
+        UPDATE tpm_shiftinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Guid != null">
+                Guid = #{Guid},
+            </if>
+            <if test="ShiftName != null">
+                ShiftName = #{ShiftName},
+            </if>
+            <if test="Description != null">
+                Description = #{Description},
+            </if>
+            <if test="StartTime != null">
+                StartTime = #{StartTime},
+            </if>
+            <if test="EndTime != null">
+                EndTime = #{EndTime},
+            </if>
+            <if test="Creator != null">
+                Creator = #{Creator},
+            </if>
+            <if test="CreateTime != null">
+                CreateTime = #{CreateTime},
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{LastModifyMan},
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{LastModifyTime},
+            </if>
+            <if test="Remark != null">
+                Remark = #{Remark}
+            </if>
+        </trim>
+        where Ruid = #{Ruid}
+    </update>
+    <delete id="DeleteShiftInfo">
+         DELETE FROM tpm_shiftinfo WHERE Ruid = #{Ruid}
+    </delete>
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ToolFamilyPMDAO" >
+    <resultMap type="pnc.mesadmin.entity.ToolFamilyPMInfo" id="ToolFamilyPMInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="toolFamilyGd" column="toolFamilyGd" />
+        <result property="pMGd" column="pMGd" />
+        <result property="pMType" column="pMType" />
+
+    </resultMap>
+
+    <select id="selectToolFamilyPMInfoByToolFamilyGd" parameterType="string" resultMap="ToolFamilyPMInfoResult">
+        select * from tpm_toolfamilypminfo where toolFamilyGd=#{toolFamilyGd}
+    </select>
+
+    <insert id="insertToolFamilyPMInfo">
+          insert into tpm_toolfamilypminfo(guid,toolFamilyGd,pMGd,pMType)
+          values (#{guid},#{toolFamilyGd},#{pMGd},#{pMType});
+    </insert>
+
+    <delete id="deleteToolFamilyPMInfo">
+        delete from tpm_toolfamilypminfo where ruid=#{ruid}
+    </delete>
+
+</mapper>

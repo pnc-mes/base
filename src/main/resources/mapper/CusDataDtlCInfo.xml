@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CusDataDtlCDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.CusDataDtlCInfo" id="cusDataDtlCInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="cusDataGd" column="CusDataGd" />
+        <result property="displayName" column="DisplayName" />
+        <result property="val" column="Val" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <select id="SelectCusDataDtlCInfoByCusDataGd" resultMap="cusDataDtlCInfoMap" parameterType="string">
+        select * from `tpm_cusdatadtlcinfo` where CusDataGd=#{cusDataGd}
+    </select>
+
+    <insert id="InsertCusDataDtlCInfo">
+         INSERT INTO tpm_cusdatadtlcinfo
+		(Guid,CusDataGd,DisplayName,Val,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES(#{guid},#{cusDataGd},#{displayName},#{val},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <delete id="DeleteCusDataDtlCInfo" parameterType="int">
+        delete from `tpm_cusdatadtlcinfo`  where Ruid=#{ruid}
+    </delete>
+
+    <select id="selectCusData" resultMap="cusDataDtlCInfoMap">
+        SELECT * FROM tpm_cusdatadtlcinfo t1
+        WHERE  t1.`CusDataGd`=#{Guid}
+    </select>
+
+</mapper>

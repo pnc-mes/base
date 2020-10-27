@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PickDAO" >
+    <resultMap type="pnc.mesadmin.entity.PickInfo" id="pickInfoResult">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="pickCode" column="PickCode" />
+        <result property="assCode" column="AssCode" />
+        <result property="assSource" column="AssSource" />
+        <result property="exStatus" column="ExStatus" />
+        <result property="sStatus" column="sStatus" />
+        <result property="prePickDate" column="PrePickDate" />
+        <result property="createTime" column="CreateTime" />
+        <result property="creator" column="Creator" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+        <result property="dSource" column="dSource" />
+    </resultMap>
+    <!--新增来料单信息-->
+    <insert id="InsertPickInfo">
+        INSERT INTO `tpm_pickinfo`(Guid,AssSource,PickCode,AssCode,ExStatus,sStatus,PrePickDate,CreateTime,Creator,LastModifyMan,LastModifyTime,Remark,dSource)
+        VALUES (#{guid},#{assSource},#{pickCode},#{assCode},#{exStatus},#{sStatus},#{prePickDate},#{createTime},#{creator},#{lastModifyMan},#{lastModifyTime},#{remark},#{dSource})
+    </insert>
+
+    <!--获取领料单列表信息-->
+    <select id="SelectPickInfo" resultMap="pickInfoResult">
+        SELECT * FROM tpm_pickinfo
+    </select>
+
+    <!--根据guid查询-->
+    <select id="SelectPickInfoGuid" resultMap="pickInfoResult">
+        SELECT * FROM tpm_pickinfo p WHERE p.Guid=#{guid}
+    </select>
+
+    <!--删除领料单列表信息-->
+    <delete id="DeletePickInfoByRuid" parameterType="int">
+       DELETE FROM tpm_pickinfo WHERE Ruid=#{ruid}
+    </delete>
+
+
+    <!--获取领料单信息-->
+    <select id="SelectPickInfoByRuid" resultMap="pickInfoResult" parameterType="int">
+        SELECT * FROM tpm_pickinfo WHERE Ruid=#{ruid}
+    </select>
+
+    <!--根据领料单ID查询领料单信息  王怀龙-->
+    <select id="SelectPickInfoByPickCode" resultMap="pickInfoResult">
+        SELECT * FROM tpm_pickinfo WHERE PickCode = #{argPickCode}
+    </select>
+
+    <!--根据关联单号查询多条信息-->
+    <select id="SelectPickInfoByAssCode" resultMap="pickInfoResult" parameterType="string">
+        SELECT * FROM tpm_pickinfo WHERE AssCode = #{assCode}
+    </select>
+
+    <!--根据领料单ID更新领料单信息    王怀龙-->
+    <update id="UpdatePickInfo">
+        UPDATE tpm_pickinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pickCode != null">
+                PickCode = #{pickCode},
+            </if>
+            <if test="assCode != null">
+                AssCode = #{assCode},
+            </if>
+            <if test="assSource != null">
+                AssSource = #{assSource},
+            </if>
+            <if test="exStatus != null">
+                ExStatus = #{exStatus},
+            </if>
+            <if test="sStatus != null">
+                sStatus = #{ sStatus },
+            </if>
+            <if test="prePickDate != null">
+                PrePickDate = #{prePickDate},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime},
+            </if>
+            <if test="creator != null">
+                Creator = #{creator},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        where Ruid = #{ruid}
+    </update>
+
+</mapper>

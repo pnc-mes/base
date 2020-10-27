@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.WFDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.WFInfo" id="WFInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="wFName" column="wFName" />
+        <result property="verGd" column="verGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+    <!-- 新增工艺信息 (By-pjf)-->
+	<insert id="InsertWFInfo">
+        <selectKey keyProperty="ruid" resultType="int" order="AFTER">SELECT LAST_INSERT_ID()</selectKey>
+		INSERT INTO tpm_wfinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,wFName,verGd,Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{wFName},#{verGd},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+    <!-- 删除工艺信息 (By-pjf)-->
+    <delete id="DeleteWFInfo">
+        DELETE FROM tpm_wfinfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+	<!-- 修改工艺信息  (By-pjf)-->
+	<update id="UpdateWFInfo">
+		UPDATE tpm_wfinfo
+		<trim prefix="set" suffixOverrides=",">
+			<if test="wFName != null">
+				wFName = #{ wFName },
+			</if>
+			<if test="verGd != null">
+				verGd = #{ verGd },
+			</if>
+			<if test="lastModifyMan != null">
+				LastModifyMan = #{ lastModifyMan },
+			</if>
+			<if test="lastModifyTime != null">
+				LastModifyTime = #{ lastModifyTime },
+			</if>
+			<if test="remark != null">
+				Remark = #{ remark },
+			</if>
+		</trim>
+		WHERE Ruid = #{ ruid }
+	</update>
+
+    <!-- 查询所有工艺信息 (By-pjf)-->
+	<select id="SelectAllWFInfo" resultMap="WFInfoResult">
+		SELECT * FROM tpm_wfinfo
+	</select>
+
+	<!-- 查询工艺信息 (By-pjf)-->
+	<select id="SelectWFInfo" resultMap="WFInfoResult">
+		SELECT * FROM tpm_wfinfo WHERE Ruid = #{ argRuid }
+	</select>
+
+    <!-- 根据Guid查询工艺信息 (By-pjf)-->
+    <select id="SelectByGuid" resultMap="WFInfoResult">
+        SELECT * FROM tpm_wfinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <!-- 根据WFName查询工艺信息 (By-pjf)-->
+	<select id="SelectByName" resultMap="WFInfoResult">
+		SELECT * FROM tpm_wfinfo WHERE WFName = #{ argWFName }
+	</select>
+
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSSearchDDInfoDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CSSearchDDInfo" id="CSSearchDDInfoResult">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAll" resultMap="CSSearchDDInfoResult">
+        SELECT * FROM tpm_cssearchddinfo
+    </select>
+
+    <select id="SelectCSSearchDDInfo" resultMap="CSSearchDDInfoResult">
+        SELECT * FROM tpm_cssearchddinfo where CSSearchFieldGd=#{CSSearchFieldG}
+    </select>
+
+    <select id="Select" resultType="java.util.HashMap">
+        ${value}
+    </select>
+
+    <insert id="InsertCSSearchDDInfo">
+        INSERT INTO tpm_cssearchddinfo(Guid,CSSearchFieldGd,DisFieldName,ValFiledName,SqlConfig,Creator,CreateTime,Remark)
+        VALUES (#{Guid},#{CSSearchFieldGd},#{DisFieldName},#{ValFiledName},#{SqlConfig},#{Creator},#{CreateTime},#{Remark})
+    </insert>
+
+</mapper>

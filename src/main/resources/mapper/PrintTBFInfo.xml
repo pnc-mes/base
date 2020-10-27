@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PrintTBFDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.PrintTBFInfo" id="PrintTBFInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="printTGd" column="printTGd" />
+        <result property="fieldCode" column="fieldCode" />
+		<result property="fieldName" column="fieldName" />
+		<result property="FSouce" column="FSouce" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+    <!-- 新增打印模板绑定字段信息 (By-pjf)-->
+    <insert id="InsertPrintTBFInfo">
+        INSERT INTO tpm_printtbfinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,PrintTGd,FieldCode,FieldName,Creator,CreateTime,FSouce,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{printTGd},#{fieldCode},#{fieldName},#{creator},#{createTime},#{FSouce},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 根据PrintTGd删除打印模板绑定字段信息 (By-pjf)-->
+    <delete id="DeletePrintTBFInfo">
+        DELETE FROM tpm_printtbfinfo WHERE PrintTGd = #{ argPrintTGd }
+    </delete>
+
+    <!-- 根据Guid删除打印模板绑定字段信息 (By-pjf)-->
+    <delete id="DeleteByGuid">
+        DELETE FROM tpm_printtbfinfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 修改打印模板绑定字段信息 (By-pjf)-->
+    <update id="UpdateByRuid">
+        UPDATE tpm_printtbfinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="fieldCode != null">
+                fieldCode = #{ fieldCode },
+            </if>
+            <if test="fieldName != null">
+                fieldName = #{ fieldName },
+            </if>
+            <if test="FSouce != null">
+                FSouce = #{ FSouce },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据PrintTGd获取所有打印模板绑定字段信息 (By-pjf)-->
+	<select id="SelectAllPrintTBFInfo" resultMap="PrintTBFInfoResult">
+        SELECT * FROM tpm_printtbfinfo WHERE PrintTGd = #{ argPrintTGd }
+    </select>
+
+    <!-- 根据Ruid获取打印模板绑定字段信息 (By-pjf)-->
+    <select id="SelectPrintTBFInfo" resultMap="PrintTBFInfoResult">
+        SELECT * FROM tpm_printtbfinfo WHERE Ruid = #{ argRuid }
+    </select>
+
+</mapper>

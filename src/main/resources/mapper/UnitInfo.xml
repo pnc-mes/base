@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.UnitDAO" >
+    <resultMap type="pnc.mesadmin.entity.UnitInfo" id="unitInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="unitName" column="UnitName" />
+        <result property="dSource" column="DSource" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--查询计量单位信息 张亮亮-->
+    <select id="SelectUnitInfo" resultMap="unitInfoMap">
+       SELECT * FROM `tpm_unitinfo`
+    </select>
+    <!--根据ruid查询计量单位信息 张亮亮-->
+    <select id="SelectUnitInfoByruid" resultMap="unitInfoMap">
+        SELECT * FROM `tpm_unitinfo` WHERE Ruid = #{ruid}
+    </select>
+    <!--新增计量单位信息-->
+    <insert id="InsertUnitInfo">
+        <selectKey keyProperty="ruid" order="AFTER" resultType="int">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO `tpm_unitinfo`(Guid,UnitName,DSource,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{unitName},#{dSource},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+    <!--删除计量单位信息-->
+    <delete id="DeleteUnitInfo">
+      DELETE  FROM `tpm_unitinfo` WHERE Ruid = #{ruid}
+    </delete>
+    <!--更新计量单位信息-->
+    <update id="UpdateUnitInfo">
+        UPDATE `tpm_unitinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="unitName != null">
+                UnitName = #{ unitName },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据Guid查询计量单位  (By-pjf) -->
+    <select id="SelectByGuid" resultMap="unitInfoMap">
+        SELECT * FROM `tpm_unitinfo` WHERE Guid = #{argGuid}
+    </select>
+
+     <!-- 根据Guid查询计量单位  (By-pjf) -->
+    <select id="SelectByUnitName" resultMap="unitInfoMap" parameterType="string">
+        SELECT * FROM `tpm_unitinfo` WHERE UnitName = #{unitName}
+    </select>
+
+</mapper>

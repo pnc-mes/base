@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.LoginLogDAO" >
+    <resultMap type="pnc.mesadmin.entity.LoginLogInfo" id="loginLogInfoMap">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="userGd" column="userGd" />
+        <result property="userName" column="userName" />
+        <result property="action" column="action" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--新增日志信息 张亮亮-->
+    <insert id="InsertLoginLogInfo">
+        INSERT INTO `tpm_loginloginfo`(ruid,guid,userGd,userName,`action`,creator,createTime,lastModifyMan,lastModifyTime,remark)
+        VALUES (#{ruid},#{guid},#{userGd},#{userName},#{action},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+</mapper>

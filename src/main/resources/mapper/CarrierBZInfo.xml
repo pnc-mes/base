@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CarrierBZDao" >
+    <resultMap type="pnc.mesadmin.entity.CarrierBZInfo" id="carrierBZInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="CarrierGd" column="CarrierGd" />
+        <result property="Reference" column="Reference" />
+    </resultMap>
+
+ <select id="SelectCarrierBZInfo" resultMap="carrierBZInfoMap">
+     select * from tpm_carrierbzinfo where CarrierGd=#{CarrierGd}
+ </select>
+
+ <select id="SelectCarrierBZInfoGuid"   resultMap="carrierBZInfoMap">
+          select * from tpm_carrierbzinfo where Guid=#{argguid}
+ </select>
+    <select id="SelectCarrierBZInfoRuid"   resultMap="carrierBZInfoMap">
+          select * from tpm_carrierbzinfo where Ruid=#{argRuid}
+ </select>
+<insert id="InsertCarrierBZInfo">
+                  INSERT INTO `tpm_carrierbzinfo`(
+            Guid,CarrierGd,Reference)
+            VALUES (
+            #{guid},#{CarrierGd},#{Reference})
+</insert>
+
+
+    <update id="UpdateCarrierBZInfo">
+        UPDATE `tpm_carrierbzinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="CarrierGd != null">
+                CarrierGd = #{ CarrierGd },
+            </if>
+            <if test="Reference != null">
+                Reference = #{ Reference },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <delete id="DeleteAllCarrierBZInfoRuid">
+      DELETE  FROM tpm_carrierbzinfo  WHERE CarrierGd = #{CarrierGd}
+    </delete>
+
+</mapper>

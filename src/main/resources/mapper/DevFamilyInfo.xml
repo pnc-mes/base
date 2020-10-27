@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevFamilyDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevFamilyInfo" id="DevFamilyInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="familyName" column="familyName" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--查询设备家族所有信息-->
+    <select id="SelectAllDevFamilyInfo" resultMap="DevFamilyInfoResult">
+        select * from tpm_devfamilyinfo
+    </select>
+
+    <!--查询根据rd设备家族信息-->
+    <select id="SelectBydevFRd" resultMap="DevFamilyInfoResult">
+        SELECT * FROM tpm_devfamilyinfo d WHERE d.`Ruid` = #{devFRd}
+    </select>
+
+    <!--查询根据gd设备家族信息-->
+    <select id="SelectByguid" resultMap="DevFamilyInfoResult">
+        SELECT * FROM tpm_devfamilyinfo d WHERE d.`guid` = #{guid}
+    </select>
+
+    <!--查询设备家族名称-->
+    <select id="SelectByfamilyName" resultMap="DevFamilyInfoResult">
+        SELECT * FROM tpm_devfamilyinfo d WHERE d.`familyName` = #{familyName}
+    </select>
+
+    <!--保存设备家族信息-->
+    <insert id="InsertDevFamilyInfo">
+        INSERT INTO tpm_devfamilyinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,FamilyName,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{familyName},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除设备家族信息-->
+    <delete id="DeleteDevFamilyInfo">
+        DELETE FROM tpm_devfamilyinfo WHERE Ruid = #{devFRd}
+    </delete>
+
+    <!--更新设备家族信息-->
+    <update id="UpdateDevFamilyInfo">
+        UPDATE tpm_devfamilyinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="familyName != null">
+                familyName = #{familyName},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+</mapper>

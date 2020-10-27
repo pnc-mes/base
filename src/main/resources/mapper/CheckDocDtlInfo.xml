@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckDocDtlDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CheckDocDtlInfo" id="CheckDocDtlInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAllByDocGuid" resultMap="CheckDocDtlInfoMap">
+        SELECT * FROM tpm_checkdocdtlinfo where CheckDocGd=#{docGuid}
+    </select>
+
+    <select id="SelectByRuid" resultMap="CheckDocDtlInfoMap">
+        SELECT * FROM tpm_checkdocdtlinfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="CheckDocDtlInfoMap">
+        SELECT * FROM tpm_checkdocdtlinfo where  Guid=#{guid}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_checkdocdtlinfo(Guid,CheckDocGd,FileName,FileUrl,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{checkDocGd},#{fileName},#{fileUrl},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <delete id="DeleteByDocGuid">
+        DELETE  FROM tpm_checkdocdtlinfo WHERE CheckDocGd=#{docGuid}
+    </delete>
+
+</mapper>
+

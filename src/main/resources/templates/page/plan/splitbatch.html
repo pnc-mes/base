@@ -1,0 +1,395 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：计划管理
+* 创建人：cxj
+* 创建时间：2020-09-17
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>原材料批次拆分</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .Dwidth {
+            width: 80%
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main layui-row layui-col-space5">
+        <blockquote class="layui-elem-quote layui-text">
+            原材料批次拆分
+        </blockquote>
+        <form class="layui-form layuimini-form" lay-filter="splitContent" id="splitContent" action="">
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">批次号</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lotNo" name="lotNo" autocomplete="off" class="layui-input Dwidth">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">物料代码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="maCode" disabled class="layui-input Dwidth">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">物料名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="maName" disabled autocomplete="off" class="layui-input Dwidth">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="num" disabled autocomplete="off" class="layui-input Dwidth">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">单位</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="unitName" disabled autocomplete="off" class="layui-input Dwidth">
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">打印模板</label>
+                    <div class="layui-input-block ">
+                        <div id="printTemp" class="xm-select-demo Dwidth" lay-verify="required" value=""></div>
+                    </div>
+
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">打印机</label>
+                    <div class="layui-input-block">
+                        <div id="printer" class="xm-select-demo Dwidth"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <input type="checkbox" id="IsPrintPack" title="是否打印包裹批次">
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" id="save">批次拆分</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md6">
+                <table class="layui-hide" id="splitNums" lay-filter="splitNumsTableFilter"
+                       style="font-size: 5px"></table>
+                <script type="text/html" id="splitNumstoolbar">
+                    <a class="layui-btn layui-btn-xs layui-btn-normal layui-btn-sm" lay-event="add">添加</a>
+                </script>
+
+                <script type="text/html" id="splitNumsTableBar">
+                    <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                </script>
+            </div>
+
+            <div class="layui-col-md12">
+                <script type="text/html" id="hisListToolbar">
+                </script>
+                <table class="layui-hide" id="hisList" lay-filter="hisListTableFilter" style="font-size: 5px"></table>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/html" id="No">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'element', 'table', 'xmSelect'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            xmSelect = layui.xmSelect;
+
+
+        //回车事件
+        $(document).on('keydown', function (event) {
+            if (event.keyCode == 13) {
+                if ($("#lotNo").is(":focus")) {
+                    query($("#lotNo").val().trim());
+                }
+            }
+        });
+
+        function query(data) {
+            if (data === undefined || data === '') {
+                layer.msg("批次信息不能为空");
+                return;
+            }
+            requests({url: "/Wms/MaterailsB/GetSplitB", data: JSON.stringify({"Batch": data})}, function (res) {
+                let data = res.data;
+                form.val('splitContent', {
+                    "maCode": data.MaCode,
+                    "maName": data.MaName,
+                    "num": data.Num,
+                    "unitName": data.UnitName,
+                });
+
+                table.reload("hisList", {
+                    data: data.RefBatch   // 将新数据重新载入表格
+                })
+
+                table.reload("splitNums", {
+                    data: []  // 将新数据重新载入表格
+                })
+            });
+            return false;
+        }
+
+        /**
+         * 拆分数量
+         * */
+        table.render({
+            id: 'splitNums',
+            elem: '#splitNums',
+            width: 610,
+            url: '',
+            data: [],
+            limit: 1000,
+            title: 'BOM信息',
+            toolbar: '#splitNumstoolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'no', title: '编号', width: 100, sort: true, templet: '#No'}
+                    , {field: 'num', title: '数量', edit: 'text', width: 400}
+                    , {title: '操作', minWidth: 100, toolbar: '#splitNumsTableBar', align: "center"}
+                ]
+            ]
+        });
+
+        //toolbar监听新增事件
+        table.on('toolbar(splitNumsTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                var dataBak = [];   //定义一个空数组,用来存储之前编辑过的数据已经存放新数据
+                var tableBak = table.cache.splitNums;
+                //获取之前编辑过的全部数据，前提是编辑数据是要更新缓存，stock_add_table 为表格的id
+
+                let formData = form.val("splitContent");
+                if (formData.num == "") {
+                    layer.msg("可拆批数量不足！");
+                    return;
+                }
+                let sumNumber = 0;
+                for (var i = 0; i < tableBak.length; i++) {
+                    if (tableBak[i].num != undefined) {
+                        let n = i + 1;
+                        if (tableBak[i].num == "") {
+                            layer.msg("行编号" + n + "：不能为空！");
+                            return;
+                        }
+                        if (isNaN(tableBak[i].num)) {
+                            layer.msg("行编号" + n + "：请填写数字！");
+                            return;
+                        }
+                        sumNumber = sumNumber + parseFloat(tableBak[i].num);
+                        if (sumNumber > parseFloat(formData.num)) {
+                            layer.msg("截至行编号" + n + "：累计拆批数量大于可用数量！");
+                            return;
+                        }
+                        dataBak.push(tableBak[i]);
+                    }
+
+                }
+                dataBak.push({
+                    "num": ""
+                });
+
+                table.reload("splitNums", {
+                    data: dataBak   // 将新数据重新载入表格
+                })
+            }
+        });
+
+        //监听工具条
+        table.on('tool(splitNumsTableFilter)', function (obj) {
+            if (obj.event === 'delete') { //删除
+                obj.del();
+            }
+        });
+
+
+        /**
+         * 拆批历史记录
+         * */
+        table.render({
+            id: 'hisList',
+            elem: '#hisList',
+            url: '',
+            data: [],
+            limit: 1000,
+            title: '拆批历史记录',
+            toolbar: '#hisListToolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'no', title: '编号', width: 100, sort: true, templet: '#No'}
+                    , {field: 'Batch', title: 'Lot', width: 400}
+                    , {field: 'Num', title: '数量', width: 180}
+                    , {field: 'UnitName', title: '单位', width: 120}
+                    , {field: 'Splitor', title: '操作人', width: 180}
+                    , {field: 'SplitTime', title: '操作时间'}
+                ]
+            ]
+        });
+
+
+        //单选通用设置
+        let radioSetting = {
+            radio: true
+            , clickClose: true
+            , theme: {
+                color: '#5FB878',
+            }, model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            }, toolbar: {
+                show: true,
+            },
+            filterable: true
+        };
+
+        //加载打印模板
+        let printTemp = xmSelect.render({
+            el: '#printTemp'
+            , ...radioSetting
+            , prop: {
+                name: 'PtName',
+                value: 'PtRd',
+            }
+            , data: []
+        });
+        requests({url: "/PrintT/GetAllPtNew"}, function (res) {
+            printTemp.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载打印机
+        let printer = xmSelect.render({
+            el: '#printer'
+            , ...radioSetting
+            , prop: {
+                name: 'PrName',
+                value: 'PrRd',
+            }
+            , data: []
+        });
+        requests({url: "/Printer/GetAllPrNew"}, function (res) {
+            printer.update({
+                data: res.data.list,
+                autoRow: true
+            })
+
+        });
+        //select下拉框选中触发事件
+        form.on("select", function (data) {
+        });
+
+
+        //保存事件
+        $("#save").click(function () {
+            let formData = form.val("splitContent");
+
+            let SplitInfo = [];
+
+            let sumNumber = 0;
+
+            let isTrue = "00";
+            $.each(table.cache.splitNums, function (index, item) {
+                if (item.num != undefined && item.num != null) {
+                    //校验
+                    let n = index + 1;
+                    if (item.num == "") {
+                        layer.msg("行编号" + n + "：数量不能为空！");
+                        isTrue = "01";
+                        return;
+                    }
+                    if (isNaN(item.num)) {
+                        layer.msg("行编号" + n + "：请填写数字！");
+                        isTrue = "01";
+                        return;
+                    }
+                    sumNumber = sumNumber + parseFloat(item.num);
+                    if (sumNumber > parseFloat(formData.num)) {
+                        isTrue = "01";
+                        layer.msg("截至编号" + n + "：累计拆批数量大于可用数量！");
+                        return;
+                    }
+
+                    let splitInfo = {
+                        "Num": item.num
+                    };
+                    SplitInfo.push(splitInfo);
+                }
+            });
+
+            let data = {
+                "Batch": formData.lotNo,
+                "PrintTRd": printTemp.getValue("valueStr"),
+                "PrintRd": printer.getValue("valueStr"),
+                "IsPrint": '00',
+                "SplitInfo": SplitInfo
+            };
+            if (isTrue == "00") {
+                requests({url: "/Wms/MaterailsB/Split", data: JSON.stringify(data)}, function (res) {
+                    layer.msg("成功！");
+                    requests({
+                        url: "/Wms/MaterailsB/GetSplitB",
+                        data: JSON.stringify({"Batch": formData.lotNo})
+                    }, function (res) {
+                        let data = res.data;
+                        form.val('splitContent', {
+                            "maCode": data.MaCode,
+                            "maName": data.MaName,
+                            "num": data.Num,
+                            "unitName": data.UnitName,
+                        });
+
+                        table.reload("hisList", {
+                            data: data.RefBatch   // 将新数据重新载入表格
+                        });
+
+                        table.reload("splitNums", {
+                            data: []  // 将新数据重新载入表格
+                        })
+                    });
+                    return;
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

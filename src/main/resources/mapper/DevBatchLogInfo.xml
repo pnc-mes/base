@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevBatchLogDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.DevBatchLogInfo" id="DevBatchLogInfoResult">
+		<id property="ruid" column="ruid" />
+	</resultMap>
+
+	<insert id="InsertDevBatchLog">
+		INSERT INTO tpm_devbatchloginfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,DevGd,Batch,DType,Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{devGd},#{batch},#{dType},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+</mapper>

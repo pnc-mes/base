@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.TeamMemberInfoDAO" >
+    <resultMap type="pnc.mesadmin.entity.TeamMemberInfo" id="TeamMemberInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="userGd" column="userGd" />
+        <result property="teamGd" column="teamGd" />
+        <result property="sequence" column="sequence" />
+    </resultMap>
+
+    <!-- 获取团队明细信息，根据主表的guid zll-->
+    <select id="SelectTeamInfoByGuid" resultMap="TeamMemberInfoResult">
+		select * from `tpm_teammemberinfo` where teamGd=#{teamGd}
+	</select>
+
+    <!--新增团队明细信息 zll-->
+    <insert id="InsertTeamMemberInfo">
+        INSERT INTO tpm_teammemberinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            userGd,teamGd,sequence,
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{userGd},#{teamGd},#{sequence},
+        </trim>
+    </insert>
+
+    <!--删除团队明细信息 zll-->
+    <delete id="DeleteTeamMemberInfoByRuid">
+         DELETE  FROM `tpm_teammemberinfo` WHERE ruid = #{ruid}
+    </delete>
+</mapper>

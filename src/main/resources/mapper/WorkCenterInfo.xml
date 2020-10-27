@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.WorkCenterDAO" >
+	<resultMap id="workCenterMap" type="pnc.mesadmin.entity.WorkCenterInfo">
+		<id column="Ruid" property="ruid"></id>
+		<result column="Guid" property="guid"></result>
+		<result column="CenterName" property="centerName"></result>
+		<result column="FaGd" property="faGd"></result>
+		<result column="Creator" property="creator"></result>
+		<result column="CreateTime" property="createTime" ></result>
+		<result column="LastModifyMan" property="lastModifyMan" ></result>
+		<result column="LastModifyTime" property="lastModifyTime" ></result>
+		<result column="Remark" property="remark" ></result>
+	</resultMap>
+
+	<!--增加工作中心 张亮亮-->
+	<insert id="InsertWorkCenterInfo">
+		INSERT INTO `tpm_workcenterinfo`(Guid,CenterName,FaGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES (#{guid},#{centerName},#{faGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+	</insert>
+
+	<!--删除工作中心 张亮亮-->
+	<delete id="DeleteWorkCenterInfo">
+		DELETE FROM `tpm_workcenterinfo` WHERE Ruid=#{ruid}
+	</delete>
+
+	<!--更新工作中心 张亮亮-->
+	<update id="UpdateWorkCenterInfo">
+		UPDATE `tpm_workcenterinfo`
+		<trim prefix="set" suffixOverrides=",">
+			<if test="guid != null">
+				Guid = #{ guid },
+			</if>
+			<if test="centerName != null">
+				CenterName = #{ centerName },
+			</if>
+			<if test="faGd != null">
+				FaGd = #{ faGd },
+			</if>
+			<if test="creator != null">
+				Creator = #{ creator },
+			</if>
+			<if test="createTime != null">
+				CreateTime = #{ createTime },
+			</if>
+			<if test="lastModifyMan != null">
+				LastModifyMan = #{ lastModifyMan },
+			</if>
+			<if test="lastModifyTime != null">
+				LastModifyTime = #{ lastModifyTime },
+			</if>
+			<if test="remark != null">
+				Remark = #{ remark },
+			</if>
+		</trim>
+		WHERE Ruid = #{ ruid }
+	</update>
+
+
+	<!--查询工作中心 张亮亮-->
+	<select id="SelectWorkCenterInfo" resultMap="workCenterMap">
+		SELECT * FROM `tpm_workcenterinfo`
+	</select>
+
+	<!--根据ruid查询工作中心 张亮亮-->
+	<select id="SelectWorkCenterByruid" resultMap="workCenterMap" parameterType="int">
+		SELECT * FROM `tpm_workcenterinfo` WHERE Ruid=#{ruid}
+	</select>
+
+	<!--根据guid查询工作中心 张亮亮-->
+	<select id="SelectWorkCenterByguid" resultMap="workCenterMap" parameterType="string">
+		SELECT * FROM `tpm_workcenterinfo` WHERE Guid=#{guid}
+	</select>
+
+	<!--根据名称查询工作中心 张亮亮-->
+	<select id="SelectWorkCenterByCenterName" resultMap="workCenterMap" parameterType="string">
+		SELECT * FROM `tpm_workcenterinfo` WHERE CenterName=#{centerName}
+	</select>
+
+</mapper>

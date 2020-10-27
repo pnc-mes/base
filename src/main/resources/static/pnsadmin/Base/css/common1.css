@@ -1,0 +1,78 @@
+/*--------------处理的是菜单的信息------------------------------*/
+body{
+    overflow: hidden;
+}
+.tabTop{
+    position: fixed;top: 0; right: 0;z-index: 100;
+}
+.left{
+    margin-top: 26px;
+}
+.left1{
+    margin-top: 0px;
+}
+/*----------处理右侧搜索框的位置样式-----------*/
+.right_left .input2{
+    margin-right: 0px;
+    display: inline-block;
+    width: 40%;
+    margin-left:0px;
+}
+/*------------------表单中的备注---------------------------*/
+.beizhu {
+    width: 100%;
+    margin-top: 20px;
+    position: relative;
+    height: 76px;
+}
+
+.beizhuspan {
+    position: absolute;
+    left: 0px;
+    top: 15px;
+}
+
+#beizhu{
+    position: absolute;
+    left: 47px;
+    height: 56px;
+    width: 196px;
+    border-color: #d2d6de;
+    max-width: 260px;
+    max-height: 60px;
+}
+#mShu{
+    left: 335px;
+    height: 32px;
+    max-height: 32px;
+    top: 102px;
+    position: absolute;
+    width: 458px;
+    max-width: 458px;
+    border-color: rgb(210, 214, 222);
+    padding-top:5px;
+
+}
+.mShuspan{
+    position: absolute;
+    left: 275px;
+    top: 109px;
+}
+/*-----------------------表单中的checkbox--------------------------------*/
+#dd{
+    margin-left: 20px;
+}
+#dd>input{
+    position: absolute;left: -20px;
+}
+/*-----------------form表单---------------------------*/
+.form-control{
+    display: block;
+}
+/*-----tab切换2行表单内容-------*/
+.gys{
+    margin-top: 20px;
+}
+.right_left .check{
+    margin-right:0px;
+}

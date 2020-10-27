@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckPlanDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.CheckPlanInfo" id="checkPlanInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="checkPlanName" column="checkPlanName" />
+        <result property="status" column="status" />
+        <result property="description" column="description" />
+        <result property="Reference" column="Reference" />
+        <result property="starDate" column="starDate" />
+        <result property="endDate" column="endDate" />
+        <result property="mTType" column="mTType" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+        <result property="FileVerGd" column="FileVerGd" />
+
+    </resultMap>
+    <!--查询所有-->
+    <select id="selectAllCheckPlanInfo" resultMap="checkPlanInfoResult">
+          select * from tpm_checkplaninfo
+    </select>
+
+    <!--熊伟-->
+    <select id="selectCheckPlanInfoByGuidd"  resultMap="checkPlanInfoResult">
+        select * from tpm_checkplaninfo where Guid=#{guid}
+    </select>
+
+    <!--熊伟-->
+    <delete id="DeleteCheckPlanInfoByGd">
+        delete from  tpm_checkplaninfo where Guid=#{Guid}
+    </delete>
+
+    <!--根据名字查询-->
+    <select id="selectCheckPlanInfoByCheckPlanName" parameterType="string" resultMap="checkPlanInfoResult">
+       select * from tpm_checkplaninfo where CheckPlanName=#{checkPlanName}
+    </select>
+
+    <!--根据guid查询-->
+    <select id="selectCheckPlanInfoByGuid" parameterType="string" resultMap="checkPlanInfoResult">
+       select * from tpm_checkplaninfo where Guid=#{guid}
+    </select>
+    
+    <!--新增-->
+    <insert id="insertCheckPlanInfo">
+          insert into tpm_checkplaninfo (guid,checkPlanName,status,checkPlanType,description,FileVerGd,Reference,starDate,endDate,mTType,creator,createTime,lastModifyMan,lastModifyTime,remark)
+          values (#{guid},#{checkPlanName},#{status},#{checkPlanType},#{description},#{FileVerGd},#{Reference},#{starDate},#{endDate},#{mTType},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark}) ;
+    </insert>
+
+    <!--删除-->
+    <delete id="deleteCheckPlanInfo">
+          delete from  tpm_checkplaninfo where ruid=#{ruid}
+    </delete>
+
+    <!--根据id查询一条信息-->
+    <select id="selectCheckPlanInfoByRuid" parameterType="int" resultMap="checkPlanInfoResult">
+          select * from tpm_checkplaninfo where ruid=#{ruid}
+    </select>
+
+    <!--修改-->
+    <update id="updateCheckPlanInfo">
+        UPDATE `tpm_checkplaninfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="checkPlanName != null">
+                checkPlanName = #{ checkPlanName },
+            </if>
+            <if test="checkPlanType != null">
+                checkPlanType = #{ checkPlanType },
+            </if>
+            <if test="status != null">
+                status = #{ status },
+            </if>
+            <if test="description != null">
+                description = #{ description },
+            </if>
+            <if test="Reference != null">
+                Reference = #{ Reference },
+            </if>
+            <if test="FileVerGd != null">
+                FileVerGd = #{ FileVerGd },
+            </if>
+            <if test="starDate != null">
+                starDate = #{ starDate },
+            </if>
+            <if test="endDate != null">
+                endDate = #{ endDate },
+            </if>
+            <if test="mTType != null">
+                mTType = #{ mTType },
+            </if>
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+        </trim>
+        WHERE ruid = #{ ruid }
+    </update>
+</mapper>

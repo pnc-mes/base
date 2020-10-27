@@ -1,0 +1,395 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：班别管理
+* 创建人：蒋顾毅
+* 创建时间：2020-09-09
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>紧急度代码</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">紧急度代码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="UrcyCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+
+<!--- 子页面 -->
+<div id="content" style="display: none;">
+    <div class="layui-form layuimini-form" style="width: 90%;margin-top: 20px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label required">紧急度代码</label>
+            <div class="layui-input-block">
+                <input type="text" id="name" name="name" lay-verify="required" lay-reqtext="名称不能为空" placeholder="请输入紧急度代码" value="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label required">紧急度名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="urcyDes" name="urcyDes" lay-verify="required" class="layui-input" placeholder="请输入紧急度名称" />
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea id="remark" name="remark" class="layui-textarea" placeholder="请输入备注信息"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 查看子页面 -->
+<div class="layui-tab" id="readContent" style="display: none;">
+    <ul class="layui-tab-title">
+        <li class="layui-this">基础信息</li>
+        <li>其它</li>
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">紧急度代码</label>
+                <div class="layui-input-block">
+                    <input type="text" id="name_" name="name" lay-verify="required" disabled class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">紧急度名称</label>
+                <div class="layui-input-block">
+                    <input type="text" id="urcyDes_" name="urcyDes" lay-verify="required" class="layui-input" disabled />
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">创建人</label>
+                <div class="layui-input-block">
+                    <input type="text" id="creator" name="name" lay-verify="required" disabled class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">创建时间</label>
+                <div class="layui-input-block">
+                    <input type="text" id="createTime" name="name" lay-verify="required" disabled class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">修改人</label>
+                <div class="layui-input-block">
+                    <input type="text" id="lastModifyMan" name="name" lay-verify="required" disabled class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">修改时间</label>
+                <div class="layui-input-block">
+                    <input type="text" id="lastModifyTime" name="name" lay-verify="required" disabled class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea id="remark_" name="remark" class="layui-textarea" disabled></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'laydate', 'element'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+            laydate = layui.laydate;
+
+        //页面首次加载
+        load();
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                clear();
+                let index = layer.open({
+                    title: '添加紧急度代码',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#content"),//'factory',
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                //获取选中id
+                let urcyId = data.UrcyRd;
+                requests({url: "/Urgency/GetUrcyInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify({"UrcyRd": urcyId})
+                    }}, function (res) {
+                    let data = res.Data;
+
+                    clear();
+
+                    $("#name").val(data.UrcyCode);
+                    $("#urcyDes").val(data.UrcyDes);
+                    $("#remark").val(data.Remark);
+
+                    let index = layer.open({
+                        title: '编辑紧急度代码',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin:true,
+                        shadeClose: true,
+                        area: ['50%', '70%'],
+                        content: $("#content"),
+                        btn: ['确认保存'],
+                        yes: function (index, layero) {
+                            save(index, 2, urcyId);
+                        }
+                    });
+                    $(window).on("resize", function () {
+                        layer. full(index);
+                    });
+                });
+
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    requests({url: "/Urgency/SaveUrcyInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                            "BusData": JSON.stringify({UrcyRd: data.UrcyRd})
+                        }}, function (res) {
+                        //obj.del();
+                        layer.msg("删除成功", {icon: 1});
+                        table.reload('currentTableId');
+                    });
+
+                    layer.close(index);
+                });
+            } else if(obj.event === 'read') {
+                read(data);
+
+                return false;
+            }
+        });
+
+        //监听行双击事件
+        table.on('rowDouble(currentTableFilter)', function(obj){
+            read(obj.data);
+            return false;
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: [
+                        {
+                            fieldName: "UrcyCode",
+                            fieldOpt: "like",
+                            fieldVal: data.field.UrcyCode
+                        },
+                        {
+                            fieldName: "Ruid",
+                            fieldOpt: "Order BY",
+                            fieldVal: ""
+                        }
+                    ]
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //查看
+        function read(data) {
+            //获取选中id
+            let urcyId = data.UrcyRd;
+            requests({url: "/Urgency/GetUrcyInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({"UrcyRd":urcyId})
+                }}, function (res) {
+                let data = res.Data;
+
+                clear();
+
+                $("#name_").val(data.UrcyCode);
+                $("#urcyDes_").val(data.UrcyDes);
+                $("#remark_").val(data.Remark);
+
+                $("#creator").val(data.Creator);
+                $("#createTime").val(data.CreateTime);
+                $("#lastModifyMan").val(data.LastModifyMan);
+                $("#lastModifyTime").val(data.LastModifyTime);
+
+                let index = layer.open({
+                    title: '查看紧急度代码',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#readContent"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+        }
+
+        //保存
+        function save(index, type, urcyId) {
+            //type-> 1.新增 2.编辑 3.删除
+            let data = {
+                UrcyCode: $("#name").val(),
+                UrcyDes: $("#urcyDes").val(),
+                Remark: $("#remark").val()
+            };
+            if(type === 1){
+                requests({url: "/Urgency/SaveUrcyInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }else if(type === 2){
+                data.UrcyRd = urcyId;
+                requests({url: "/Urgency/SaveUrcyInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/Urgency/GetAllUrcyInfoNew",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        // {type: "checkbox", width: 50},
+                        {field: 'UrcyRd', title: 'ID', sort: true},
+                        {field: 'UrcyCode', title: '紧急度代码'},
+                        {field: 'UrcyDes', title: '紧急度名称'},
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+            });
+        }
+
+        //清空
+        function clear() {
+            $("#name").val("");
+            $("#urcyDes").val("");
+            $("#remark").val("");
+
+            $("#name_").val("");
+            $("#urcyDes_").val("");
+            $("#remark_").val("");
+
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevFamilyPMDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevFamilyPMInfo" id="DevFamilyPMInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="devFamilyGd" column="devFamilyGd" />
+        <result property="pMGd" column="pMGd" />
+        <result property="pMType" column="pMType" />
+    </resultMap>
+
+    <select id="selectDevFamilyPMInfoByDevFamilyGd" parameterType="string" resultMap="DevFamilyPMInfoResult">
+        select * from tpm_devfamilypminfo where devFamilyGd=#{devFamilyGd}
+    </select>
+
+    <insert id="insertDevCheckPlanInfo">
+          insert into tpm_devfamilypminfo(guid,devFamilyGd,pMGd,pMType)
+          values (#{guid},#{devFamilyGd},#{pMGd},#{pMType});
+    </insert>
+
+    <delete id="deleteDevCheckPlanInfo">
+        delete from tpm_devfamilypminfo where ruid=#{ruid}
+    </delete>
+
+</mapper>

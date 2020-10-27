@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.BomMaterialDAO">
+
+    <resultMap type="pnc.mesadmin.entity.BomMaterialInfo" id="BomMaterialInfoResult">
+        <id property="ruid" column="ruid"/>
+        <result property="guid" column="guid"/>
+        <result property="bomVerGd" column="bomVerGd"/>
+        <result property="maVerGd" column="maVerGd"/>
+        <result property="specVerGd" column="specVerGd"/>
+        <result property="num" column="num"/>
+        <result property="aRate" column="aRate"/>
+        <result property="unitName" column="unitName"/>
+        <result property="conSMode" column="conSMode"/>
+        <result property="checked" column="checked"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lastModifyMan" column="lastModifyMan"/>
+        <result property="lastModifyTime" column="lastModifyTime"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <select id="selectBomMaterialInfoBymaVerGd" parameterType="string" resultMap="BomMaterialInfoResult">
+		select * from tpm_bommaterialinfo where maVerGd=#{maVerGd}
+	</select>
+    <!-- 新增BOM用料信息  (By-pjf)-->
+    <insert id="InsertBomMaterialInfo">
+        INSERT INTO tpm_bommaterialinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,BomVerGd,MaVerGd,SpecVerGd,Num,ARate,UnitName,conSMode,Checked,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{bomVerGd},#{maVerGd},
+            #{specVerGd},#{num},#{aRate},#{unitName},#{conSMode},#{checked},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除BOM用料信息  (By-pjf)-->
+    <delete id="DeleteBomMaterialInfo">
+        DELETE FROM tpm_bommaterialinfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+    <!-- 根据BomVerGd删除BOM用料信息  (By-pjf)-->
+    <delete id="DeleteByBomVerGd">
+        DELETE FROM tpm_bommaterialinfo WHERE BomVerGd = #{ argBomVerGd }
+    </delete>
+
+    <!-- 修改BOM用料信息  (By-pjf)-->
+    <update id="UpdateByRuid">
+        UPDATE tpm_bommaterialinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="bomVerGd != null">
+                bomVerGd = #{ bomVerGd },
+            </if>
+            <if test="maVerGd != null">
+                maVerGd = #{ maVerGd },
+            </if>
+            <if test="specVerGd != null">
+                specVerGd = #{ specVerGd },
+            </if>
+            <if test="num != null">
+                num = #{ num },
+            </if>
+            <if test="aRate != null">
+                aRate = #{ aRate },
+            </if>
+            <if test="unitName != null">
+                unitName = #{ unitName },
+            </if>
+            <if test="conSMode != null">
+                conSMode = #{ conSMode },
+            </if>
+            <if test="checked != null">
+                checked = #{ checked },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 查询所有BOM用料信息  (By-pjf)-->
+    <select id="SelectAllBomMaterialInfo" resultMap="BomMaterialInfoResult">
+		SELECT * FROM tpm_bommaterialinfo
+	</select>
+
+    <!-- 根据BomVerGd查询Bom用料信息 (By-pjf) -->
+    <select id="SelectByBomVerGd" resultMap="BomMaterialInfoResult">
+        SELECT * FROM tpm_bommaterialinfo WHERE BomVerGd = #{ argBomVerGd }
+    </select>
+
+    <!-- 根据BomVerGd+SpecVerGd查询Bom用料信息 (By-pjf) -->
+    <select id="SelectByBSGd" resultMap="BomMaterialInfoResult">
+		SELECT * FROM tpm_bommaterialinfo WHERE BomVerGd = #{ argBomVerGd } AND SpecVerGd = #{ argSpecVerGd }
+	</select>
+
+    <!-- 查询Bom用料信息  (By-pjf) -->
+    <select id="SelectBomMaterialInfo" resultMap="BomMaterialInfoResult">
+        SELECT * FROM tpm_bommaterialinfo WHERE Ruid = #{ argRuid }
+    </select>
+    <!--同一个物料信息统计数量 张亮亮-->
+    <select id="SelectBomMaterialInfoBymaterialCode" resultType="int" parameterType="string">
+		 SELECT SUM(Num) FROM `tpm_bommaterialinfo` WHERE MaterialCode= #{ materialCode } AND bomVerGd=#{bomVerGd}
+	</select>
+    <!-- 根据Guid查询Bom用料信息  (By-pjf) -->
+    <select id="SelectBomMaterialInfoByGuid" resultMap="BomMaterialInfoResult">
+		SELECT * FROM tpm_bommaterialinfo WHERE Guid = #{ argGuid }
+	</select>
+
+    <!--根据WoGd,SpecVGd,查询【5.2.1. 工单信息表(tpm_WoInfo)】、【5.7.3. BOM用料表(tpm_BomMaterialInfo)】关联信息-->
+    <select id="SelectBomMaterialInfo1" resultMap="BomMaterialInfoResult">
+		SELECT t2.* FROM tpm_WoInfo t1,tpm_BomMaterialInfo t2
+		WHERE t1.`Guid`=#{WoGd}  AND t2.SpecVerGd=#{SpecVGd} AND t2.BomVerGd=t1.BomVerGd
+	</select>
+
+
+    <!-- 根据BOMVerGuid和物料标识查询Bom用料信息  -->
+    <select id="SelectByBomVerGdAndMaVerGd" resultMap="BomMaterialInfoResult">
+		SELECT * FROM tpm_bommaterialinfo WHERE BomVerGd = #{ argBomVerGd } and  MaVerGd=#{MaVerGd} and specVerGd=#{specVerGd}
+	</select>
+
+</mapper>

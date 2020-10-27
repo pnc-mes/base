@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CarrierFamilyDAO">
+    <resultMap id="CarrierFamilyMapper" type="pnc.mesadmin.entity.CarrierFamilyInfo">
+        <id property="Ruid" column="Ruid"></id>
+        <result property="Guid" column="Guid"></result>
+        <result property="CarrierFamilyName" column="CarrierFamilyName"></result>
+        <result property="Description" column="Description"></result>
+        <result property="FaGd" column="FaGd"></result>
+        <result property="DevSMGd" column="DevSMGd"></result>
+        <result property="Creator" column="Creator"></result>
+        <result property="CreateTime" column="CreateTime"></result>
+        <result property="LastModifyMan" column="LastModifyMan"></result>
+        <result property="LastModifyTime" column="LastModifyTime"></result>
+        <result property="Remark" column="Remark"></result>
+    </resultMap>
+
+    <!--更新工具家族信息-->
+    <update id="UpdateCarrierFamilyInfoByruid">
+        UPDATE `tpm_carrierfamilyinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Guid != null">
+                Guid = #{ Guid },
+            </if>
+            <if test="CarrierFamilyName != null">
+                CarrierFamilyName = #{ CarrierFamilyName },
+            </if>
+            <if test="Description != null">
+                Description = #{ Description },
+            </if>
+            <if test="FaGd != null">
+                FaGd = #{ FaGd },
+            </if>
+            <if test="DevSMGd != null">
+                DevSMGd = #{ DevSMGd },
+            </if>
+            <if test="Creator != null">
+                Creator = #{ Creator },
+            </if>
+            <if test="CreateTime != null">
+                CreateTime = #{ CreateTime },
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{ LastModifyMan },
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{ LastModifyTime },
+            </if>
+            <if test="Remark != null">
+                Remark = #{ Remark }
+            </if>
+        </trim>
+        WHERE Ruid = #{ Ruid }
+    </update>
+    <!--查询所有工具家族信息-->
+    <select id="selectCarrierFamilyAll" resultMap="CarrierFamilyMapper">
+        SELECT  * FROM tpm_carrierfamilyinfo
+    </select>
+
+    <!--根据标识查询工具家族信息-->
+    <select id="selectCarrierFamily" resultMap="CarrierFamilyMapper">
+        SELECT * FROM tpm_carrierfamilyinfo WHERE Guid=#{Guid}
+    </select>
+
+    <!--根据ID查询工具家族信息-->
+    <select id="selectCarrierFamilyID" resultMap="CarrierFamilyMapper">
+        SELECT * FROM tpm_carrierfamilyinfo WHERE Ruid=#{Ruid}
+    </select>
+
+    <!--根据工具家族名称查询工具信息-->
+    <select id="SelectCarrierInfoByToolFaName" resultMap="CarrierFamilyMapper">
+         SELECT * FROM tpm_carrierfamilyinfo WHERE CarrierFamilyName=#{CarrierFamilyName}
+    </select>
+
+    <!--增加工具家族信息-->
+    <insert id="InsertCarrierFamilyInfo" >
+        INSERT INTO `tpm_carrierfamilyinfo`(Guid,CarrierFamilyName,Description,FaGd,DevSMGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{CarrierFamilyName},#{Description},#{FaGd},#{DevSMGd},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+
+    </insert>
+
+    <!--删除工具信息，根据工具家族ID-->
+    <delete id="DeleteCarrierFamilyInfoByruid">
+        DELETE FROM `tpm_carrierfamilyinfo` WHERE Ruid=#{Ruid}
+    </delete>
+</mapper>

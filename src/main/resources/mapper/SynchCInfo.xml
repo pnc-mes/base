@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SynchCDAO" >
+    <resultMap type="pnc.mesadmin.entity.SynchCInfo" id="SynchCInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="synchName" column="synchName" />
+        <result property="status" column="status" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!--查询所有同步信息-->
+    <select id="SelectAllSynchCInfo" resultMap="SynchCInfoResult">
+        SELECT * FROM tpm_synchcinfo
+    </select>
+
+    <!-- 查询同步名 -->
+    <select id="SelectBysynchName" resultMap="SynchCInfoResult">
+        SELECT * FROM tpm_synchcinfo s WHERE s.SynchName = #{synchName}
+    </select>
+
+    <!-- 保存同步名信息 -->
+    <insert id="InsertSynchcinfo">
+        INSERT INTO tpm_synchcinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,SynchName,Status,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{synchName},#{status},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 更新同步信息 -->
+    <update id="UpdateSynchcinfo">
+        UPDATE tpm_synchcinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="synchName != null">
+                synchName = #{synchName},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+</mapper>

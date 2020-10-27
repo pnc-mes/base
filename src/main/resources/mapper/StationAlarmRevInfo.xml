@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.StationAlarmRevDAO">
+
+    <resultMap type="pnc.mesadmin.entity.StationAlarmRevInfo" id="StationAlarmRevInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="selectStationAlarmRevInfo" resultMap="StationAlarmRevInfoMap">
+        SELECT * FROM tpm_stationalarmrevinfo WHERE StationAlarmGd=#{StationAlarmGd}
+    </select>
+    <!--插入警报指定人员信息-->
+    <insert id="insertStationAlarmRevInfo">
+        INSERT INTO tpm_stationalarmrevinfo (Guid,StationGd,StationAlarmGd,UserGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{StationGd},#{StationAlarmGd},#{UserGd},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+    <!--根据工位标识删除信息-->
+    <delete id="deleteStationAlarmRevInfo">
+        DELETE FROM tpm_stationalarmrevinfo WHERE StationGd=#{StationGd}
+    </delete>
+
+</mapper>
+

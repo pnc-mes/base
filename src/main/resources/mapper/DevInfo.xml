@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevInfo" id="DevInfoResult">
+        <id property="ruid" column="ruid" />
+    </resultMap>
+
+    <!--查询设备所有信息-->
+    <select id="SelectAllDevInfo" resultMap="DevInfoResult">
+        select * from tpm_devinfo
+    </select>
+    <!--根据设备编码查询一条信息-->
+    <select id="SelectAllDevInfoBydevCode" resultMap="DevInfoResult" parameterType="string">
+        select * from tpm_devinfo where devCode=#{devCode}
+    </select>
+    <!--查询根据rd设备信息-->
+    <select id="SelectBydevRd" resultMap="DevInfoResult">
+        SELECT * FROM tpm_devinfo d WHERE d.`Ruid` = #{devRd}
+    </select>
+
+    <!--查询根据gd设备信息-->
+    <select id="SelectByguid" resultMap="DevInfoResult">
+        SELECT * FROM tpm_devinfo d WHERE d.`guid` = #{guid}
+    </select>
+
+    <!--查询设备名称-->
+    <select id="SelectBydevName" resultMap="DevInfoResult">
+        SELECT * FROM tpm_devinfo d WHERE d.`devName` = #{devName}
+    </select>
+
+    <!--保存设备信息-->
+    <insert id="InsertDevInfo">
+      INSERT INTO tpm_devinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,DevName,DevCode,SupplierGd,Creator,CreateTime,
+            <if test="usrNum != null">
+                usrNum,
+            </if>
+            <if test="Place != null">
+                Place,
+            </if>
+            <if test="totalUsrNum != null">
+                totalUsrNum,
+            </if>
+            <if test="toolFamilyGd != null">
+                toolFamilyGd,
+            </if>
+            <if test="devFamilyGd != null">
+                devFamilyGd,
+            </if>
+            <if test="devSMGd != null">
+                devSMGd,
+            </if>
+            <if test="DevSGd != null">
+                DevSGd,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+		VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{devName},#{devCode},#{supplierGd},#{creator},#{createTime},
+            <if test="usrNum != null">
+                #{usrNum},
+            </if>
+            <if test="Place != null">
+                #{Place},
+            </if>
+            <if test="totalUsrNum != null">
+                #{totalUsrNum},
+            </if>
+            <if test="toolFamilyGd != null">
+                #{toolFamilyGd},
+            </if>
+            <if test="devFamilyGd != null">
+                #{devFamilyGd},
+            </if>
+            <if test="devSMGd != null">
+                #{devSMGd},
+            </if>
+            <if test="DevSGd != null">
+                #{DevSGd},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除设备信息-->
+    <delete id="DeleteDevInfo">
+        DELETE FROM tpm_devinfo WHERE Ruid = #{devRd}
+    </delete>
+
+    <!--更新设备信息-->
+    <update id="UpdateDevInfo">
+      UPDATE tpm_devinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="totalUsrNum != null">
+                totalUsrNum = #{totalUsrNum},
+            </if>
+            <if test="usrNum != null">
+                usrNum = #{usrNum},
+            </if>
+            <if test="devName != null">
+                devName = #{devName},
+            </if>
+            <if test="devCode != null">
+                devCode = #{devCode},
+            </if>
+            <if test="Place != null">
+                Place = #{Place},
+            </if>
+            <if test="supplierGd != null">
+                supplierGd = #{supplierGd},
+            </if>
+            <if test="toolFamilyGd != null">
+                toolFamilyGd = #{toolFamilyGd},
+            </if>
+            <if test="devFamilyGd != null">
+                devFamilyGd = #{devFamilyGd},
+            </if>
+            <if test="devSMGd != null">
+                devSMGd = #{devSMGd},
+            </if>
+            <if test="DevSGd != null">
+                DevSGd = #{DevSGd},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+		where ruid = #{ruid}
+    </update>
+
+    <!-- 根据sop物料+工序查询设备 (By-pjf) -->
+    <select id="SelectByMaGdSpecVerGd" resultMap="DevInfoResult">
+        SELECT d.ruid,d.devname,d.guid FROM tpm_devinfo d,tpm_devgpdtlinfo dgpl,tpm_sopdlinfo sop
+        WHERE d.`Guid`=dgpl.`DevGd`
+        AND dgpl.devgpgd = sop.`DevGrGd`
+        AND sop.`MaVerGd`=#{argMaGd}
+        AND sop.`SpecVerGd`=#{argSpecGd}
+    </select>
+
+    <!-- 根据设备组查询设备 (By-pjf) -->
+    <select id="SelectByDevGpGd" resultMap="DevInfoResult">
+        SELECT d.ruid,d.devname,d.guid FROM tpm_devinfo d, tpm_devgpdtlinfo dgpl
+        WHERE d.`Guid` = dgpl.`DevGd`
+        AND dgpl.devgpgd = #{ argDevGpGd }
+    </select>
+
+    <select id="SelectDevInfoByIP" resultMap="DevInfoResult">
+        SELECT d.* FROM tpm_devinfo d, tpm_devpropertyinfo dp
+        WHERE d.guid = dp.devgd
+        AND dp.f1 = #{ ip }
+    </select>
+</mapper>

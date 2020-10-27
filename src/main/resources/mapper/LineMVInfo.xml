@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.LineMVDAO" >
+    <resultMap type="pnc.mesadmin.entity.LineMVInfo" id="LineMVInfoResultMap">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="fWoCode" column="fWoCode" />
+        <result property="batch" column="batch" />
+        <result property="maVerGd" column="maVerGd" />
+        <result property="materialCode" column="materialCode" />
+        <result property="materialName" column="materialName" />
+        <result property="num" column="num" />
+        <result property="unitName" column="unitName" />
+        <result property="tWoCode" column="tWoCode" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--插入产线余料调拨记录-->
+    <insert id="InsertLineMVInfo">
+        INSERT INTO tpm_linemvinfo
+        (guid,fWoCode,batch,maVerGd,materialCode,materialName,num,unitName,tWoCode,creator,createTime,remark)
+        VALUES
+        (#{guid},#{fWoCode},#{batch},#{maVerGd},#{materialCode},#{materialName},#{num},#{unitName},#{tWoCode},#{creator},
+        #{createTime},#{remark})
+    </insert>
+
+</mapper>

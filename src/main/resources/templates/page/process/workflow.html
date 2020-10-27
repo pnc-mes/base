@@ -1,0 +1,534 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：工艺流程管理
+* 创建人：pjf
+* 创建时间：2020-09-17
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>工艺流程管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/css/wf/workflow.css}">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+        .dPanel {
+            margin: 10px 5px;
+        }
+        .bk {
+            background-color: #fff3e0;
+        }
+        ._button {
+            border-radius: 4px;
+        }
+        .jtk-demo-canvas {
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+<!-- content -->
+<div class="layui-row">
+    <div class="layui-col-xs12 layui-col-sm3 layui-col-md3">
+        <div class="layuimini-container" style="margin: 0 8px 5px 8px;">
+            <div class="layuimini-main">
+                <div class="layui-form-item">
+                    <button type="button" class="layui-btn layui-btn layui-btn-sm _button" id="add"><i class="layui-icon"></i>新增</button>
+
+                    <button type="button" class="layui-btn layui-btn-warm layui-btn-sm _button" id="save"><i class="layui-icon"></i>保存</button>
+
+                    <button type="button" class="layui-btn layui-btn-danger layui-btn-sm _button" id="remove"><i class="layui-icon"></i>删除</button>
+
+                    <span id="tip" style="float: right; color: red; display: none;"><i class="layui-icon layui-icon-edit" style="font-size: 25px;"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="layuimini-container" style="margin: 0 8px 0 8px;">
+            <div class="layuimini-main">
+                <div class="layui-form-item">
+                    <div class="layui-inline" style="max-width: 140px; margin-bottom: 0;">
+                        <input id="wfSearch" name="wfSearch" class="layui-input _button" placeholder="输入工艺流程名称" >
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-normal _button" id="search">搜索</button>
+
+                    <table class="layui-hide" id="wfTable" lay-filter="wfTableFilter"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-col-xs12 layui-col-sm9 layui-col-md9">
+        <div class="layuimini-container" style="margin: 0 8px 0 8px;">
+            <div class="layuimini-main">
+                <div class="layui-tab layui-tab-brief" lay-filter="tab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this" lay-id="1" id="li_1">流程信息</li>
+                        <li lay-id="2" id="li_2">流程图</li>
+                        <li lay-id="3" id="li_3">其它</li>
+                    </ul>
+                    <div class="layui-form layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <!-- 流程信息 -->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">流程名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="wfRd" name="wfVerRd" class="layui-input" style="display: none;">
+                                    <input type="text" id="wfVerRd" name="wfVerRd" class="layui-input" style="display: none;">
+                                    <input type="text" id="wfName" name="wfName" lay-verify="required" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">流程类型</label>
+                                <div class="layui-input-block">
+                                    <div id="wfType" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">状态</label>
+                                <div class="layui-input-block">
+                                    <div id="status" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 流程图 -->
+                            <div class="layui-row">
+                                <div class="layui-col-xs12 layui-col-sm2 layui-col-md2">
+                                    <div class="layui-form-item" style="margin: 0 5px 0 5px;">
+                                        <div class="layui-inline" style="margin-bottom: 0;">
+                                            <input id="specSearch" name="specSearch" class="layui-input _button" placeholder="输入工艺流程名称" >
+                                        </div>
+
+                                        <table class="layui-hide" id="spTable" lay-filter="spTableFilter"></table>
+                                    </div>
+                                </div>
+
+                                <div class="layui-col-xs12 layui-col-sm10 layui-col-md10">
+                                    <div id="main" style="margin: 0 5px 0 5px;">
+                                        <div class="_top">
+                                            <span class="lbl">返工路线</span>
+                                        </div>
+                                        <div class="jtk-demo-canvas canvas-wide statemachine-demo jtk-surface" id="canvas">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-tab-item">
+                            <!-- 其它 -->
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">创建人</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="creator" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">创建时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="createTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">修改人</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="lastModifyMan" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">修改时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="lastModifyTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                                </div>
+                            </div>
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">备注</label>
+                                <div class="layui-input-block">
+                                    <textarea id="remark" name="remark" class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="rightkey" id="rightkey" style="display: none;">
+    <span id="defElement">开始元素</span>
+    <span id="delElement">删除元素</span>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/pnsadmin/Module/process/workflow/jsplumb.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/js/wf/workflow.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['laytpl','form','element','table','xmSelect'], function () {
+        let $ = layui.jquery,
+            laytpl = layui.laytpl,
+            form = layui.form,
+            table = layui.table,
+            element = layui.element,
+            xmSelect = layui.xmSelect;
+
+        //页面首次加载
+        load();
+
+        //单选通用设置
+        let radioSetting = {
+            radio: true
+            ,clickClose: true
+            ,theme: {
+                color: '#5FB878',
+            }
+            ,model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            }
+        }
+
+        //加载流程类型
+        let wfTypeS = xmSelect.render({
+            el: '#wfType'
+            ,...radioSetting
+            ,data: [{name: '正常流程', value: '00', selected: true},{name: '返工流程', value: '01'}]
+        });
+
+        //加载状态
+        let statusS = xmSelect.render({
+            el: '#status'
+            ,...radioSetting
+            ,data: [{name: '激活', value: '00', selected: true},{name: '未激活', value: '01'}]
+        });
+
+        let flagSPTable = true;
+
+        //表格点击事件
+        table.on('row(wfTableFilter)', function(obj){
+            query(obj.data.WfVerRd);
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+        });
+
+        //新增
+        $("#add").click(function () {
+            $("#wfRd").val("");
+            $("#wfVerRd").val("");
+            $("#wfName").val("");
+            statusS.setValue(["00"]);
+            wfTypeS.setValue(["00"]);
+
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+            $("#remark").val("");
+
+            $("#tip").hide();
+            emptyJsplumb();
+            if(flagSPTable){
+                table.reload('spTable');
+                flagSPTable = !flagSPTable;
+            }
+        });
+
+        //保存
+        $("#save").click(function () {
+
+            let jsplumbdata = save_Data();
+
+            if(jsplumbdata == undefined || jsplumbdata == ""){
+                return;
+            }
+
+            let wfinfodata = eval(jsplumbdata.split("~")[1]);
+
+            let wfinfo = [];
+
+            for(let i=0; i<wfinfodata.length; i++){
+                let condition = eval(wfinfodata[i].blockTarget);
+
+                let ospec = [];
+                let rspec = [];
+
+                if(Array.isArray(condition)) {
+                    for (let j = 0; j < condition.length; j++) {
+
+                        if (condition[j].WfCirRd != undefined && condition[j].WfCirRd != "" && condition[j].Expression != undefined) {
+
+                            if (condition[j].RouteType == "可选") { //可选
+
+                                ospec.push({
+                                    OSpecVerRd: condition[j].WfCirRd,
+                                    Expression: condition[j].Expression
+                                });
+
+                            } else {  //返工
+
+                                rspec.push({
+                                    RSpecVerRd: condition[j].WfCirRd,
+                                    Expression: condition[j].Expression
+                                });
+
+                            }
+                        }
+
+                    }
+                }
+
+                wfinfo.push({
+                    SpecVerRd: wfinfodata[i].blockSpecVerRd,
+                    OSpec: ospec,
+                    RSpec: rspec,
+                    NSpecVerRd: wfinfodata[i].blockNextSpecVerRd,
+                    SeSpecType: wfinfodata[i].blockSeSpecType
+                });
+
+            }
+
+            if(wfinfo.length <= 0){
+                layer.msg("工序流程不能为空", {icon: 2});
+                return;
+            }
+
+            let wfRd = $("#wfRd").val().trim();
+            let wfVerRd = $("#wfVerRd").val().trim();
+            let wfName = $("#wfName").val().trim();
+            if(wfRd !== '' || wfVerRd !== '') {
+                //修改
+                let data = {
+                    WfRd: wfRd,
+                    WfVerRd: wfVerRd,
+                    WfName: wfName,
+                    Version: "1",
+                    WFType: wfTypeS.getValue("valueStr"),
+                    IsDef: "00",
+                    Status: statusS.getValue("valueStr"),
+                    WFJson: save_Data(),
+                    WfInfo: wfinfo,
+                    Remark: $("#remark").val().trim()
+                };
+
+                save("02", data);
+            }else{
+                //新增
+                let data = {
+                    WfName: wfName,
+                    Version: "1",
+                    WFType: wfTypeS.getValue("valueStr"),
+                    IsDef: "00",
+                    Status: statusS.getValue("valueStr"),
+                    WFJson: save_Data(),
+                    WfInfo: wfinfo,
+                    Remark: $("#remark").val()
+                };
+
+                save("00", data);
+            }
+        });
+
+        //删除
+        $("#remove").click(function () {
+            let wfRd = $("#wfRd").val().trim();
+            save("01", {WfRd: wfRd});
+        });
+
+        //搜索
+        $("#search").click(function () {
+            table.reload('wfTable', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: [
+                        {
+                            fieldName: "WfName",
+                            fieldOpt: "like",
+                            fieldVal: $("#wfSearch").val().trim()
+                        },
+                        {
+                            fieldName: "Ruid",
+                            fieldOpt: "Order BY",
+                            fieldVal: ""
+                        }
+                    ]
+                }
+            });
+        });
+
+        //specTable双击事件
+        table.on('rowDouble(spTableFilter)', function(obj){
+            newSpecNode(obj.data.SpecVerRd, obj.data.SpecName);
+            return false;
+        });
+
+        //specTable回车事件
+        $(document).on('keydown', function (event) {
+            if (event.keyCode == 13) {
+                if($("#specSearch").is(":focus")) {
+                    table.reload('spTable', {
+                         where: {
+                            fields: [
+                                {
+                                    fieldName: "SpecName",
+                                    fieldOpt: "like",
+                                    fieldVal: $("#specSearch").val().trim()
+                                },
+                                {
+                                    fieldName: "Ruid",
+                                    fieldOpt: "Order BY",
+                                    fieldVal: ""
+                                }
+                            ]
+                        }
+                    });
+                }
+            }
+        });
+
+        //查询
+        function query(id) {
+            requests({url: "/WF/GetWfVInfo", contentType: "application/x-www-form-urlencoded", data: {ExecType: "01",
+                BusData: JSON.stringify({WfVerRd: id})
+            }}, function (res) {
+                let data = res.Data;
+
+                $("#wfRd").val(data.WfRd);
+                $("#wfVerRd").val(data.WfVerRd);
+                $("#wfName").val(data.WfName);
+                statusS.setValue([data.Status]);
+                wfTypeS.setValue([data.WFType]);
+
+                $("#creator").val(data.Creator);
+                $("#createTime").val(data.CreateTime);
+                $("#lastModifyMan").val(data.LastModifyMan);
+                $("#lastModifyTime").val(data.LastModifyTime);
+                $("#remark").val(data.Remark);
+
+                element.tabChange('tab', '2');
+
+                loadJsplumb(data.WFJson);
+
+                if(flagSPTable){
+                    table.reload('spTable');
+                    flagSPTable = !flagSPTable;
+                }
+
+                $("#tip").show();
+            });
+        }
+
+        function save(type, data) {
+            requests({url: "/WF/SaveWfInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": type,
+                    "BusData": JSON.stringify(data)
+                }}, function (res) {
+                layer.msg(res.MsgDes, {icon: 1});
+                table.reload('wfTable');
+
+                if(type === "00"){
+                    $("#add").click();
+                }else if(type === "01"){
+                    $("#add").click();
+                }else if(type === "02"){
+                    query(data.WfVerRd);
+                }
+            });
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#wfTable',
+                url: getBasePath() + "/WF/GetAllWfNew",
+                method: 'post',
+                contentType: 'application/json',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                cols: [
+                    [
+                        {field: 'WfVerRd', title: 'id', hide: true},
+                        {field: 'WfName', title: '工艺流程名称', templet: function(d){
+                            return '<div><span">'+ d.WfName +'</span><i class="layui-icon layui-icon-right" style="float: right;"></i> </div>'
+                        }, unresize: true}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: {
+                    layout: ['prev', 'page', 'next', 'count'] //自定义分页布局
+                    ,groups: 2 //只显示 1 个连续页码
+                    ,first: false //不显示首页
+                    ,last: false //不显示尾页
+                },
+                skin: 'row '
+            });
+
+            table.render({
+                elem: '#spTable',
+                url: getBasePath() + "/Spec/GetAllSpecNew",
+                method: 'post',
+                contentType: 'application/json',
+                height: 500,
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                cols: [
+                    [
+                        {field: 'SpecVerRd', title: 'id', hide: true},
+                        {field: 'SpecName', title: '工序名称', templet: function(d){
+                            return '<div><span">'+ d.SpecName +'</span><i class="layui-icon layui-icon-add-circle" style="float: right;"></i></div>'
+                        }, unresize: true}
+                    ]
+                ],
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                skin: 'row '
+            });
+        }
+    });
+</script>
+</body>
+</html>

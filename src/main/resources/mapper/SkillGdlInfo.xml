@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SkillGdlDAO" >
+    <resultMap id="skillGdlInfoMap" type="pnc.mesadmin.entity.SkillGdlInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="SkillGGd" property="skillGGd"></result>
+        <result column="SkillGd" property="skillGd"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime" ></result>
+        <result column="LastModifyMan" property="lastModifyMan" ></result>
+        <result column="LastModifyTime" property="lastModifyTime" ></result>
+        <result column="Remark" property="remark" ></result>
+    </resultMap>
+
+    <!--根据技能组标识查询技能明细信息-->
+    <select id="SelectSkillGdlInfoBySkillGGd" resultMap="skillGdlInfoMap" parameterType="string">
+        SELECT *  FROM tpm_skillgdlinfo WHERE SkillGGd=#{SkillGGd}
+    </select>
+
+    <!--新增技能明细信息-->
+    <insert id="InsertSkillGdlInfo">
+        INSERT INTO `tpm_skillgdlinfo`(Guid,SkillGGd,SkillGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{skillGGd},#{skillGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+    <!--删除明细信息-->
+    <delete id="DeleteSkillGdlInfo">
+      DELETE FROM tpm_skillgdlinfo WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新技能组明细信息-->
+    <update id="UpdateSkillGdlInfo">
+        UPDATE `tpm_skillgdlinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="skillGGd != null">
+                SkillGGd = #{ skillGGd },
+            </if>
+            <if test="skillGd != null">
+                SkillGd = #{ skillGd },
+            </if>
+
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSTotalColumnsDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CSTotalColumnsInfo" id="resuCSTotalColumnsInfo">
+        <id property="Ruid" column="Ruid"/>
+
+    </resultMap>
+
+    <select id="SelectAllInfo" resultMap="resuCSTotalColumnsInfo">
+        select * from tpm_cstotalcolumnsinfo
+    </select>
+
+    <select id="SelectAllByCSTotalGd" resultMap="resuCSTotalColumnsInfo">
+        select * from tpm_cstotalcolumnsinfo where  CSTotalGd =#{CSTotalGd}
+    </select>
+
+    <insert id="InsertCSTotalColumnsInfo">
+     INSERT INTO tpm_cstotalcolumnsinfo(Guid,CSTotalGd,ColumnName,OutPutText,Creator,CreateTime,Remark)
+        VALUES (#{Guid},#{CSTotalGd},#{ColumnName},#{OutPutText},#{Creator},#{CreateTime},#{Remark})
+    </insert>
+
+</mapper>

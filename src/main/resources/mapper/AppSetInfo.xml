@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.AppSetDao">
+
+    <resultMap type="pnc.mesadmin.entity.AppSetInfo" id="AppSetInfoMap">
+        <id property="ruid" column="ruid"/>
+    </resultMap>
+
+    <!--根据ID查询-->
+    <select id="SelectOneByAppSetInfo" resultMap="AppSetInfoMap">
+        SELECT * FROM tpm_appsetinfo where Ruid=#{ruid}
+    </select>
+
+
+    <update id="SevaAppSetInfo" parameterType="int">
+        UPDATE tpm_appsetinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="appName != null">
+                AppName = #{ appName },
+            </if>
+            <if test="appLogo != null">
+                AppLogo = #{ appLogo },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark }
+            </if>
+        </trim>
+        WHERE Ruid = #{ruid}
+    </update>
+
+</mapper>
+

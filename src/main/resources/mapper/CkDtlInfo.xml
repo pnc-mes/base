@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CkDtlDAO">
+    <resultMap id="ckDtlInfoMap" type="pnc.mesadmin.entity.CkDtlInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="CkTkDtlGd" property="ckTkDtlGd"></result>
+        <result column="CkCode" property="ckCode"></result>
+        <result column="BarType" property="barType"></result>
+        <result column="BarCode" property="barCode"></result>
+        <result column="MaVerGd" property="maVerGd"></result>
+        <result column="MaterialCode" property="materialCode"></result>
+        <result column="MaterialName" property="materialName"></result>
+        <result column="MaterialDes" property="materialDes"></result>
+        <result column="StoreGd" property="storeGd"></result>
+        <result column="LocationGd" property="locationGd"></result>
+        <result column="Batch" property="batch"></result>
+        <result column="Num" property="num"></result>
+        <result column="UnitName" property="unitName"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime"></result>
+        <result column="LastModifyMan" property="lastModifyMan"></result>
+        <result column="LastModifyTime" property="lastModifyTime"></result>
+        <result column="Remark" property="remark"></result>
+    </resultMap>
+
+    <!--新增出库扫描实体信息-->
+    <insert id="InsertCkDtlInfo" >
+            INSERT INTO `tpm_ckdtlinfo`(
+            Guid,CkTkDtlGd,CkCode,BarType,BarCode,MaVerGd,MaterialCode,MaterialName,MaterialDes,StoreGd,LocationGd,Batch,Num,UnitName,
+            Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+            VALUES (
+            #{guid},#{ckTkDtlGd},#{ckCode},#{barType},#{barCode},#{maVerGd},#{materialCode},#{materialName},#{materialDes},#{storeGd},#{locationGd},#{batch},#{num},#{unitName},
+            #{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--根据出库明细的标识到扫描信息中查询信息-->
+    <select id="SelectCkDtlInfoByCkTkDtlGd" parameterType="string" resultMap="ckDtlInfoMap">
+        SELECT * FROM  `tpm_ckdtlinfo` WHERE CkTkDtlGd=#{ckTkDtlGd}
+    </select>
+
+    <!--根据批次号查询已提交信息-->
+    <select id="SelectCkDtlInfoByBatch" parameterType="string" resultMap="ckDtlInfoMap">
+        SELECT * FROM  `tpm_ckdtlinfo` WHERE Batch=#{argBatch}
+    </select>
+
+    <!--根据批次号查询已提交信息-->
+    <select id="SelectCkDtlInfoByBatchAndCkCode" parameterType="string" resultMap="ckDtlInfoMap">
+        SELECT * FROM  `tpm_ckdtlinfo` WHERE Batch=#{argBatch} AND CkCode=#{argCkCode}
+    </select>
+
+    <!--查询所有出库信息-->
+    <select id="SelectAllCkDtlInfo" parameterType="string" resultMap="ckDtlInfoMap">
+        SELECT * FROM  `tpm_ckdtlinfo`
+    </select>
+
+
+    <select id="SelectCkDtlInfoguid" parameterType="string" resultMap="ckDtlInfoMap">
+        SELECT * FROM  `tpm_ckdtlinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--根据MaVerGd和StoreGd查询出库信息-->
+    <select id="SelectCkDtlInfoByMaVerGdAndStoreGd" parameterType="string" resultMap="ckDtlInfoMap">
+        SELECT * FROM  `tpm_ckdtlinfo` WHERE MaVerGd=#{argMaVerGd} AND StoreGd=#{argStoreGd}
+    </select>
+</mapper>

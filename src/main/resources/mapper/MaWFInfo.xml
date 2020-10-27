@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MaWFDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.MaWFInfo" id="MaWFInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="maVerGd" column="maVerGd" />
+		<result property="wFVerGd" column="wFVerGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+
+    <!-- 根据MaVerGd查询物料工艺流程设置信息  (By-pjf)-->
+    <select id="SelectByMaVerGd" resultMap="MaWFInfoResult">
+        SELECT * FROM tpm_mawfinfo WHERE MaVerGd = #{ argMaVerGd }
+    </select>
+
+	<insert id="inseetAll">
+		INSERT INTO tpm_mawfinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			Guid,MaVerGd,WFVerGd,Creator,CreateTime,
+			<if test="lastModifyMan !=null and lastModifyMan!=''">
+				LastModifyMan,
+			</if>
+			<if test="lastModifyTime !=null and lastModifyTime!=''">
+				LastModifyTime,
+			</if>
+			<if test="remark !=null and remark!=''">
+				Remark
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			#{guid},#{maVerGd},#{wFVerGd},#{creator},#{createTime},
+			<if test="lastModifyMan !=null and lastModifyMan!=''">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime !=null and lastModifyTime!=''">
+				#{lastModifyTime},
+			</if>
+			<if test="remark !=null and remark!=''">
+				#{remark}
+			</if>
+		</trim>
+	</insert>
+
+	<!--删除工艺流程-->
+	<delete id="deleteAll">
+		DELETE FROM tpm_mawfinfo WHERE MaVerGd=#{MaVerGd}
+	</delete>
+
+</mapper>

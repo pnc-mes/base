@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PrintTDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.PrintTInfo" id="PrintTInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="tempName" column="tempName" />
+        <result property="fileName" column="fileName" />
+		<result property="isScript" column="isScript" />
+		<result property="scriptName" column="scriptName" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+	<!-- 新增打印模板信息 (By-pjf)-->
+	<insert id="InsertPrintTInfo">
+		INSERT INTO tpm_printtinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,TempName,FileName,Creator,CreateTime,IsScript,
+			<if test="scriptName != null">
+				ScriptName,
+			</if>
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{tempName},#{fileName},#{creator},#{createTime},#{isScript},
+
+			<if test="scriptName != null">
+				#{scriptName},
+			</if>
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+    <!-- 根据guid删除打印模板信息 (By-pjf)-->
+    <delete id="DeletePrintTInfo">
+      DELETE FROM tpm_printtinfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 根据guid修改打印模板信息 (By-pjf)-->
+    <update id="UpdatePrintTInfo">
+        UPDATE tpm_printtinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="tempName != null">
+                TempName = #{ tempName },
+            </if>
+            <if test="fileName != null">
+                FileName = #{ fileName },
+            </if>
+			<if test="isScript != null">
+				IsScript = #{ isScript },
+			</if>
+			<if test="scriptName != null">
+				ScriptName = #{ scriptName },
+			</if>
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Guid = #{ guid }
+    </update>
+
+    <!-- 获取所有打印模板信息 (By-pjf)-->
+	<select id="SelectAllPrintTInfo" resultMap="PrintTInfoResult">
+        SELECT * FROM tpm_printtinfo
+    </select>
+
+	<!-- 根据ruid获取打印模板信息 (By-pjf)-->
+	<select id="SelectPrintTInfo" resultMap="PrintTInfoResult">
+		SELECT * FROM tpm_printtinfo WHERE Ruid = #{ argRuid }
+	</select>
+
+	<!-- 根据Guid获取打印模板信息 (By-pjf)-->
+	<select id="SelectByGuid" resultMap="PrintTInfoResult">
+		SELECT * FROM tpm_printtinfo WHERE Guid = #{ argGuid }
+	</select>
+
+	<!-- 根据TempName获取打印模板信息 (By-pjf)-->
+	<select id="SelectByTempName" resultMap="PrintTInfoResult">
+		SELECT * FROM tpm_printtinfo WHERE TempName = #{ argTempName }
+	</select>
+
+</mapper>

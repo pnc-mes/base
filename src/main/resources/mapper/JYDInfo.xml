@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.JYDDAO">
+
+    <resultMap type="pnc.mesadmin.entity.JYDInfo" id="JYDInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAll" resultMap="JYDInfoMap">
+        SELECT * FROM tpm_stationinfo
+    </select>
+
+    <select id="SelectByRuid" resultMap="JYDInfoMap">
+        SELECT * FROM tpm_stationinfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="JYDInfoMap">
+        SELECT * FROM tpm_stationinfo where  Guid=#{guid}
+    </select>
+
+    <select id="SelectByName" resultMap="JYDInfoMap">
+        SELECT * FROM tpm_stationinfo where  name=#{name}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_stationinfo(Guid,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <update id="UpdateByGuid">
+        UPDATE tpm_stationinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+        </trim>
+        WHERE Guid =#{guid}
+    </update>
+
+    <delete id="DeleteByGuid">
+        DELETE  FROM tpm_stationinfo WHERE Guid =#{guid}
+    </delete>
+
+</mapper>
+

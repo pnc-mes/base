@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.EmailRoleDAO" >
+    <resultMap type="pnc.mesadmin.entity.EmailRoleInfo" id="EmailRoleInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="distributionGd" column="distributionGd" />
+        <result property="roleGd" column="roleGd" />
+        <result property="sequence" column="sequence" />
+    </resultMap>
+
+    <!--根据分发主表的guid 来查询分发角色信息-->
+    <select id="SelectEmailRoleInfoByDistributionGd" parameterType="string" resultMap="EmailRoleInfoResult">
+        select *  from `tpm_emailroleinfo` where distributionGd=#{distributionGd}
+    </select>
+    <!--新增-->
+    <insert id="InsertEmailRoleInfo">
+        INSERT INTO tpm_emailroleinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            distributionGd,roleGd,sequence,
+
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{distributionGd},#{roleGd},#{sequence},
+
+        </trim>
+    </insert>
+
+    <!--删除-->
+    <delete id="DeleteEmailRoleInfo">
+         DELETE  FROM `tpm_emailroleinfo` WHERE ruid = #{ruid}
+    </delete>
+</mapper>

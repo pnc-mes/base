@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.BLevelDAO" >
+    <resultMap type="pnc.mesadmin.entity.BLevelInfo" id="BLevelInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="bLName" column="bLName" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--查询批次等级信息列表-->
+    <select id="SelectAllBLevelInfo" resultMap="BLevelInfoResult">
+        select * from tpm_blevelinfo
+    </select>
+
+    <!--查询批次等级信息-->
+    <select id="SelectBybLRd" resultMap="BLevelInfoResult">
+        SELECT * FROM tpm_blevelinfo b WHERE b.`Ruid` = #{bLRd}
+    </select>
+
+    <!--查询批次等级名称-->
+    <select id="SelectBybLName" resultMap="BLevelInfoResult">
+        SELECT * FROM tpm_blevelinfo b WHERE b.`bLName` = #{bLName}
+    </select>
+
+    <!--通过Guid查询批次等级信息    王怀龙-->
+    <select id="SelectByGuid" resultMap="BLevelInfoResult">
+        SELECT * FROM tpm_blevelinfo b WHERE b.`Guid` = #{_parameter}
+    </select>
+
+    <!--保存批次等级信息-->
+    <insert id="InsertBLevelInfo">
+        INSERT INTO tpm_blevelinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,BLName,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{bLName},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除批次等级信息-->
+    <delete id="DeleteBLevelInfo">
+        DELETE FROM tpm_blevelinfo WHERE Ruid = #{bLRd}
+    </delete>
+
+    <!--更新批次等级信息-->
+    <update id="UpdateBLevelInfo">
+        UPDATE tpm_blevelinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="bLName != null">
+                bLName = #{bLName},
+            </if>
+
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.HoldDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.HoldInfo" id="HoldInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="batch" column="batch" />
+		<result property="reaDes" column="reaDes" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增 (By-pjf)-->
+	<insert id="InsertHold">
+		INSERT INTO tpm_holdinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,batch,reaDes,Creator,CreateTime,
+
+			<if test="specVerGd != null">
+				specVerGd,
+			</if>
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{batch},#{reaDes},#{creator},#{createTime},
+
+			<if test="specVerGd != null">
+				#{specVerGd},
+			</if>
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+</mapper>

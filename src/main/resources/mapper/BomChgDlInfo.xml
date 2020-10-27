@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.BomChgDlDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.BomChgDlInfo" id="BomChgDlInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="bomChgGd" column="bomChgGd" />
+		<result property="qMaterialCode" column="qMaterialCode" />
+		<result property="qMaterialName" column="qMaterialName" />
+		<result property="qSpecName" column="qSpecName" />
+		<result property="qNum" column="qNum" />
+		<result property="qARate" column="qARate" />
+		<result property="qConSMode" column="qConSMode" />
+		<result property="qChecked" column="qChecked" />
+		<result property="hMaterialCode" column="hMaterialCode" />
+		<result property="hMaterialName" column="hMaterialName" />
+		<result property="hSpecName" column="hSpecName" />
+		<result property="hNum" column="hNum" />
+		<result property="hConSMode" column="hConSMode" />
+        <result property="hChecked" column="hChecked" />
+        <result property="optType" column="optType" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增变更记录明细信息 (By-pjf)-->
+	<insert id="InsertBomChgDl">
+		INSERT INTO tpm_bomchgdlinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,bomChgGd,qMaterialCode,qMaterialName,qSpecName,qNum,qARate,qConSMode,qChecked,
+            hMaterialCode,hMaterialName,hSpecName,hNum,hConSMode,hChecked,optType,
+            Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{bomChgGd},#{qMaterialCode},#{qMaterialName},#{qSpecName},#{qNum},#{qARate},#{qConSMode},#{qChecked},
+            #{hMaterialCode},#{hMaterialName},#{hSpecName},#{hNum},#{hConSMode},#{hChecked},#{optType},
+            #{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="SelectByBomChgGd" resultMap="BomChgDlInfoResult">
+		SELECT * FROM tpm_bomchgdlinfo WHERE BomChgGd = #{guid}
+	</select>
+</mapper>

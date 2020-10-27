@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DoDCDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.DoDCInfo" id="doDCInfoMap">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="batch" column="batch" />
+        <result property="specVerGd" column="specVerGd" />
+        <result property="specName" column="specName" />
+        <result property="devGd" column="devGd" />
+        <result property="devName" column="devName" />
+        <result property="dCItemGd" column="dCItemGd" />
+        <result property="itemName" column="itemName" />
+        <result property="cValue" column="cValue" />
+        <result property="optType" column="optType" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+        <result property="lineName" column="lineName" />
+    </resultMap>
+
+    <!-- 新增批次数据采集信息  (By-pjf) -->
+    <insert id="InsertDoDcInfo">
+        INSERT INTO tpm_dodcinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,batch,specVerGd,specName,devGd,devName,dCItemGd,itemName,cValue,Creator,CreateTime,LineGd,
+
+            <if test="type != null">
+                type,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{batch},#{specVerGd},#{specName},#{devGd},
+            #{devName},#{dCItemGd},#{itemName},#{cValue},#{creator},#{createTime},#{lineGd},
+
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据批次信息批次数据采集信息 张亮亮-->
+    <select id="SelectDoDCInfoBybatch" resultMap="doDCInfoMap" parameterType="string">
+        SELECT * FROM tpm_dodcinfo WHERE batch=#{batch}
+    </select>
+
+    <!--根据批次信息批次数据采集信息查询数据采集信息去掉去重 张亮亮-->
+    <select id="SelectDoDCInfoDISTINCTBybatch" resultMap="doDCInfoMap" parameterType="string">
+       SELECT a.SpecName,a.LineGd,a.SpecVerGd,
+COUNT(DISTINCT a.SpecName) FROM tpm_dodcinfo a WHERE batch=#{batch}  GROUP BY  a.SpecName,a.LineGd,a.SpecVerGd
+    </select>
+
+    <!--根据批次信息查询数据采集信息返回的ItemName汇总 张亮亮-->
+    <select id="SelectDoDCInfoItemNameBybatch" resultMap="doDCInfoMap" parameterType="string">
+       SELECT ItemName FROM tpm_dodcinfo WHERE batch=#{batch} GROUP BY ItemName
+    </select>
+
+    <!--根据批次信息查询数据采集信息返回的ItemName汇总的其他值 张亮亮-->
+    <select id="SelectDoDCInfoItemNameBybatchspecName" resultMap="doDCInfoMap" parameterType="string">
+          SELECT DISTINCT DevName,Creator FROM tpm_dodcinfo WHERE batch=#{batch} AND SpecName=#{specName}
+    </select>
+    <!--张亮亮-->
+    <select id="SelectDoDCInfoItemNameBybatchCValue" resultMap="doDCInfoMap" parameterType="string">
+      SELECT ItemName ,CValue   FROM tpm_dodcinfo WHERE batch=#{batch} AND SpecName=#{specName} AND type=#{type} GROUP BY ItemName ,CValue
+    </select>
+
+</mapper>

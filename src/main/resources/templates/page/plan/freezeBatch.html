@@ -1,0 +1,234 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：冻结批次
+* 创建人：pjf
+* 创建时间：2020-10-14
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>冻结批次</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+        .dPanel{
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <!--<button class="layui-btn layui-btn-danger layui-btn-sm data-add-btn" lay-event="del"> 删除 </button>-->
+    </div>
+</script>
+
+<!-- content -->
+<div class="layui-row">
+    <div class="layui-col-xs12 layui-col-sm4 layui-col-md4">
+        <div class="layuimini-container" style="margin: 0 5px 5px 0;">
+            <div class="layuimini-main">
+                <div class="layui-form-item">
+                    <button type="button" class="layui-btn layui-btn-primary" id="query">查询</button>
+
+                    <button type="button" class="layui-btn layui-btn-normal" id="save">冻结</button>
+                </div>
+            </div>
+        </div>
+        <div class="layuimini-container" style="margin-right: 5px;">
+            <div class="layuimini-main">
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">生产批次</label>
+                    <div class="layui-input-block">
+                        <textarea id="batch" required lay-verify="required" placeholder="请输入批次号" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">冻结原因</label>
+                    <div class="layui-input-block">
+                        <div id="msg" class="xm-select-demo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-col-xs12 layui-col-sm8 layui-col-md8">
+        <div class="layuimini-container" style="margin-left: 5px;">
+            <div class="layuimini-main">
+                <table class="layui-hide" id="currentTableId" lay-filter="tableFilter"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['laytpl','form','element','table','xmSelect'], function () {
+        let $ = layui.jquery,
+            laytpl = layui.laytpl,
+            form = layui.form,
+            table = layui.table,
+            element = layui.element,
+            xmSelect = layui.xmSelect;
+
+        //页面首次加载
+        load();
+
+        //单选通用设置
+        let radioSetting = {
+            radio: true
+            ,clickClose: true
+            ,theme: {
+                color: '#5FB878',
+            },model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            },toolbar: {
+                show: true,
+            },
+            filterable: true
+        }
+
+        //加载冻结原因
+        let msgS = xmSelect.render({
+            el: '#msg'
+            ,...radioSetting
+            ,template({ item, sels, name, value }){
+                return item.ReaDes  + '<span style="position: absolute; right: 10px; color: #8799a3">'+ item.ReaCode + '</span>'
+            }
+            ,prop: {
+                name: 'ReaDes',
+                value: 'ReaRd',
+            }
+            ,data: []
+        });
+        requests({url: "/Reason/GetAllReaNew", data: JSON.stringify({
+            fields: [{
+                fieldName: "ReaType",
+                fieldOpt: "=",
+                fieldVal: "06"
+            }]})},
+        function (res) {
+            msgS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //toolbar监听事件
+        table.on('toolbar(tableFilter)', function (obj) {
+            if(obj.event === 'del'){
+                let data = table.cache['currentTableId'].filter(item => !item.LAY_CHECKED);
+                table.reload("currentTableId", {data: data});
+            }
+        });
+
+        //查询事件
+        $("#query").click(function (obj) {
+            let batch = $("#batch").val().trim();
+
+            query(batch);
+        });
+
+        $("#save").click(function () {
+            let msg = msgS.getValue("nameStr");
+
+            if(msg === undefined || msg === ''){
+                layer.msg('冻结原因不能为空', {icon: 2});
+                return;
+            }
+
+            let arr = table.checkStatus('currentTableId');
+            if(arr === undefined || arr.data.length <= 0){
+                layer.msg('请选中需要冻结的批次号', {icon: 2});
+                return;
+            }
+
+            let data = {
+                BatchInfo: arr.data.map(item => {return {Batch: item.Batch}}),
+                ReaDes: msg
+            };
+
+            save(data);
+        });
+
+        //查询
+        function query(batch) {
+            if(batch === undefined || batch === ''){
+                return;
+            }
+            let bs = batch.split("\n").join(",");
+            requests({url: "/Commom/GetCMBNew", data: JSON.stringify({
+                fields: [{
+                    fieldName: "status",
+                    fieldOpt: "!=",
+                    fieldVal: "02"
+                },{
+                    fieldName: "batch",
+                    fieldOpt: "in",
+                    fieldVal: bs
+                }]})
+            }, function (res) {
+                let data = res.data.list;
+
+                table.reload('currentTableId', {
+                    data: data
+                });
+            });
+        }
+
+        function save(data) {
+            requests({url: "/Batch/SaveBOptInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify(data)
+            }}, function (res) {
+                layer.msg(res.MsgDes, {icon: 1});
+                $("#query").click();
+            });
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                toolbar: '#toolbar',
+                defaultToolbar: ['filter', 'exports', 'print'],
+                data: [],
+                cols: [
+                    [
+                        {type:'checkbox'},
+                        {field: 'Batch', title: '批次号'},
+                        {field: 'MaCode', title: '物料代码'},
+                        {field: 'MaName', title: '物料名称'},
+                        {field: 'Num', title: '数量'}
+                    ]
+                ],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+    });
+</script>
+</body>
+</html>

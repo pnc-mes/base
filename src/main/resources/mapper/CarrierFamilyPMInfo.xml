@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CarrierFamilyPMDAO" >
+    <resultMap type="pnc.mesadmin.entity.CarrierFamilyPMInfo" id="CarrierFamilyPMInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="carrierFamilyGd" column="carrierFamilyGd" />
+        <result property="pMGd" column="pMGd" />
+        <result property="pMType" column="pMType" />
+
+    </resultMap>
+
+    <select id="selectCarrierFamilyPMInfoByCarrierFamilyGd" parameterType="string" resultMap="CarrierFamilyPMInfoResult">
+        select * from tpm_carrierfamilypminfo where carrierFamilyGd=#{carrierFamilyGd}
+    </select>
+
+    <insert id="insertCarrierFamilyPMInfo">
+          insert into tpm_carrierfamilypminfo(guid,carrierFamilyGd,pMGd,pMType)
+          values (#{guid},#{carrierFamilyGd},#{pMGd},#{pMType});
+    </insert>
+
+    <delete id="deleteCarrierFamilyPMInfo">
+        delete from tpm_carrierfamilypminfo where ruid=#{ruid}
+    </delete>
+
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.TaskDAO" >
+    <resultMap type="pnc.mesadmin.entity.TaskInfo" id="taskInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="taskName" column="taskName" />
+        <result property="description" column="description" />
+        <result property="status" column="status" />
+        <result property="taskType" column="taskType" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!--查询所有任务历史-->
+    <select id="selectAllTaskInfo" resultMap="taskInfoResult">
+        select * from tpm_taskinfo
+    </select>
+
+    <!--查询单个历史任务信息根据guid-->
+    <select id="selectTaskInfoByGuid" resultMap="taskInfoResult" parameterType="string">
+        select * from tpm_taskinfo where guid=#{guid}
+    </select>
+
+    <!--查询单个历史任务信息根据taskListName-->
+    <select id="selectTaskInfoByTaskName" parameterType="string" resultMap="taskInfoResult">
+        select * from tpm_taskinfo where taskName=#{taskName}
+    </select>
+
+    <!--查询单个历史任务信息根据ruid-->
+    <select  id="selectTaskInfoByRuid" parameterType="int" resultMap="taskInfoResult">
+         select * from tpm_taskinfo where ruid=#{ruid}
+    </select>
+
+    <!--新增历史任务信息-->
+    <insert id="insertTaskInfo">
+        <selectKey keyProperty="ruid" order="AFTER"  resultType="int">
+            select @@IDENTITY
+        </selectKey>
+        insert into  tpm_taskinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            guid,creator,createTime,taskName,
+            <if test="description!=null">
+                description,
+            </if>
+            <if test="status!=null">
+                status,
+            </if>
+            <if test="taskType!=null">
+                taskType,
+            </if>
+            <if test="lastModifyMan!=null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime!=null">
+                lastModifyTime,
+            </if>
+            <if test="remark!=null">
+                remark,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{creator},#{createTime},#{taskName},
+            <if test="description!=null">
+                #{description},
+            </if>
+            <if test="status!=null">
+                #{status},
+            </if>
+            <if test="taskType!=null">
+                #{taskType},
+            </if>
+            <if test="lastModifyMan!=null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime!=null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark!=null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除历史任务信息-->
+    <delete id="deleteTaskInfo">
+        delete from tpm_taskinfo where ruid=#{ruid}
+    </delete>
+
+    <!--更新任务历史信息-->
+    <update id="updateTaskInfo">
+        update  `tpm_taskinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                guid = #{ guid },
+            </if>
+            <if test="taskName != null">
+                taskName = #{ taskName },
+            </if>
+            <if test="description != null">
+                description = #{ description },
+            </if>
+            <if test="taskType != null">
+                taskType = #{ taskType },
+            </if>
+            <if test="status != null">
+                status = #{ status },
+            </if>
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+        </trim>
+        WHERE ruid = #{ ruid }
+    </update>
+</mapper>

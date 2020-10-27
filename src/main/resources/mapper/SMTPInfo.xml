@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SMTPDAO" >
+    <resultMap type="pnc.mesadmin.entity.SMTPInfo" id="ResInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="Guid" column="Guid" />
+        <result property="UserName" column="UserName" />
+        <result property="Port" column="Port" />
+        <result property="Password" column="Password" />
+        <result property="SMTPURL" column="SMTPURL" />
+        <result property="UseSSL" column="UseSSL" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <select id="SelectSMTP" resultMap="ResInfoResult">
+        SELECT * from tpm_smtpinfo
+    </select>
+
+    <select id="SelectAllSMTPInfoBySMTPName" resultMap="ResInfoResult" parameterType="string">
+        SELECT * from tpm_smtpinfo where SMTPName=#{SMTPName}
+    </select>
+
+    <select id="SelectSMTPByID" resultMap="ResInfoResult">
+         select * from tpm_smtpinfo WHERE Ruid= #{SMTPRd}
+    </select>
+    <select id="SelectByGuid" resultMap="ResInfoResult">
+        select * from tpm_smtpinfo WHERE Guid= #{Guid}
+    </select>
+    <insert id="InsertSMTPInfo">
+        INSERT INTO tpm_smtpinfo (Guid,SMTPName,Port,UserName,Password,SMTPURL,UseSSL,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{SMTPName},#{Port},#{UserName},#{Password},#{SMTPURL},#{UseSSL},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+    <delete id="DeleteSMTPInfo" >
+        DELETE FROM tpm_smtpinfo WHERE Ruid = #{Ruid}
+    </delete>
+    <update id="UpdateSMTPInfo">
+        UPDATE tpm_smtpinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Guid != null">
+                Guid = #{Guid},
+            </if>
+            <if test="Port != null">
+                Port = #{Port},
+            </if>
+            <if test="UserName != null">
+                UserName = #{UserName},
+            </if>
+            <if test="Password != null">
+                Password = #{Password},
+            </if>
+            <if test="SMTPURL != null">
+                SMTPURL = #{SMTPURL},
+            </if>
+            <if test="UseSSL != null">
+                UseSSL = #{UseSSL},
+            </if>
+            <if test="Creator != null">
+                Creator = #{Creator},
+            </if>
+            <if test="CreateTime != null">
+                CreateTime = #{CreateTime},
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{LastModifyMan},
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{LastModifyTime},
+            </if>
+            <if test="Remark != null">
+                Remark = #{Remark}
+            </if>
+        </trim>
+        where Ruid = #{Ruid}
+    </update>
+</mapper>

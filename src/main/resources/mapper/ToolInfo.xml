@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ToolDao">
+    <resultMap id="ToolMapper" type="pnc.mesadmin.entity.ToolInfo">
+        <id property="Ruid" column="Ruid"></id>
+        <result property="Guid" column="Guid"></result>
+        <result property="ToolName" column="ToolName"></result>
+        <result property="SupplierGd" column="SupplierGd"></result>
+        <result property="ToolFamilyGd" column="ToolFamilyGd"></result>
+        <result property="DevSMGd" column="DevSMGd"></result>
+        <result property="DevSGd" column="DevSGd"></result>
+        <result property="UsrNum" column="UsrNum"></result>
+        <result property="VenderSN" column="VenderSN"></result>
+        <result property="FaGd" column="FaGd"></result>
+        <result property="Creator" column="Creator"></result>
+        <result property="CreateTime" column="CreateTime"></result>
+        <result property="LastModifyMan" column="LastModifyMan"></result>
+        <result property="LastModifyTime" column="LastModifyTime"></result>
+        <result property="Remark" column="Remark"></result>
+    </resultMap>
+    <!--更新工具信息-->
+    <update id="UpdateToolInfoByruid">
+        UPDATE `tpm_toolinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Guid != null">
+                Guid = #{ Guid },
+            </if>
+            <if test="ToolName != null">
+                ToolName = #{ ToolName },
+            </if>
+            <if test="SupplierGd != null">
+                SupplierGd = #{ SupplierGd },
+            </if>
+            <if test="ToolFamilyGd != null">
+                ToolFamilyGd = #{ ToolFamilyGd },
+            </if>
+            <if test="DevSMGd != null">
+                DevSMGd = #{ DevSMGd },
+            </if>
+            <if test="DevSGd != null">
+                DevSGd = #{ DevSGd },
+            </if>
+            <if test="VenderSN != null">
+                VenderSN = #{ VenderSN },
+            </if>
+            <if test="FaGd != null">
+                FaGd = #{ FaGd },
+            </if>
+            <if test="Creator != null">
+                Creator = #{ Creator },
+            </if>
+            <if test="CreateTime != null">
+                CreateTime = #{ CreateTime },
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{ LastModifyMan },
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{ LastModifyTime },
+            </if>
+            <if test="Remark != null">
+                Remark = #{ Remark }
+            </if>
+        </trim>
+        WHERE Ruid = #{ Ruid }
+    </update>
+    <!-- 获取工具列表信息-->
+    <select id="SelectAllToolInfo" resultMap="ToolMapper">
+        SELECT * FROM tpm_toolinfo
+    </select>
+
+    <!--根据工具ruid查询工厂信息-->
+    <select id="SelectToolInfoByruid" resultMap="ToolMapper" parameterType="int">
+        SELECT * FROM `tpm_toolinfo` WHERE Ruid=#{Ruid}
+    </select>
+
+    <select id="SelectAllByVenSn" resultMap="ToolMapper" parameterType="String">
+        SELECT * FROM `tpm_toolinfo` WHERE VenderSN=#{venSn}
+    </select>
+
+
+    <!--增加工具信息-->
+    <insert id="InsertToolInfo">
+        INSERT INTO `tpm_toolinfo`(Guid,ToolName,SupplierGd,ToolFamilyGd,DevSMGd,VenderSN,FaGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{ToolName},#{SupplierGd},#{ToolFamilyGd},#{DevSMGd},#{VenderSN},#{FaGd},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+
+    <!--根据guid查询工具信息 ,此查询是在工作中心中查询 -->
+    <select id="SelectToolInfoByguid" resultMap="ToolMapper" parameterType="string">
+        SELECT * FROM `tpm_toolinfo` WHERE Guid=#{Guid}
+    </select>
+
+    <!--根据名称查工具信息 ,此查询是在工作中心中查询 -->
+    <select id="SelectToolInfoByFactoryName" resultMap="ToolMapper" parameterType="string">
+        SELECT * FROM `tpm_toolinfo` WHERE ToolName=#{ToolName}
+    </select>
+    <!--删除工具信息，根据工厂ID-->
+    <delete id="DeleteToolInfoByruid">
+        DELETE FROM `tpm_toolinfo` WHERE Ruid=#{Ruid}
+    </delete>
+</mapper>

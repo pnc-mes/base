@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.AQLRuleDtlDAO">
+
+    <resultMap type="pnc.mesadmin.entity.AQLRuleDtlInfo" id="AQLRuleDtlInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAllByAQLGd" resultMap="AQLRuleDtlInfoMap">
+        SELECT * FROM tpm_aqlruleDtlinfo where AQLRuleGd=#{aqlGd}
+    </select>
+
+    <select id="SelectByRuid" resultMap="AQLRuleDtlInfoMap">
+        SELECT * FROM tpm_aqlruleDtlinfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="AQLRuleDtlInfoMap">
+        SELECT * FROM tpm_aqlruleDtlinfo where  Guid=#{guid}
+    </select>
+
+
+    <select id="SelectAllByAQLGdAndQJNum" resultMap="AQLRuleDtlInfoMap">
+        SELECT * FROM tpm_aqlruleDtlinfo where  AQLRuleGd=#{aqlGd} and MinNum <![CDATA[ <= ]]> #{qjNum} and MaxNum <![CDATA[ >= ]]> #{qjNum}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_aqlruleDtlinfo(Guid,AQLRuleGd,MinNum,MaxNum,SamplingNum,AcceptNum,RejectNum,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{AQLRuleGd},#{MinNum},#{MaxNum},#{SamplingNum},#{AcceptNum},#{RejectNum},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <delete id="DeleteByAQLGd">
+        DELETE  FROM tpm_aqlruleDtlinfo where AQLRuleGd=#{aqlGd}
+    </delete>
+
+</mapper>
+

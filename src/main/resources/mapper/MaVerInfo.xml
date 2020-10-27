@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MaVerDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.MaVerInfo" id="MaVerInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="maGd" column="maGd" />
+        <result property="OnLineMaPeriodGd" column="OnLineMaPeriodGd" />
+        <result property="companyCode" column="companyCode" />
+		<result property="materialCode" column="materialCode" />
+        <result property="mapMaCode" column="mapMaCode" />
+		<result property="materialName" column="materialName" />
+        <result property="materialDes" column="materialDes" />
+		<result property="version" column="version" />
+		<result property="isDef" column="isDef" />
+		<result property="materialType" column="materialType" />
+        <result property="maTypeGd" column="maTypeGd" />
+		<result property="pdFamilyGd" column="pdFamilyGd" />
+		<result property="bomGd" column="bomGd" />
+		<result property="serialRuleGd" column="serialRuleGd" />
+		<result property="unitGd" column="unitGd" />
+        <result property="suName" column="suName" />
+        <result property="suMaCode" column="suMaCode" />
+        <result property="cusMaCode" column="cusMaCode" />
+		<result property="shelflife" column="shelflife" />
+		<result property="interval" column="interval" />
+		<result property="sUnit" column="sUnit" />
+        <result property="disRule" column="disRule" />
+        <result property="minSNum" column="minSNum" />
+        <result property="maxSNum" column="maxSNum" />
+		<result property="reMaterial" column="reMaterial" />
+        <result property="isExem" column="isExem" />
+        <result property="trayPackGd" column="trayPackGd" />
+        <result property="boxPackGd" column="boxPackGd" />
+        <result property="dSource" column="dSource" />
+        <result property="status" column="status" />
+        <result property="f1" column="f1" />
+        <result property="f2" column="f2" />
+        <result property="f3" column="f3" />
+        <result property="f4" column="f4" />
+        <result property="f5" column="f5" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+        <result property="brand" column="brand" />
+        <result property="orderNum" column="orderNum" />
+        <result property="isBatch" column="isBatch" />
+        <result property="maBarCode" column="maBarCode" />
+        <result property="minPQ" column="MinPQ" />
+        <result property="printTGd" column="PrintTGd" />
+
+
+	</resultMap>
+
+    <resultMap id="resultMaterialInfo" type="pnc.mesadmin.entity.MaterialInfo">
+        <result property="materialDes" column="MaterialDes" />
+    </resultMap>
+
+    <select id="SelectMaverAndMater" resultMap="resultMaterialInfo" parameterType="string">
+      SELECT * FROM tpm_materialinfo a,tpm_maverinfo  b WHERE b.MaGd=a.`Guid` AND a.`Guid`=#{MaGd}
+    </select>
+
+    <select id="SelectMaterialInfoBymaBarCode" resultMap="MaVerInfoResult" parameterType="string">
+      SELECT * FROM tpm_maverinfo t WHERE t.maBarCode=#{maBarCode}
+    </select>
+
+    <insert id="InsertMaverInfo">
+        INSERT INTO tpm_maverinfo
+
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,MaGd,MaterialCode,MaterialName,Version,IsDef,MaterialType,DisRule,MinSNum,MaxSNum,
+            <if test="materialDes != null">
+                MaterialDes,
+            </if>
+            <if test="printTGd != null">
+                PrintTGd,
+            </if>
+            <if test="OnLineMaPeriodGd != null">
+                OnLineMaPeriodGd,
+            </if>
+            <if test="suMaCode != null">
+                SuMaCode,
+            </if>
+            <if test="isExem != null">
+                IsExem,
+            </if>
+            <if test="pdFamilyGd != null">
+                PdFamilyGd,
+            </if>
+            <if test="bomGd != null">
+                BomGd,
+            </if>
+            <if test="serialRuleGd != null">
+                SerialRuleGd,
+            </if>
+            <if test="unitGd != null">
+                UnitGd,
+            </if>
+
+            <if test="trayPackGd != null">
+                TrayPackGd,
+            </if>
+            <if test="boxPackGd != null">
+                BoxPackGd,
+            </if>
+
+            Shelflife,`Interval`,ReMaterial,Creator,CreateTime,
+
+            <if test="sUnit != null">
+                `SUnit`,
+            </if>
+
+            <if test="maTypeGd != null">
+                MaTypeGd,
+            </if>
+            <if test="suName != null">
+                SuName,
+            </if>
+            <if test="cusMaCode != null">
+                CusMaCode,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+
+            <if test="lastModifyMan != null">
+                LastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime,
+            </if>
+
+            <if test="brand != null">
+                Brand,
+            </if>
+            <if test="orderNum != null">
+                OrderNum,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+
+            <if test="companyCode != null">
+               CompanyCode,
+            </if>
+            <if test="mapMaCode != null">
+                MapMaCode,
+            </if>
+            <if test="dSource != null">
+                DSource,
+            </if>
+            <if test="f1 != null">
+                F1,
+            </if>
+            <if test="f2 != null">
+                F2,
+            </if>
+            <if test="f3 != null">
+                F3,
+            </if>
+            <if test="f4 != null">
+                F4,
+            </if>
+            <if test="f5 != null">
+                F5,
+            </if>
+            <if test="isBatch != null">
+                IsBatch,
+            </if>
+            <if test="maBarCode != null">
+                MaBarCode,
+            </if>
+            <if test="minPQ != null">
+                MinPQ,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{maGd},#{materialCode},#{materialName},#{version},#{isDef},
+            #{materialType},#{disRule},#{minSNum},#{maxSNum},
+
+            <if test="materialDes != null">
+                #{materialDes},
+            </if>
+            <if test="printTGd != null">
+                #{printTGd},
+            </if>
+            <if test="OnLineMaPeriodGd != null">
+                #{OnLineMaPeriodGd},
+            </if>
+            <if test="suMaCode != null">
+                #{suMaCode},
+            </if>
+            <if test="isExem != null">
+                #{isExem},
+            </if>
+            <if test="pdFamilyGd != null">
+                #{pdFamilyGd},
+            </if>
+            <if test="bomGd != null">
+                #{bomGd},
+            </if>
+            <if test="serialRuleGd != null">
+                #{serialRuleGd},
+            </if>
+
+            <if test="unitGd != null">
+                #{unitGd},
+            </if>
+
+            <if test="trayPackGd != null">
+                #{trayPackGd},
+            </if>
+            <if test="boxPackGd != null">
+                #{boxPackGd},
+            </if>
+
+            #{shelflife},#{interval},#{reMaterial},#{creator},#{createTime},
+
+            <if test="sUnit != null">
+                #{sUnit},
+            </if>
+
+            <if test="maTypeGd != null">
+                #{maTypeGd},
+            </if>
+            <if test="suName != null">
+                #{suName},
+            </if>
+            <if test="cusMaCode != null">
+                #{cusMaCode},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+
+            <if test="brand != null">
+                #{brand},
+            </if>
+            <if test="orderNum != null">
+                #{orderNum},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+
+            <if test="companyCode != null">
+                #{companyCode},
+            </if>
+            <if test="mapMaCode != null">
+                #{mapMaCode},
+            </if>
+            <if test="dSource != null">
+                #{dSource},
+            </if>
+            <if test="f1 != null">
+                #{f1},
+            </if>
+            <if test="f2 != null">
+                #{f2},
+            </if>
+            <if test="f3 != null">
+                #{f3},
+            </if>
+            <if test="f4 != null">
+                #{f4},
+            </if>
+            <if test="f5 != null">
+                #{f5},
+            </if>
+            <if test="isBatch != null">
+                #{isBatch},
+            </if>
+            <if test="maBarCode != null">
+                #{maBarCode},
+            </if>
+            <if test="minPQ != null">
+                #{minPQ},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 根据MaGd删除物料版本信息 (By-pjf)-->
+    <delete id="DeleteByMaGd">
+        DELETE FROM tpm_maverinfo WHERE MaGd = #{ argMaGd }
+    </delete>
+
+    <delete id="DeleteByGuid">
+        DELETE FROM tpm_maverinfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 修改物料版本信息 (By-pjf)-->
+    <update id="UpdateMaVerInfo">
+        UPDATE tpm_maverinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="materialCode != null">
+                MaterialCode = #{ materialCode },
+            </if>
+            <if test="printTGd != null">
+                PrintTGd = #{ printTGd },
+            </if>
+            <if test="materialName != null">
+                MaterialName = #{ materialName },
+            </if>
+            <if test="OnLineMaPeriodGd!=null">
+                OnLineMaPeriodGd = #{ OnLineMaPeriodGd },
+            </if>
+                MaterialDes = #{ materialDes },
+            <if test="version != null">
+                Version = #{ version },
+            </if>
+            <if test="isDef != null">
+                IsDef = #{ isDef },
+            </if>
+            <if test="materialType != null">
+                MaterialType = #{ materialType },
+            </if>
+
+            <if test="pdFamilyGd != null">
+              PdFamilyGd = #{ pdFamilyGd },
+            </if>
+            <if test="bomGd != null">
+              BomGd = #{ bomGd },
+            </if>
+
+            <if test="serialRuleGd != null">
+              SerialRuleGd = #{ serialRuleGd },
+            </if>
+
+            <if test="unitGd != null">
+              UnitGd = #{ unitGd },
+            </if>
+
+            <if test="disRule != null">
+                disRule = #{ disRule },
+            </if>
+
+            <if test="minSNum != null">
+                minSNum = #{ minSNum },
+            </if>
+
+            <if test="maxSNum != null">
+                maxSNum = #{ maxSNum },
+            </if>
+
+            <if test="shelflife != null">
+                Shelflife = #{ shelflife },
+            </if>
+
+            <if test="interval != null">
+              `Interval` = #{ interval },
+            </if>
+
+            <if test="sUnit != null">
+                SUnit = #{ sUnit },
+            </if>
+            <if test="suMaCode != null">
+                suMaCode = #{ suMaCode },
+            </if>
+            <if test="isExem != null">
+                isExem = #{ isExem },
+            </if>
+
+            <if test="trayPackGd != null">
+                trayPackGd = #{ trayPackGd },
+            </if>
+            <if test="boxPackGd != null">
+                boxPackGd = #{ boxPackGd },
+            </if>
+
+            <if test="maTypeGd != null">
+                maTypeGd = #{maTypeGd},
+            </if>
+            <if test="suName != null">
+                suName = #{suName},
+            </if>
+            <if test="cusMaCode != null">
+                cusMaCode = #{cusMaCode},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+
+            <if test="reMaterial != null">
+                ReMaterial = #{ reMaterial },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="brand != null">
+                Brand = #{brand},
+            </if>
+            <if test="orderNum != null">
+                OrderNum = #{orderNum},
+            </if>
+
+            <if test="companyCode != null">
+                companyCode = #{companyCode},
+            </if>
+            <if test="mapMaCode != null">
+                mapMaCode = #{mapMaCode},
+            </if>
+            <if test="dSource != null">
+                dSource = #{dSource},
+            </if>
+            <if test="f1 != null">
+                f1 = #{f1},
+            </if>
+            <if test="f2 != null">
+                f2 = #{f2},
+            </if>
+            <if test="f3 != null">
+                f3 = #{f3},
+            </if>
+            <if test="f4 != null">
+                f4 = #{f4},
+            </if>
+            <if test="f5 != null">
+                f5 = #{f5},
+            </if>
+            <if test="isBatch != null">
+                isBatch = #{isBatch},
+            </if>
+            <if test="maBarCode != null">
+                maBarCode = #{maBarCode},
+            </if>
+            <if test="minPQ != null">
+                MinPQ=#{minPQ},
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 获取所有物料版本信息 (By-pjf)-->
+    <select id="SelectAllMaVerInfo" resultMap="MaVerInfoResult">
+        SELECT * FROM tpm_maverinfo
+    </select>
+
+    <!-- 根据Guid获取所有物料版本信息 (By-pjf)-->
+    <select id="SelectMaverInfo" resultMap="MaVerInfoResult">
+        SELECT * FROM tpm_maverinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <!-- 根据Ruid获取所有物料版本信息 (By-pjf)-->
+	<select id="SelectByRuid" resultMap="MaVerInfoResult">
+		SELECT * FROM tpm_maverinfo WHERE Ruid = #{ argRuid }
+	</select>
+
+    <!-- 根据MaGd获取物料版本信息 (By-pjf)-->
+	<select id="SelectByMaGd" resultMap="MaVerInfoResult">
+		SELECT * FROM tpm_maverinfo WHERE MaGd = #{ argMaGd }
+	</select>
+
+    <!-- 根据MaGd与Version获取物料版本信息 (By-pjf)-->
+    <select id="SelectByMaGdVersion" resultMap="MaVerInfoResult">
+        SELECT * FROM tpm_maverinfo WHERE MaGd = #{ argMaGd } AND Version = #{ argVersion }
+    </select>
+
+    <!-- 根据PdFamilyGd获取物料版本信息 (By-pjf)-->
+    <select id="SelectByPdFamilyGd" resultMap="MaVerInfoResult">
+        SELECT * FROM tpm_maverinfo WHERE PdFamilyGd = #{ argPdGd }
+    </select>
+
+    <!-- 通过版本guid集合查询对应的版本集合信息 (By-ZC)-->
+    <select id="SelectMaVerListByGuidList" parameterType="java.util.List" resultMap="MaVerInfoResult">
+        SELECT * from tpm_maverinfo
+        <foreach collection="list" item="guid" index="i" open="where guid in (" close=")" separator=",">
+            #{guid}
+        </foreach>
+    </select>
+
+    <!-- 通过版本id集合查询对应的版本集合信息 (By-ZC)-->
+    <select id="SelectMaVerListByRuidList" parameterType="java.util.List" resultMap="MaVerInfoResult">
+        SELECT * from tpm_maverinfo
+        <foreach collection="list" item="ruid" index="i" open="where ruid in (" close=")" separator=",">
+            #{ruid}
+        </foreach>
+    </select>
+
+    <select id="SelectByCompanyCodeMaCodeDSource" resultMap="MaVerInfoResult">
+        SELECT * from tpm_maverinfo WHERE CompanyCode = #{argCompanyCode}
+        AND MaterialCode = #{argMaCode} AND DSource = #{argDSource}
+    </select>
+
+      <select id="SelectMaVerInfoByInfosAndPageInfo" resultMap="MaVerInfoResult">
+        SELECT * from tpm_maverinfo
+        WHERE (MaterialType='02' OR MaterialType='03')
+          <if test="argMaInfo != null and argMaInfo != ''">
+              AND (MaterialName LIKE  CONCAT('%','${argMaInfo}','%') OR MaterialCode LIKE  CONCAT('%','${argMaInfo}','%')  )
+          </if>
+
+          limit #{argOffSize},#{argPageSize}
+
+    </select>
+
+    <select id="SelectByMaCode" resultMap="MaVerInfoResult">
+        SELECT * from tpm_maverinfo WHERE materialCode = #{argMaCode}
+    </select>
+</mapper>

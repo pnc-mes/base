@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ResOptDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.ResOptInfo" id="ResOptInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="resGd" column="resGd" />
+		<result property="optGd" column="optGd" />
+		<result property="optUrl" column="optUrl" />
+		<result property="optName" column="optName" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+	<!-- 查询所有资源的所有操作信息 (By-pjf)-->
+	<select id="SelectAllResOptInfo" resultMap="ResOptInfoResult">
+		select * from tpm_resoptinfo
+	</select>
+
+	<!-- 查询某个资源所拥有的所有操作信息 (By-pjf)-->
+	<select id="SelectResOptInfo" resultMap="ResOptInfoResult">
+		select * from tpm_resoptinfo where ResGd = #{ resGd }
+	</select>
+
+	<!-- 根据ruid查询某一个资源的某一个操作信息 (By-pjf)-->
+	<select id="SelectResOptInfoRuid" resultMap="ResOptInfoResult">
+		select * from tpm_resoptinfo where Ruid = #{ ruid }
+	</select>
+
+	<!-- 新增资源操作信息 (By-pjf)-->
+	<insert id="InsertResOpt">
+		INSERT INTO tpm_resoptinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			Guid,resGd,optGd,optUrl,optName,creator,createTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			#{guid},#{resGd},#{optGd},#{optUrl},#{optName},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+    <!-- 删除资源下所有操作 (By-pjf)-->
+    <delete id="DeleteResOptByResGd">
+        DELETE FROM tpm_resoptinfo WHERE ResGd = #{ argResGd }
+    </delete>
+
+	<!-- 删除资源操作 (By-pjf)-->
+	<delete id="DeleteResOptByGuid">
+        DELETE FROM tpm_resoptinfo WHERE Guid = #{ argGuid }
+	</delete>
+
+</mapper>

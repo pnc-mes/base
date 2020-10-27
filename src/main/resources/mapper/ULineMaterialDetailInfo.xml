@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ULineMaterialDetailInfoDao">
+
+    <resultMap type="pnc.mesadmin.dto.SaveUDMaterailDto.GetAllUDMaterialsRespons" id="GetAllUDMaterialsResult">
+    </resultMap>
+
+    <select id="selectPageUDMD" resultMap="GetAllUDMaterialsResult">
+        SELECT
+        u.WoCode AS WoCode,
+        u.SpecName AS SpecName,
+        ud.ruid AS ruid,
+        ud.BatchNo AS BatchNo,
+        ud.LotNo AS LotNo,
+        ud.MaterialCode AS MaterialCode,
+        ud.MaterialName AS MaterialName,
+        ud.luType AS luType,
+        ud.devGd AS devGd,
+        ud.devName AS devName,
+        ud.replaceMaterial AS replaceMaterial,
+        ud.SumNum AS SumNum,
+        ud.CanNum AS CanNum,
+        ud.UnitName AS UnitName,
+        ud.Createtime AS dateTime
+        FROM
+        tpm_ulinematerialinfo u
+        LEFT JOIN tpm_ulinematerialdetailinfo ud ON u.Guid = ud.UlmGuid
+        WHERE
+        ud.STATUS = '00'
+        AND u.WoCode=#{woCode}
+        <if test="specGuid !=null and specGuid!=''">
+            AND u.specGuid=#{specGuid}
+        </if>
+        ORDER BY ud.`CreateTime` DESC
+	</select>
+</mapper>

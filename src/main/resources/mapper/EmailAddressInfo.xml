@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.EmailAddressDAO" >
+    <resultMap type="pnc.mesadmin.entity.EmailAddressInfo" id="EmailAddressInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="distributionGd" column="distributionGd" />
+        <result property="emailAddress" column="emailAddress" />
+        <result property="recipient" column="recipient"/>
+        <result property="sequence" column="sequence" />
+    </resultMap>
+    <!--根据分发主表的guid 来查询分发地址信息-->
+    <select id="SelectEmailAddressInfoByDistributionGd" parameterType="string" resultMap="EmailAddressInfoResult">
+        select *  from `tpm_emailaddressinfo` where distributionGd=#{distributionGd}
+    </select>
+
+    <!--新增-->
+    <insert id="InsertEmailAddressInfo">
+        INSERT INTO tpm_emailaddressinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            distributionGd,emailAddress,recipient,sequence,
+
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{distributionGd},#{emailAddress},#{recipient},#{sequence},
+
+        </trim>
+    </insert>
+
+    <!--删除-->
+    <delete id="DeleteEmailEmailAddressInfo">
+         DELETE  FROM `tpm_emailaddressinfo` WHERE ruid = #{ruid}
+    </delete>
+
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.AffairDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.AffairInfo" id="affairInfoMap">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="batch" column="batch" />
+        <result property="lineGd" column="lineGd" />
+        <result property="specVerGd" column="specVerGd" />
+        <result property="specName" column="specName" />
+        <result property="optType" column="optType" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!-- 新增  (By-pjf) -->
+    <insert id="InsertAffairInfo">
+        INSERT INTO tpm_affairinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,batch,specVerGd,specName,optType,lineGd,
+            Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{batch},#{specVerGd},#{specName},#{optType},#{lineGd},
+            #{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据批次信息查询批次事务操作信息 张亮亮-->
+    <select id="SelectAffairInfoBybatch" resultMap="affairInfoMap" parameterType="string">
+        SELECT * FROM tpm_affairinfo WHERE batch=#{batch}
+    </select>
+
+    <select id="SelectAffairByStartTimeAndEndTiemAndLineGd" resultType="Integer">
+        SELECT
+            COUNT( * )
+        FROM
+            tpm_affairinfo
+        WHERE
+            specvergd = '6891984201809280909'
+            AND opttype =  '01'
+            AND LineGd = #{lineGd}
+            AND CreateTime BETWEEN #{startTime}
+            AND #{endTime}
+            GROUP BY Batch
+    </select>
+</mapper>

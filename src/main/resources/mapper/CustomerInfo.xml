@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CustomerDAO" >
+    <resultMap type="pnc.mesadmin.entity.CustomerInfo" id="CustomerInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="customerName" column="customerName" />
+        <result property="contactor" column="contactor" />
+        <result property="mobile" column="mobile" />
+        <result property="address" column="address" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--查询客户信息列表-->
+    <select id="SelectAllCustomerInfo" resultMap="CustomerInfoResult">
+        select * from tpm_customerinfo
+    </select>
+
+    <!--查询客户信息-->
+    <select id="SelectByRuid" resultMap="CustomerInfoResult">
+        SELECT * FROM tpm_customerinfo c WHERE c.`Ruid` = #{cusRd}
+    </select>
+
+    <!--通过guid查询客户信息-->
+    <select id="SelectByGuid" resultMap="CustomerInfoResult">
+        SELECT * FROM tpm_customerinfo c WHERE c.`guid` = #{guid}
+    </select>
+
+    <!--查询客户名称-->
+    <select id="SelectBycustomerName" resultMap="CustomerInfoResult">
+        SELECT * FROM tpm_customerinfo c WHERE c.`CustomerName` = #{customerName}
+    </select>
+
+    <!--保存客户信息-->
+    <insert id="InsertCustomerInfo">
+        INSERT INTO tpm_customerinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,CustomerName,Contactor,Mobile,Address,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{customerName},#{contactor},#{mobile},#{address},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除客户信息-->
+    <delete id="DeleteCustomerInfo">
+        DELETE FROM tpm_customerinfo WHERE Ruid = #{cusRd}
+    </delete>
+
+    <!--更新客户信息-->
+    <update id="UpdateCustomerInfo">
+        UPDATE tpm_customerinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="customerName != null">
+                customerName = #{customerName},
+            </if>
+            <if test="contactor != null">
+                contactor = #{contactor},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+    <select id="SelectByOrderCode" resultMap="CustomerInfoResult">
+        select * from tpm_customerinfo c, tpm_cusorderinfo cd
+        where c.guid = cd.customergd and cd.ordercode = #{ orderCode }
+    </select>
+</mapper>

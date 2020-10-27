@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckPlanDtlDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.CheckPlanDtllnfo" id="checkPlanDtllnfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="checkPlanGd" column="checkPlanGd" />
+        <result property="taskGd" column="taskGd" />
+        <result property="taskName" column="taskName" />
+        <result property="taskItemName" column="taskItemName" />
+        <result property="sureType" column="sureType" />
+   <!--     <result property="minExCount" column="minExCount" />-->
+        <result property="maxExCount" column="maxExCount" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!--根据主表标识查询所有信息-->
+    <select id="selectCheckPlanDtllnfoByCheckPlanGd" parameterType="string" resultMap="checkPlanDtllnfoResult">
+        select * from  tpm_checkplandtlinfo where checkPlanGd=#{checkPlanGd}
+    </select>
+
+    <!--删除-->
+    <delete id="deleteCheckPlanDtllnfo">
+        delete from tpm_checkplandtlinfo where checkPlanGd=#{guid}
+    </delete>
+
+    <!--新增-->
+    <insert id="insertCheckPlanDtllnfo">
+        insert into tpm_checkplandtlinfo (guid,checkPlanGd,taskGd,taskName,taskItemName,sureType,maxExCount,creator,createTime,lastModifyMan,lastModifyTime,remark)
+        values (#{guid},#{checkPlanGd},#{taskGd},#{taskName},#{taskItemName},#{sureType},#{maxExCount},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark}) ;
+    </insert>
+</mapper>

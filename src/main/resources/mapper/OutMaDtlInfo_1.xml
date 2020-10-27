@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.OutMaDtlInfo_1DAO">
+    <resultMap id="outMaDtlInfo_1Result" type="pnc.mesadmin.entity.OutMaDtlInfo_1">
+        <id column="ruid" property="ruid"/>
+        <result column="guid" property="guid" />
+        <result column="outMaGd" property="outMaGd" />
+        <result column="outCode" property="outCode" />
+        <result column="maVerGd" property="maVerGd" />
+        <result column="num" property="num" />
+        <result column="unitName" property="unitName" />
+        <result column="storeGd" property="storeGd" />
+        <result column="creator" property="creator"/>
+        <result column="createTime" property="createTime"/>
+        <result column="lastModifyMan" property="lastModifyMan"/>
+        <result column="lastModifyTime" property="lastModifyTime"/>
+        <result column="remark" property="remark"/>
+        <result column="lgd" property="lgd"/>
+        <result column="bartype" property="bartype"/>
+        <result column="batch" property="batch"/>
+    </resultMap>
+
+    <select id="selectOutMaDtlInfo_1ByOutMaGd" resultMap="outMaDtlInfo_1Result" parameterType="string">
+          select * from tpm_outmadtlinfo_1 where outMaGd=#{outMaGd}
+    </select>
+
+    <insert id="insertOutMaDtlInfo_1">
+        insert into tpm_outmadtlinfo_1(guid,outMaGd,outCode,maVerGd,num,unitName,storeGd,creator,createTime,lastModifyMan,lastModifyTime,remark,lgd,bartype,batch)
+        values (#{guid},#{outMaGd},#{outCode},#{maVerGd},#{num},#{unitName},#{storeGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark},#{lgd},#{bartype},#{batch});
+    </insert>
+
+    <delete id="deleteOutMaDtlInfo_1ByRuid">
+        delete  from tpm_outmadtlinfo_1 where ruid=#{ruid}
+    </delete>
+
+
+    <select id="selectOutMaDtlInfo_1ByoutMaGdAndbatch" resultMap="outMaDtlInfo_1Result" parameterType="string">
+         select *  from tpm_outmadtlinfo_1 where outMaGd=#{outMaGd} and batch=#{batch}
+    </select>
+
+
+</mapper>

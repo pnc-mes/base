@@ -1,0 +1,1205 @@
+<!--
+* @Description bom
+* @Author yin.yang
+* @Param
+* @Return
+* @Exception
+*-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>BOM管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">BOM代码</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" name="bomCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">BOM名称</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" name="bomName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <select name="status">
+                                    <option value="">请选择状态开始查询</option>
+                                    <option value="00">可用</option>
+                                    <option value="01">不可用</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加</button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="bomList" lay-filter="currentTableFilter" style="font-size: 5px"></table>
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs layui-btn-normal data-count-edit" lay-event="edit">变更</a>
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="history">变更历史记录</a>
+        </script>
+
+
+    </div>
+</div>
+
+<!--- 新增页 -->
+<div id="content" style="display: none;">
+    <form class="layui-form layuimini-form layui-form-pane" lay-filter="addContent" id="addContent"
+          style="width: 90%;margin-top: 20px;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">BOM代码</label>
+                <div class="layui-input-block">
+                    <input name="BomCode" required lay-reqtext="BOM代码不能为空" placeholder="请输入BOM代码" class="layui-input"
+                           style="width: 250px">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">BOM名称</label>
+                <div class="layui-input-block">
+                    <input name="BomName" required lay-reqtext="BOM名称不能为空" placeholder="请输入BOM名称" class="layui-input"
+                           style="width: 250px">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">版本号</label>
+                <input name="VersionNo" required lay-reqtext="BOM版本号为空" placeholder="请输入版本号" class="layui-input"
+                       style="width: 250px">
+            </div>
+            <!--<div class="layui-inline">
+                <label class="layui-form-label">BOM编号</label>
+                <div class="layui-input-block">
+                    <input name="BomNo" placeholder="请输入BOM编号" class="layui-input" style="width: 250px">
+                </div>
+            </div>-->
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block" style="width: 250px">
+                    <select id="device_add" name="Status">
+                        <option value="00">可用</option>
+                        <option value="01">不可用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input name="Remark" class="layui-input" style="width: 250px">
+                </div>
+            </div>
+        </div>
+    </form>
+    <table class="layui-hide" id="addBomList" lay-filter="addBomListTableFilter" style="font-size: 5px"></table>
+    <script type="text/html" id="addBomtoolbar">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加</button>
+        </div>
+    </script>
+
+    <script type="text/html" id="addBomTableBar">
+        <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="addReBom">设置替代料</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+    </script>
+</div>
+
+<!--- 编辑弹出页 -->
+<div id="content_1" style="display: none;">
+    <form class="layui-form layuimini-form" lay-filter="editContent" id="editContent"
+          style="width: 90%;margin-top: 20px;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">物料代码</label>
+                <div class="layui-input-block" style="width: 625px;">
+                    <select name="MaCode" xm-select="select_MaCode" xm-select-radio xm-select-search-type="dl"
+                            xm-select-search>
+                        <option value="">请选择物料</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">物料名称</label>
+                <div class="layui-input-block">
+                    <input name="MaName" disabled class="layui-input"
+                           style="width: 250px">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">单位</label>
+                <div class="layui-input-block">
+                    <input name="UnitName" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">工序信息</label>
+                <div class="layui-input-block" style="width: 250px">
+                    <select name="SpecName" xm-select="select_Spec" xm-select-radio xm-select-search-type="dl"
+                            xm-select-search>
+                        <option value="">请选择工序</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">消耗方式</label>
+                <div class="layui-input-block" style="width: 250px">
+                    <select id="ConSMode" name="ConSMode">
+                        <option value=""></option>
+                        <option value="01">按照批次消耗</option>
+                        <option value="00">仅显示</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">消耗数量</label>
+                <input name="Num" type="number" placeholder="请输入消耗数量" class="layui-input"
+                       style="width: 250px">
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">损耗率</label>
+                <div class="layui-input-block">
+                    <input name="ARate" placeholder="%" type="number" class="layui-input" style="width: 250px">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--- 替代料弹出页 -->
+<div id="content_2" style="display: none;">
+    <table class="layui-hide" id="addReBomList" lay-filter="addReBomListTableFilter" style="font-size: 5px"></table>
+    <script type="text/html" id="addReBomtoolbar">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加</button>
+        </div>
+    </script>
+
+    <script type="text/html" id="addReBomTableBar">
+        <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+    </script>
+</div>
+
+<!--- 替代料编辑弹出页 -->
+<div id="content_3" style="display: none;">
+    <form class="layui-form layuimini-form" lay-filter="editReContent" id="editReContent"
+          style="width: 90%;margin-top: 20px;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">物料代码</label>
+                <div class="layui-input-block" style="width: 625px">
+                    <select name="MaCode" xm-select="select_ReMaCode" xm-select-radio xm-select-search-type="dl"
+                            xm-select-search>
+                        <option value="">请选择物料</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">物料名称</label>
+                <div class="layui-input-block">
+                    <input name="MaName" disabled class="layui-input"
+                           style="width: 250px">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">单位</label>
+                <div class="layui-input-block">
+                    <input name="UnitName" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">消耗数量</label>
+                <input name="Num" type="number" placeholder="请输入消耗数量" class="layui-input"
+                       style="width: 250px">
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">损耗率</label>
+                <div class="layui-input-block">
+                    <input name="ARate" placeholder="%" type="number" class="layui-input" style="width: 250px">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!--详情页面-->
+<div id="content_detail" style="display: none;">
+    <form class="layui-form layuimini-form layui-form-pane" lay-filter="detailContent" id="detailContent"
+          style="width: 90%;margin-top: 20px;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">BOM代码</label>
+                <div class="layui-input-block">
+                    <input name="BomCode" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">BOM名称</label>
+                <div class="layui-input-block">
+                    <input name="BomName" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">默认版本</label>
+                <input name="VersionNo" disabled class="layui-input" style="width: 250px">
+            </div>
+
+            <!--<div class="layui-inline">
+                <label class="layui-form-label">BOM编号</label>
+                <div class="layui-input-block">
+                    <input name="BomNo" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>-->
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block" style="width: 250px">
+                    <select id="Status" disabled name="Status">
+                        <option value="00">可用</option>
+                        <option value="01">不可用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input name="Remark" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">历史版本</label>
+                <div class="layui-input-block" style="width: 250px">
+                    <select name="BomVersion" xm-select="select_BomVersion" xm-select-radio xm-select-search-type="dl"
+                            xm-select-search>
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+    <table class="layui-hide" id="DetailBomList" style="font-size: 5px"></table>
+    <script type="text/html" id="Detailtoolbar">
+        <div class="layui-btn-container">
+        </div>
+    </script>
+</div>
+
+<!--历史记录页面-->
+<div id="content_history" style="display: none;">
+    <form class="layui-form layuimini-form layui-form-pane" lay-filter="historyContent" id="historyContent"
+          style="width: 90%;margin-top: 20px;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">BOM编号</label>
+                <div class="layui-input-block">
+                    <input name="BomCode" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">BOM名称</label>
+                <div class="layui-input-block">
+                    <input name="BomName" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">版本号</label>
+                <div class="layui-input-block" style="width: 250px">
+                    <select name="BomChgRd" xm-select="select_BomChg" xm-select-radio xm-select-search-type="dl"
+                            xm-select-search>
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">变更时间</label>
+                <div class="layui-input-block" style="width: 250px">
+                    <input name="CreateTime" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">变更人</label>
+                <div class="layui-input-block">
+                    <input name="Creator" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">变更原因</label>
+                <div class="layui-input-block" style="width: 250px">
+                    <input name="Remark" disabled class="layui-input" style="width: 250px">
+                </div>
+            </div>
+        </div>
+    </form>
+    <table class="layui-hide" id="HistoryBomList" style="font-size: 5px"></table>
+</div>
+
+</body>
+<script type="text/html" id="statusTpl">
+    {{ d.status == '00' ? '<a class="layui-btn layui-btn-xs">可用</a>' : '<a
+            class="layui-btn layui-btn-disabled layui-btn-xs">不可用</a>' }}
+</script>
+
+<script type="text/html" id="BomNo">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/html" id="ARateTemp">
+    {{d.ARate!=undefined ? d.ARate + '%' :''}}
+</script>
+<script type="text/html" id="NumTemp">
+    {{d.Num != undefined ? d.Num : ''}} {{d.UnitName != undefined ? d.UnitName : ''}}
+</script>
+
+<script type="text/html" id="ConSModeTemp">
+    {{d.ConSMode == '00' ? '仅显示' : d.ConSMode == '01' ? '按批次消耗' : '序号'}}
+</script>
+
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'formSelects', 'element', 'laydate', 'util', 'treeTable'], function () {
+        var table = layui.table,
+            form = layui.form,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            util = layui.util,
+            laydate = layui.laydate,
+            treeTable = layui.treeTable,
+            $ = layui.jquery;
+
+        /**
+         * 列表分页
+         * */
+        table.render({
+            id: 'deviceReload',
+            height: 650,
+            elem: '#bomList',
+            url: getBasePath() + '/BOM/GetAllBOMInfo_V2', //数据接口
+            method: 'post', //类型
+            title: 'BOM信息',
+            toolbar: '#toolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            totalRow: true, //开启合计
+            page: true,  //开启分页
+            limits: [10, 30, 50, 100, 500],
+            cols: [
+                [
+                    {field: 'bomCode', title: 'BOM编号', width: 250, sort: true, fixed: 'left'}
+                    , {field: 'bomName', title: 'BOM名称', width: 350}
+                    , {field: 'versionNo', title: '当前版本号', width: 160}
+                    , {field: 'status', title: '状态', width: 100, templet: '#statusTpl', unresize: true}
+                    , {
+                    field: 'createTime', title: '时间', sort: true, width: 180, templet: function (d) {
+                        return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                    , {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                ]
+            ],
+            parseData: function (res) {
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.body.msgDes, //解析提示文本
+                    "count": res.body.data == null ? 0 : res.body.data.total, //解析数据长度
+                    "data": res.body.data == null ? "" : res.body.data.records //解析数据列表
+                };
+            }
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('deviceReload', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    "bomCode": data.field.bomCode,
+                    "bomName": data.field.bomName,
+                    "status": data.field.status
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * 表格操作项
+         * */
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                clear();
+                requests({
+                    url: "/BOM/GetBVInfo", contentType: "application/x-www-form-urlencoded", data: {
+                        "ExecType": "00",
+                        "BusData": JSON.stringify({"BomRd": data.ruid})
+                    }
+                }, function (res) {
+                    let data = res.Data;
+                    form.val('addContent', {
+                        "BomCode": data.BomCode,
+                        "BomName": data.BomName,
+                        "BomNo": data.BomNo,
+                        "Status": data.Status,
+                        "VersionNo": data.VersionNo,
+                        "Remark": data.Remark,
+                    });
+                    $.each(data.BMInfo, function (index, item) {
+                        item.BomNo = index + 1;
+                        reBomMap.set(index + 1, item.ReMaInfo);
+                    });
+                    table.reload('addBomList', {
+                        data: data.BMInfo
+                    });
+
+
+                    let index = layer.open({
+                        title: 'BOM变更',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['100%', '100%'],
+                        content: $("#content"),
+                        btn: ['确认保存'],
+                        yes: function (index, layero) {
+                            save(index, 2, data.BomVerRd);
+                        }
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('确定删除！', function (index) {
+                    requests({
+                        url: "/Device/RmDevInfo",
+                        contentType: "application/x-www-form-urlencoded",
+                        data: {"ruid": data.ruid}
+                    }, function (res) {
+                        layer.msg("删除成功", {icon: 1});
+                        table.reload('deviceReload');
+                    });
+
+                    layer.close(index);
+                });
+            } else if (obj.event === 'read') {
+                read(data);
+                return false;
+            } else if (obj.event === 'history') {
+                history(data);
+                return false;
+            }
+        });
+
+        //查看
+        function read(data) {
+            clear();
+            //根据BOM查询所有版本信息
+            formSelects.config('select_BomVersion', {
+                type: 'post',
+                header:{'Content-Type': 'application/x-www-form-urlencoded'},
+                data:{"ExecType": '00' ,BusData:JSON.stringify({'BomRd':data.ruid})},
+            }, false);
+            formSelects.data('select_BomVersion', 'server', {
+                url: getBasePath() + '/BOM/GetBOMTreeInfo',
+                beforeSuccess: function (id, url, searchVal, result) {
+                    result = result.Body.Data;
+                    $.each(result, function (index, item) {
+                        item.name = item.Version;
+                        item.value = item.Version;
+                    });
+                    return result;
+                }
+            });
+            //详情
+            requests({
+                url: "/BOM/GetBVInfo", contentType: "application/x-www-form-urlencoded", data: {
+                    "ExecType": "00",
+                    "BusData": JSON.stringify({"BomRd": data.ruid})
+                }
+            }, function (res) {
+                var dataBak = [];
+                let data = res.Data;
+                form.val('detailContent', {
+                    "BomCode": data.BomCode,
+                    "BomName": data.BomName,
+                    "BomNo": data.BomNo,
+                    "VersionNo": data.VersionNo,
+                    "Status": data.Status,
+                    "Remark": data.Remark,
+                });
+                $.each(data.BMInfo, function (index, item) {
+                    dataBak.push({
+                        "Type": "主料",
+                        "authorityId": item.BMRd,
+                        "parentId": 0,
+                        "MaName": item.MaName,
+                        "MaCode": item.MaCode,
+                        "UnitName": item.UnitName,
+                        "SpecName": item.SpecName,
+                        "Num": item.Num,
+                        "ARate": item.ARate,
+                        "ConSMode": item.ConSMode
+                    });
+                    $.each(item.ReMaInfo, function (indexs, items) {
+                        var id = 1000000 + item.BMRd + indexs + 1;
+                        dataBak.push({
+                            "Type": "替代料",
+                            "authorityId": id,
+                            "parentId": item.BMRd,
+                            "MaName": items.MaName,
+                            "MaCode": items.MaCode,
+                            "Num": items.Num,
+                            "ARate": items.ARate,
+                            "UnitName": item.UnitName,
+                            "SpecName": item.SpecName,
+                            "ConSMode": item.ConSMode
+                        });
+                    })
+                });
+                insTb.refresh(dataBak);
+                let index = layer.open({
+                    title: '查看BOM详情',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: $("#content_detail"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+        }
+
+        //查看历史版本
+        function history(data) {
+            clear();
+            insTb2.refresh([]);
+            form.val('historyContent', {
+                "BomCode": data.bomCode,
+                "BomName": data.bomName
+            });
+            formSelects.config('select_BomChg', {
+                type: 'post',
+                header:{'Content-Type': 'application/x-www-form-urlencoded'},
+                data:{"ExecType": '00' ,BusData:JSON.stringify({'BomRd':data.ruid})},
+            }, false);
+            formSelects.data('select_BomChg', 'server', {
+                url: getBasePath() + '/BOM/GetAllBHChgInfo',
+                beforeSuccess: function (id, url, searchVal, result) {
+                    result = result.Body.Data;
+                    $.each(result, function (index, item) {
+                        item.name = item.Version;
+                        item.value = item.BomChgRd;
+                    });
+                    return result;
+                }
+            });
+            let index = layer.open({
+                title: '查看BOM变更记录',
+                type: 1,
+                shade: 0.2,
+                maxmin: true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: $("#content_history"),
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+        }
+
+        //详情页
+        var insTb = treeTable.render({
+            id: '#DetailBomList',
+            elem: '#DetailBomList',
+            data: [],
+            tree: {
+                iconIndex: 0,           // 折叠图标显示在第几列
+                isPidData: true,        // 是否是id、pid形式数据
+                idName: 'authorityId',  // id字段名称
+                pidName: 'parentId'     // pid字段名称
+            },
+            toolbar: '#Detailtoolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'Type', title: '类型', width: 150}
+                    , {field: 'MaCode', title: '物料代码', width: 250}
+                    , {field: 'MaName', title: '物料名称', width: 300}
+                    , {field: 'SpecName', title: '工序名称', width: 200}
+                    , {field: 'Num', title: '消耗数量', width: 120, templet: '#NumTemp'}
+                    , {field: 'ARate', title: '损耗率', width: 120, templet: '#ARateTemp'}
+                    , {field: 'ConSMode', title: '消耗方式', width: 180, templet: '#ConSModeTemp'}
+                ]
+            ]
+        });
+
+        //历史变更明细页
+        var insTb2 = treeTable.render({
+            id: '#HistoryBomList',
+            elem: '#HistoryBomList',
+            data: [],
+            toolbar: '#Detailtoolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {title: '变更前', colspan: 6},
+                    {title: '变更后', colspan: 6}
+                ],
+                [
+                     {field: 'MaCode', title: '物料代码', width: 250}
+                    , {field: 'MaName', title: '物料名称', width: 300}
+                    , {field: 'SpecName', title: '工序名称', width: 200}
+                    , {field: 'Num', title: '消耗数量', width: 120, templet: '#NumTemp'}
+                    , {field: 'ARate', title: '损耗率', width: 120, templet: '#ARateTemp'}
+                    , {field: 'ConSMode', title: '消耗方式', width: 180, templet: '#ConSModeTemp'}
+
+                    , {field: 'HMaCode', title: '物料代码', width: 250}
+                    , {field: 'HMaName', title: '物料名称', width: 300}
+                    , {field: 'HSpecName', title: '工序名称', width: 200}
+                    , {field: 'HNum', title: '消耗数量', width: 120, templet: '#NumTemp'}
+                    , {field: 'HARate', title: '损耗率', width: 120, templet: '#ARateTemp'}
+                    , {field: 'HConSMode', title: '消耗方式', width: 180, templet: '#ConSModeTemp'}
+                ]
+            ]
+        });
+
+        /**
+         * 新增操作
+         * */
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                clear();
+                let index = layer.open({
+                    title: 'BOM新增',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: $("#content"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //保存
+        function save(index, type, id) {
+            var data = form.val('addContent');
+            data.BomVerRd = id;
+            data.BMInfo = [];
+
+            $.each(table.cache.addBomList, function (index, item) {
+                if (item.MaCode != undefined && item.MaCode != null) {
+                    if (reBomMap.get(item.BomNo) != undefined) {
+                        let reMaInfo = [];
+                        $.each(reBomMap.get(item.BomNo), function (index1, item1) {
+                            if (item1.MaCode != undefined && item1.MaCode != null) {
+                                reMaInfo.push(item1)
+                            }
+                        });
+                        item.ReMaInfo = reMaInfo;
+                    }
+                    data.BMInfo.push(item);
+                }
+            });
+            //type-> 1.新增 2.变更
+            if (type === 1) {
+                requests({url: "/BOM/AddBomInfoV2", data: JSON.stringify(data)}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('deviceReload');
+                });
+            } else if (type === 2) {
+                requests({url: "/BOM/BomInfoChangeV2", data: JSON.stringify(data)}, function (res) {
+                    layer.msg("变更成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('deviceReload');
+                });
+            }
+        }
+
+        /** ==========================================主料========================================================*/
+        /**
+         * 明细项新增列表
+         * */
+        table.render({
+            id: 'addBomList',
+            elem: '#addBomList',
+            url: '',
+            data: [],
+            limit: 1000,
+            title: 'BOM信息',
+            toolbar: '#addBomtoolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'BomNo', title: '编号', edit: 'text', width: 100, sort: true, templet: '#BomNo'}
+                    , {field: 'MaCode', title: '物料代码', width: 250}
+                    , {field: 'MaName', title: '物料名称', width: 300}
+                    , {field: 'SpecName', title: '工序名称', width: 200}
+                    , {field: 'SpecVerRd', hide: true, title: '工序RD'}
+                    , {field: 'Num', title: '消耗数量', width: 120, templet: '#NumTemp'}
+                    , {field: 'ARate', title: '损耗率', width: 120, templet: '#ARateTemp'}
+                    , {field: 'UnitName', hide: true, title: '单位'}
+                    , {field: 'ConSMode', title: '消耗方式', width: 140, templet: '#ConSModeTemp'}
+                    , {title: '操作', minWidth: 150, toolbar: '#addBomTableBar', align: "center"}
+                ]
+            ]
+        });
+
+
+        //toolbar监听新增事件
+        table.on('toolbar(addBomListTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                var dataBak = [];   //定义一个空数组,用来存储之前编辑过的数据已经存放新数据
+
+                var tableBak = table.cache.addBomList;
+                //获取之前编辑过的全部数据，前提是编辑数据是要更新缓存，stock_add_table 为表格的id
+
+                for (var i = 0; i < tableBak.length; i++) {
+                    dataBak.push(tableBak[i]);
+                    dataBak[i].BomNo = tableBak[i].LAY_TABLE_INDEX + 1;//将之前的数组备份
+                }
+
+                dataBak.push({
+                    "BomNo": tableBak.length + 1,
+                    "MaName": "",
+                    "MaCode": "",
+                    "UnitName": "",
+                    "SpecName": "",
+                    "SpecVerRd": "",
+                    "Num": "",
+                    "ARate": "",
+                    "ConSMode": "",
+                    "ConSModeName": ""
+                });
+
+                table.reload("addBomList", {
+                    data: dataBak   // 将新数据重新载入表格
+                })
+            }
+        });
+
+        var reBomMap = new Map();
+        //监听工具条
+        table.on('tool(addBomListTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') { //编辑
+                form.val('editContent', {
+                    MaName: data.MaName
+                    , SpecVerRd: data.SpecVerRd
+                    , Num: data.Num
+                    , ARate: data.ARate
+                    , UnitName: data.UnitName
+                    , ConSMode: data.ConSMode
+                });
+                layui.formSelects.value('select_MaCode', [data.MaCode]);
+                layui.formSelects.value('select_Spec', [data.SpecVerRd]);
+                let index = layer.open({
+                    title: '编辑',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['55%', '60%'],
+                    content: $("#content_1"),
+                    btn: ['确认'],
+                    yes: function (index, layero) {
+                        var editContentdata = form.val('editContent');
+                        obj.update({
+                            MaCode: editContentdata.MaCode
+                            , MaName: editContentdata.MaName
+                            , SpecName: formSelects.value('select_Spec', 'nameStr')
+                            , SpecVerRd: editContentdata.SpecName
+                            , Num: editContentdata.Num
+                            , ARate: editContentdata.ARate
+                            , UnitName: editContentdata.UnitName
+                            , ConSMode: editContentdata.ConSMode
+                            , ConSModeName: $("#ConSMode option:checked").text()
+                        });
+                        layer.close(index);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+
+            } else if (obj.event === 'delete') { //删除
+                obj.del();
+            } else if (obj.event === 'addReBom') { //新增替代料
+                if (reBomMap.has(data.BomNo)) {
+                    table.reload("addReBomList", {
+                        data: reBomMap.get(data.BomNo)
+                    })
+                } else {
+                    table.reload("addReBomList", {
+                        data: []
+                    })
+                }
+                let index = layer.open({
+                    title: '替代料',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['60%', '80%'],
+                    content: $("#content_2"),
+                    btn: ['确认'],
+                    yes: function (index, layero) {
+                        reBomMap.set(data.BomNo, table.cache.addReBomList);
+                        layer.close(index);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        /** ==========================================替代料========================================================*/
+
+        /**
+         * 明细项新增列表
+         * */
+        table.render({
+            id: 'addReBomList',
+            elem: '#addReBomList',
+            url: '',
+            data: [],
+            limit: 1000,
+            title: 'BOM信息',
+            toolbar: '#addReBomtoolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'MaCode', title: '物料代码', width: 250, fixed: 'left'}
+                    , {field: 'MaName', title: '物料名称', width: 300}
+                    , {field: 'Num', title: '消耗数量', width: 100}
+                    , {field: 'ARate', title: '损耗率', width: 100}
+                    , {title: '操作', minWidth: 150, toolbar: '#addReBomTableBar', align: "center"}
+                ]
+            ]
+        });
+
+
+        //toolbar监听新增事件
+        table.on('toolbar(addReBomListTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                form.val('editReContent', {
+                    "MaName": "",
+                    "MaCode": "",
+                    "UnitName": ""
+                });
+                formSelects.value('select_ReMaCode', []);
+                let index = layer.open({
+                    title: '添加替代物料',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['55%', '50%'],
+                    content: $("#content_3"),
+                    btn: ['确认'],
+                    yes: function (index, layero) {
+                        var editContentdata = form.val('editReContent');
+                        var dataBak = [];   //定义一个空数组,用来存储之前编辑过的数据已经存放新数据
+                        var tableBak = table.cache.addReBomList;
+                        for (var i = 0; i < tableBak.length; i++) {
+                            dataBak.push(tableBak[i]);
+                        }
+                        dataBak.push(editContentdata);
+                        table.reload("addReBomList", {
+                            data: dataBak   // 将新数据重新载入表格
+                        });
+                        layer.close(index);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+
+            }
+        });
+
+        //监听工具条
+        table.on('tool(addReBomListTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'delete') {
+                obj.del();
+            }
+        });
+
+
+        /**
+         * 下拉框
+         * */
+        formSelects.config('select_MaCode', {
+            type: 'post',
+            head: 'application/json;charset=UTF-8',
+        }, true);
+
+        formSelects.data('select_MaCode', 'server', {
+            url: getBasePath() + '/BaseRequestSelect/GetAllMaterial',
+            beforeSuccess: function (id, url, searchVal, result) {
+                result = result.body.data;
+                $.each(result, function (index, item) {
+                    item.name = item.materialCode;
+                    item.value = item.materialCode;
+                });
+
+                return result;
+            }
+        });
+
+        formSelects.render('select_MaCode', {
+            template: function (name, value, selected, disabled) {
+                return value.materialCode + '<span style="position: absolute; right: 0; color: #A0A0A0; font-size: 12px;">' + value.materialName + '</span>';
+            }
+        });
+
+        formSelects.on('select_MaCode', function (id, vals, val, isAdd, isDisabled) {
+            form.val('editContent', {
+                "MaName": val.materialName,
+                "UnitName": val.unitGd
+            });
+        });
+
+        formSelects.config('select_Spec', {
+            type: 'post',
+            head: 'application/json;charset=UTF-8',
+        }, true);
+
+        formSelects.data('select_Spec', 'server', {
+            url: getBasePath() + '/BaseRequestSelect/GetAllSpec',
+            beforeSuccess: function (id, url, searchVal, result) {
+                result = result.body.data;
+                $.each(result, function (index, item) {
+                    item.name = item.specName;
+                    item.value = item.ruid;
+                });
+
+                return result;
+            }
+        });
+
+        formSelects.config('select_ReMaCode', {
+            type: 'post',
+            head: 'application/json;charset=UTF-8',
+        }, true);
+
+        formSelects.data('select_ReMaCode', 'server', {
+            url: getBasePath() + '/BaseRequestSelect/GetAllMaterial',
+            beforeSuccess: function (id, url, searchVal, result) {
+                result = result.body.data;
+                $.each(result, function (index, item) {
+                    item.name = item.materialCode;
+                    item.value = item.materialCode;
+                });
+
+                return result;
+            }
+        });
+
+        formSelects.render('select_ReMaCode', {
+            template: function (name, value, selected, disabled) {
+                return value.materialCode + '<span style="position: absolute; right: 0; color: #A0A0A0; font-size: 12px;">' + value.materialName + '</span>';
+            }
+        });
+
+        formSelects.on('select_ReMaCode', function (id, vals, val, isAdd, isDisabled) {
+            form.val('editReContent', {
+                "MaName": val.materialName,
+                "UnitName": val.unitGd
+            });
+        });
+
+        formSelects.on('select_BomChg', function (id, vals, val, isAdd, isDisabled) {
+            form.val('historyContent', {
+                "Remark": val.Remark,
+                "CreateTime": val.CreateTime,
+                "Creator": val.Creator
+            });
+            requests({
+                url: "/BOM/GetBHChgDtlInfo", contentType: "application/x-www-form-urlencoded", data: {
+                    "ExecType": "00",
+                    "BusData": JSON.stringify({"BomChgRd": val.BomChgRd})
+                }
+            }, function (res) {
+                var dataBak = [];
+                let data = res.Data;
+                $.each(data, function (index, item) {
+                    dataBak.push({
+                        "MaName": item.QChg.MaName,
+                        "MaCode": item.QChg.MaCode,
+                        "UnitName": item.QChg.UnitName,
+                        "SpecName": item.QChg.SpecName,
+                        "Num": item.QChg.Num,
+                        "ARate": item.QChg.ARate,
+                        "ConSMode": item.QChg.ConSMode,
+
+                        "HMaName": item.HChg.MaName,
+                        "HMaCode": item.HChg.MaCode,
+                        "HUnitName": item.HChg.UnitName,
+                        "HSpecName": item.HChg.SpecName,
+                        "HNum": item.HChg.Num,
+                        "HARate": item.HChg.ARate,
+                        "HConSMode": item.HChg.ConSMode
+                    });
+                });
+                insTb2.refresh(dataBak);
+            });
+        });
+
+        formSelects.on('select_BomVersion', function (id, vals, val, isAdd, isDisabled) {
+            //详情
+            requests({
+                url: "/BOM/GetBVInfo", contentType: "application/x-www-form-urlencoded", data: {
+                    "ExecType": "01",
+                    "BusData": JSON.stringify({"BomVerRd": val.BomVerRd})
+                }
+            }, function (res) {
+                var dataBak = [];
+                let data = res.Data;
+                form.val('detailContent', {
+                    "BomCode": data.BomCode,
+                    "BomName": data.BomName
+                });
+                $.each(data.BMInfo, function (index, item) {
+                    dataBak.push({
+                        "Type": "主料",
+                        "authorityId": item.BMRd,
+                        "parentId": 0,
+                        "MaName": item.MaName,
+                        "MaCode": item.MaCode,
+                        "UnitName": item.UnitName,
+                        "SpecName": item.SpecName,
+                        "Num": item.Num,
+                        "ARate": item.ARate,
+                        "ConSMode": item.ConSMode
+                    });
+                    $.each(item.ReMaInfo, function (indexs, items) {
+                        var id = 1000000 + item.BMRd + indexs + 1;
+                        dataBak.push({
+                            "Type": "替代料",
+                            "authorityId": id,
+                            "parentId": item.BMRd,
+                            "MaName": items.MaName,
+                            "MaCode": items.MaCode,
+                            "Num": items.Num,
+                            "ARate": items.ARate,
+                            "UnitName": item.UnitName,
+                            "SpecName": item.SpecName,
+                            "ConSMode": item.ConSMode
+                        });
+                    })
+                });
+                insTb.refresh(dataBak);
+            });
+        });
+
+        //清空
+        function clear() {
+            $("#addContent")[0].reset();
+            $("#editContent")[0].reset();
+            $("#editReContent")[0].reset();
+            $("#historyContent")[0].reset();
+            reBomMap = new Map();
+            table.reload('addBomList', {
+                data: []
+            });
+            table.reload('addReBomList', {
+                data: []
+            });
+            form.render();
+        }
+    });
+
+</script>
+</html>

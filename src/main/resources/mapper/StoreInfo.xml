@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.StoreDAO" >
+    <resultMap type="pnc.mesadmin.entity.StoreInfo" id="StoreInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="storeCode" column="storeCode" />
+        <result property="storeName" column="storeName" />
+        <result property="storeType" column="storeType" />
+        <result property="dSource" column="dSource" />
+        <result property="status" column="status" />
+        <result property="f1" column="f1" />
+        <result property="f2" column="f2" />
+        <result property="f3" column="f3" />
+        <result property="f4" column="f4" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--查询仓库列表信息-->
+    <select id="SelectAllStoreInfo" resultMap="StoreInfoResult">
+        select * from tpm_storeinfo
+    </select>
+
+    <!--查询仓库信息-->
+    <select id="SelectByRuid" resultMap="StoreInfoResult">
+        SELECT * FROM tpm_storeinfo s WHERE s.ruid = #{StoreRd}
+    </select>
+
+    <!--查询仓库信息-->
+    <select id="SelectBystoreName" resultMap="StoreInfoResult">
+        SELECT * FROM tpm_storeinfo s WHERE s.`storeName` = #{storeName}
+    </select>
+
+    <!--查询仓库信息关联盘点表-->
+    <select id="SelectBystoreGd" resultMap="StoreInfoResult">
+        SELECT * FROM tpm_storeinfo s WHERE s.`Guid` = #{storeGd}
+    </select>
+
+    <!--查询仓库信息关联库存表-->
+    <select id="SelectByguid" resultMap="StoreInfoResult">
+        SELECT * FROM tpm_storeinfo s WHERE s.`Guid` = #{storeGd}
+    </select>
+
+    <!--查询仓库信息关联表-->
+    <select id="SelectByStoreGd" resultMap="StoreInfoResult">
+        SELECT * FROM tpm_storeinfo s WHERE s.`Guid` = #{storeGd}
+    </select>
+
+    <!--查询仓库代码-->
+    <select id="SelectByStoreCode" resultMap="StoreInfoResult">
+        SELECT * FROM tpm_storeinfo s WHERE s.`StoreCode` = #{storeCode}
+    </select>
+
+    <!--保存仓库信息-->
+    <insert id="InsertStoreInfo">
+        INSERT INTO tpm_storeinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,StoreCode,StoreName,DSource,Status,Creator,CreateTime,
+
+            <if test="storeType != null">
+                storeType,
+            </if>
+            <if test="f1 != null">
+                f1,
+            </if>
+            <if test="f2 != null">
+                f2,
+            </if>
+            <if test="f3 != null">
+                f3,
+            </if>
+            <if test="f4 != null">
+                f4,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{storeCode},#{storeName},#{dSource},#{status},#{creator},#{createTime},
+
+            <if test="storeType != null">
+                #{storeType},
+            </if>
+            <if test="f1 != null">
+                #{f1},
+            </if>
+            <if test="f2 != null">
+                #{f2},
+            </if>
+            <if test="f3 != null">
+                #{f3},
+            </if>
+            <if test="f4 != null">
+                #{f4},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除仓库信息-->
+    <delete id="DeleteStoreInfo">
+        DELETE FROM tpm_storeinfo WHERE Ruid = #{storeRd}
+    </delete>
+
+    <!--更新仓库信息-->
+    <update id="UpdateStoreInfo">
+        UPDATE tpm_storeinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="storeCode != null">
+                storeCode = #{storeCode},
+            </if>
+            <if test="storeName != null">
+                storeName = #{storeName},
+            </if>
+            <if test="storeType != null">
+                storeType = #{storeType},
+            </if>
+            <if test="f1 != null">
+                f1 = #{f1},
+            </if>
+            <if test="f2 != null">
+                f2 = #{f2},
+            </if>
+            <if test="f3 != null">
+                f3 = #{f3},
+            </if>
+            <if test="f4 != null">
+                f4 = #{f4},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+</mapper>

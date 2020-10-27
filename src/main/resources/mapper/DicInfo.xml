@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DicDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.DicInfo" id="dicMap">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="language" column="language" />
+		<result property="labelID" column="labelID" />
+		<result property="labelDes" column="labelDes" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+	<!--查询语言类型列表-->
+	<select id="getLanguageList" resultType="string">
+		SELECT DISTINCT language FROM tpm_dicinfo ORDER BY language
+	</select>
+
+	<!--查询语言类型对应数量-->
+	<select id="getDicCountByLanguage" parameterType="string" resultType="_int">
+		SELECT COUNT(ruid) FROM tpm_dicinfo d WHERE d.language = #{language}
+	</select>
+
+	<!--查询字典列表信息-->
+	<select id="getDicInfoListByLanCode" parameterType="string" resultMap="dicMap">
+		SELECT * FROM tpm_dicinfo d WHERE d.`Language` = #{lanCode}
+	</select>
+
+	<!--查询字典信息-->
+	<select id="getDicInfoByGuid" parameterType="string" resultMap="dicMap">
+		SELECT * FROM tpm_dicinfo d WHERE d.`Ruid` = #{dicRd}
+	</select>
+
+	<!--保存字典信息-->
+	<insert id="saveDicInfo">
+		INSERT INTO tpm_dicinfo
+		(guid,Language,labelID,labelDes,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES(#{guid},#{language},#{labelID},#{labelDes},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+	</insert>
+
+	<!--删除字典信息-->
+	<delete id="deleteDicInfoByRuid" parameterType="_int">
+		DELETE FROM tpm_dicinfo WHERE `Ruid` = #{dicRd}
+	</delete>
+
+	<!--更新字典信息-->
+	<update id="update">
+		UPDATE tpm_dicinfo d SET d.`LabelID` = #{labelID},d.`LabelDes` = #{labelDes},
+		d.`LastModifyMan` = #{lastModifyMan},d.`LastModifyTime` = #{lastModifyTime}
+		<trim>
+			<if test="remark != null">
+			,d.`Remark` = #{remark}
+			</if>
+		</trim>
+		where d.`Ruid` = #{ruid}
+	</update>
+</mapper>

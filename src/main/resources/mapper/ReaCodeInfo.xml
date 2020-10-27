@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ReasonDAO" >
+    <resultMap id="reacodeInfoMap" type="pnc.mesadmin.entity.ReaCodeInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="ReaType" property="reaType"></result>
+        <result column="ReaCode" property="reaCode"></result>
+        <result column="ReaDes" property="reaDes"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime" ></result>
+        <result column="LastModifyMan" property="lastModifyMan" ></result>
+        <result column="LastModifyTime" property="lastModifyTime" ></result>
+        <result column="Remark" property="remark" ></result>
+    </resultMap>
+
+    <!--查询原因代码信息 张亮亮-->
+    <select id="SelectReacodeInfo" resultMap="reacodeInfoMap">
+        SELECT * FROM `tpm_reacodeinfo`
+    </select>
+
+    <!--根据原因类型查询原因代码信息 张亮亮-->
+    <select id="SelectReacodeInfoReaType" resultType="string">
+        SELECT DISTINCT ReaType FROM `tpm_reacodeinfo` ORDER BY ReaType
+    </select>
+
+    <!--根据类型获取所有的总数-->
+    <select id="SelectReacodeInfoAccount" parameterType="string" resultType="_int">
+        SELECT COUNT(*) FROM `tpm_reacodeinfo`  WHERE  ReaType=#{reaType}
+    </select>
+
+    <!--根据主键查询原因代码 张亮亮-->
+    <select id="SelectReacodeInfoByruid" resultMap="reacodeInfoMap" parameterType="int">
+        SELECT * FROM `tpm_reacodeinfo` WHERE Ruid=#{ruid}
+    </select>
+
+    <!--根据guid查询原因代码 张亮亮-->
+    <select id="SelectReacodeInfoByguid" resultMap="reacodeInfoMap" parameterType="string">
+        SELECT * FROM `tpm_reacodeinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--根据名称查询原因代码 张亮亮-->
+    <select id="SelectReacodeInfoByReaCode" resultMap="reacodeInfoMap" parameterType="string">
+        SELECT * FROM `tpm_reacodeinfo` WHERE ReaCode=#{reaCode}
+    </select>
+    <!--根据名称和类型查询原因代码-->
+    <select id="SelectReacodeInfoByReaCodeAndReaType" resultMap="reacodeInfoMap" parameterType="string">
+        SELECT * FROM `tpm_reacodeinfo` WHERE ReaCode=#{reaCode} and ReaType=#{reaType}
+    </select>
+    <!--新增原因代码 张亮亮-->
+    <insert id="InsertReacodeInfo">
+        INSERT INTO `tpm_reacodeinfo`(Guid,ReaType,ReaCode,ReaDes,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{reaType},#{reaCode},#{reaDes},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+    <!--删除原因代码 张亮亮-->
+    <delete id="DeleteReacodeInfo">
+        DELETE  FROM `tpm_reacodeinfo`  WHERE  Ruid=#{rud}
+    </delete>
+    <!--更新原因代码 张亮亮-->
+    <update id="UpdateReacodeInfo">
+        UPDATE `tpm_reacodeinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="reaType != null">
+                ReaType = #{ reaType },
+            </if>
+            <if test="reaCode != null">
+                ReaCode = #{ reaCode },
+            </if>
+            <if test="reaDes != null">
+                ReaDes = #{ reaDes },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!--根据原因类别查询原因代码信息 王怀龙-->
+    <select id="SelectReacodeInfoByReaType" resultMap="reacodeInfoMap" parameterType="string">
+        SELECT * FROM `tpm_reacodeinfo` WHERE ReaType=#{reaType}
+    </select>
+</mapper>

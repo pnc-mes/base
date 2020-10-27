@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PrintScriptOutDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.PrintScriptOutInfo" id="PrintScriptOutResult">
+		<id property="ruid" column="ruid" />
+	</resultMap>
+
+	<select id="selectByPrintTGd" resultMap="PrintScriptOutResult">
+		select * from tpm_printscriptoutinfo where printtgd = #{ printTGd }
+	</select>
+
+
+	<insert id="InsertPrintScriptOutInfo">
+		INSERT INTO tpm_printscriptoutinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,PrintTGd,FieldCode,FieldName,Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{printTGd},#{fieldCode},#{fieldName},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark}
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="DelPrintScriptOutInfoBYPGD">
+		DELETE FROM tpm_printscriptoutinfo WHERE PrintTGd = #{ printTGd }
+	</delete>
+
+</mapper>

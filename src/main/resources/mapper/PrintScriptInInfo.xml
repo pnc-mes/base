@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PrintScriptInDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.PrintScriptInInfo" id="PrintScriptInResult">
+		<id property="ruid" column="ruid" />
+	</resultMap>
+
+	<select id="selectByPrintTGd" resultMap="PrintScriptInResult">
+		select * from tpm_printscriptininfo where printtgd = #{ printTGd }
+	</select>
+
+	<insert id="InsertPrintScriptInInfo">
+		INSERT INTO tpm_printscriptininfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,PrintTGd,FieldCode,FieldSource,Val,Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				LastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				LastModifyTime,
+			</if>
+			<if test="remark != null">
+				Remark
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{printTGd},#{fieldCode},#{fieldSource},#{val},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark}
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 根据PrintTGd删除打印模板绑定字段信息 (By-pjf)-->
+	<delete id="DelPrintScriptInInfoByPrintTGd">
+        DELETE FROM tpm_printscriptininfo WHERE PrintTGd = #{ printTGd }
+    </delete>
+
+</mapper>

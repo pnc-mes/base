@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ScanPVDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.ScanPVInfo" id="ScanPVInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="roleGd" column="roleGd" />
+		<result property="opertMFlag" column="opertMFlag" />
+		<result property="pVFlag" column="pVFlag" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增Scanner权限信息  (By-pjf)-->
+	<insert id="InsertScanPV">
+		INSERT INTO tpm_scanpvinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			Guid,roleGd,opertMFlag,pVFlag,Creator,CreateTime,
+
+			<if test="lastModifyMan != null">
+				lastModifyMan,
+			</if>
+			<if test="lastModifyTime != null">
+				lastModifyTime,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		VALUES
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			#{guid},#{roleGd},#{opertMFlag},#{pVFlag},#{creator},#{createTime},
+
+			<if test="lastModifyMan != null">
+				#{lastModifyMan},
+			</if>
+			<if test="lastModifyTime != null">
+				#{lastModifyTime},
+			</if>
+			<if test="remark != null">
+				#{remark},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 根据RoleGd删除Scanner权限信息  (By-pjf)-->
+	<delete id="DeleteByRoleGd">
+		DELETE FROM tpm_scanpvinfo WHERE RoleGd = #{ argRoleGd }
+	</delete>
+
+    <!-- 根据Guid删除Scanner权限信息  (By-pjf)-->
+    <delete id="DeleteScanPV">
+        DELETE FROM tpm_scanpvinfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 根据RoleGd、OpertMFlag查询Scanner权限信息  (By-pjf)-->
+    <select id="SelectByOpertMFlag" resultMap="ScanPVInfoResult">
+        SELECT * FROM tpm_scanpvinfo WHERE RoleGd = #{ argRoleGd } AND OpertMFlag = #{ argOpertMFlag }
+    </select>
+
+	<!--根据用户标识查询Scanner权限细信息  王怀龙-->
+	<select id="SelectScanPVInfoByRoleGd" resultMap="ScanPVInfoResult">
+		SELECT * FROM tpm_scanpvinfo WHERE RoleGd = #{argRoleGd}
+	</select>
+
+	<!-- 查询所有Scanner权限信息  (By-pjf)-->
+	<select id="SelectAllScanPV" resultMap="ScanPVInfoResult">
+		SELECT * FROM tpm_scanpvinfo
+	</select>
+
+</mapper>

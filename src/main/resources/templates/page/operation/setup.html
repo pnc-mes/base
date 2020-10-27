@@ -1,0 +1,522 @@
+<!--
+* @Description 装卸物料
+* @Author yin.yang
+* @Param
+* @Return
+* @Exception
+*-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>装卸物料</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend></legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form" lay-filter="selectContent" id="selectContent" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">装卸方式</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <select name="luType" xm-select="select_luType" xm-select-radio>
+                                    <option value="00" selected="selected">工序</option>
+                                    <option value="01">设备</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工单号</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <select name="woRd" xm-select="select_woCode" xm-select-radio xm-select-search-type="dl"
+                                        xm-select-search>
+                                    <option value="">请选择工单</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工艺流程</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" disabled name="wfName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">预警值</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" disabled name="warningVaule" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工序</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <select name="specRd" xm-select="select_spec" xm-select-radio xm-select-search-type="dl"
+                                        xm-select-search>
+                                    <option value="">请选择工序</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline" id="dev" style="display: none">
+                            <label class="layui-form-label">设备</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <select name="devRd" xm-select="select_dev" xm-select-radio xm-select-search-type="dl"
+                                        xm-select-search>
+                                    <option value="">请选择设备</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn" lay-submit lay-filter="data-search-btn"><i
+                                    class="layui-icon"></i> 查 询
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+        </script>
+
+        <!--操作页-->
+        <div class="layui-form layuimini-form" id="readContent" lay-filter="readContent">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">装料</li>
+                    <li>卸料</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form layuimini-form layui-form-pane" lay-filter="udMaterialContent"
+                              id="udMaterialContent"
+                              style="width: 90%;margin-top: 20px;">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">物料批次号</label>
+                                    <div class="layui-input-block">
+                                        <input name="batch" required class="layui-input" style="width: 250px">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">备注</label>
+                                    <div class="layui-input-block">
+                                        <input name="remark" class="layui-input" style="width: 150px">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                            lay-filter="udMaterial">装料
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <table class="layui-hide" id="udMaterialLogs" lay-filter="udMaterialTableFilter"
+                               style="font-size: 5px"></table>
+                    </div>
+
+                    <!--其它信息-->
+                    <div class="layui-tab-item">
+                        <form class="layui-form layuimini-form layui-form-pane" lay-filter="dowMaterialContent"
+                              id="dowMaterialContent"
+                              style="width: 90%;margin-top: 20px;">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">物料批次号</label>
+                                    <div class="layui-input-block">
+                                        <input name="batch" required class="layui-input" style="width: 250px">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">备注</label>
+                                    <div class="layui-input-block">
+                                        <input name="remark" class="layui-input" style="width: 150px">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <button type="submit" class="layui-btn layui-btn-danger" lay-submit
+                                            lay-filter="dowMaterial">卸料
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <table class="layui-hide" id="dowMaterialLogs" lay-filter="dowMaterialTableFilter"
+                               style="font-size: 5px"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <fieldset class="table-search-fieldset">
+            <!--统计表-->
+            <table class="layui-hide" id="statList"></table>
+        </fieldset>
+    </div>
+</div>
+
+</body>
+
+<script type="text/html" id="sunNumTemp">
+    {{d.sumNum != undefined ? d.sumNum : ''}} {{d.unitName != undefined ? d.unitName : ''}}
+</script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'formSelects', 'element', 'laydate', 'util', 'treeTable'], function () {
+        var table = layui.table,
+            form = layui.form,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            util = layui.util,
+            laydate = layui.laydate,
+            treeTable = layui.treeTable,
+            $ = layui.jquery;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#entryTime' //指定元素
+        });
+
+
+        /**
+         * 上料日志
+         * */
+        table.render({
+            id: 'udMaterialLogs',
+            height: 400,
+            width: '100%',
+            limit: 2000,
+            elem: '#udMaterialLogs',
+            url: '',
+            data: [],
+            title: '上料日志',
+            toolbar: '#toolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'lotNo', title: '物料批次', width: 250, sort: true, fixed: 'left'}
+                    , {field: 'materialCode', title: '物料代码', width: 300}
+                    , {field: 'materialName', title: '物料名称', width: 160}
+                    , {field: 'devName', title: '设备名称', width: 160}
+                    , {field: 'sumNum', title: '数量', width: 120, templet: "#sunNumTemp"}
+                    , {field: 'remark', title: '备注', width: 100}
+                    , {field: 'creator', title: '操作人', width: 120}
+                    , {
+                    field: 'createTime', title: '时间', sort: true, width: 180, templet: function (d) {
+                        return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                ]
+            ]
+        });
+
+        /**
+         * 下料日志
+         * */
+        table.render({
+            id: 'dowMaterialLogs',
+            height: 400,
+            width: '100%',
+            limit: 2000,
+            elem: '#dowMaterialLogs',
+            url: '',
+            data: [],
+            title: '下料日志',
+            toolbar: '#toolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'lotNo', title: '物料批次', width: 250, sort: true, fixed: 'left'}
+                    , {field: 'materialCode', title: '物料代码', width: 300}
+                    , {field: 'materialName', title: '物料名称', width: 160}
+                    , {field: 'devName', title: '设备名称', width: 160}
+                    , {field: 'sumNum', title: '数量', width: 120, templet: "#sunNumTemp"}
+                    , {field: 'remark', title: '备注', width: 120}
+                    , {field: 'creator', title: '操作人', width: 100}
+                    , {
+                    field: 'createTime', title: '时间', sort: true, width: 160, templet: function (d) {
+                        return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                ]
+            ]
+        });
+
+        //统计页
+        var insTb = treeTable.render({
+            id: '#statList',
+            elem: '#statList',
+            data: [],
+            tree: {
+                iconIndex: 0,           // 折叠图标显示在第几列
+                isPidData: true,        // 是否是id、pid形式数据
+                idName: 'authorityId',  // id字段名称
+                pidName: 'parentId'     // pid字段名称
+            },
+            limit: 2000,
+            size: 'sm',
+            toolbar: '#toolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'type', title: '类型', width: 150}
+                    , {field: 'maCode', title: '料号', width: 300}
+                    , {field: 'maName', title: '物料名称', width: 250}
+                    , {field: 'stockSumNum', title: '工序所需用量', width: 110}
+                    , {field: 'upSumNum', title: '累计上料总数', width: 110}
+                    , {field: 'updSumNum', title: '累计下料总数', width: 110}
+                    , {field: 'nums', title: '工序剩余总数', width: 120}
+                    , {field: 'unitName', title: '单位', width: 100}
+                ]
+            ]
+        });
+
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            let rdata = {
+                "woRd": data.field.woRd,
+                "luType": data.field.luType,
+                "specRd": data.field.specRd
+            };
+            query(rdata);
+            return false;
+        });
+
+        //上
+        form.on('submit(udMaterial)', function (data) {
+            let formData = form.val('udMaterialContent');
+            let qdata = form.val('selectContent');
+            let rdata = {
+                "woRd": qdata.woRd,
+                "specRd": qdata.specRd,
+                "batch": formData.batch,
+                "luType": qdata.luType,
+                "devRd": qdata.luType == "01" ? qdata.devRd : "",
+                "type": "00",
+                "remark": formData.remark
+            };
+            setUp(rdata);
+            form.val('udMaterialContent', {
+                "batch": "",
+            });
+            return false;
+        });
+
+        //下
+        form.on('submit(dowMaterial)', function (data) {
+            let formData = form.val('dowMaterialContent');
+            let qdata = form.val('selectContent');
+            let rdata = {
+                "woRd": qdata.woRd,
+                "specRd": qdata.specRd,
+                "batch": formData.batch,
+                "luType": qdata.luType,
+                "devRd": qdata.luType == "01" ? qdata.devRd : "",
+                "type": "01",
+                "isDifference": "00",
+                "remark": formData.remark
+            };
+            setUp(rdata);
+            form.val('dowMaterialContent', {
+                "batch": "",
+            });
+            return false;
+        });
+
+
+        function query(data) {
+            clear();
+            requests({url: "/UDMaterialFPPlus/GetAllByWoAndSpec", data: JSON.stringify(data)}, function (res) {
+                let data = res.data;
+                //详情页
+                let udMaterialDatas = []; //上
+                let dowMaterialDatas = []; //下
+                $.each(data.details, function (index, item) {
+                    if (item.udType == '00') {
+                        udMaterialDatas.push(item);
+                    } else if (item.udType == '01') {
+                        dowMaterialDatas.push(item);
+                    }
+                });
+                table.reload('udMaterialLogs', {
+                    data: udMaterialDatas
+                });
+                table.reload('dowMaterialLogs', {
+                    data: dowMaterialDatas
+                });
+
+                //统计页
+                let dataBak = [];
+                $.each(data.stockBomDetails, function (index, item) {
+                    dataBak.push({
+                        "type": "主料",
+                        "authorityId": item.bomDetailRd,
+                        "parentId": 0,
+                        "maName": item.maName,
+                        "maCode": item.maCode,
+                        "stockSumNum": item.stockSumNum,
+                        "upSumNum": item.upSumNum,
+                        "updSumNum": item.updSumNum,
+                        "nums": item.upSumNum - item.updSumNum,
+                        "unitName": item.unitName
+                    });
+                    $.each(item.stockReBomDetails, function (indexs, items) {
+                        var id = 1000000 + item.bomDetailRd + indexs + 1;
+                        dataBak.push({
+                            "type": "替代料",
+                            "authorityId": id,
+                            "parentId": item.bomDetailRd,
+                            "maName": items.maName,
+                            "maCode": items.maCode,
+                            "stockSumNum": items.stockSumNum,
+                            "upSumNum": items.upSumNum,
+                            "updSumNum": items.updSumNum,
+                            "nums": items.upSumNum - items.updSumNum,
+                            "unitName": items.unitName
+                        });
+                    })
+                });
+                insTb.refresh(dataBak);
+            });
+            layer.msg("查询成功");
+        }
+
+
+        function setUp(data) {
+            if (data.batch == null || data.batch == "") {
+                layer.msg("批次号不能为空！");
+                return false;
+            }
+            requests({
+                url: "/UDMaterialFPPlus/SaveUDMaterial", contentType: "application/x-www-form-urlencoded",
+                data: {
+                    "ExecType": "00",
+                    "BusData": JSON.stringify(data)
+                }
+            }, function (res) {
+                layer.msg("成功", {icon: 1});
+                let rdata = {
+                    "woRd": data.woRd,
+                    "luType": data.field.luType,
+                    "specRd": data.specRd
+                };
+                query(rdata);
+            });
+        }
+
+
+        //select查询
+        formSelects.config('select_woCode', {
+            type: 'post',
+            head: 'application/json;charset=UTF-8',
+        }, true);
+
+        formSelects.data('select_woCode', 'server', {
+            url: getBasePath() + '/BaseRequestSelect/GetAllWo',
+            beforeSuccess: function (id, url, searchVal, result) {
+                result = result.body.data;
+                $.each(result, function (index, item) {
+                    item.name = item.woCode;
+                    item.value = item.ruid;
+                });
+
+                return result;
+            }
+        });
+
+        formSelects.on('select_woCode', function (id, vals, val, isAdd, isDisabled) {
+            requests({
+                url: "/UDMaterialFPPlus/GetWOInfo", contentType: "application/x-www-form-urlencoded", data: {
+                    "ExecType": "00",
+                    "BusData": JSON.stringify({"WoRd": val.value})
+                }
+            }, function (res) {
+                clear();
+                let data = res.data;
+                let selectData = [];
+                if (data.wfinfo != null) {
+                    layui.each(data.wfinfo.SpecInfo, function (index, item) {
+                        var data = {"name": item.SpecName, value: item.SpecVerRd, "devGInfo": item.DevGInfo};
+                        selectData.push(data);
+                    });
+                    layui.formSelects.data('select_spec', 'local', {
+                        arr: selectData
+                    });
+                    form.val('selectContent', {
+                        "wfName": data.wfinfo.WFName
+                    });
+                }
+            });
+
+        });
+
+        formSelects.on('select_spec', function (id, vals, val, isAdd, isDisabled) {
+            clear();
+            let devList = [];
+            $.each(val.devGInfo, function (index, item) {
+                devList.push({
+                    "name": item.DevName,
+                    "value": item.DevRd
+                })
+            });
+            layui.formSelects.data('select_dev', 'local', {
+                arr: devList
+            });
+            if (devList != undefined && devList != null && devList.length > 0) {
+                $("#dev").show();
+                layui.formSelects.value('select_luType', ['01']);
+            } else {
+                $("#dev").hide();
+                layui.formSelects.value('select_luType', ['00']);
+            }
+            //执行搜索重载
+            let rdata = {
+                "woRd": form.val('selectContent').woRd,
+                "luType": form.val('selectContent').luType,
+                "specRd": val.value
+            };
+            query(rdata);
+        });
+
+        formSelects.on('select_luType', function (id, vals, val, isAdd, isDisabled) {
+            if (val.value == "01") {
+                $("#dev").show();
+            } else {
+                $("#dev").hide();
+            }
+        });
+
+        //清空
+        function clear() {
+            table.reload('udMaterialLogs', {
+                data: []
+            });
+            table.reload('dowMaterialLogs', {
+                data: []
+            });
+            insTb.refresh([]);
+        }
+    });
+
+</script>
+</html>

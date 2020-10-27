@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.StationUDMDAO">
+
+    <resultMap type="pnc.mesadmin.entity.StationUDMInfo" id="StationUDMInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <!--根据工位GD查询上下料信息-->
+    <select id="seleceStationGd" resultMap="StationUDMInfoMap">
+        SELECT * FROM  tpm_stationudminfo WHERE StationGd=#{StationGd} ORDER by UDMIndex
+    </select>
+
+    <!--插入信息-->
+    <insert id="insertStationUDMInfo">
+        INSERT INTO tpm_stationudminfo (Guid,StationGd,UDMType,UDMCarrierType,DMArea,UDMIndex,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{StationGd},#{UDMType},#{UDMCarrierType},#{DMArea},#{UDMIndex},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+
+    <!--根据工位标识删除信息-->
+    <delete id="deleteStationUDMInfo">
+        DELETE FROM tpm_stationudminfo WHERE StationGd=#{StationGd}
+    </delete>
+
+    <select id="seleceByStationGdUDMType" resultMap="StationUDMInfoMap">
+        SELECT * FROM  tpm_stationudminfo WHERE StationGd=#{stationGd} AND UDMType=#{uDMType}
+    </select>
+</mapper>
+

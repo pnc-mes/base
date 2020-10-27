@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.UrgencyDAO" >
+    <resultMap type="pnc.mesadmin.entity.UrgencyInfo" id="UrgencyInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="urcyCode" column="urcyCode" />
+        <result property="urcyDes" column="urcyDes" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--根据ShiftName查询一条信息 zll-->
+    <select id="SelectAllUrgencyInfoByUrcyCode" resultMap="UrgencyInfoResult" parameterType="string">
+      select * from tpm_urgencyinfo where UrcyCode=#{UrcyCode}
+  </select>
+
+    <!--查询紧急度代码信息列表-->
+    <select id="SelectAllUrgencyInfo" resultMap="UrgencyInfoResult">
+        select * from tpm_urgencyinfo
+    </select>
+
+    <!--查询紧急度代码信息-->
+    <select id="SelectByRuid" resultMap="UrgencyInfoResult">
+        SELECT * FROM tpm_urgencyinfo p WHERE p.`Ruid` = #{urcyRd}
+    </select>
+
+    <!--查询紧急度代码信息guid-->
+    <select id="SelectByguid" resultMap="UrgencyInfoResult">
+        SELECT * FROM tpm_urgencyinfo p WHERE p.`guid` = #{guid}
+    </select>
+
+    <!--查询紧急度代码-->
+    <select id="SelecturcyCode" resultMap="UrgencyInfoResult">
+        SELECT * FROM tpm_urgencyinfo u WHERE u.`urcyCode` = #{urcyCode}
+    </select>
+
+    <!--查询紧急度名称-->
+    <select id="SelecturcyDes" resultMap="UrgencyInfoResult">
+        SELECT * FROM tpm_urgencyinfo u WHERE u.`urcyDes` = #{urcyDes}
+    </select>
+
+    <!--保存紧急度代码信息-->
+    <insert id="InsertUrgencyInfo">
+        INSERT INTO tpm_urgencyinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,UrcyCode,UrcyDes,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{urcyCode},#{urcyDes},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除紧急度代码信息-->
+    <delete id="DeleteUrgencyInfo">
+        DELETE FROM tpm_urgencyinfo WHERE Ruid = #{urcyRd}
+    </delete>
+
+    <!--更新打印机信息-->
+    <update id="UpdateUrgencyInfo">
+        UPDATE tpm_urgencyinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="urcyCode != null">
+                urcyCode = #{urcyCode},
+            </if>
+            <if test="urcyDes != null">
+                urcyDes = #{urcyDes},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+</mapper>

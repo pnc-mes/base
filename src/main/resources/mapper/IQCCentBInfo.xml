@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.IQCCentBInfoDAO" >
+    <resultMap type="pnc.mesadmin.entity.IQCCentBInfo" id="IQCCentBInfoResult">
+        <id property="ruid" column="ruid" />
+       <result property="guid" column="guid"/>
+       <result property="iqcGd" column="iqcGd"/>
+        <result property="fileName" column="fileName"/>
+       <result property="creator" column="creator"/>
+       <result property="createTime" column="createTime"/>
+       <result property="lastModifyMan" column="lastModifyMan"/>
+       <result property="lastModifyTime" column="lastModifyTime"/>
+       <result property="remark" column="remark"/>
+    </resultMap>
+
+    <insert id="InsertIQCCentBInfo">
+        INSERT INTO tpm_iqccentinfo(
+        <trim suffixOverrides=",">
+              guid,iqcGd,fileName,creator,createTime,
+            <if test="remark != null">
+                remark,
+            </if>
+
+        </trim>
+        )VALUES (
+        #{guid},#{iqcGd},#{fileName},#{creator},#{createTime},
+        <if test="remark != null">
+            #{remark}
+        </if>
+        )
+    </insert>
+
+    <delete id="DeleteIQCCentBInfoByIqcGd">
+        DELETE FROM tpm_iqccentinfo WHERE iqcGd=#{argIqcGd}
+    </delete>
+
+    <update id="UpdateIQCCentBInfo">
+        update tpm_iqccentinfo set
+        <trim suffixOverrides=",">
+            <if test="guid != null">
+                guid=#{guid},
+            </if>
+            <if test="iqcGd != null">
+                iqcGd=#{iqcGd},
+            </if>
+           <if test="fileName != null">
+               fileName = #{fileName},
+           </if>
+            <if test="creator != null">
+                creator=#{creator},
+            </if>
+            <if test="createTime != null">
+                createTime=#{createTime},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan=#{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime=#{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+
+        </trim>
+        where ruid=#{ruid}
+    </update>
+    <!--查询客户信息列表-->
+    <select id="SelectIQCCentBInfoByIQCGd" resultMap="IQCCentBInfoResult">
+        select * from tpm_iqccentinfo where IQCGd=#{argIQCGd}
+    </select>
+
+ <!--查询客户信息列表-->
+    <select id="SelectIQCCentBInfoByRuid" resultMap="IQCCentBInfoResult">
+        select * from tpm_iqccentinfo where Ruid=#{argRuid}
+    </select>
+
+</mapper>

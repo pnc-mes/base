@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PackSpecificationDAO" >
+    <resultMap type="pnc.mesadmin.entity.PackSpecificationInfo" id="PackSpecificationInfoResult">
+        <id property="Ruid" column="ruid" />
+        <result property="Guid" column="guid" />
+        <result property="PackName" column="PackName" />
+        <result property="PackType" column="PackType" />
+        <result property="PTGd" column="PTGd" />
+        <result property="SerialRuleGd" column="SerialRuleGd" />
+        <result property="Num" column="Num" />
+        <result property="Weight" column="Weight" />
+        <result property="UpLimit" column="UpLimit" />
+        <result property="DownLimit" column="DownLimit" />
+        <result property="UnitName" column="UnitName" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="Remark" column="Remark" />
+    </resultMap>
+
+
+    <insert id="InsertPackSpecification">
+        INSERT INTO tpm_packspinfo(guid,PackName,PackType,PTGd,SerialRuleGd,Num,Weight,UpLimit,DownLimit,UnitName,Creator,CreateTime,Remark,
+        isProperty,powerGd,currentGd,colorGd,gradeGd,startPower,endPower,maVerGd)
+        VALUES(#{Guid},#{PackName},#{PackType},#{PTGd},#{SerialRuleGd},#{Num},#{Weight},#{UpLimit},#{DownLimit},#{UnitName},#{creator},#{createTime},#{Remark},
+        #{isProperty},#{powerGd},#{currentGd},#{colorGd},#{gradeGd},#{startPower},#{endPower},#{maVerGd})
+    </insert>
+
+    <delete id="DeletePackSpecificationByRuid">
+        DELETE FROM tpm_packspinfo where ruid = #{mpRd}
+    </delete>
+
+    <update id="UpdatePackSpecification">
+        UPDATE tpm_packspinfo SET PackName = #{PackName},PackType = #{PackType},PTGd = #{PTGd},SerialRuleGd = #{SerialRuleGd},
+        Num = #{Num},Weight = #{Weight},UpLimit = #{UpLimit},DownLimit = #{DownLimit},UnitName = #{UnitName},lastModifyMan = #{lastModifyMan},
+        lastModifyTime = #{lastModifyTime},Remark = #{Remark},isProperty = #{isProperty}, powerGd = #{powerGd}, currentGd = #{currentGd},
+        colorGd = #{colorGd}, gradeGd = #{gradeGd}, startPower = #{startPower}, endPower = #{endPower}, maVerGd = #{ maVerGd }
+        WHERE Ruid = #{Ruid}
+    </update>
+    
+    <select id="SelectAllPackSpecification" resultMap="PackSpecificationInfoResult">
+        SELECT * FROM tpm_packspinfo
+    </select>
+
+    <select id="SelectPackSpecificationByRuid" resultMap="PackSpecificationInfoResult">
+        SELECT * FROM tpm_packspinfo WHERE ruid = #{mpRd}
+    </select>
+
+    <select id="SelectPackSpecificationByName" resultType="_int">
+        SELECT count(ruid) from tpm_packspinfo WHERE PackName = #{mpName}
+    </select>
+
+    <select id="SelectPackSPByName" resultType="_int">
+        SELECT count(ruid) from tpm_packspinfo WHERE PackName = #{PackName} and Ruid != #{Ruid}
+    </select>
+
+    <select id="SelectPackSpecificationByGuid" resultMap="PackSpecificationInfoResult">
+        SELECT * FROM tpm_packspinfo WHERE Guid = #{mpGd}
+    </select>
+
+</mapper>

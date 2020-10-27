@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.UserRoleDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.UserRoleInfo" id="UserRoleInfoResult">
+		<id property="ruid" column="Ruid" />
+		<result property="guid" column="Guid" />
+		<result property="userGd" column="UserGd" />
+		<result property="roleGd" column="RoleGd" />
+		<result property="creator" column="Creator" />
+		<result property="createTime" column="CreateTime" />
+		<result property="lastModifyMan" column="LastModifyMan" />
+		<result property="lastModifyTime" column="LastModifyTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+
+
+	<!-- 根据ruid查询用户角色关系信息 -->
+	<select id="selectUserRoleruid" parameterType="java.lang.Integer" resultMap="UserRoleInfoResult">
+		select * from tpm_userroleinfo where Ruid=#{ruid}
+	</select>
+
+
+	<!-- 删除某个用户的所有角色关联信息 张亮亮 -->
+	<delete id="DeleteUserRoleByruid">
+		DELETE  FROM tpm_userroleinfo WHERE Ruid=#{ruid} AND UserGd=#{userGd}
+	</delete>
+
+	<!-- 新增用户角色关联信息  张亮亮-->
+	<insert id="InsertUserRoleInfo" parameterType="pnc.mesadmin.entity.UserRoleInfo">
+		INSERT INTO tpm_userroleinfo(Guid,UserGd,RoleGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES (#{guid},#{userGd},#{roleGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+	</insert>
+
+	<!--根据用户的Guid查询用户下所属角色信息 张亮亮-->
+	<select id="SelectUserRoleInfoByuserGd" resultMap="UserRoleInfoResult" parameterType="string">
+		select * from tpm_userroleinfo where UserGd = #{ userGd }
+	</select>
+
+	<!-- 查询用户角色关系信息（根据userGd,roleGd）,此方法是实现是否勾选,张亮亮-->
+	<select id="SelectUseridAndRolridInfo" parameterType="java.lang.String" resultType="pnc.mesadmin.entity.UserRoleInfo">
+		SELECT * FROM tpm_userroleinfo WHERE UserGd=#{userGd} AND RoleGd=#{roleGd}
+	</select>
+
+	<!-- 查询用户角色关系信息（根据roleGd）(pjf) -->
+	<select id="SelectByRoleGd" resultType="java.lang.String">
+		SELECT UserGd FROM tpm_userroleinfo WHERE RoleGd=#{roleGd}
+	</select>
+
+	<select id="SelectByGuids" resultType="pnc.mesadmin.entity.UserInfo">
+		SELECT DISTINCT u.* FROM tpm_userinfo u LEFT JOIN tpm_userroleinfo ur ON u.`Guid` = ur.`UserGd`
+		WHERE ur.`RoleGd` in
+		<foreach collection="ids" item="id" index="list" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</select>
+</mapper>

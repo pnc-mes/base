@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSTableColumnsDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CSTableColumnsInfo" id="resuCSTableColumnsInfo">
+        <id property="Ruid" column="Ruid"/>
+
+    </resultMap>
+
+    <select id="SelectAllInfo" resultMap="resuCSTableColumnsInfo">
+        select * from tpm_cstablecolumnsinfo
+    </select>
+
+    <select id="SelectCSTableColumnsInfo" resultMap="resuCSTableColumnsInfo">
+        select * from tpm_cstablecolumnsinfo where CSTableGd=#{CSTableGd}
+    </select>
+
+    <insert id="InsertCSTableColumnsInfo">
+    INSERT INTO tpm_cstablecolumnsinfo(Guid,CSTableGd,ColumnName,AliasName,ColumnType,IsDisplay,ColumnWidth,Truncated,Creator,CreateTime,Remark)
+        VALUES (#{Guid},#{CSTableGd},#{ColumnName},#{AliasName},#{ColumnType},#{IsDisplay},#{ColumnWidth},#{Truncated},#{Creator},#{CreateTime},#{Remark})
+    </insert>
+
+</mapper>

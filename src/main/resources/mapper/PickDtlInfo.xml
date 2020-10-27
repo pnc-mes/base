@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PickDtlDAO" >
+    <resultMap type="pnc.mesadmin.entity.PickDtlInfo" id="pickDtlInfoResult">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="pickCode" column="PickCode" />
+        <result property="pickGd" column="PickGd" />
+        <result property="reML" column="ReML" />
+        <result property="maVerGd" column="MaVerGd" />
+        <result property="num" column="Num" />
+        <result property="scanNum" column="ScanNum" />
+        <result property="unitName" column="UnitName" />
+        <result property="storeGd" column="StoreGd" />
+        <result property="createTime" column="CreateTime" />
+        <result property="creator" column="Creator" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+        <result property="fromOrder" column="fromOrder" />
+        <result property="workOrder" column="workOrder" />
+    </resultMap>
+
+    <!--新增领料单明细-->
+    <insert id="InsertPickDtlInfo">
+        INSERT INTO `tpm_pickdtlinfo`(Guid,ReML,PickCode,PickGd,MaVerGd,Num,ScanNum,UnitName,StoreGd,CreateTime,Creator,LastModifyMan,LastModifyTime,Remark,fromOrder,workOrder)
+        VALUES (#{guid},#{reML},#{pickCode},#{pickGd},#{maVerGd},#{num},#{scanNum},#{unitName},#{storeGd},#{createTime},#{creator},#{lastModifyMan},#{lastModifyTime},#{remark},#{fromOrder},#{workOrder})
+    </insert>
+
+    <!--根据领料单号查询领料单明细信息  王怀龙-->
+    <select id="SelectPickDtlInfosByPickCode" resultMap="pickDtlInfoResult">
+        SELECT * FROM tpm_pickdtlinfo WHERE PickCode = #{pickCode}
+    </select>
+
+    <!--根据领料单明细ID查询领料单明细信息  王怀龙-->
+    <select id="SelectPickDtlInfoByRuid" resultMap="pickDtlInfoResult">
+        SELECT * FROM tpm_pickdtlinfo WHERE Ruid = #{argRuid}
+    </select>
+
+    <!--根据领料单明细Guid查询领料单明细信息  王怀龙-->
+    <select id="SelectPickDtlInfoByGuid" resultMap="pickDtlInfoResult">
+        SELECT * FROM tpm_pickdtlinfo WHERE Guid = #{argGuid}
+    </select>
+
+    <!--根据领料单明细ID更新领料单信息    王怀龙-->
+    <update id="UpdatePickDtlInfo" >
+        UPDATE tpm_pickdtlinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pickCode != null">
+                PickCode = #{pickCode},
+            </if>
+            <if test="pickGd != null">
+                PickGd = #{pickGd},
+            </if>
+            <if test="reML != null">
+                ReML = #{reML},
+            </if>
+
+            <if test="maVerGd != null">
+                MaVerGd = #{maVerGd},
+            </if>
+            <if test="num != null">
+                Num = #{num},
+            </if>
+            <if test="scanNum != null">
+                ScanNum = #{scanNum},
+            </if>
+            <if test="unitName != null">
+                UnitName = #{unitName},
+            </if>
+            <if test="storeGd != null">
+                StoreGd = #{storeGd},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime},
+            </if>
+            <if test="creator != null">
+                Creator = #{creator},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="fromOrder != null">
+                fromOrder = #{ fromOrder },
+            </if>
+            <if test="workOrder != null">
+                workOrder = #{ workOrder },
+            </if>
+        </trim>
+        where Ruid = #{ruid}
+    </update>
+
+
+    <!--根据领料单标识，查看领料单明细信息-->
+    <select id="SelectPickDtlInfoByPickGd" resultMap="pickDtlInfoResult" parameterType="string">
+        SELECT * FROM tpm_pickdtlinfo WHERE PickGd = #{pickGd}
+    </select>
+
+    <!--根据领料单标识，查看领料单明细信息-->
+    <select id="SelectPickDtlInfoByPickGdAndMaverGd" resultMap="pickDtlInfoResult" parameterType="string">
+        SELECT * FROM tpm_pickdtlinfo WHERE PickGd = #{pickGd} AND maVerGd=#{maVerGd}
+    </select>
+
+    <!--删除领料单明细-->
+    <delete id="DeletePickDtlInfoByRuid" parameterType="int">
+       DELETE FROM tpm_pickdtlinfo WHERE Ruid = #{ruid}
+    </delete>
+
+    <select id="SelectPickDtlInfoByPickCodeAndMaverGd" resultMap="pickDtlInfoResult">
+        SELECT * FROM tpm_pickdtlinfo WHERE PickCode = #{argPickCode} AND MaVerGd=#{argMaVerGd}
+    </select>
+
+    <!-- 根据领料单查询物料已开单数量 -->
+    <select id="SelectByAssCodeAssSourceMaVerGd" resultType="Float">
+         SELECT SUM(pd.`Num`) FROM tpm_pickinfo p, tpm_pickdtlinfo pd WHERE p.`AssCode` = #{ argAssCode }
+            AND p.`AssSource` = #{ argAssSource }
+            AND p.`Guid` = pd.`PickGd`
+            AND pd.`MaVerGd` = #{ argMaVerGd }
+    </select>
+</mapper>

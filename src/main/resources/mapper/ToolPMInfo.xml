@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ToolPMDAO" >
+    <resultMap type="pnc.mesadmin.entity.ToolPMInfo" id="ToolPMInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="toolGd" column="toolGd" />
+        <result property="pMGd" column="pMGd" />
+        <result property="pMType" column="pMType" />
+
+    </resultMap>
+
+    <select id="selectToolPMInfoByToolGd" parameterType="string" resultMap="ToolPMInfoResult">
+        select * from tpm_toolpminfo where toolGd=#{toolGd}
+    </select>
+
+    <insert id="insertToolPMInfo">
+          insert into tpm_toolpminfo(guid,toolGd,pMGd,pMType)
+          values (#{guid},#{toolGd},#{pMGd},#{pMType});
+    </insert>
+
+    <delete id="deleteToolPMInfo">
+        delete from tpm_toolpminfo where ruid=#{ruid}
+    </delete>
+
+    <select id="selectByToolGdPmType" resultMap="ToolPMInfoResult">
+        select * from tpm_toolpminfo where toolGd=#{toolGd} and pMType=#{pMType}
+    </select>
+
+    <select id="SelectByPMGd" resultMap="ToolPMInfoResult">
+        select * from tpm_toolpminfo where PMGd=#{PMGd}
+    </select>
+
+
+    <delete id="deleteByPMGd">
+        delete from tpm_toolpminfo where PMGd=#{PMGd}
+    </delete>
+
+</mapper>

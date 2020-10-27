@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SplitBatchDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.SplitBatchInfo" id="SplitBatchInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="sBatch" column="sBatch" />
+		<result property="batch" column="batch" />
+		<result property="num" column="num" />
+		<result property="unitName" column="unitName" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增批次拆分信息  (By-pjf)-->
+    <insert id="InsertSplitBatch">
+        INSERT INTO tpm_splitbatchinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,sBatch,batch,num,unitName,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{sBatch},#{batch},#{num},#{unitName},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 根据源批次查询批次拆分信息  (By-pjf)-->
+    <select id="SelectBySBatch" resultMap="SplitBatchInfoResult">
+        SELECT * FROM tpm_splitbatchinfo WHERE SBatch = #{ argSBatch }
+    </select>
+
+</mapper>

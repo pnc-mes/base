@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SOPDAO">
+    <resultMap type="pnc.mesadmin.entity.SOPInfo" id="SOPInfoResult">
+        <id property="ruid" column="ruid"/>
+        <result property="guid" column="guid"/>
+        <result property="maVerGd" column="maVerGd"/>
+        <result property="WFVerGd" column="WFVerGd"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lastModifyMan" column="lastModifyMan"/>
+        <result property="lastModifyTime" column="lastModifyTime"/>
+        <result property="remark" column="Remark"/>
+    </resultMap>
+
+    <!--查询工艺文件信息-->
+    <select id="SelectBymaVerGd" resultMap="SOPInfoResult">
+        SELECT * FROM tpm_sopinfo  WHERE maVerGd = #{guid}
+    </select>
+
+    <!--查询工艺文件信息-->
+    <select id="SelectByruid" resultMap="SOPInfoResult">
+        SELECT * FROM tpm_sopinfo  WHERE ruid = #{ruid}
+    </select>
+
+    <!--保存工艺文件信息-->
+    <insert id="InsertSOPInfo">
+        INSERT INTO tpm_sopinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,MaVerGd,WFVerGd,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{maVerGd},#{WFVerGd},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除工艺文件信息-->
+    <delete id="DeleteSOPInfo">
+        DELETE FROM tpm_sopinfo WHERE Ruid = #{maVerRd}
+    </delete>
+
+    <!--更新工艺文件信息-->
+    <update id="UpdateSOPInfo">
+        UPDATE tpm_sopinfo
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+    <!--查询工艺文件信息-->
+    <select id="SelectBymaVerGdAndWfGd" resultMap="SOPInfoResult">
+        SELECT * FROM tpm_sopinfo  WHERE MaVerGd = #{maVerGd} and WFVerGd =#{WFVerGd}
+    </select>
+</mapper>

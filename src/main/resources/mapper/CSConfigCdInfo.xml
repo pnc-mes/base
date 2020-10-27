@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CSConfigCdDAO">
+    <resultMap id="CSConfigCdInfoMap" type="pnc.mesadmin.entity.CSConfigCdInfo">
+        <id column="Ruid" property="Ruid"></id>
+    </resultMap>
+
+    <select id="SelectCSConfigColumnInfoByRd" resultMap="CSConfigCdInfoMap">
+        select * from  tpm_csconfigcdinfo where Ruid=#{ruid}
+    </select>
+
+    <select id="SelectCSConfigColumnInfoByGD" resultMap="CSConfigCdInfoMap">
+        select * from  tpm_csconfigcdinfo where Guid=#{guid}
+    </select>
+
+    <select id="SelectAllByConfigGD" resultMap="CSConfigCdInfoMap">
+        select * from  tpm_csconfigcdinfo where CSConfigGd=#{configGuid}
+    </select>
+
+    <insert id="InsertCSConfigCdInfo">
+        INSERT INTO tpm_csconfigcdinfo(Guid,CSConfigGd,CdName,AliasName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{CSConfigGd},#{CdName},#{AliasName},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+
+    <update id="UpdateCsConfigCdInfo">
+        UPDATE tpm_csconfigcdinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="CdName != null">
+                CdName = #{CdName},
+            </if>
+            <if test="AliasName != null">
+                AliasName = #{AliasName},
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{LastModifyMan},
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{LastModifyTime},
+            </if>
+            <if test="Remark != null">
+                Remark = #{Remark},
+            </if>
+        </trim>
+        WHERE Ruid =#{Ruid}
+    </update>
+
+    <delete id="DelectCsConfigCdInfoByConfigGuid">
+        delete  from tpm_csconfigcdinfo where CSConfigGd=#{configGuid}
+    </delete>
+
+    <select id="SelectSQL" resultType="java.util.HashMap">
+        ${value}
+    </select>
+
+</mapper>

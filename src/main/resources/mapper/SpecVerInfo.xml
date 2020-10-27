@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.SpecVerDAO" >
+    <resultMap id="specVerInfoMap" type="pnc.mesadmin.entity.SpecVerInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="SpecGd" property="specGd"></result>
+        <result column="SpecName" property="specName"></result>
+        <result column="DCVerGd" property="dCVerGd"></result>
+        <result column="SkillGGd" property="skillGGd"></result>
+        <result column="Version" property="version"></result>
+        <result column="IsDef" property="isDef"></result>
+        <result column="OpertGd" property="opertGd"></result>
+        <result column="Status" property="status"></result>
+        <result column="DevGrGd" property="devGrGd"></result>
+        <result column="FileGrGd" property="fileGrGd"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime" ></result>
+        <result column="LastModifyMan" property="lastModifyMan" ></result>
+        <result column="LastModifyTime" property="lastModifyTime" ></result>
+        <result column="Remark" property="remark" ></result>
+        <result column="AfDCVerGd" property="afDCVerGd"></result>
+    </resultMap>
+
+
+    <!--增加工序版本信息 张亮亮-->
+    <insert id="InsertSpecVerInfo">
+        INSERT INTO tpm_specverinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,SpecGd,DCVerGd,SkillGGd,SpecName,Version,IsDef,OpertGd,Status,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark,AfDCVerGd,
+
+            <if test="devGrGd != null">
+                devGrGd,
+            </if>
+            <if test="fileGrGd != null">
+                fileGrGd,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{specGd},#{dCVerGd},#{skillGGd},#{specName},#{version},#{isDef},#{opertGd},#{status},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark},#{afDCVerGd},
+            <if test="devGrGd != null">
+                #{devGrGd},
+            </if>
+            <if test="fileGrGd != null">
+                #{fileGrGd},
+            </if>
+        </trim>
+
+</insert>
+    <!--删除工序版本信息 张亮亮-->
+    <delete id="DeleteSpecVerInfo">
+        DELETE FROM  `tpm_specverinfo` WHERE Ruid=#{ruid}
+    </delete>
+    <!--删除工序版本信息根据SpecGd 张亮亮-->
+    <delete id="DeleteSpecVerInfoByspecGd" parameterType="string">
+        DELETE FROM  `tpm_specverinfo` WHERE SpecGd=#{specGd} AND Guid=#{guid}
+    </delete>
+
+    <!--更新工序版本信息 张亮亮-->
+    <update id="UpdateSpecVerInfo">
+        UPDATE `tpm_specverinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="specGd != null">
+                SpecGd = #{ specGd },
+            </if>
+            <if test="dCVerGd != null">
+                DCVerGd = #{ dCVerGd },
+            </if>
+            <if test="skillGGd != null">
+                SkillGGd = #{ skillGGd },
+            </if>
+            <if test="specName != null">
+                SpecName = #{ specName },
+            </if>
+            <if test="version != null">
+                Version = #{ version },
+            </if>
+            <if test="isDef != null">
+                IsDef = #{ isDef },
+            </if>
+
+            <if test="opertGd != null">
+                OpertGd = #{ opertGd },
+            </if>
+            <if test="status != null">
+                Status = #{ status },
+            </if>
+            <if test="devGrGd != null">
+                DevGrGd = #{ devGrGd },
+            </if>
+            <if test="fileGrGd != null">
+                FileGrGd = #{ fileGrGd },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+            <if test="afDCVerGd != null">
+                AfDCVerGd = #{ afDCVerGd },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+
+    <!--查询工序版本信息 张亮亮-->
+    <select id="SelectSpecVerInfo" resultMap="specVerInfoMap">
+      SELECT * FROM `tpm_specverinfo`
+    </select>
+
+    <!--根据specGd查询工序版本信息-->
+    <select id="SelectSpecVerInfoByspecGd" resultMap="specVerInfoMap" parameterType="string">
+        SELECT * FROM `tpm_specverinfo` WHERE SpecGd=#{specGd}
+    </select>
+
+    <!--根据specGd查询工序版本信息-->
+    <select id="SelectSpecVerInfoByspecGd00" resultMap="specVerInfoMap" parameterType="string">
+        SELECT * FROM `tpm_specverinfo` WHERE SpecGd=#{specGd} AND IsDef="00"
+    </select>
+
+    <!--根据guid查询工序版本信息-->
+    <select id="SelectSpecVerInfoByguid" resultMap="specVerInfoMap" parameterType="string">
+        SELECT * FROM `tpm_specverinfo` WHERE Guid=#{guid}
+    </select>
+
+    <!--根据ruid查询工序版本信息-->
+    <select id="SelectSpecVerInfoByruid" resultMap="specVerInfoMap" parameterType="int">
+        SELECT * FROM `tpm_specverinfo` WHERE Ruid=#{ruid}
+    </select>
+    <!--根据Version查询工序版本信息-->
+    <select id="SelectSpecVerInfoByVersion" resultMap="specVerInfoMap" parameterType="string">
+        SELECT * FROM `tpm_specverinfo` WHERE Version=#{version} AND SpecGd=#{specGd}
+    </select>
+
+    <!-- 根据工序名称模糊查询 pjf -->
+    <select id="SelectLikeName" resultMap="specVerInfoMap">
+        SELECT * FROM `tpm_specverinfo` WHERE SpecName LIKE '%${argSpecName}%'
+        AND Status = '00' AND IsDef = '00'
+		ORDER BY CreateTime DESC Limit ${argPageStart}, ${argPageEnd}
+    </select>
+
+    <!-- 根据工序名称模糊查询 pjf -->
+    <select id="SelectLikeNameCount" resultType="int">
+        SELECT COUNT(Guid) FROM `tpm_specverinfo` WHERE SpecName LIKE '%${argSpecName}%'
+        AND Status = '00' AND IsDef = '00'
+    </select>
+
+</mapper>

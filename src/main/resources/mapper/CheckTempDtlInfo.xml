@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckTempDtlDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CheckTempDtlInfo" id="CheckTempDtlInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAllByTempGuid" resultMap="CheckTempDtlInfoMap">
+        SELECT * FROM tpm_checktempdtlinfo where CheckTempGd=#{tempGuid}
+    </select>
+
+    <select id="SelectByRuid" resultMap="CheckTempDtlInfoMap">
+        SELECT * FROM tpm_checktempdtlinfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="CheckTempDtlInfoMap">
+        SELECT * FROM tpm_checktempdtlinfo where  Guid=#{guid}
+    </select>
+
+    <select id="SelectAllByTempGuidAndRelType" resultMap="CheckTempDtlInfoMap">
+        SELECT * FROM tpm_checktempdtlinfo where CheckTempGd=#{tempGuid} and RelType=#{relType}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_checktempdtlinfo(Guid,CheckTempGd,RelGd,RelType,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{checkTempGd},#{relGd},#{relType},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <delete id="DeleteByTempGuid">
+        DELETE  FROM tpm_checktempdtlinfo WHERE CheckTempGd=#{checkTempGd}
+    </delete>
+
+</mapper>
+

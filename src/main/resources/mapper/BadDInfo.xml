@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.BadDtDAO">
+
+    <resultMap type="pnc.mesadmin.entity.BadDInfo" id="BadDResult">
+        <id property="ruid" column="ruid"/>
+    </resultMap>
+
+    <select id="SelectByBadDInfoByBadGd" resultMap="BadDResult">
+        SELECT * FROM trt_BadDtlInfo where BadGd=#{badGd}
+    </select>
+
+    <select id="SelectByBadDInfoByBadCode" resultMap="BadDResult">
+        SELECT * FROM trt_BadDtlInfo where BadCode=#{BadCode}
+    </select>
+
+
+    <select id="SelectByBadDInfoByBadCodeone" resultMap="BadDResult">
+        SELECT * FROM trt_BadDtlInfo where BadCode=#{BadCode}
+    </select>
+
+
+    <insert id="InsertBadDInfo">
+        INSERT INTO trt_BadDtlInfo(Guid,BadGd,BadCode,BadName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{badGd},#{badCode},#{badName},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <delete id="DelBadDInfoByRuid">
+        DELETE  FROM trt_BadDtlInfo WHERE BadGd=#{badGd}
+    </delete>
+
+
+    <update id="UpdateBadDInfoByRuid">
+        UPDATE trt_BadDtlInfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="badGd != null">
+                BadGd = #{badGd},
+            </if>
+            <if test="badCode != null">
+                BadCode = #{badCode},
+            </if>
+            <if test="badName != null">
+                BadName = #{badName},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+        </trim>
+        WHERE Ruid =#{ruid}
+    </update>
+
+</mapper>

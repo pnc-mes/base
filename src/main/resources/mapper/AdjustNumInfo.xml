@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.AdjustNumDAO" >
+    <resultMap type="pnc.mesadmin.entity.AdjustNumInfo" id="AdjustNumInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="materialCode" column="materialCode" />
+        <result property="materialName" column="materialName" />
+        <result property="batch" column="batch" />
+        <result property="adjustType" column="adjustType" />
+        <result property="num" column="num" />
+        <result property="beAdjustNum" column="beAdjustNum" />
+        <result property="afAdjustNum" column="afAdjustNum" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+</mapper>

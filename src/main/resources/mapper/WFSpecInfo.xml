@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.WFSpecDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.WFSpecInfo" id="WFSpecInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="wfVerGd" column="wfVerGd" />
+        <result property="specVerGd" column="specVerGd" />
+        <result property="eOSpec" column="eOSpec" />
+        <result property="eRSpec" column="eRSpec" />
+        <result property="nSpecVerGd" column="nSpecVerGd" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModiryTime" column="lastModiryTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!-- 新增工艺工序版本信息 (By-pjf) -->
+    <insert id="InsertWFSpec">
+        INSERT INTO tpm_wfspecinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,wfVerGd,specVerGd,Creator,CreateTime,
+
+            <if test="eOSpec != null">
+                eOSpec,
+            </if>
+            <if test="eRSpec != null">
+                eRSpec,
+            </if>
+            <if test="nSpecVerGd != null">
+                nSpecVerGd,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{wfVerGd},#{specVerGd},#{creator},#{createTime},
+
+            <if test="eOSpec != null">
+                #{eOSpec},
+            </if>
+            <if test="eRSpec != null">
+                #{eRSpec},
+            </if>
+            <if test="nSpecVerGd != null">
+                #{nSpecVerGd},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除工艺工序版本信息 (By-pjf) -->
+    <delete id="DeleteWFSpec">
+        DELETE FROM tpm_wfspecinfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+    <!-- 根据WFVerGd删除 (By-pjf) -->
+    <delete id="DeleteByWFVerGd">
+        DELETE FROM tpm_wfspecinfo WHERE WFVerGd = #{ argWFVerGd }
+    </delete>
+
+    <!--关联查询工艺工序信息表-->
+    <select id="Selectguid" resultMap="WFSpecInfoResult">
+        SELECT * FROM tpm_wfspecinfo WHERE guid=#{guid}
+    </select>
+
+    <!-- 根据WFVerGd与SpecVerGd查询工艺工序版本信息 (By-pjf) -->
+    <select id="SelectByWSVerGd" resultMap="WFSpecInfoResult">
+        SELECT * FROM tpm_wfspecinfo WHERE WFVerGd = #{ argWFVerGd } AND SpecVerGd = #{ argSpecVerGd }
+    </select>
+
+    <!-- 根据WFVerGd查询工艺版本信息 (By-pjf) -->
+    <select id="SelectByWFVerGd" resultMap="WFSpecInfoResult">
+        SELECT * FROM tpm_wfspecinfo WHERE WFVerGd = #{ argWFVerGd }
+    </select>
+
+    <!-- 根据WFVerGd与Pos查询工艺工序版本信息 (By-pjf) -->
+    <select id="SelectByWPVerGd" resultMap="WFSpecInfoResult">
+        SELECT * FROM tpm_wfspecinfo WHERE WFVerGd = #{ argWFVerGd } AND Pos = #{ argPos }
+    </select>
+
+</mapper>

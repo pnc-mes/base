@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.NPickDAO" >
+    <resultMap type="pnc.mesadmin.entity.NPickInfo" id="npickInfoResult">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="pickCode" column="PickCode" />
+        <result property="pickerGd" column="PickerGd" />
+        <result property="use" column="Use" />
+        <result property="exStatus" column="ExStatus" />
+        <result property="sStatus" column="SStatus" />
+        <result property="prePickDate" column="PrePickDate" />
+        <result property="createTime" column="CreateTime" />
+        <result property="sStatus" column="SStatus"/>
+        <result property="creator" column="Creator" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+        <result property="dSource" column="dSource" />
+    </resultMap>
+    <!--新增来料单信息-->
+    <insert id="InsertNPickInfo">
+        <selectKey resultType="Integer" order="AFTER" keyProperty="ruid">
+            SELECT LAST_INSERT_ID() AS Ruid
+        </selectKey>
+        INSERT INTO `tpm_npickinfo`(Guid,PickCode,SStatus,PickerGd,`Use`,ExStatus,PrePickDate,CreateTime,Creator,LastModifyMan,LastModifyTime,Remark,dSource)
+        VALUES (#{guid},#{pickCode},#{sStatus},#{pickerGd},#{use},#{exStatus},#{prePickDate},#{createTime},#{creator},#{lastModifyMan},#{lastModifyTime},#{remark},#{dSource})
+    </insert>
+
+    <!--获取领料单列表信息-->
+    <select id="SelectNPickInfo" resultMap="npickInfoResult">
+        SELECT * FROM tpm_npickinfo
+    </select>
+
+    <!--根据guid查询-->
+    <select id="SelectNPickInfoGuid" resultMap="npickInfoResult">
+        SELECT * FROM tpm_npickinfo n WHERE n.Guid=#{guid}
+    </select>
+
+    <!--删除领料单列表信息-->
+    <delete id="DeleteNPickInfoByRuid" parameterType="int">
+       DELETE FROM tpm_npickinfo WHERE Ruid=#{ruid}
+    </delete>
+
+
+    <!--获取领料单信息-->
+    <select id="SelectNPickInfoByRuid" resultMap="npickInfoResult" parameterType="int">
+        SELECT * FROM tpm_npickinfo WHERE Ruid=#{ruid}
+    </select>
+
+    <!--t通过领料单号获取领料单信息  WHL-->
+    <select id="SelectNPickInfoByPickCode" resultMap="npickInfoResult" >
+        SELECT * FROM tpm_npickinfo WHERE PickCode=#{pickCode}
+    </select>
+
+
+
+    <!--根据领料单ID更新领料单信息-->
+    <update id="UpdatenNPickInfo">
+        UPDATE tpm_npickinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pickCode != null">
+                PickCode = #{pickCode},
+            </if>
+            <if test="sStatus != null">
+                SStatus = #{sStatus},
+            </if>
+            <if test="pickerGd != null">
+                PickerGd = #{pickerGd},
+            </if>
+            <if test="use != null">
+                `Use` = #{use},
+            </if>
+            <if test="exStatus != null">
+                ExStatus = #{exStatus},
+            </if>
+            <if test="prePickDate != null">
+                PrePickDate = #{prePickDate},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime},
+            </if>
+            <if test="creator != null">
+                Creator = #{creator},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        where Ruid = #{ruid}
+    </update>
+<!--筛选-->
+    <select id="SelectNPickInfoShaiXuan" parameterType="string" resultMap="npickInfoResult">
+        SELECT *  FROM `tpm_npickinfo`  a  WHERE a.`PickerGd` IN (SELECT Guid FROM `tpm_userinfo` b  WHERE
+        <if test="userRd != null and userRd!=''">
+            b.`Ruid` =#{userRd}
+        </if>
+        )
+        AND
+        a.PickCode
+        <choose>
+            <when test="pickCode != null and pickCode!='' ">
+                LIKE CONCAT('%','${pickCode}','%')
+            </when>
+            <otherwise>
+                LIKE CONCAT('%','','%')
+            </otherwise>
+        </choose>
+        <if test="exStatus != null and exStatus!=''">
+            AND a.`ExStatus`=#{exStatus}
+        </if>
+        <if test="createTime != null and createTime!=''">
+            AND a.`CreateTime` BETWEEN #{createTime}
+        </if>
+        <if test="createTime1 != null and createTime1!=''">
+            AND #{createTime1}
+        </if>
+    </select>
+</mapper>

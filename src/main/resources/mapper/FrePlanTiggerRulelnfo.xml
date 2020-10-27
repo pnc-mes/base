@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.FrePlanTiggerRuleDAO">
+    <resultMap id="FrePlanTiggerRulelnfo" type="pnc.mesadmin.entity.FrePlanTiggerRulelnfo">
+        <id property="Ruid" column="Ruid"></id>
+        <result property="Guid" column="Guid"></result>
+        <result property="FrePlanGd" column="FrePlanGd"></result>
+        <result property="UpUseNum" column="UpUseNum"></result>
+        <result property="DownUseNum" column="DownUseNum"></result>
+        <result property="PresetUseNum" column="PresetUseNum"></result>
+        <result property="PresetEmailDistributionGd" column="PresetEmailDistributionGd"></result>
+        <result property="PresetEmailMessageGd" column="PresetEmailMessageGd"></result>
+        <result property="StartEmailDistributionGd" column="StartEmailDistributionGd"></result>
+        <result property="StartEmailMessageGd" column="StartEmailMessageGd"></result>
+        <!--<result property="OverTimeAction" column="OverTimeAction"></result>-->
+        <result property="OverdueEmailDistributionGd" column="OverdueEmailDistributionGd"></result>
+        <result property="OverdueEmailMessageGd" column="OverdueEmailMessageGd"></result>
+        <result property="Creator" column="Creator"></result>
+        <result property="CreateTime" column="CreateTime"></result>
+        <result property="LastModifyMan" column="LastModifyMan"></result>
+        <result property="LastModifyTime" column="LastModifyTime"></result>
+        <result property="Remark" column="Remark"></result>
+        <result property="Status" column="Status"></result>
+    </resultMap>
+
+    <!--查询在线物料有效期列表-->
+    <select id="selectFrePlanGd" resultMap="FrePlanTiggerRulelnfo">
+        SELECT * FROM tpm_freplantiggerruleinfo WHERE FrePlanGd=#{FrePlanGd}
+    </select>
+
+    <insert id="insertTiggerRulelnfo">
+        INSERT INTO tpm_freplantiggerruleinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,FrePlanGd,Creator,CreateTime,
+            <if test="PresetUseNum !=null">
+                PresetUseNum,
+            </if>
+            <if test="UpUseNum !=null">
+                UpUseNum,
+            </if>
+            <if test="DownUseNum !=null">
+                DownUseNum,
+            </if>
+            <if test="PresetEmailDistributionGd !=null">
+                PresetEmailDistributionGd,
+            </if>
+            <if test="PresetEmailMessageGd !=null">
+                PresetEmailMessageGd,
+            </if>
+            <if test="StartEmailDistributionGd !=null">
+                StartEmailDistributionGd,
+            </if>
+            <if test="StartEmailMessageGd !=null">
+                StartEmailMessageGd,
+            </if>
+
+            <if test="OverdueEmailDistributionGd !=null">
+                OverdueEmailDistributionGd,
+            </if>
+            <if test="OverdueEmailMessageGd !=null">
+                OverdueEmailMessageGd,
+            </if>
+            <if test="LastModifyMan !=null">
+                LastModifyMan,
+            </if>
+            <if test="LastModifyTime !=null">
+                LastModifyTime,
+            </if>
+            <if test="Remark !=null">
+                Remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{Guid},#{FrePlanGd},#{Creator},#{CreateTime},
+            <if test="PresetUseNum !=null">
+                #{PresetUseNum},
+            </if>
+            <if test="UpUseNum !=null">
+                #{UpUseNum},
+            </if>
+            <if test="DownUseNum !=null">
+                #{DownUseNum},
+            </if>
+            <if test="PresetEmailDistributionGd !=null">
+                #{PresetEmailDistributionGd},
+            </if>
+            <if test="PresetEmailMessageGd !=null">
+                #{PresetEmailMessageGd},
+            </if>
+            <if test="StartEmailDistributionGd !=null">
+                #{StartEmailDistributionGd},
+            </if>
+            <if test="StartEmailMessageGd !=null">
+                #{StartEmailMessageGd},
+            </if>
+
+            <if test="OverdueEmailDistributionGd !=null">
+                #{OverdueEmailDistributionGd},
+            </if>
+            <if test="OverdueEmailMessageGd !=null">
+                #{OverdueEmailMessageGd},
+            </if>
+            <if test="LastModifyMan !=null">
+                #{LastModifyMan},
+            </if>
+            <if test="LastModifyTime !=null">
+                #{LastModifyTime},
+            </if>
+            <if test="Remark !=null">
+                #{Remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--根据保养计划标识删除对应信息-->
+    <delete id="deleteFrePlanGd" >
+        DELETE FROM tpm_freplantiggerruleinfo WHERE Ruid=#{Ruid}
+    </delete>
+
+    <!---->
+    <update id="updateFrePlanInfo">
+        UPDATE tpm_freplantiggerruleinfo SET
+          Guid=#{Guid}, FrePlanGd=#{FrePlanGd}, UpUseNum=#{UpUseNum}, DownUseNum=#{DownUseNum}, PresetUseNum=#{PresetUseNum}, PresetEmailDistributionGd=#{PresetEmailDistributionGd},
+           PresetEmailMessageGd=#{PresetEmailMessageGd}, StartEmailDistributionGd=#{StartEmailDistributionGd}, StartEmailMessageGd=#{StartEmailMessageGd},
+            OverdueEmailDistributionGd=#{OverdueEmailDistributionGd}, OverdueEmailMessageGd=#{OverdueEmailMessageGd},
+            Creator=#{Creator}, CreateTime=#{CreateTime}, LastModifyMan=#{LastModifyMan}, LastModifyTime=#{LastModifyTime}, Remark=#{Remark}
+            WHERE
+            FrePlanGd=#{FrePlanGd}
+
+    </update>
+
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.OpertDAO" >
+    <resultMap type="pnc.mesadmin.entity.OpertInfo" id="OpertInfoResult">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="optName" column="OptName" />
+        <result property="wcgd" column="WcGd" />
+        <result property="reaCGGd" column="ReaCGGd" />
+        <result property="bLGd" column="BLGd" />
+        <result property="specoption" column="SpecOption" />
+        <result property="packopt" column="PackOpt" />
+        <result property="ckweight" column="CkWeight" />
+        <result property="packtype" column="PackType" />
+        <result property="badOutSpec" column="BadOutSpec" />
+        <result property="creator" column="Creator" />
+        <result property="createtime" column="CreateTime" />
+        <result property="lastmodifyman" column="LastModifyMan" />
+        <result property="lastmodifytime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <insert id="insertOpertInfo" parameterType="pnc.mesadmin.entity.OpertInfo">
+        insert into tpm_opertinfo(
+        <trim suffixOverrides=",">
+
+            guid,optName,wcGd,BLGd,reaCGGd,specOption,packOpt,cKWeight,packType,badOutSpec,
+            creator,createTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        ) values(
+        <trim suffixOverrides=",">
+
+            #{guid},#{optName},#{wcgd},#{bLGd},#{reaCGGd},#{specoption},#{packopt},
+            #{ckweight},#{packtype},#{badOutSpec},#{creator},#{createtime},
+
+            <if test="lastModifyMan != null">
+                #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                #{ remark },
+            </if>
+        </trim>
+        )
+    </insert>
+    <!--复制-->
+    <insert id="CopyOpertInfo" parameterType="pnc.mesadmin.entity.OpertInfo">
+        insert into tpm_opertinfo
+        (guid,optName,wcGd,bLGd,reaCGGd,specOption,packOpt,cKWeight,packType,badOutSpec,
+        creator,createTime)
+        values
+        (#{guid},#{optName},#{wcgd},#{blgd},#{reaCGGd},#{specoption},#{packopt},
+        #{ckweight},#{packtype},#{badOutSpec},#{creator},#{createtime})
+
+    </insert>
+    <!--根据ruid删除作业信息-->
+    <delete id="deleteByRuid" parameterType="int">
+        delete from tpm_opertinfo where Ruid=#{ruid}
+    </delete>
+
+    <!--编辑作业信息-->
+    <update id="editByRuid">
+        update tpm_opertinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{guid},
+            </if>
+            <if test="optName != null">
+                OptName = #{optName},
+            </if>
+            <if test="wcgd != null">
+                WcGd = #{wcgd},
+            </if>
+            <if test="reaCGGd != null">
+                ReaCGGd = #{reaCGGd},
+            </if>
+            <if test="bLGd != null">
+                BLGd = #{bLGd},
+            </if>
+            <if test="specoption != null">
+                SpecOption = #{specoption},
+            </if>
+            <if test="packopt != null">
+                PackOpt = #{packopt},
+            </if>
+            <if test="ckweight != null">
+                CkWeight = #{ckweight},
+            </if>
+            <if test="packtype != null">
+                PackType = #{packtype},
+            </if>
+            <if test="badOutSpec != null">
+                BadOutSpec = #{badOutSpec},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+            <if test="lastmodifyman != null">
+                LastModifyMan = #{lastmodifyman},
+            </if>
+            <if test="lastmodifytime != null">
+                LastModifyTime = #{lastmodifytime},
+            </if>
+        </trim>
+        where Ruid = #{ruid}
+    </update>
+
+    <!--  获取作业列表信息-->
+    <select id="GetAllOpertInfo" parameterType="map"  resultMap="OpertInfoResult">
+        select * from tpm_opertinfo
+    </select>
+    <select id="GetOpertInfoByRuid"   resultMap="OpertInfoResult">
+        select * from tpm_opertinfo where ruid=#{_parameter}
+    </select>
+
+    <select id="GetOpertInfoByGuid"  resultMap="OpertInfoResult">
+        select * from tpm_opertinfo where guid=#{_parameter}
+    </select>
+
+    <!--查询作业信息的操作名称- LFZ-->
+    <select id="SelectoptName"  resultMap="OpertInfoResult">
+        select * from tpm_opertinfo  o where o.optName=#{optName}
+    </select>
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DCItemDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.DCItemInfo" id="dcItemInfoMap">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="dcVerGd" column="dcVerGd" />
+		<result property="itemName" column="itemName" />
+		<result property="itemType" column="itemType" />
+		<result property="sValue" column="sValue" />
+		<result property="upLimit" column="upLimit" />
+		<result property="dwLimit" column="dwLimit" />
+		<result property="defValue" column="defValue" />
+		<result property="checked" column="checked" />
+		<result property="action" column="action" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="Remark" />
+		<result property="dataAlias" column="dataAlias" />
+	</resultMap>
+	<delete id="deleteDCItemInfoByRuid">
+		delete  from tpm_dciteminfo where ruid=#{ruid}
+	</delete>
+	<!-- 保存 -->
+	<insert id="insertDCItemInfos" parameterType="list">
+		INSERT INTO tpm_dciteminfo
+		(Guid,DataAlias,DCVerGd,Action,ItemName,ItemType,SValue,UpLimit,DwLimit,
+		DefValue,Checked,Creator,CreateTime,LastModifyMan,LastModifyTime)
+		VALUES
+		<foreach collection ="list" item="dcItemInfo" index= "index" separator =",">
+			(
+			#{dcItemInfo.guid},#{dcItemInfo.dataAlias},#{dcItemInfo.dcVerGd},#{dcItemInfo.action},#{dcItemInfo.itemName},#{dcItemInfo.itemType},#{dcItemInfo.sValue},
+			#{dcItemInfo.upLimit},#{dcItemInfo.dwLimit},#{dcItemInfo.defValue},#{dcItemInfo.checked},#{dcItemInfo.creator},
+			#{dcItemInfo.createTime},#{dcItemInfo.lastModifyMan},#{dcItemInfo.lastModifyTime}
+			)
+		</foreach>
+	</insert>
+
+
+	<insert id="insertDCItemInfo">
+		INSERT INTO tpm_dciteminfo
+		(Guid,DataAlias,DCVerGd,`Action`,ItemName,ItemType,SValue,UpLimit,DwLimit,
+		DefValue,Checked,Creator,CreateTime,LastModifyMan,LastModifyTime)
+		VALUES
+			(
+			#{dcItemInfo.guid},#{dcItemInfo.dataAlias},#{dcItemInfo.dcVerGd},#{dcItemInfo.action},#{dcItemInfo.itemName},#{dcItemInfo.itemType},#{dcItemInfo.sValue},
+			#{dcItemInfo.upLimit},#{dcItemInfo.dwLimit},#{dcItemInfo.defValue},#{dcItemInfo.checked},#{dcItemInfo.creator},
+			#{dcItemInfo.createTime},#{dcItemInfo.lastModifyMan},#{dcItemInfo.lastModifyTime}
+			)
+	</insert>
+
+	<!-- 根据dcVerInfo的guid删除下面所有的Items -->
+	<delete id="deleteDCItemInfoByDCVerGd">
+		DELETE FROM tpm_dciteminfo WHERE DCVerGd = #{dcVerGd}
+	</delete>
+
+	<!-- 更新DCItemInfo -->
+	<update id="updateDCItemInfo">
+		UPDATE tpm_dciteminfo SET ItemName = #{itemName},DataAlias=#{dataAlias},Action=#{action},ItemType = #{itemType},SValue = #{sValue},UpLimit = #{upLimit},
+		DwLimit = #{dwLimit},DefValue = #{defValue},Checked = #{checked},LastModifyMan = #{lastModifyMan},LastModifyTime = #{lastModifyTime}
+		WHERE Ruid = #{ruid}
+	</update>
+
+	<!-- 根据dcVerGd查询对应的items列表-->
+	<select id="selectDCItemInfosByDCVerGd" resultMap="dcItemInfoMap">
+		SELECT * FROM tpm_dciteminfo dci WHERE dci.dcVerGd = #{dcVerGd} ORDER BY itemName
+	</select>
+
+	<!-- 根据ItemRd查询DCItemInfo -->
+	<select id="selectDCItemInfoByItemRd" resultMap="dcItemInfoMap">
+		SELECT * FROM tpm_dciteminfo dci WHERE dci.ruid = #{itemRd}
+	</select>
+
+	<!-- 根据sop物料+工序查询数据采集 (By-pjf) -->
+	<select id="SelectByMaGdSpecVerGd" resultMap="dcItemInfoMap">
+        SELECT * FROM tpm_dciteminfo di, tpm_sopdlinfo sop
+        WHERE di.guid = sop.`DCVerGd`
+        AND sop.`MaVerGd`=#{argMaGd}
+        AND sop.`SpecVerGd`=#{argSpecGd}
+	</select>
+</mapper>

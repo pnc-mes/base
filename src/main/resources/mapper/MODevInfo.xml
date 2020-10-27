@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MODevDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.MODevInfo" id="MODevInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="devGd" column="devGd" />
+        <result property="maVerGd" column="maVerGd" />
+        <result property="materialCode" column="materialCode" />
+        <result property="materialName" column="materialName" />
+        <result property="num" column="num" />
+        <result property="unitName" column="unitName" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增物料上机信息  (By-pjf)-->
+    <insert id="InsertMODev">
+        INSERT INTO tpm_modevinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,devGd,maVerGd,materialCode,materialName,num,
+            unitName,creator,createTime
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{devGd},#{maVerGd},#{materialCode},#{materialName},
+            #{num},#{unitName},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 根据guid删除物料上机信息 -->
+    <delete id="DeleteByGuid">
+        DELETE FROM tpm_modevinfo WHERE Guid = #{ argGuid }
+    </delete>
+
+    <!-- 根据DevGd删除物料上机信息 -->
+    <delete id="DeleteByDevGd">
+        DELETE FROM tpm_modevinfo WHERE DevGd = #{ devGd }
+    </delete>
+
+
+    <!-- 修改物料上机信息  (By-pjf)-->
+    <update id="UpdateMODev">
+        UPDATE tpm_modevinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="devGd != null">
+                devGd = #{ devGd },
+            </if>
+            <if test="maVerGd != null">
+                maVerGd = #{ maVerGd },
+            </if>
+            <if test="materialCode != null">
+                materialCode = #{ materialCode },
+            </if>
+            <if test="materialName != null">
+                materialName = #{ materialName },
+            </if>
+            <if test="num != null">
+                num = #{ num },
+            </if>
+            <if test="unitName != null">
+                unitName = #{ unitName },
+            </if>
+
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据设备标识查询物料上机信息  (By-pjf)-->
+    <select id="SelectByDevGd" resultMap="MODevInfoResult">
+        SELECT * FROM tpm_modevinfo WHERE DevGd = #{ argDevGd }
+    </select>
+
+    <!-- 根据设备标识和物料标识查询物料上机信息  (By-pjf)-->
+    <select id="SelectByDevMa" resultMap="MODevInfoResult">
+        SELECT * FROM tpm_modevinfo WHERE DevGd = #{ argDevGd } AND MaVerGd = #{ argMaVerGd } ORDER BY CreateTime
+    </select>
+
+    <!-- 查询物料上机信息  (By-pjf)-->
+    <select id="SelectByGuid" resultMap="MODevInfoResult">
+        SELECT * FROM tpm_modevinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <!-- 根据设备标识、关联单号查询物料上机信息 (pjf) -->
+    <select id="SelectByDevGdAssCode" resultMap="MODevInfoResult">
+        SELECT m.`Ruid`, m.`Guid`, m.`MaVerGd`,SUM(b.`CanNum`) AS Num FROM tpm_modevinfo m, tpm_modevdlinfo md, tpm_binfo b
+        WHERE m.`Guid` = md.`MODevGd`
+        AND md.`AssSource` = #{ argAssSource }
+        AND md.`AssCode` = #{ argAssCode }
+        AND m.`DevGd` = #{ argDevGd }
+        AND md.`Batch` = b.`Batch`
+        GROUP BY m.`Ruid`
+    </select>
+
+
+    <!-- 查询物料上机信息  (By-pjf)-->
+    <select id="SelectByDevGdAndExecGd" resultMap="MODevInfoResult">
+        	SELECT mo.* FROM tpm_modevinfo mo left join tpm_modevdlinfo modd  on mo.Guid=modd.MODevGd
+        	WHERE mo.DevGd=#{argDevGd} and modd.ExecGd=#{ExecGd} GROUP BY mo.Ruid
+    </select>
+
+
+</mapper>

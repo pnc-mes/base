@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevMapInfoDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevMapInfo" id="DevMapInfoResult">
+        <id property="Ruid" column="Ruid" />
+        <result property="Guid" column="Guid" />
+        <result property="DevGd" column="DevGd" />
+        <result property="DevMapCode" column="DevMapCode" />
+        <result property="DevMapName" column="DevMapName" />
+        <result property="Creator" column="Creator" />
+        <result property="CreateTime" column="CreateTime" />
+        <result property="LastModifyMan" column="LastModifyMan" />
+        <result property="LastModifyTime" column="LastModifyTime" />
+        <result property="Remark" column="Remark" />
+    </resultMap>
+    <!--根据设备标识DevGd查询设备映射信息-->
+    <select id="SelectDevMap" resultMap="DevMapInfoResult">
+        SELECT * FROM tpm_devmapinfo WHERE DevGd=#{DevGd}
+    </select>
+
+
+    <select id="SelectGuid" resultMap="DevMapInfoResult">
+        SELECT * FROM tpm_devmapinfo WHERE Guid=#{Guid}
+    </select>
+
+     <insert id="InsertDevMapInfo">
+      insert into  tpm_devmapinfo(
+         Guid,DevGd,DevMapCode,DevMapName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark
+        ) values(
+             #{Guid},#{DevGd},#{DevMapCode},#{DevMapName},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark}
+        )
+     </insert>
+
+
+    <update id="UpdateDevMapInfo">
+        update tpm_devmapinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Guid != null">
+                Guid=#{Guid},
+            </if>
+            <if test="DevGd != null">
+                DevGd=#{DevGd},
+            </if>
+            <if test="DevMapCode != null">
+                DevMapCode=#{DevMapCode},
+            </if>
+            <if test="DevMapName != null">
+                DevMapName=#{DevMapName},
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan=#{LastModifyMan},
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime=#{LastModifyTime},
+            </if>
+            <if test="Remark != null">
+                Remark=#{Remark},
+            </if>
+        </trim>
+       where DevGd=#{DevGd}
+    </update>
+
+    <delete id="DeleteDevMapInfo" parameterType="int">
+        delete from tpm_devmapinfo where Ruid=#{Ruid}
+    </delete>
+
+    <select id="SelectDevMapInfoByDevGdAndDevMapCode" parameterType="string" resultMap="DevMapInfoResult">
+        select * from tpm_devmapinfo where  DevGd=#{DevGd} and DevMapCode=#{DevMapCode}
+    </select>
+
+    <!--根据映射Guid查询信息-->
+    <select id="SelectGuidDevMap" resultMap="DevMapInfoResult">
+         select * from tpm_devmapinfo where  Guid=#{Guid}
+    </select>
+
+    <!--Ruid查询-->
+    <select id="SelectRuidDevMap" resultMap="DevMapInfoResult">
+         select * from tpm_devmapinfo where  Ruid=#{Ruid}
+    </select>
+
+</mapper>

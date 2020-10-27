@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DCDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.DCInfo" id="dcInfoMap">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="dcName" column="dcName" />
+		<result property="verGd" column="verGd" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+	<!-- 新增保存数据采集信息根节点 -->
+	<insert id="insertDCInfo">
+		<selectKey keyProperty="ruid" resultType="_int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO tpm_dcinfo
+		(Guid,DCName,VerGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES(#{guid},#{dcName},#{verGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+	</insert>
+
+	<!-- 根据guid删除数据采集 -->
+	<delete id="deleteDCInfoByGuid">
+		DELETE FROM tpm_dcinfo WHERE guid = #{guid}
+	</delete>
+
+	<!-- 更新 -->
+	<update id="updateDCInfo">
+		UPDATE tpm_dcinfo SET DCName = #{dcName},VerGd = #{verGd},LastModifyMan = #{lastModifyMan},LastModifyTime = #{lastModifyTime}
+		WHERE Guid = #{guid}
+	</update>
+
+	<!-- 查询数据采集列表 -->
+	<select id="selectDCInfos" resultMap="dcInfoMap">
+		SELECT * FROM tpm_dcinfo
+	</select>
+
+	<!-- 根据dcRd查询数据采集 -->
+	<select id="selectDCInfoByDcRd" resultMap="dcInfoMap">
+		SELECT * FROM tpm_dcinfo d WHERE d.ruid = #{dcRd}
+	</select>
+
+	<!-- 根据guid查询数据采集 -->
+	<select id="selectByGuid" resultMap="dcInfoMap">
+		select * from tpm_dcinfo dc where dc.guid = #{guid}
+	</select>
+
+	<!-- 查询数据采集名称 -->
+	<select id="SelectDcName" resultMap="dcInfoMap">
+		select * from tpm_dcinfo dc where dc.dcName = #{dcName}
+	</select>
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.OutMaDtlInfoDAO">
+    <resultMap id="outMaDtlInfoResult" type="pnc.mesadmin.entity.OutMaDtlInfo">
+        <id column="ruid" property="ruid"/>
+        <result column="guid" property="guid"/>
+        <result column="outMaGd" property="outMaGd"/>
+        <result column="outCode" property="outCode"/>
+        <result column="maVerGd" property="maVerGd"/>
+        <result column="num" property="num"/>
+        <result column="scanNum" property="scanNum"/>
+        <result column="unitName" property="unitName"/>
+        <result column="storeGd" property="storeGd"/>
+        <result column="creator" property="creator"/>
+        <result column="createTime" property="createTime"/>
+        <result column="lastModifyMan" property="lastModifyMan"/>
+        <result column="lastModifyTime" property="lastModifyTime"/>
+        <result column="remark" property="remark"/>
+        <result column="lgd" property="lgd"/>
+        <result column="bartype" property="bartype"/>
+        <result column="batch" property="batch"/>
+    </resultMap>
+
+
+
+    <select id="selectOutMaDtlInfoByoutMaGdAndbatch" resultMap="outMaDtlInfoResult" parameterType="string">
+         select *  from tpm_outmadtlinfo where outMaGd=#{outMaGd} and batch=#{batch}
+    </select>
+
+
+    <insert id="insertOutMaDtlInfo">
+        insert into tpm_outmadtlinfo(guid,outMaGd,outCode,maVerGd,num,scanNum,unitName,storeGd,creator,createTime,lastModifyMan,lastModifyTime,remark,lgd,bartype,batch)
+        values (#{guid},#{outMaGd},#{outCode},#{maVerGd},#{num},#{scanNum},#{unitName},#{storeGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark},#{lgd},#{bartype},#{batch});
+    </insert>
+
+    <select id="selectOutMaDtlInfoByoutMaGd" parameterType="string" resultMap="outMaDtlInfoResult">
+        select * from tpm_outmadtlinfo   where outMaGd=#{outMaGd};
+    </select>
+
+    <select id="selectPackListByoutMaGd" parameterType="string" resultType="String">
+        select batch from tpm_outmadtlinfo   where outMaGd=#{outMaGd};
+    </select>
+
+    <select id="SelectByGuid" parameterType="string" resultMap="outMaDtlInfoResult">
+        select * from tpm_outmadtlinfo   where Guid=#{guid};
+    </select>
+
+    <select id="SelectByRuid" resultMap="outMaDtlInfoResult">
+        select * from tpm_outmadtlinfo   where Ruid=#{ruid};
+    </select>
+
+    <delete id="deleteOutMaDtlInfoByRuid">
+        delete from tpm_outmadtlinfo   where ruid=#{ruid};
+    </delete>
+
+    <update id="UpdateByGuid">
+        UPDATE tpm_outmadtlinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="scanNum != null">
+                scanNum = #{ scanNum },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+        </trim>
+        WHERE Guid = #{ guid }
+    </update>
+
+
+</mapper>

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.InstockDAO" >
+    <resultMap type="pnc.mesadmin.entity.InstockInfo" id="InstockInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="maVerGd" column="maVerGd" />
+        <result property="materialCode" column="materialCode" />
+        <result property="materialName" column="materialName" />
+        <result property="version" column="version" />
+        <result property="materialType" column="materialType" />
+        <result property="storeGd" column="storeGd" />
+        <result property="num" column="num" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+<!--插入库存信息   王怀龙-->
+    <insert id="InsertInStock" parameterType="pnc.mesadmin.entity.InstockInfo">
+        insert into tpm_instockinfo(
+        guid,maVerGd,materialCode,materialName,version,materialType,storeGd,num,creator,createTime
+        ) values (
+         #{guid},#{maVerGd},#{materialCode},#{materialName},#{version},#{materialType},#{storeGd},#{num},#{creator},#{createTime}
+        )
+    </insert>
+
+    <!--根据库存ID删除库存信息  王怀龙 -->
+    <delete id="DeleteInStockInfoByRuid" >
+        DELETE FROM tpm_instockinfo WHERE ruid = #{ argInStockInfoRuid }
+    </delete>
+
+    <update id="UpdateInStockInfo">
+
+            UPDATE tpm_instockinfo
+            <trim prefix="set" suffixOverrides=",">
+
+                <if test="materialCode != null">
+                    materialCode = #{ materialCode },
+                </if>
+                <if test="materialName != null">
+                    materialName = #{ materialName },
+                </if>
+                <if test="version != null">
+                    version = #{ version },
+                </if>
+                <if test="materialType != null">
+                    materialType = #{ materialType },
+                </if>
+                <if test="storeGd != null">
+                    storeGd = #{ storeGd },
+                </if>
+                <if test="num != null">
+                    num = #{ num },
+                </if>
+                <if test="creator != null">
+                    creator = #{ creator },
+                </if>
+                <if test="createTime != null">
+                    createTime = #{ createTime },
+                </if>
+                <if test="lastModifyMan != null">
+                    lastModifyMan = #{ lastModifyMan },
+                </if>
+                <if test="lastModifyTime != null">
+                    lastModifyTime = #{ lastModifyTime },
+                </if>
+
+            </trim>
+            WHERE maVerGd = #{ maVerGd }
+
+    </update>
+
+    <!--根据物料版本标识和仓库标识更新库存信息-->
+    <update id="UpdateInStockInfoByMaVerGdAndStoreGd">
+
+        UPDATE tpm_instockinfo
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="materialCode != null">
+                materialCode = #{ materialCode },
+            </if>
+            <if test="materialName != null">
+                materialName = #{ materialName },
+            </if>
+            <if test="version != null">
+                version = #{ version },
+            </if>
+            <if test="materialType != null">
+                materialType = #{ materialType },
+            </if>
+            <if test="num != null">
+                num = #{ num },
+            </if>
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+
+        </trim>
+        WHERE maVerGd = #{ maVerGd }
+        AND storeGd = #{storeGd}
+
+    </update>
+
+    <!--根据物料类型查询库存信息-->
+    <select id="SelectmaterialType" resultMap="InstockInfoResult">
+        SELECT * FROM tpm_instockinfo i WHERE i.`materialType` = #{materialType}
+    </select>
+
+    <!--根据物料类型查询库存信息-->
+    <select id="SelectByInsRd" resultMap="InstockInfoResult">
+        SELECT * FROM tpm_instockinfo i WHERE i.`ruid` = #{insRd}
+    </select>
+
+    <!--根据物料类型查询库存信息-->
+    <select id="SelectBystoreGd" resultMap="InstockInfoResult">
+        SELECT * FROM tpm_instockinfo i WHERE i.`storeGd` = #{storeGd}
+    </select>
+
+    <select id="SelectBymaterialCode" resultMap="InstockInfoResult" parameterType="string">
+        SELECT * FROM tpm_instockinfo  WHERE materialCode = #{materialCode} AND storeGd = #{storeGd}
+    </select>
+
+    <!--关联库存表-->
+    <select id="SelectByinsGd" resultMap="InstockInfoResult">
+        SELECT * FROM tpm_instockinfo i WHERE i.`guid` = #{insGd}
+    </select>
+
+    <select id="SelectInstockInfoListByMaVerGd" resultMap="InstockInfoResult">
+        SELECT * FROM tpm_instockinfo where maVerGd = #{argMaVerGd}
+    </select>
+
+    <!--通过物料版本标识和仓库标识查询库存信息  王怀龙-->
+    <select id="SelectInstockInfoListByMaVerGdAndStoreGd" resultMap="InstockInfoResult">
+        SELECT * FROM tpm_instockinfo WHERE maVerGd = #{argMaVerGd} AND storeGd = #{argStoreGd}
+    </select>
+
+    <select id="SelectBymaVerGd" resultMap="InstockInfoResult">
+        SELECT * FROM tpm_instockinfo i WHERE i.`maVerGd` = #{maVerGd}
+    </select>
+
+    <update id="UpdateInStockInfoNum">
+
+        UPDATE tpm_instockinfo
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="materialCode != null">
+                materialCode = #{ materialCode },
+            </if>
+            <if test="materialName != null">
+                materialName = #{ materialName },
+            </if>
+            <if test="version != null">
+                version = #{ version },
+            </if>
+            <if test="materialType != null">
+                materialType = #{ materialType },
+            </if>
+            <if test="storeGd != null">
+                storeGd = #{ storeGd },
+            </if>
+            <if test="num != null">
+                num = #{ num },
+            </if>
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+
+        </trim>
+        WHERE Guid = #{ guid }
+
+    </update>
+
+    <!--关联查询-->
+    <select id="SelectBystoreGdShaixuan" resultMap="InstockInfoResult">
+       SELECT *  FROM  `tpm_instockinfo` b  WHERE
+        <if test="StoreGd != null and StoreGd!=''">
+        b.`StoreGd`=#{StoreGd}
+        </if>
+       AND b.`MaterialCode`
+        <choose>
+            <when test="macode != null and macode!='' ">
+                LIKE CONCAT('%','${macode}','%')
+            </when>
+            <otherwise>
+                LIKE CONCAT('%','','%')
+            </otherwise>
+        </choose>
+        AND b.`MaterialName`
+        <choose>
+        <when test="maname != null and maname!='' ">
+            LIKE  CONCAT('%','${maname}','%')
+        </when>
+        <otherwise>
+            LIKE CONCAT('%','','%')
+        </otherwise>
+    </choose>
+    </select>
+
+    <!--筛选关联查询-->
+    <select id="SelectBystoreGdShaixuanMaterial_Storeinfo_Maverinfo" resultMap="InstockInfoResult">
+
+        SELECT *  FROM  `tpm_instockinfo` b  WHERE b.`StoreGd` IN
+        (SELECT Guid FROM `tpm_storeinfo` c
+        <if test="StoreRd != null and StoreRd!=''">
+            WHERE c.`Ruid`=#{StoreRd}
+        </if>
+        )
+        AND b.`MaVerGd` IN
+
+        (SELECT mv.Guid FROM tpm_maverinfo mv, tpm_materialinfo m WHERE
+
+        m.Guid = mv.MaGd
+
+        <if test="MaterialDes != null and MaterialDes!='' ">
+            AND m.`MaterialDes` LIKE CONCAT('${MaterialDes}','%')
+        </if>
+
+        <if test="Brand != null and Brand!='' ">
+            AND mv.`Brand` LIKE CONCAT('${Brand}','%')
+        </if>
+
+       <if test="OrderNum != null and OrderNum!='' ">
+           AND mv.OrderNum LIKE CONCAT('${OrderNum}','%')
+       </if>
+
+        <if test="macode != null and macode!='' ">
+            AND m.`MaterialCode` LIKE CONCAT('${macode}','%')
+        </if>
+
+        <if test="maname != null and maname!='' ">
+            AND m.`MaterialName` LIKE  CONCAT('${maname}','%')
+        </if>
+
+        AND mv.Guid IN
+
+        (SELECT MaVerGd FROM tpm_mapropertyinfo ma
+
+        <if test="Size != null and Size!='' ">
+        WHERE ma.Size LIKE CONCAT('${Size}','%')
+        </if>
+
+        <if test="Material != null and Material!='' ">
+        AND ma.Material LIKE CONCAT('${Material}','%')
+        </if>
+
+        <if test="Norm != null and Norm!='' ">
+        AND ma.Norm LIKE CONCAT('${Norm}','%')
+        </if>
+
+        <if test="Model != null and Model!='' ">
+        AND ma.Model LIKE CONCAT('${Model}','%')
+        </if>
+        )
+
+        )
+    </select>
+
+    <!--筛选关联查询-->
+    <select id="SelectBystoreGdShaixuanMaterial_Storeinfo_Maverinfo1" resultMap="InstockInfoResult">
+
+        SELECT *  FROM  `tpm_instockinfo` b  WHERE b.`StoreGd` IN
+        (SELECT Guid FROM `tpm_storeinfo` c
+        <if test="StoreRd != null and StoreRd!=''">
+            WHERE c.`Ruid`=#{StoreRd}
+        </if>
+        )
+        AND b.`MaVerGd` IN
+
+        (SELECT mv.Guid FROM tpm_maverinfo mv, tpm_materialinfo m WHERE
+
+        m.Guid = mv.MaGd
+
+        <if test="MaterialDes != null and MaterialDes!='' ">
+            AND m.`MaterialDes` LIKE CONCAT('%','${MaterialDes}','%')
+        </if>
+
+        <if test="Brand != null and Brand!='' ">
+            AND mv.`Brand` LIKE CONCAT('${Brand}','%')
+        </if>
+
+        <if test="OrderNum != null and OrderNum!='' ">
+            AND mv.OrderNum LIKE CONCAT('${OrderNum}','%')
+        </if>
+
+        <if test="macode != null and macode!='' ">
+            AND m.`MaterialCode` LIKE CONCAT('%','${macode}','%')
+        </if>
+
+        <if test="maname != null and maname!='' ">
+            AND m.`MaterialName` LIKE  CONCAT('%','${maname}','%')
+        </if>
+        )
+    </select>
+
+    <!--OR查询-->
+    <select id="SelectBystoreGdShaixuan00" resultMap="InstockInfoResult">
+        SELECT *  FROM  `tpm_instockinfo` b  WHERE
+        <if test="StoreGd != null and StoreGd!=''">
+            b.`StoreGd`=#{StoreGd}
+        </if>
+        AND b.`MaterialCode`
+        <choose>
+            <when test="macode != null and macode!='' ">
+                LIKE CONCAT('%','${macode}','%')
+            </when>
+            <otherwise>
+                LIKE CONCAT('%','','%')
+            </otherwise>
+        </choose>
+        OR b.`MaterialName`
+        <choose>
+            <when test="maname != null and maname!='' ">
+                LIKE  CONCAT('%','${maname}','%')
+            </when>
+            <otherwise>
+                LIKE CONCAT('%','','%')
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--查询库存所有数据-->
+    <select id="SelectAllByinstockinfo" resultMap="InstockInfoResult">
+        SELECT * FROM tpm_instockinfo
+    </select>
+
+    <!--查询有库存的物料-->
+  <!--  <select id="SelectInstockInfoByStoreInfoAndMaInfoAndPage" resultMap="InstockInfoResult">
+        SELECT DISTINCT *  FROM tpm_instockinfo
+        WHERE StoreGd=#{StoreGd}
+        AND
+        <if test="MaInfo != null and MaInfo!=''">
+            MaterialCode LIKE CONCAT('%','${MaInfo}','%')
+            OR MaterialName LIKE CONCAT('%','${MaInfo}','%')
+        </if>
+        LIMIT ${StartIndex},${PageSize}
+
+    </select>-->
+     <!--查询有库存的物料-->
+         <select id="SelectInstockInfoByStoreInfoAndMaInfoAndPage" resultMap="InstockInfoResult">
+             SELECT DISTINCT * FROM `tpm_instockinfo` b
+             WHERE b.`StoreGd`=#{StoreGd}
+             AND (
+                 b.`MaterialCode` LIKE CONCAT('%','${MaInfo}','%')
+                 OR b.`MaterialName` LIKE  CONCAT('%','${MaInfo}','%')
+             )
+            LIMIT ${StartIndex},${PageSize}
+
+        </select>
+</mapper>

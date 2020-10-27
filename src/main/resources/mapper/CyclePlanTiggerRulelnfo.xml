@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CyclePlanTiggerRuleDAO" >
+    <resultMap type="pnc.mesadmin.entity.CyclePlanTiggerRulelnfo" id="cyclePlanTiggerRulelnfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="cyclePlanGd" column="cyclePlanGd" />
+        <result property="timeType" column="timeType" />
+        <result property="timeContent" column="timeContent" />
+        <result property="weekContent" column="weekContent" />
+        <result property="monthContent" column="monthContent" />
+        <result property="yearContent" column="yearContent" />
+        <result property="desContent" column="desContent" />
+        <result property="quarterContent" column="quarterContent" />
+        <result property="upTime" column="upTime" />
+        <result property="downTime" column="downTime" />
+        <result property="presetTime" column="presetTime" />
+        <result property="presetEmailDistributionGd" column="presetEmailDistributionGd" />
+        <result property="presetEmailMessageGd" column="presetEmailMessageGd" />
+        <result property="startEmailDistributionGd" column="startEmailDistributionGd" />
+        <result property="startEmailMessageGd" column="startEmailMessageGd" />
+        <!--<result property="overTimeAction" column="overTimeAction" />-->
+        <result property="overdueEmailMessageGd" column="overdueEmailMessageGd" />
+        <result property="overdueEmailDistributionGd" column="overdueEmailDistributionGd" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--根据主表标识查询-->
+    <select id="selectCyclePlanTiggerRulelnfoByCyclePlanGd" resultMap="cyclePlanTiggerRulelnfoResult" parameterType="string">
+        select * from tpm_cycleplantiggerruleinfo where cyclePlanGd=#{cyclePlanGd}
+    </select>
+
+    <!--删除-->
+    <delete id="deleteCyclePlanTiggerRulelnfo">
+       delete from  tpm_cycleplantiggerruleinfo where ruid=#{ruid}
+    </delete>
+
+    <delete id="deleteCyclePlanTiggerRulelnfoByGuid">
+        delete from  tpm_cycleplantiggerruleinfo where CyclePlanGd=#{guid}
+    </delete>
+
+    <!--新增-->
+    <insert id="insertCyclePlanTiggerRulelnfo">
+        insert into tpm_cycleplantiggerruleinfo
+        (guid,cyclePlanGd,timeType,timeContent,weekContent,monthContent,yearContent,desContent,quarterContent,
+        upTime,downTime,presetTime,presetEmailDistributionGd,presetEmailMessageGd, startEmailDistributionGd,
+        startEmailMessageGd,overdueEmailMessageGd,overdueEmailDistributionGd,creator,
+        createTime,lastModifyMan,lastModifyTime,remark)
+        values (#{guid},#{cyclePlanGd},#{timeType},#{timeContent},#{weekContent},#{monthContent},#{yearContent},#{desContent},#{quarterContent},
+        #{upTime},#{downTime},#{presetTime},#{presetEmailDistributionGd},#{presetEmailMessageGd}, #{startEmailDistributionGd},
+        #{startEmailMessageGd},#{overdueEmailMessageGd},#{overdueEmailDistributionGd},#{creator},
+        #{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+
+    </insert>
+
+    <update id="updateCyclePlanTiggerRulelnfo">
+        UPDATE `tpm_cycleplantiggerruleinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="cyclePlanGd != null">
+                cyclePlanGd = #{ cyclePlanGd },
+            </if>
+            <if test="timeType != null">
+                timeType = #{ timeType },
+            </if>
+            <if test="timeContent != null">
+                timeContent = #{ timeContent },
+            </if>
+            <if test="weekContent != null">
+                weekContent = #{ weekContent },
+            </if>
+            <if test="monthContent != null">
+                monthContent = #{ monthContent },
+            </if>
+            <if test="yearContent != null">
+                yearContent = #{ yearContent },
+            </if>
+            <if test="desContent != null">
+                desContent = #{ desContent },
+            </if>
+            <if test="quarterContent != null">
+                quarterContent = #{ quarterContent },
+            </if>
+            <if test="upTime != null">
+                upTime = #{ upTime },
+            </if>
+            <if test="downTime != null">
+                downTime = #{ downTime },
+            </if>
+            <if test="presetTime != null">
+                presetTime = #{ presetTime },
+            </if>
+            <if test="presetEmailDistributionGd != null">
+                presetEmailDistributionGd = #{ presetEmailDistributionGd },
+            </if>
+            <if test="presetEmailMessageGd != null">
+                presetEmailMessageGd = #{ presetEmailMessageGd },
+            </if>
+            <if test="startEmailDistributionGd != null">
+                startEmailDistributionGd = #{ startEmailDistributionGd },
+            </if>
+            <if test="startEmailMessageGd != null">
+                startEmailMessageGd = #{ startEmailMessageGd },
+            </if>
+            <if test="overdueEmailMessageGd != null">
+                overdueEmailMessageGd = #{ overdueEmailMessageGd },
+            </if>
+            <if test="overdueEmailDistributionGd != null">
+                overdueEmailDistributionGd = #{ overdueEmailDistributionGd },
+            </if>
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+        </trim>
+        WHERE ruid = #{ ruid }
+    </update>
+
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.UsrSkillDAO" >
+    <resultMap type="pnc.mesadmin.entity.UsrSkillInfo" id="UsrSkillInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="userGd" column="userGd" />
+        <result property="realName" column="realName" />
+        <result property="skillGd" column="skillGd" />
+        <result property="skillName" column="skillName" />
+        <result property="sVPDate" column="sVPDate" />
+        <result property="eVPDate" column="eVPDate" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--查询人员技能信息列表-->
+    <select id="SelectAllUsrSkillInfo" resultMap="UsrSkillInfoResult">
+        select * from tpm_usrskillinfo
+    </select>
+
+    <!--根据用户标识查询技能信息列表-->
+    <select id="SelectByUserGd" resultMap="UsrSkillInfoResult">
+        select * from tpm_usrskillinfo WHERE UserGd = #{argUserGd}
+    </select>
+
+    <!--保存人员技能信息-->
+    <insert id="InsertUsrSkillInfo">
+        INSERT INTO tpm_usrskillinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,UserGd,RealName,SkillGd,SkillName,SVPDate,EVPDate,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{userGd},#{realName},#{skillGd},#{skillName},#{sVPDate},#{eVPDate},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除人员技能信息-->
+    <delete id="DeleteUsrSkillInfo">
+        DELETE FROM tpm_usrskillinfo WHERE Ruid = #{userRd}
+    </delete>
+</mapper>

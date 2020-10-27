@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevBZDtlDao" >
+    <resultMap type="pnc.mesadmin.entity.DevBZDtlInfo" id="devBZDtlMap">
+        <id property="ruid" column="Ruid" />
+        <result property="DevBZGd" column="DevBZGd" />
+        <result property="KeyName" column="KeyName" />
+        <result property="KeyValue" column="KeyValue" />
+    </resultMap>
+
+<select id="SelectDevBZDtlDevBZGd" resultMap="devBZDtlMap">
+    select * from tpm_devbzdtlinfo where DevBZGd=#{DevBZGd}
+</select>
+
+    <select id="SelectDevBZDtlargruid" resultMap="devBZDtlMap">
+    select * from tpm_devbzdtlinfo where Ruid=#{argruid}
+</select>
+
+
+    <insert id="InsertDevBZDtl">
+                  INSERT INTO `tpm_devbzdtlinfo`(
+            DevBZGd,KeyName,KeyValue)
+            VALUES (
+            #{DevBZGd},#{KeyName},#{KeyValue})
+</insert>
+
+    <update id="UpdateDevBZDtlInfo">
+        UPDATE `tpm_devbzdtlinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="DevBZGd != null">
+                DevBZGd = #{ DevBZGd },
+            </if>
+            <if test="KeyName != null">
+                KeyName = #{ KeyName },
+            </if>
+            <if test="KeyValue != null">
+                KeyValue = #{ KeyValue },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <delete id="DeleteAllDevBZDtlDevBZGd">
+      DELETE  FROM tpm_devbzdtlinfo  WHERE DevBZGd = #{DevBZGd}
+    </delete>
+</mapper>

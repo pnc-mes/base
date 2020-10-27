@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevExpectLogDAO">
+    <resultMap type="pnc.mesadmin.entity.BCirExcpInfo" id="BCirExcpInfoResult">
+        <id property="ruid" column="ruid"/>
+        <result property="guid" column="guid"/>
+        <result property="batch" column="batch"/>
+        <result property="lineGd" column="lineGd"/>
+        <result property="lineName" column="lineName"/>
+        <result property="specVerGd" column="specVerGd"/>
+        <result property="specName" column="specName"/>
+        <result property="stationGd" column="stationGd"/>
+        <result property="stationName" column="stationName"/>
+        <result property="msg" column="msg"/>
+        <result property="execor" column="execor"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lastModifyMan" column="lastModifyMan"/>
+        <result property="lastModifyTime" column="lastModifyTime"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <resultMap id="GetAllBcirExcpResult" type="pnc.mesadmin.dto.GetAllBcirExcp.GetAllBcirExcpResponse">
+        <id property="Batch" column="Batch"/>
+    </resultMap>
+
+    <insert id="InsertBCirExcpInfo">
+        INSERT INTO tpm_bcirexcpinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            guid,batch,lineGd,lineName,specVerGd,specName,stationGd,stationName,
+            msg,execor,Creator,CreateTime,
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{batch},#{lineGd},#{lineName},
+            #{specVerGd},#{specName},#{stationGd},#{stationName},#{msg},
+            #{execor},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="SelectAllBCirExcpInfo" resultMap="BCirExcpInfoResult" parameterType="string">
+        Select * from  tpm_bcirexcpinfo where batch=#{batch}
+    </select>
+
+    <select id="SelectAllBCirExcpInfoByReq" resultMap="GetAllBcirExcpResult">
+        Select * from tpm_bcirexcpinfo
+        <if test="Batch !=''">
+            where Batch=#{Batch}
+        </if>
+        <if test="CreateTimeStart !='' and Batch==''">
+            where CreateTime between #{CreateTimeStart} and #{CreateTimeEnd}
+        </if>
+        ORDER BY CreateTime DESC LIMIT 0,500
+    </select>
+
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.OrderLineDAO">
+    <resultMap id="OrderLineInfoMap" type="pnc.mesadmin.entity.OrderLineinfo">
+        <id column="Ruid" property="ruid"/>
+        <result column="WOGd" property="woGd"/>
+        <result column="LineGd" property="lineGd"></result>
+    </resultMap>
+
+    <select id="SelectAllWoGdOrderLineinfo" resultMap="OrderLineInfoMap">
+        SELECT WOGd FROM tpm_orderlineinfo
+    </select>
+
+    <select id="SelectOrderLineByGuid" resultMap="OrderLineInfoMap">
+    SELECT * FROM `tpm_orderlineinfo` WHERE woGd = #{woGd}
+ </select>
+    <select id="SelectOLineByGuid" resultMap="OrderLineInfoMap">
+        SELECT * FROM `tpm_orderlineinfo` WHERE woGd = #{woGd}
+    </select>
+    <insert id="InsertOrderLineinfo">
+     INSERT INTO `tpm_orderlineinfo` (WOGd,LineGd)
+     VALUES (#{woGd},#{lineGd})
+    </insert>
+
+
+    <delete id="deleteOrderLineinfoByruid" parameterType="int">
+        delete from `tpm_orderlineinfo` where Ruid=#{ruid}
+    </delete>
+
+    <update id="UpdateOrderLineinfo">
+        UPDATE `tpm_orderlineinfo`
+        SET
+             LineGd = #{LineGd},
+             WOGd = #{woGd}
+        where WOGd = #{woGd}
+    </update>
+
+
+    <!--   <update id="UpdateOrderLineinfo">
+           UPDATE `tpm_lineinfo`
+           <trim prefix="set" suffixOverrides=",">
+               <if test="woGd != null">
+                   WOGd = #{ woGd },
+               </if>
+               <if test="lineGd != null">
+                   LineGd = #{ lineGd },
+               </if>
+           </trim>
+           WHERE Ruid = #{ ruid }
+       </update>-->
+</mapper>
+

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevGpDAO" >
+    <resultMap type="pnc.mesadmin.entity.DevGpInfo" id="DevGpInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="devGpName" column="devGpName" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+   <!-- 查询设备组信息-->
+    <select id="SelectAllDevGpInfo" resultMap="DevGpInfoResult">
+        select * from tpm_devgpinfo
+    </select>
+
+    <!-- 查询设备组表 -->
+    <select id="SelectDevGpById" resultMap="DevGpInfoResult">
+        SELECT * FROM tpm_devgpinfo d WHERE d.ruid = #{devGRd}
+    </select>
+
+    <!-- 查询关联设备表 -->
+    <select id="SelectById" resultMap="DevGpInfoResult">
+        SELECT * FROM tpm_devgpinfo d WHERE d.guid = #{devGpGd}
+    </select>
+
+    <!-- 根据gd查询设备组表 -->
+    <select id="SelectByguid" resultMap="DevGpInfoResult">
+        SELECT * FROM tpm_devgpinfo d WHERE d.guid = #{guid}
+    </select>
+
+    <!-- 查询设备组名称-->
+    <select id="SelectdevGpName" resultMap="DevGpInfoResult">
+        SELECT * FROM tpm_devgpinfo d WHERE d.devGpName = #{devGpName}
+    </select>
+
+    <!--保存设备组信-->
+    <insert id="InsertDevGpInfo">
+        INSERT INTO tpm_devgpinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        Guid,DevGpName,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{guid},#{devGpName},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除设备组信-->
+    <delete id="DeleteDevGpInfo">
+        DELETE FROM tpm_devgpinfo WHERE ruid = #{devGRd}
+    </delete>
+
+    <!--更新设备组信息-->
+    <update id="UpdateDevGpInfo">
+        UPDATE tpm_devgpinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="devGpName != null">
+                devGpName = #{devGpName},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+</mapper>

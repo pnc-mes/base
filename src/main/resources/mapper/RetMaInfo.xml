@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.RetMaInfoDAO" >
+    <resultMap type="pnc.mesadmin.entity.RetMaInfo" id="RetMaInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="retCode" column="retCode" />
+        <result property="assCode" column="assCode" />
+        <result property="assSource" column="assSource" />
+        <result property="exStatus" column="exStatus" />
+        <result property="sStatus" column="sStatus" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!-- 新增退料单 -->
+    <insert id="InsertRetMaInfo">
+        INSERT INTO tpm_retmainfo(guid,RetCode,AssCode,AssSource,ExStatus,SStatus,Creator,CreateTime,Remark)
+        VALUES(#{guid},#{retCode},#{assCode},#{assSource},#{exStatus},#{sStatus},#{creator},#{createTime},#{remark})
+    </insert>
+
+    <delete id="DeleteRetMaInfo">
+        DELETE FROM tpm_retmainfo WHERE guid = #{guid}
+    </delete>
+
+    <!-- 通过ruid查询查询退料信息 ZC -->
+    <select id="SelectRetMaInfoByRuid" resultMap="RetMaInfoResult">
+        SELECT * FROM tpm_retmainfo where ruid = #{retRd}
+    </select>
+
+    <select id="SelectRetMaInfoByGuid" resultMap="RetMaInfoResult">
+        SELECT * FROM tpm_retmainfo where Guid = #{guid}
+    </select>
+
+    <!-- 查询所有的退料信息 ZC -->
+    <select id="SelectAllRetMaInfo" resultMap="RetMaInfoResult">
+        SELECT * FROM tpm_retmainfo
+    </select>
+
+    <!-- 通过code查询查询退料信息 WHL -->
+    <select id="SelectRetMaInfoByRetCode"  resultMap="RetMaInfoResult">
+        SELECT * FROM tpm_retmainfo where retCode = #{retCode}
+    </select>
+
+    <update id="UpdateRetMaInfoByRuid">
+        UPDATE tpm_retmainfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="exStatus != null">
+                ExStatus = #{ exStatus },
+            </if>
+            <if test="sStatus != null">
+                SStatus = #{ sStatus },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+</mapper>

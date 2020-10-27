@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.StationProdDevDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.StationProdDevInfo" id="StationProdDevInfo">
+		<id property="ruid" column="ruid" />
+	</resultMap>
+
+	<select id="SelectByStationGd" resultMap="StationProdDevInfo">
+		SELECT * FROM tpm_stationproddevinfo WHERE StationGd = #{ stationGd }
+	</select>
+
+	<!---->
+	<insert id="insertByStation">
+		INSERT INTO tpm_stationproddevinfo(Guid,StationGd,AssDevGd,Creator,CreateTime)
+		VALUES (#{Guid},#{StationGd},#{AssDevGd},#{Creator},#{CreateTime})
+	</insert>
+
+	<!---->
+	<delete id="deleteStation">
+		DELETE FROM tpm_stationproddevinfo WHERE StationGd = #{ stationGd }
+	</delete>
+
+	<select id="SelectStationProdDevByDevGD" resultMap="StationProdDevInfo">
+		SELECT * FROM tpm_stationproddevinfo WHERE AssDevGd = #{ devGd }
+	</select>
+
+</mapper>

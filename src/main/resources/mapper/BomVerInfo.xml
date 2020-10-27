@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.BomVerDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.BomVerInfo" id="BomVerInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="bomGd" column="bomGd" />
+		<result property="bomCode" column="bomCode" />
+		<result property="bomName" column="bomName" />
+		<result property="version" column="version" />
+		<result property="isDef" column="isDef" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增BOM清单版本信息  (By-pjf)-->
+    <insert id="InsertBomVerInfo">
+        INSERT INTO tpm_bomverinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,BomGd,BomCode,BomName,Version,IsDef,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{bomGd},#{bomCode},#{bomName},#{version},#{isDef},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除BOM清单版本信息  (By-pjf)-->
+    <delete id="DeleteBomVerInfo">
+        DELETE FROM tpm_bomverinfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+    <!-- 根据BomGd删除BOM清单版本信息  (By-pjf)-->
+    <delete id="DeleteByBomGd">
+        DELETE FROM tpm_bomverinfo WHERE BomGd = #{ argBomGd }
+    </delete>
+
+    <!-- 修改BOM清单版本信息  (By-pjf)-->
+    <update id="UpdateBomVerInfo">
+        UPDATE tpm_bomverinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="bomGd != null">
+                BomGd = #{ bomGd },
+            </if>
+            <if test="bomCode != null">
+                BomCode = #{ bomCode },
+            </if>
+            <if test="bomName != null">
+                BomName = #{ bomName },
+            </if>
+            <if test="version != null">
+                Version = #{ version },
+            </if>
+            <if test="isDef != null">
+                IsDef = #{ isDef },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据BOM清单标识修改BOM是否为默认版本信息  (By-pjf)-->
+    <update id="UpdateByBomGd">
+        UPDATE tpm_bomverinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="isDef != null">
+                IsDef = #{ isDef },
+            </if>
+        </trim>
+        WHERE BomGd = #{ bomGd }
+    </update>
+
+    <!-- 查询所有BOM清单版本信息  (By-pjf)-->
+	<select id="SelectAllBomVerInfo" resultMap="BomVerInfoResult">
+		SELECT * FROM tpm_bomverinfo
+	</select>
+
+	<!-- 查询BOM清单版本信息  (By-pjf)-->
+	<select id="SelectBomVerInfo" resultMap="BomVerInfoResult">
+		SELECT * FROM tpm_bomverinfo WHERE Guid = #{ argGuid }
+	</select>
+
+    <!-- 根据Ruid查询BOM清单版本信息  (By-pjf)-->
+    <select id="SelectByRuid" resultMap="BomVerInfoResult">
+        SELECT * FROM tpm_bomverinfo WHERE Ruid = #{ argRuid }
+    </select>
+
+	<!-- 根据BomGd查询BOM清单版本信息  (By-pjf)-->
+	<select id="SelectByBomGd" resultMap="BomVerInfoResult">
+		SELECT * FROM tpm_bomverinfo WHERE BomGd = #{ argBomGd }
+	</select>
+
+    <!-- 根据BomGd和Version查询BOM清单版本信息  (By-pjf)-->
+    <select id="SelectByBomGdVersion" resultMap="BomVerInfoResult">
+        SELECT * FROM tpm_bomverinfo WHERE BomGd = #{ argBomGd } AND Version = #{ argVersion }
+    </select>
+
+    <!-- 根据Gudi查询BOM清单版本信息 -->
+    <select id="SelectBomVerInfoByGuid" resultMap="BomVerInfoResult" parameterType="string">
+        SELECT * FROM tpm_bomverinfo WHERE Guid = #{ guid }
+    </select>
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CmethodDAO" >
+    <resultMap type="pnc.mesadmin.entity.CmethodInfo" id="UrgencyInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="CheckMethodCod" column="CheckMethodCod" />
+        <result property="CheckMethodName" column="CheckMethodName" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <select id="SelectAllCmethodInfo" resultMap="UrgencyInfoResult">
+        select * from tpm_checkmethodinfo
+    </select>
+
+
+    <select id="SelectByRuid" resultMap="UrgencyInfoResult">
+        SELECT * FROM tpm_checkmethodinfo p WHERE p.`Ruid` = #{CMethodRd}
+    </select>
+
+    <select id="SelectByGuid" resultMap="UrgencyInfoResult">
+        SELECT * FROM tpm_checkmethodinfo  WHERE Guid=#{guid}
+    </select>
+
+
+    <select id="SelectByguid" resultMap="UrgencyInfoResult">
+        SELECT * FROM tpm_checkmethodinfo p WHERE p.`guid` = #{guid}
+    </select>
+
+
+    <select id="SelectCheckCmethodInfo" resultMap="UrgencyInfoResult">
+        SELECT * FROM tpm_checkmethodinfo u WHERE u.`CheckMethodCode` = #{CheckMethodCode}
+    </select>
+
+
+    <select id="SelecturcyDes" resultMap="UrgencyInfoResult">
+        SELECT * FROM tpm_checkmethodinfo u WHERE u.`urcyDes` = #{urcyDes}
+    </select>
+
+ <select id="SelectCmethodGd" resultMap="UrgencyInfoResult">
+ SELECT * FROM tpm_checkmethodinfo p WHERE p.`guid` = #{guid}
+
+ </select>
+    <insert id="InsertCmethodInfo">
+        INSERT INTO tpm_checkmethodinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,CheckMethodCode,CheckMethodName,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{CheckMethodCode},#{CheckMethodName},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除紧急度代码信息-->
+    <delete id="DeleteCmethodInfo">
+        DELETE FROM tpm_checkmethodinfo WHERE Ruid = #{CMethodRd}
+    </delete>
+
+
+    <update id="UpdateCheckCmethodInfo">
+        UPDATE tpm_checkmethodinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="CheckMethodCode != null">
+                CheckMethodCode = #{CheckMethodCode},
+            </if>
+            <if test="CheckMethodName != null">
+                CheckMethodName = #{CheckMethodName},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+</mapper>

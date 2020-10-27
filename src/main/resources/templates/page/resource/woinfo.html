@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>工单管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/js/lay-module/formSelects-v4/formSelects-v4.css}" />
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">工单名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="searchWoName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">产品代码</label>
+                           <!-- <div class="layui-input-inline">
+                                <input type="text" name="materialName" autocomplete="off" class="layui-input">
+                            </div>-->
+                            <div class="layui-input-inline">
+                                <select name="materialRd" lay-filter="" lay-search></select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                       <!-- <div class="layui-inline">
+                            <label class="layui-form-label">时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" class="layui-input">
+                            </div>
+                        </div>-->
+                    </div>
+
+
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="xiada">下达</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+        <script type="text/html" id="lineInfo">
+            {{#
+            var fn = function(list){
+            var str = '';
+            $.each(list, function(i,item){
+            if(i == 0){
+                str+=item.lineName+" ";
+            }
+            });
+            return str;
+            };
+            }}
+            <div>{{ fn(d.lineInfo) }}</div>
+        </script>
+
+
+    </div>
+</div>
+
+<!-- 子页面 -->
+<div class="layui-fluid" id="woinfo" style="display: none;">
+    <div class="layui-card">
+        <div class="layui-card-body" >
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基础信息</li>
+                    <li>进度信息</li>
+                    <li>其他信息</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form" action="" id="userinfoform" lay-filter="component-form-group" >
+                            <div class="layui-tab-item layui-show">
+
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">工单名称</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="woName"  autocomplete="off" placeholder="请输入工单名称" class="layui-input">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">物料代码</label>
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline">
+                                                <select name="materialRds" lay-filter="materialRds" lay-search></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">BOM代码</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" id="bomCode" class="layui-input" readonly disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">BOM版本</label>
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline">
+                                                <input type="text" id="bomVer" class="layui-input" readonly disabled/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">紧急度</label>
+                                        <div class="layui-input-inline" lay-search>
+                                            <select name="urgency" lay-filter="" lay-search></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">工单类型</label>
+                                        <div class="layui-input-inline" lay-search>
+                                            <select name="woType" lay-filter="" lay-search></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">数量</label>
+                                        <div class="layui-input-inline" lay-search>
+                                            <input type="text" name="num"  autocomplete="off" class="layui-input checkFloat" style="width: 80px"/>
+                                        </div>
+                                        <span class="unitname" style="margin-left: -110px"/>
+                                    </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">生产线体</label>
+                                        <div class="layui-input-inline">
+                                            <select name="reLine" xm-select="reLine" xm-select-search="" xm-select-direction="down">
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">工艺流程</label>
+                                        <div class="layui-input-inline">
+
+                                            <div class="layui-input-inline">
+                                                <!--<select name="wokerFllo" xm-select="wokerFllo" xm-select-search="" xm-select-direction="down">-->
+                                                <select name="wokerFllo" lay-filter="" lay-search></select>
+
+                                                </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">开始时间</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="startDate" id="startDate" placeholder="yyyy-MM-dd"class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">完成时间</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" name="endDate" id="endDate" placeholder="yyyy-MM-dd" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="layui-tab-item">
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">已完工数量</label>
+                                <div class="layui-input-inline">
+                                   <span id="fnishNum"></span>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">未创建批次数量</label>
+                                <div class="layui-input-inline">
+                                    <span id="unCreateNum"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">状态</label>
+                                <div class="layui-input-inline">
+                                    <span id="status"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="layui-tab-item">
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">创建人</label>
+                                <div class="layui-input-inline">
+                                    <input type="tel" name="creator" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">创建时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">修改人</label>
+                                <div class="layui-input-inline">
+                                    <input type="tel" name="modifier" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">修改时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="modifyTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-block">
+                                <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'laydate', 'element','formSelects',], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            formSelects=layui.formSelects,
+            laydate = layui.laydate;
+
+        //重新渲染表单函数
+        function renderForm() {
+            layui.use('form', function() {
+                var form = layui.form;
+                form.render();
+            });
+        }
+        //加载时间
+        laydate.render({
+            elem: '#startDate'
+            ,type: 'date'
+            ,format: 'yyyy-MM-dd'
+        });
+        laydate.render({
+            elem: '#endDate'
+            ,type: 'date'
+            ,format: 'yyyy-MM-dd'
+        });
+
+
+
+        //页面首次加载
+        load();
+
+        //下拉框选择事件
+        form.on('select(materialRds)', function(data){
+            getAllWokerFool(data.value);
+        });
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            var data=obj.data;
+
+            if (obj.event === 'add') {  // 监听添加操作
+                getAllMaterial2s();
+                getAllUrgency();
+                getAllWoType();
+                clear();
+                let index = layer.open({
+                    title: '添加工单',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content:$("#woinfo"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+
+                        save(index, 1);
+
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                edit(data);
+            } else if (obj.event === 'delete') {
+                del(data);
+
+            } else if(obj.event === 'read') {
+                read(data);
+            }else if(obj.event === 'xiada') {
+                xiada(data);
+            }
+        });
+
+  /*      //监听行双击事件
+        table.on('rowDouble(currentTableFilter)', function(obj){
+            read(obj.data);
+            return false;
+        });*/
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            let field=[];
+            if(data.field.searchWoName!=''){
+                let   fields={
+                    fieldName: "woCode",
+                    fieldOpt: "like",
+                    fieldVal: data.field.searchWoName
+                }
+                field.push(fields);
+            }
+            if(data.field.materialRd!=''){
+                let   fields={
+                    fieldName: "maverGd",
+                    fieldOpt: "=",
+                    fieldVal: data.field.materialRd
+                }
+                field.push(fields);
+            }
+            field.push({
+                fieldName: "CreateTime",
+                fieldOpt: "Order BY",
+                fieldVal: "DESC"
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: field
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //查看
+        function read(data) {
+            layer.open({
+                type: 1
+                ,title: '查看工单'
+                ,content:$("#woinfo")
+                ,maxmin: true
+                ,area: ['950px', '500px']
+            });
+            $("input[name='woName']").val(data.woCode);
+            $("input[name='num']").val(data.num);
+            $(".unitname").text(data.unitName);
+            $("select[name='materialRds']").val(data.materialRd);
+
+            $("select[name='woType']").val(data.wotRd);
+
+            $("select[name='urgency']").val(data.urcyRd);
+            $("#startDate").val(data.jstartDate);
+            $("#endDate").val(data.jfinishDate);
+            $("#fnishNum").text(data.finishNum);
+            $("#unCreateNum").text(data.unCBatNum);
+            $("#bomCode").val(data.bomCode);
+            $("#bomVer").val(data.bomVer);
+            var status=data.status;
+            var str='';
+            if ("00" == status) {
+                str = "待处理";
+            } else if ("01" == status) {
+                str = "下达";
+            } else if ("02" == status) {
+                str = "取消";
+            } else if ("03" ==status) {
+                str = "处理中";
+            } else if ("04" == status) {
+                str = "冻结";
+            } else if ("05" == status) {
+                str = "终止";
+            } else if ("06" == status) {
+                str = "完成";
+            } else if ("07" == status) {
+                str = "关闭";
+            }
+            $("#status").text(str);
+            $("select[name='wokerFllo']").val(data.wfRd);
+            formSelects.value('reLine', data.lineInfo.map(item => {return item.lineRd}));
+            renderForm();
+            $("textarea[name='remark']").val(data.remark);
+            $("input[name='creator']").val(data.creator);
+            $("input[name='modifier']").val(data.lastModifyMan);
+            $("input[name='modifyTime']").val(data.lastModifyTime);
+            $("input[name='createTime']").val(data.createTime);
+
+
+        }
+        
+        //下达
+        function xiada(data) {
+            var newData1 = {
+                "WoRd": data.woRd
+            };
+            requests({url: "/WO/SaveWOInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "03", "BusData": JSON.stringify(newData1)
+                }}, function (res) {
+                layer.msg("保存成功", {icon: 1});
+                //layer.close(index);
+                table.reload('currentTableId');
+            });
+        }
+
+        //编辑
+        function edit(data){
+            $("input[name='woName']").val(data.woCode);
+            $("input[name='num']").val(data.num);
+            $(".unitname").text(data.unitName);
+            $("select[name='materialRds']").val(data.materialRd);
+            $("select[name='woType']").val(data.wotRd);
+
+            $("select[name='urgency']").val(data.urcyRd);
+            $("#startDate").val(data.jstartDate);
+            $("#endDate").val(data.jfinishDate);
+            $("#fnishNum").text(data.finishNum);
+            $("#unCreateNum").text(data.unCBatNum);
+            $("#bomCode").val(data.bomCode);
+            $("#bomVer").val(data.bomVer);
+            var status=data.status;
+            var str='';
+            if ("00" == status) {
+                str = "待处理";
+            } else if ("01" == status) {
+                str = "下达";
+            } else if ("02" == status) {
+                str = "取消";
+            } else if ("03" ==status) {
+                str = "处理中";
+            } else if ("04" == status) {
+                str = "冻结";
+            } else if ("05" == status) {
+                str = "终止";
+            } else if ("06" == status) {
+                str = "完成";
+            } else if ("07" == status) {
+                str = "关闭";
+            }
+            $("#status").text(str);
+            $("select[name='wokerFllo']").val(data.wfRd);
+            formSelects.value('reLine', data.lineInfo.map(item => {return item.lineRd}));
+            renderForm();
+            $("textarea[name='remark']").val(data.remark);
+            $("input[name='creator']").val(data.creator);
+            $("input[name='modifier']").val(data.lastModifyMan);
+            $("input[name='modifyTime']").val(data.lastModifyTime);
+            $("input[name='createTime']").val(data.createTime);
+
+
+            layer.open({
+                type: 1
+                ,title: '修改工单'
+                ,content:$("#woinfo")
+                ,maxmin: true
+                ,area: ['950px', '500px']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero) {
+                    $("#woinfo").show();
+                    var newData1 = {
+                        "WoRd": data.woRd,
+                        "WoCode": $("input[name='woName']").val(),
+                        "MaVerRd":  $("select[name='materialRds']").val(),
+                        "Num": $("input[name='num']").val(),
+                        "UnitRd": "1",
+                        "OrderCode": "1",
+                        "Remark": $("textarea[name='remark']").val(),
+                        "JStartDate": $("#startDate").val(),
+                        "JFinishDate": $("#endDate").val(),
+                        "TrayPSpRd": "1",
+                        "BoxPSpRd": "1",
+                        "WTRd": $("select[name='woType']").val(),
+                        "UrcyRd":$("select[name='urgency']").val(),
+                        "LineInfo":formSelects.value('reLine', 'val').map(item => { return {LineRd: item} }),
+                        "WfVerRd": $("select[name='wokerFllo']").val()
+
+                    };
+
+                    requests({url: "/WO/SaveWOInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02", "BusData": JSON.stringify(newData1)
+                        }}, function (res) {
+                        layer.msg("保存成功", {icon: 1});
+                        layer.close(index);
+                        table.reload('currentTableId');
+                    });
+
+                 /*   request({
+                        url: "/WO/SaveWOInfo",
+                        data: {"ExecType": "02", "BusData": JSON.stringify(newData1)}
+                    }, function (Body) {
+                        layer.msg("保存成功", {icon: 1});
+                        layer.close(index);
+                        table.reload('currentTableId');
+                    });*/
+                }
+            });
+
+
+
+
+        }
+
+        //删除
+        function del(data) {
+            layer.confirm('真的删除行么', function (index) {
+                requests({url: "/WO/SaveWOInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                        "BusData": JSON.stringify({WoRd: data.woRd})
+                    }}, function (res) {
+                    //obj.del();
+                    layer.msg("删除成功", {icon: 1});
+                    table.reload('currentTableId');
+                });
+
+                layer.close(index);
+            });
+        }
+        
+
+        //保存
+        function save(index, type, shiftId) {
+            if (type === 1) {
+                var newData1 = {
+                    "WoCode": $("input[name='woName']").val(),
+                    "MaVerRd":  $("select[name='materialRds']").val(),
+                    "Num": $("input[name='num']").val(),
+                    "UnitRd": "1",
+                    "OrderCode": "1",
+                    "Remark": $("textarea[name='remark']").val(),
+                    "JStartDate": $("#startDate").val(),
+                    "JFinishDate": $("#endDate").val(),
+                    "TrayPSpRd": "1",
+                    "BoxPSpRd": "1",
+                    "WTRd": $("select[name='woType']").val(),
+                    "UrcyRd":$("select[name='urgency']").val(),
+                    "LineInfo":formSelects.value('reLine', 'val').map(item => { return {LineRd: item} }),
+                    "WfVerRd": $("select[name='wokerFllo']").val()
+
+                };
+
+                requests({url: "/WO/SaveWOInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00", "BusData": JSON.stringify(newData1)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }
+        }
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/WO/GetAllNewWOInfo",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "CreateTime",
+                        fieldOpt: "Order BY",
+                        fieldVal: "DESC"
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {field: 'woRd', title: 'id', sort: true,hide:true},
+                        {field: 'woCode', title: '工单名称'},
+                        {field: 'materialCode', title: '产品代码'},
+                        {field: 'materialName', title: '产品名称'},
+                        {field: 'wotRd', title: '工单类型Rd',hide:true},
+                        {field: 'woTName', title: '工单类型'},
+                        {field: 'maverGd', title: '物料的Gd',hide:true},
+                        {field: 'materialRd', title: '物料的Rd',hide:true},
+                        {field: 'unitName', title: '物料的单位',hide:true},
+                        {field: 'urcyRd', title: '物料的Rd',hide:true},
+                        {field: 'urcyDes', title: '紧急度'},
+                        {field: 'num', title: '数量'},
+                        {field: 'statusText', title: '状态'},
+                        {field: 'lineInfo', title: '线体名称',templet:'#lineInfo'},
+                        {field: 'wfRd', title: '工艺流程的Rd',hide:true},
+                        {field: 'wfName', title: '工艺名称'},
+                        {field: 'jStartDate', title: '开始时间',hide:true},
+                        {field: 'jFinishDate', title: '结束时间',hide:true},
+                        {field: 'bomCode', title: 'Bom代码',hide:true},
+                        {field: 'bomVer', title: 'Bom版本',hide:true},
+                        {title: '操作', minWidth: 220, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        //清空
+        function clear() {
+            formSelects.value('reLine', []);
+            $("input[name='woName']").val('')
+            $("select[name='materialRds']").val('')
+            $("select[name='urgency']").val('')
+            $("select[name='woType']").val('')
+            $("select[name='wokerFllo']").val('')
+            $("#bomCode").val('');
+            $("#bomVer").val('');
+            $("#fnishNum").text('0');
+            $("#unCreateNum").text('0');
+            $("#status").text('')
+            $("#startDate").val('');
+            $("#endDate").val('');
+
+            renderForm();
+
+            $("input[name='num']").val('')
+            $("input[name='creator']").val('')
+            $("input[name='createTime']").val('')
+            $("input[name='modifier']").val('')
+            $("input[name='modifyTime']").val('')
+            $("textarea[name='remark']").val('')
+        }
+
+
+
+        //加载所有产品信息
+        function getAllMaterial(){
+
+            var fields=[];
+            fields.push({
+                fieldName:'MaterialType',
+                fieldOpt:'in',
+                fieldVal:'00,01'
+            })
+            var urlData={
+                fields
+            }
+            requests({url:'/Material/GetAllMaNew', contentType: "application/json; charset=utf-8", data: JSON.stringify(urlData)}, function (res) {
+                var data=res.data.list;
+                var selectData='<option selected></option>';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].MaVerRd+"'>"+data[i].MaCode+"</option>"
+                    }
+                    $("select[name='materialRds']").empty().html(selectData);
+                    renderForm()
+                }
+            });
+
+
+        }
+        getAllMaterial();
+
+        //加载所有产品信息
+        function getAllMaterial2s(){
+
+            var fields=[];
+            fields.push({
+                fieldName:'MaterialType',
+                fieldOpt:'in',
+                fieldVal:'00,01'
+            })
+            var urlData={
+                fields
+            }
+            requests({url:'/Material/GetAllMaNew', contentType: "application/json; charset=utf-8", data: JSON.stringify(urlData)}, function (res) {
+                var data=res.data.list;
+                var selectData='<option selected></option>';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].MaVerGd+"'>"+data[i].MaCode+"</option>"
+                    }
+                    $("select[name='materialRd']").empty().html(selectData);
+                    renderForm()
+                }
+            });
+
+
+        }
+        getAllMaterial2s();
+
+
+        //加载线体
+        formSelects.config('reLine', {
+            type: 'post',
+            head: 'application/json;charset=UTF-8',
+        }, true);
+        formSelects.data('reLine', 'server', {
+            url: getBasePath() + '/Line/GetAllLineNew',
+            beforeSuccess: function(id, url, searchVal, result){
+                result = result.body.data.list;
+
+                $.each(result, function(index, item) {
+                    item.name = item.LineName;
+                    item.value = item.LineRd;
+                });
+
+                return result;
+            }
+        });
+
+
+        //加载工单类型
+        function getAllWoType(){
+            requests({url: "/WoType/GetAllWTInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"
+                }}, function (res) {
+                var data=res.Data;
+                var selectData='';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].WTRd+"'>"+data[i].WTName+"</option>"
+                    }
+                    $("select[name='woType']").empty().html(selectData);
+                }
+            })
+        }
+        getAllWoType();
+
+        //加载紧急度
+        function  getAllUrgency(){
+            requests({url: "/Urgency/GetAllUrcyInfoNew"}, function (res) {
+                var data=res.data.list;
+                var selectData='';
+                if(data.length>0){
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].UrcyRd+"'>"+data[i].UrcyDes+"</option>"
+                    }
+                    $("select[name='urgency']").empty().html(selectData);
+                }
+            })
+        }
+        getAllUrgency();
+
+        //加载工艺流程
+        function getAllWokerFools(){
+            requests({url: "/WF/GetAllWfInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00"
+                }}, function (res) {
+                var data=res.Data;
+                var selectData='';
+                if(data.length>0){0
+                    for(var i in data){
+                        selectData+="<option value='"+data[i].WfRd+"'>"+data[i].WfName+"</option>"
+                    }
+                    $("select[name='wokerFllo']").empty().html(selectData);
+                }
+            })
+        }
+        getAllWokerFools();
+
+        //调用时加载物料对应的工艺流程
+        function getAllWokerFool(MVerRd){
+
+
+            requests({url: "/Commom/GetCMWFInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({MVerRd})
+                }}, function (res) {
+                if(res.Data.WFInfo.length>0){
+                    var data=res.Data.WFInfo[0];
+                    $("select[name='wokerFllo']").empty().html("<option value='"+data.WFRd+"'>"+data.WFName+"</option>");
+                     renderForm();
+                }else {
+                    $("select[name='wokerFllo']").empty().html('');
+                    renderForm();
+                    layer.msg("无工艺流程", {icon: 1});
+                }
+
+            });
+
+        }
+
+
+
+    });
+
+
+
+
+</script>
+</body>
+</html>

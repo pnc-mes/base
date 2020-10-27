@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PurChDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.PurChInfo" id="purChInfoMap">
+        <id property="ruid" column="Ruid" />
+        <result property="guid" column="Guid" />
+        <result property="purChCode" column="PurChCode" />
+        <result property="buyer" column="Buyer" />
+        <result property="supplierCode" column="SupplierCode" />
+        <result property="supplierName" column="SupplierName" />
+        <result property="status" column="Status" />
+        <result property="sStatus" column="SStatus" />
+        <result property="dSource" column="DSource" />
+        <result property="cIEFlag" column="CIEFlag" />
+        <result property="creator" column="Creator" />
+        <result property="createTime" column="CreateTime" />
+        <result property="lastModifyMan" column="LastModifyMan" />
+        <result property="lastModifyTime" column="LastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <!--查询采购单信息-->
+    <select id="SelectPurChInfo" resultMap="purChInfoMap">
+        SELECT * FROM tpm_purchinfo
+    </select>
+
+    <!--新增采购单信息是不允许重复-->
+    <select id="SelectPurChInfoBypurChCode"  resultType="_int">
+        SELECT COUNT(ruid) FROM tpm_purchinfo WHERE PurChCode=#{purChCode}
+    </select>
+
+    <!--新增采购单信息-->
+    <insert id="InsertPurChInfo">
+        INSERT INTO `tpm_purchinfo`(Guid,PurChCode,Buyer,SupplierCode,SupplierName,Status,SStatus,CIEFlag,DSource,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{purChCode},#{buyer},#{supplierCode},#{supplierName},#{status},#{sStatus},#{cIEFlag},#{dSource},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <update id="UpdatePurChInfoByRuid">
+        UPDATE `tpm_purchinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="sStatus != null">
+                SStatus = #{ sStatus },
+            </if>
+            <if test="purChCode != null">
+                PurChCode = #{ purChCode },
+            </if>
+            <if test="buyer != null">
+                Buyer = #{ buyer },
+            </if>
+            <if test="supplierCode != null">
+                SupplierCode = #{ supplierCode },
+            </if>
+            <if test="supplierName != null">
+                SupplierName = #{ supplierName },
+            </if>
+            <if test="status != null">
+                Status = #{ status },
+            </if>
+            <if test="cIEFlag != null">
+                CIEFlag = #{ cIEFlag },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!--根据采购单单号获取采购单信息  王怀龙-->
+    <select id="SelectPurChInfoByPurChCode"  resultMap="purChInfoMap">
+        SELECT * FROM tpm_purchinfo WHERE PurChCode=#{purChCode}
+    </select>
+
+
+    <!-- 根据Ruid查询采购单信息  (pjf) -->
+    <select id="SelectByRuid" resultMap="purChInfoMap">
+        SELECT * FROM tpm_purchinfo WHERE Ruid = #{ argRuid }
+    </select>
+
+    <!-- 根据Guid查询采购单信息  (pjf) -->
+    <select id="SelectByGuid" resultMap="purChInfoMap">
+        SELECT * FROM tpm_purchinfo WHERE Guid = #{ argGuid }
+    </select>
+
+    <!--删除采购单信息-->
+    <delete id="DeletePurChInfo">
+      DELETE from tpm_purchinfo where Ruid=#{argRuid}
+    </delete>
+</mapper>

@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.BDAO">
+    <resultMap type="pnc.mesadmin.entity.BInfo" id="ResInfoResult">
+        <id property="ruid" column="ruid"/>
+        <result property="guid" column="guid"/>
+        <result property="woSource" column="woSource"/>
+        <result property="woGd" column="woGd"/>
+        <result property="woDlGd" column="woDlGd"/>
+        <result property="maVerGd" column="maVerGd"/>
+        <result property="bType" column="bType"/>
+        <result property="isBarBatch" column="IsBarBatch"/>
+        <result property="batch" column="batch"/>
+        <result property="lineGd" column="lineGd"/>
+        <result property="supBatch" column="supBatch"/>
+        <result property="num" column="num"/>
+        <result property="canNum" column="canNum"/>
+        <result property="consuNum" column="consuNum"/>
+        <result property="unitGd" column="unitGd"/>
+        <result property="wFVerGd" column="wFVerGd"/>
+        <result property="specVerGd" column="specVerGd"/>
+        <result property="bLName" column="bLName"/>
+        <result property="printTGd" column="printTGd"/>
+        <result property="bSource" column="bSource"/>
+        <result property="jStartDate" column="jStartDate"/>
+        <result property="jFinishDate" column="jFinishDate"/>
+        <result property="sStartDate" column="sStartDate"/>
+        <result property="sFinishDate" column="sFinishDate"/>
+        <result property="expireDate" column="expireDate"/>
+        <result property="bad" column="bad"/>
+        <result property="badNum" column="badNum"/>
+        <result property="iQCStatus" column="iQCStatus"/>
+        <result property="ckResult" column="ckResult"/>
+        <result property="status" column="status"/>
+        <result property="inStockStatus" column="inStockStatus"/>
+        <result property="wFStatus" column="wFStatus"/>
+        <result property="packStatus" column="packStatus"/>
+        <result property="specLFlag" column="specLFlag"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lastModifyMan" column="lastModifyMan"/>
+        <result property="lastModifyTime" column="lastModifyTime"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <resultMap type="pnc.mesadmin.dto.GetHoldBatchDTO.GetHoldBatchResD" id="HoldBatchResult">
+
+    </resultMap>
+
+    <insert id="InsertBatch">
+        insert into tpm_binfo(
+        guid,woSource,maVerGd,bType,batch,num,canNum,consuNum,unitGd,
+        printTGd,bSource,bad,
+        iQCStatus,ckResult,status,inStockStatus,
+        creator,createTime,
+        <trim suffixOverrides=",">
+            <if test="lineGd != null">
+                lineGd,
+            </if>
+            <if test="isBarBatch != null">
+                isBarBatch,
+            </if>
+            <if test="badNum != null">
+                badNum,
+            </if>
+            <if test="jStartDate != null">
+                jStartDate,
+            </if>
+            <if test="jFinishDate != null">
+                jFinishDate,
+            </if>
+            <if test="supBatch != null">
+                supBatch,
+            </if>
+            <if test="woGd != null">
+                woGd,
+            </if>
+            <if test="wFVerGd != null">
+                wFVerGd,
+            </if>
+            <if test="specVerGd != null">
+                specVerGd,
+            </if>
+            <if test="bLName != null">
+                bLName,
+            </if>
+            <if test="sStartDate != null">
+                sStartDate,
+            </if>
+            <if test="sFinishDate != null">
+                sFinishDate,
+            </if>
+
+            <if test="expireDate != null">
+                expireDate,
+            </if>
+
+            <if test="wFStatus != null">
+                wFStatus,
+            </if>
+
+            <if test="woDlGd != null">
+                woDlGd,
+            </if>
+
+            <if test="packStatus != null">
+                packStatus,
+            </if>
+
+            <if test="specLFlag != null">
+                specLFlag,
+            </if>
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark
+            </if>
+        </trim>
+        ) values(
+        #{guid},#{woSource},#{maVerGd},#{bType},#{batch},#{num},#{canNum},#{consuNum},#{unitGd},#{printTGd},
+        #{bSource},#{bad},#{iQCStatus},#{ckResult},
+        #{status},#{inStockStatus},#{creator},#{createTime},
+        <trim suffixOverrides=",">
+            <if test="lineGd != null">
+                #{lineGd},
+            </if>
+            <if test="isBarBatch != null">
+                #{isBarBatch},
+            </if>
+            <if test="badNum != null">
+                #{badNum},
+            </if>
+            <if test="jStartDate != null">
+                #{jStartDate},
+            </if>
+            <if test="jFinishDate != null">
+                #{jFinishDate},
+            </if>
+            <if test="supBatch != null">
+                #{supBatch},
+            </if>
+            <if test="woGd != null">
+                #{woGd},
+            </if>
+            <if test="wFVerGd != null">
+                #{wFVerGd},
+            </if>
+            <if test="specVerGd != null">
+                #{specVerGd},
+            </if>
+            <if test="bLName != null">
+                #{bLName},
+            </if>
+            <if test="sStartDate != null">
+                #{sStartDate},
+            </if>
+            <if test="sFinishDate != null">
+                #{sFinishDate},
+            </if>
+
+            <if test="expireDate != null">
+                #{expireDate},
+            </if>
+
+            <if test="wFStatus != null">
+                #{wFStatus},
+            </if>
+
+            <if test="woDlGd != null">
+                #{woDlGd},
+            </if>
+
+            <if test="packStatus != null">
+                #{packStatus},
+            </if>
+
+            <if test="specLFlag != null">
+                specLFlag,
+            </if>
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark}
+            </if>
+
+        </trim>
+        )
+    </insert>
+
+    <delete id="DeleteBatchInfoByRuid">
+        delete  from tpm_binfo where ruid=#{argRuid}
+    </delete>
+
+    <update id="UpdateBatchInfoByRuid">
+        update tpm_binfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="lineGd != null">
+                lineGd = #{lineGd},
+            </if>
+            <if test="bType != null">
+                bType=#{bType},
+            </if>
+            <if test="isBarBatch != null">
+                isBarBatch=#{isBarBatch},
+            </if>
+            <if test="canNum != null">
+                canNum=#{canNum},
+            </if>
+            <if test="consuNum != null">
+                consuNum=#{consuNum},
+            </if>
+            <if test="unitGd != null">
+                unitGd=#{unitGd},
+            </if>
+            <if test="wFVerGd != null">
+                wFVerGd=#{wFVerGd},
+            </if>
+            <if test="specVerGd != null">
+                specVerGd=#{specVerGd},
+            </if>
+            <if test="bLName != null">
+                bLName=#{bLName},
+            </if>
+            <if test="printTGd != null">
+                printTGd=#{printTGd},
+            </if>
+            <if test="bSource != null">
+                bSource=#{bSource},
+            </if>
+
+            <if test="expireDate != null">
+                expireDate = #{expireDate},
+            </if>
+
+            <if test="bad != null">
+                bad=#{bad},
+            </if>
+            <if test="badNum != null">
+                badNum=#{badNum},
+            </if>
+
+            <if test="iQCStatus != null">
+                iQCStatus=#{iQCStatus},
+            </if>
+            <if test="ckResult != null">
+                ckResult=#{ckResult},
+            </if>
+            <if test="wFStatus != null">
+                wFStatus=#{wFStatus},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="inStockStatus != null">
+                inStockStatus=#{inStockStatus},
+            </if>
+
+            <if test="woDlGd != null">
+                woDlGd=#{woDlGd},
+            </if>
+
+            <if test="packStatus != null">
+                packStatus=#{packStatus},
+            </if>
+
+            <if test="specLFlag != null">
+                specLFlag = #{specLFlag},
+            </if>
+
+            <if test="lastModifyMan != null">
+                lastModifyMan=#{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime=#{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+        </trim>
+        where ruid=#{ruid}
+    </update>
+
+    <update id="UpdateBatchInfoByGuid">
+        update tpm_binfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="lineGd != null">
+                lineGd = #{lineGd},
+            </if>
+            <if test="bType != null">
+                bType=#{bType},
+            </if>
+            <if test="isBarBatch != null">
+                isBarBatch=#{isBarBatch},
+            </if>
+            <if test="canNum != null">
+                canNum=#{canNum},
+            </if>
+            <if test="consuNum != null">
+                consuNum=#{consuNum},
+            </if>
+            <if test="unitGd != null">
+                unitGd=#{unitGd},
+            </if>
+            <if test="wFVerGd != null">
+                wFVerGd=#{wFVerGd},
+            </if>
+            <if test="specVerGd != null">
+                specVerGd=#{specVerGd},
+            </if>
+            <if test="bLName != null">
+                bLName=#{bLName},
+            </if>
+            <if test="printTGd != null">
+                printTGd=#{printTGd},
+            </if>
+            <if test="bSource != null">
+                bSource=#{bSource},
+            </if>
+
+            <if test="expireDate != null">
+                expireDate = #{expireDate},
+            </if>
+
+            <if test="bad != null">
+                bad=#{bad},
+            </if>
+            <if test="badNum != null">
+                badNum=#{badNum},
+            </if>
+
+            <if test="iQCStatus != null">
+                iQCStatus=#{iQCStatus},
+            </if>
+            <if test="ckResult != null">
+                ckResult=#{ckResult},
+            </if>
+            <if test="wFStatus != null">
+                wFStatus=#{wFStatus},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="inStockStatus != null">
+                inStockStatus=#{inStockStatus},
+            </if>
+
+            <if test="woDlGd != null">
+                woDlGd=#{woDlGd},
+            </if>
+
+            <if test="packStatus != null">
+                packStatus=#{packStatus},
+            </if>
+
+            <if test="specLFlag != null">
+                specLFlag = #{specLFlag},
+            </if>
+
+            <if test="BeforeCheckQC != null">
+                BeforeCheckQC = #{BeforeCheckQC},
+            </if>
+            <if test="AfterCheckQC != null">
+                AfterCheckQC = #{AfterCheckQC},
+            </if>
+
+            <if test="lastModifyMan != null">
+                lastModifyMan=#{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime=#{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+        </trim>
+        where Guid=#{guid}
+    </update>
+
+    <!--查询客户信息列表-->
+    <select id="SelectAllBatchInfo" resultMap="ResInfoResult">
+        select * from tpm_binfo
+    </select>
+    <!--根据工单号查询批次信息 张亮亮-->
+    <select id="SelectBatchInfoBywoCode" resultMap="ResInfoResult" parameterType="string">
+        select * from tpm_binfo where woCode=#{woCode}
+    </select>
+    <!--根据主键查询批次信息 张亮亮-->
+    <select id="SelectBatchInfoByruid" resultMap="ResInfoResult" parameterType="int">
+        select * from tpm_binfo where ruid=#{ruid}
+    </select>
+
+    <select id="selectBatchInfoByBatch" resultMap="ResInfoResult" parameterType="string">
+        select * from tpm_binfo where batch=#{batch}
+    </select>
+
+    <!-- 根据工单号查询批次  (By-pjf) -->
+    <select id="SelectByWoGd" resultMap="ResInfoResult">
+        SELECT * FROM tpm_binfo WHERE WoGd = #{ argWoGd }
+    </select>
+
+    <!-- 根据工单号查询批次  (By-zll) -->
+    <select id="SelectByWoGdANDStatusANDWFStatus" resultMap="ResInfoResult">
+        <!-- SELECT * FROM tpm_binfo WHERE WoGd = #{ argWoGd } AND Status='00' AND WFStatus='02'-->
+        SELECT * FROM tpm_binfo WHERE WoGd = #{ argWoGd } AND Status='00'
+    </select>
+
+    <select id="SelectWoInfoByGuid" resultMap="ResInfoResult" parameterType="string">
+    select * from tpm_binfo where guid=#{guid}
+</select>
+
+    <select id="SelectBatchBySupBatch" resultMap="ResInfoResult">
+    SELECT * from tpm_binfo where supBatch=#{argSupBatch}
+</select>
+
+    <select id="SelectBatchByGuidAnd00" resultMap="ResInfoResult">
+    SELECT * from tpm_binfo where WoGd = #{ argWoGd } AND woSource="01"
+</select>
+
+    <select id="SelectBatchInfoByBatchList" parameterType="java.util.List" resultMap="ResInfoResult">
+        SELECT * FROM tpm_binfo
+        <foreach collection="list" item="batch" open="WHERE Batch in(" close=")" separator=",">
+            #{batch}
+        </foreach>
+    </select>
+
+    <select id="Select" resultMap="ResInfoResult">
+    SELECT * FROM tpm_binfo WHERE canNum = 0 AND InStockStatus = "00"
+    AND MaVerGd = #{maVerGd} AND Batch like CONCAT('%',#{batch},'%')
+</select>
+
+    <select id="Select2" resultMap="ResInfoResult">
+    SELECT * FROM tpm_binfo WHERE InStockStatus = "02" AND (IQCStatus = "01" OR IQCStatus = "02") AND
+    IF(IQCStatus = '02',CkResult = "00" OR CkResult = "02", 1 = 1)
+    AND MaVerGd = #{maVerGd} AND Batch like CONCAT('%',#{batch},'%')
+</select>
+
+    <!--批次报表查询-->
+    <select id="SelectBInfoBaoBiao" parameterType="string" resultMap="ResInfoResult">
+        SELECT * FROM `tpm_binfo` a WHERE a.`MaVerGd` IN (SELECT Guid FROM `tpm_maverinfo` b WHERE b.`MaterialCode`
+        <choose>
+            <when test="macode != null and macode!='' ">
+                LIKE CONCAT('%','${macode}','%')
+            </when>
+            <otherwise>
+                LIKE CONCAT('%','','%')
+            </otherwise>
+        </choose>
+        AND b.`MaterialName`
+        <choose>
+            <when test="maname != null and maname!='' ">
+                LIKE CONCAT('%','${maname}','%')
+            </when>
+            <otherwise>
+                LIKE CONCAT('%','','%')
+            </otherwise>
+        </choose>
+        )
+        <if test="inStockStatus != null and inStockStatus!=''">
+            AND a.`InStockStatus` =#{inStockStatus}
+        </if>
+        <if test="createTime != null and createTime!=''">
+            AND a.`CreateTime` BETWEEN #{createTime}
+        </if>
+        <if test="createTime1 != null and createTime1!=''">
+            AND #{createTime1}
+        </if>
+        ORDER BY a.`CreateTime` DESC
+    </select>
+
+    <select id="SelectByWoSourceAndWoGdAndWoDtlGd" resultMap="ResInfoResult">
+        SELECT * from tpm_binfo WHERE woSource=#{woSource}
+        AND woGd=#{woGd}
+        AND woDlGd=#{woDlGd}
+    </select>
+
+    <!-- 获取批次号（存储过程） -->
+    <select id="SelectByList" resultType="java.util.HashMap">
+      CALL ${ scriptName }(
+        #{ fieldCode }, #{ lineCode }, #{ serialRuleGd }, #{ date }, @prCode, @errorCode
+      )
+    </select>
+
+    <!--查询 tpm_OrderLineInfo LineGd-->
+    <select id="SelectLineGd" resultType="String">
+      SELECT t.LineGd FROM tpm_OrderLineInfo t
+       WHERE t.WOGd IN(
+        SELECT t2.Guid FROM tpm_BInfo t1,tpm_WoInfo t2 WHERE t1.Batch=#{Batch} AND t1.WoGd=t2.Guid)
+    </select>
+
+    <!---->
+    <select id="SelectBInfo" resultMap="ResInfoResult">
+        SELECT * FROM tpm_BInfo WHERE Batch=#{Batch} AND BType=#{BType}
+    </select>
+
+    <select id="SelectBInfoByModevBath" resultType="Float">
+        SELECT
+	        SUM( b.CanNum )
+        FROM
+	        tpm_binfo b
+        WHERE
+	        b.Batch IN ( SELECT modd.Batch FROM tpm_modevdlinfo modd WHERE modd.MODevGd = #{moDevGd} and modd.ExecGd=#{ExecGd})
+    </select>
+
+    <select id="SelectBInfoByMospecBath" resultType="Float">
+        SELECT
+	        SUM( b.CanNum )
+        FROM
+	        tpm_binfo b
+        WHERE
+	        b.Batch IN ( SELECT modd.Batch FROM tpm_MOSpecDlInfo modd WHERE modd.MOSpecGd = #{moSpecGd} and modd.ExecGd=#{ExecGd})
+    </select>
+
+    <select id="SelectByWoRdStatus" resultMap="ResInfoResult">
+        SELECT * FROM tpm_BInfo b, tpm_WoInfo w
+        WHERE w.Guid=b.WoGd AND w.Ruid=#{woRd} AND w.status IN('01', '03') Limit 1
+    </select>
+
+    <!-- 获取档位信息（存储过程） -->
+    <select id="SelectByGear" resultType="java.util.HashMap">
+        CALL ${ scriptName }(
+        <foreach item="item" index="index" collection="scriptIn">
+            #{item},
+        </foreach>
+        <foreach item="item" index="index" collection="scriptOut" separator=",">
+            @${item}
+        </foreach>
+        )
+    </select>
+
+    <delete id="DeleteByWoGd">
+        delete from tpm_binfo where WoGd=#{woGd} and WoSource=#{woSource}
+    </delete>
+
+    <select id="selectHoldBatch" resultMap="HoldBatchResult">
+        SELECT b.`Batch`, b.`Num`, m.`MaterialCode` AS MaCode,m.`MaterialName` AS MaName,
+        m.`MaterialDes` AS MaDes, IFNULL(l.`LineName`, '') AS LineName, IFNULL(w.`WoCode`, '') AS WoCode,
+        b.`LastModifyTime` AS UpdateDate, b.`LastModifyMan` AS UpdateMan, IFNULL(h.`ReaDes`, '') AS ReaDes
+        FROM tpm_BInfo b
+        LEFT JOIN tpm_lineinfo l ON b.LineGd=l.Guid
+        LEFT JOIN tpm_maverinfo m ON m.`Guid`=b.`MaVerGd`
+        LEFT JOIN tpm_woinfo w ON w.`Guid`=b.`WoGd`
+        LEFT JOIN (SELECT h2.* FROM
+        (SELECT MAX(ruid) ruid FROM tpm_holdinfo GROUP BY batch) h1 LEFT JOIN tpm_holdinfo h2 ON h1.ruid = h2.ruid) h
+        ON h.`Batch` = b.`Batch`
+        WHERE b.Status='02'
+
+        <if test="model.StartDate != null and model.StartDate != '' and model.EndDate != null and model.EndDate != ''">
+            AND b.LastModifyTime between #{model.StartDate} AND #{model.EndDate}
+        </if>
+
+        <if test="model.Batch != null and model.Batch !='' ">
+            and b.Batch in
+            <foreach item="item" index="index" collection="model.Batch.split(',')" open="(" separator="," close=")">'${item}'</foreach>
+        </if>
+
+        <if test="model.LineRd != null">
+            and l.Ruid=#{model.LineRd}
+        </if>
+    </select>
+
+    <update id="BaseUpdateByBinfo">
+        UPDATE tpm_binfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="qCheckMaType != null">
+                <if test="qCheckMaType == '00'">
+                    BeforeCheckQC = #{finalResult},
+                </if>
+                <if test="qCheckMaType == '01'">
+                    AfterCheckQC = #{finalResult},
+                </if>
+            </if>
+            <if test="Status != null">
+                Status = #{Status},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan=#{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime=#{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark=#{remark},
+            </if>
+            <if test="inStockStatus != null">
+                InStockStatus=#{inStockStatus}
+            </if>
+        </trim>
+        where Batch in
+        <foreach collection="batchs" item="Batch" index="index" open="(" close=")" separator=",">
+            #{Batch}
+        </foreach>
+
+    </update>
+
+    <select id="BaseSelectAllByBachts" resultType="String">
+        SELECT Batch from tpm_binfo WHERE Status=#{status} AND Batch IN
+        <foreach collection="batchs" item="Batch" index="index" open="(" close=")" separator=",">
+            #{Batch}
+        </foreach>
+    </select>
+
+    <select id="BaseSelectAllByBachtsAndInStockStatus" resultType="String">
+        SELECT Batch from tpm_binfo WHERE InStockStatus=#{inStockStatus} AND Batch IN
+        <foreach collection="batchs" item="Batch" index="index" open="(" close=")" separator=",">
+            #{Batch}
+        </foreach>
+    </select>
+
+
+</mapper>

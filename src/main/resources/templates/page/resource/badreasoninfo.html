@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>不良原因管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/js/lay-module/formSelects-v4/formSelects-v4.css}" />
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width: 150px;">不良原因名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="badReasonName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                       <!-- <div class="layui-inline">
+                            <label class="layui-form-label">时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" class="layui-input">
+                            </div>
+                        </div>-->
+                    </div>
+
+
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+
+<!-- 子页面 -->
+<div class="layui-fluid" id="badreasoninfo" style="display: none;">
+    <div class="layui-card">
+        <div class="layui-card-body" >
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基础信息</li>
+                    <li>明细信息</li>
+                    <li>其他信息</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form" action="" id="userinfoform" lay-filter="component-form-group" >
+                            <div class="layui-tab-item layui-show">
+                                <input type="hidden"id="_hidden" />
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label" style="width: 150px;">不良原因名称</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" id="badReasonNames"  autocomplete="off" placeholder="请输入不良名称" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="layui-tab-item">
+                        <div class="layui-inline" id="buttonOprate">
+                            <div class="layui-input-inline">
+                                <input class="layui-btn layui-btn-sm" type="button" value="添加" id="detailAdd"/>
+                                <input class="layui-btn layui-btn-danger layui-btn-sm" type="button" value="删除" id="detailDelete"/>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <table class="layui-table">
+                                <thead>
+                                <tr>
+                                    <th style="width: 18px;"><input type="checkbox" id="selectAll" lay-skin="primary" lay-filter="selectAll"/></th>
+                                    <th style="width: 150px;">不良原因代码</th>
+                                    <th style="width: 150px;">不良原因名称</th>
+
+                                    <th style="width: 50px;">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="layui-tab-item">
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">创建人</label>
+                                <div class="layui-input-inline">
+                                    <input type="tel" name="creator" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">创建时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">修改人</label>
+                                <div class="layui-input-inline">
+                                    <input type="tel" name="modifier" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">修改时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="modifyTime" lay-verify="required" autocomplete="off" class="layui-input" readonly disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-block">
+                                <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'laydate', 'element','formSelects',], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            formSelects=layui.formSelects,
+            laydate = layui.laydate;
+
+        //重新渲染表单函数
+        function renderForm() {
+            layui.use('form', function() {
+                var form = layui.form;
+                form.render();
+            });
+        }
+
+        //页面首次加载
+        load();
+
+        //下拉框选择事件
+        form.on('select(materialRds)', function(data){
+            getAllWokerFool(data.value);
+        });
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            var data=obj.data;
+
+            if (obj.event === 'add') {  // 监听添加操作
+                clear();
+                let index = layer.open({
+                    title: '添加不良原因',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content:$("#badreasoninfo"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+
+                        save(index, 1);
+
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                edit(data);
+            } else if (obj.event === 'delete') {
+                del(data);
+
+            } else if(obj.event === 'read') {
+                read(data);
+            }else if(obj.event === 'xiada') {
+                xiada(data);
+            }
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            let field=[];
+            if(data.field.badReasonName!=''){
+                let   fields={
+                    fieldName: "badType",
+                    fieldOpt: "like",
+                    fieldVal: data.field.badReasonName
+                }
+                field.push(fields);
+            }
+            field.push({
+                fieldName: "CreateTime",
+                fieldOpt: "Order BY",
+                fieldVal: "DESC"
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: field
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //查看
+        function read(data) {
+            let BadRd = data.badRd;
+            requests({url: "/SunPort/Bad/GetBadInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({"BadRd": BadRd})
+                }}, function (res) {
+                let data = res.Data;
+
+                clear();
+                $("#_hidden").val(data.badRd);
+                var res=data.badDtlInfo;
+                if(res.length>0){
+                    var tr_="";
+
+                    for(var i in res){
+
+                        tr_+="<tr>" +
+                            "<td><input type='checkbox' class='layui-form'  lay-skin='primary' lay-filter='selectOne' class='selectPre'/></td>" +
+
+                            "<td>"+res[i].badName+"</td>" +
+                            "<td>"+res[i].badCode+"</td>" +
+                            "<td style='display: none'>"+res[i].BadDtlRd+"</td>" +
+                            "<td>无操作</td></tr>"
+                    }
+                    $("#tbody").empty(tr_).html(tr_);
+                }else {
+                    $("#tbody").empty(tr_).text("无数据");
+                }
+
+                $("#badReasonNames").val(data.badTypeName);
+                $("textarea[name='remark']").val(data.remark);
+                $("input[name='creator']").val(data.creator);
+                $("input[name='modifier']").val(data.lastModifyMan);
+                $("input[name='modifyTime']").val(data.lastModifyTime);
+                $("input[name='createTime']").val(data.createTime);
+
+                let index = layer.open({
+                    title: '查看不良原因',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#badreasoninfo"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+
+        }
+        
+        //编辑
+        function edit(data) {
+
+            let BadRd = data.badRd;
+            requests({url: "/SunPort/Bad/GetBadInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({"BadRd": BadRd})
+                }}, function (res) {
+                let data = res.Data;
+                $("#_hidden").val(data.badRd);
+                clear();
+                var res=data.badDtlInfo;
+                if(res.length>0){
+                    var tr_="";
+
+                    for(var i in res){
+
+                        tr_+="<tr>" +
+                            "<td><input type='checkbox' class='layui-form'  lay-skin='primary' lay-filter='selectOne' class='selectPre'/></td>" +
+                            "<td><input type='text' name='a' class=\"layui-input\" value='"+res[i].badName+"'/></td>" +
+                            "<td><input type='text' name='b' class=\"layui-input\" value='"+res[i].badCode+"'/></td>" +
+                            "<td style='display: none'>"+res[i].badDtlRd+"</td>" +
+                            "<td><button type='button' id='detailDeletes' class='layui-btn layui-btn-primary layui-btn-sm'><i class='layui-icon'></i></button></td></tr>"
+                    }
+                    $("#tbody").empty(tr_).html(tr_);
+                }else {
+                    $("#tbody").empty(tr_).text("无数据");
+                }
+                renderForm();
+                $("#badReasonNames").val(data.badTypeName);
+                $("textarea[name='remark']").val(data.remark);
+                $("input[name='creator']").val(data.creator);
+                $("input[name='modifier']").val(data.lastModifyMan);
+                $("input[name='modifyTime']").val(data.lastModifyTime);
+                $("input[name='createTime']").val(data.createTime);
+
+                layer.open({
+                    type: 1
+                    ,title: '修改不良原因'
+                    ,content:$("#badreasoninfo")
+                    ,maxmin: true
+                    ,area: ['90%', '75%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var data=[];
+                        $("#tbody tr").each(function(){
+                            var tdArr = $(this).children();
+                            var Column={
+                                BadCode:tdArr.eq(1).find("input[name='a']").val().trim(),
+                                BadName:tdArr.eq(2).find("input[name='b']").val(),
+                                BadDtlRd:tdArr.eq(3).text()
+                            }
+                            data.push(Column);
+                            i++;
+                        });
+                        var badReasonNames=$("#badReasonNames").val().trim();
+
+                        var remark=$("textarea[name='remark']").val()
+                        var newData = {
+                            BadRd: $("#_hidden").val(),
+                            BadTypeName: badReasonNames,
+                            BadDtlInfo: data,
+                            Remark:remark
+                        };
+
+                        requests({url: "/SunPort/Bad/SaveBadInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02", "BusData": JSON.stringify(newData)
+                            }}, function (res) {
+                            layer.msg("修改成功", {icon: 1});
+                            layer.close(index);
+                            table.reload('currentTableId');
+                        });
+                    }
+                });
+
+            });
+
+        }
+        //删除
+        function del(data) {
+            var data = {
+                "DcRd": data.badRd
+            };
+            layer.confirm('真的删除行么', function (index) {
+                requests({url: "/SunPort/Bad/SaveBadInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    //obj.del();
+                    layer.msg("删除成功", {icon: 1});
+                    table.reload('currentTableId');
+                });
+
+                layer.close(index);
+            });
+        }
+        
+        //保存
+        function save(index, type, shiftId) {
+            if (type === 1) {
+
+                //  BadName
+                var i=1;
+                var data=[];
+                $("#tbody tr").each(function(){
+                    var tdArr = $(this).children();
+                    var Column={
+                        BadCode:tdArr.eq(1).find("input[name='a']").val().trim(),
+                        BadName:tdArr.eq(2).find("input[name='b']").val(),
+                    }
+                    data.push(Column);
+                    i++;
+                });
+                var badReasonNames=$("#badReasonNames").val().trim();
+
+                var remark=$("textarea[name='remark']").val()
+                var newData = {
+                    BadTypeName: badReasonNames,
+                    BadDtlInfo: data,
+                    Remark:remark
+                };
+
+                requests({url: "/SunPort/Bad/SaveBadInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00", "BusData": JSON.stringify(newData)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }
+        }
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/SunPort/Bad/GetAllNewBad",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "CreateTime",
+                        fieldOpt: "Order BY",
+                        fieldVal: "DESC"
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {field: 'badRd', title: 'ID', sort: true,hide:true},
+                        {field: 'badTypeName', title: '不良原因名称'},
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        //清空
+        function clear() {
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+        }
+        //明细添加事件
+        $("#detailAdd").click(function () {
+            $("#tbody").append("<tr>" +
+                "<td><input type='checkbox' class='layui-form'  lay-skin='primary' lay-filter='selectOne' class='selectPre'/></td>" +
+                "<td><input type='text' name='a' class='layui-input layui-form'/></td>" +
+                "<td><input type='text' name='b' class='layui-input layui-form'/></td>" +
+                "<td><button type='button' id='detailDeletes' class='layui-btn layui-btn-primary layui-btn-sm'><i class='layui-icon'></i></button>       </td></tr>");
+            $("#selectAll").prop("checked", false);
+            renderForm();
+        });
+
+        //明细的删除
+        $(document).on('click', '#detailDelete', function (){
+            var checklength=$("#tbody input[type='checkbox']:checked");
+            if (checklength.length == 0) {
+                $("#selectAll").prop("checked", false);
+                layer.alert("删除失败，请选择你要删除的数据");
+                return false;
+            }
+
+            $("#tbody input[type='checkbox']").each(function(){
+                if($(this).is(":checked")){
+                    $(this).closest('tr').remove();
+                }
+            });
+            $("#selectAll").prop("checked", false);
+
+
+
+        });
+
+        //明细表格的删除
+        $(document).on('click', '#detailDeletes', function () {
+            $(this).closest('tr').remove();
+        });
+        //明细表格的单选
+        layui.use('form', function () {
+            var form = layui.form;
+            //全选
+            form.on('checkbox(selectAll)', function (data) {
+                var a = data.elem.checked;
+                if (a == true) {
+                    $("#tbody input[type='checkbox']").each(function(){
+                        $(this).prop("checked",true);
+                    });
+                    form.render('checkbox');
+                } else {
+                    $("#tbody input[type='checkbox']").each(function(){
+                        $(this).prop("checked",false);
+                    });
+                    form.render('checkbox');
+                }
+
+            });
+
+
+            //有一个未选中全选取消选中
+            form.on('checkbox(selectOne)', function (data) {
+                var item = $(".selectPre");
+                for (var i = 0; i < item.length; i++) {
+                    if (item[i].checked == false) {
+                        $("#selectAll").prop("checked", false);
+                        form.render('checkbox');
+                        break;
+                    }
+                }
+                //如果都勾选了  勾上全选
+                var  all=item.length;
+                for (var i = 0; i < item.length; i++) {
+                    if (item[i].checked == true) {
+                        all--;
+                    }
+                }
+                if(all==0){
+                    $("#selectAll").prop("checked", false);
+                    form.render('checkbox');}
+            });
+        });
+
+
+
+    });
+
+
+
+
+</script>
+</body>
+</html>

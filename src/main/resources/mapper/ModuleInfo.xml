@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ModuleDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.ModuleInfo" id="ModuleInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="parentGd" column="parentGd" />
+		<result property="sysVerGd" column="sysVerGd" />
+		<result property="moduleName" column="moduleName" />
+        <result property="resUrl" column="resUrl" />
+        <result property="linkType" column="linkType" />
+        <result property="pos" column="pos" />
+        <result property="isClose" column="isClose" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModiryTime" column="lastModiryTime" />
+		<result property="remark" column="Remark" />
+	</resultMap>
+
+    <!-- 获取所有模块信息 (By-pjf)-->
+    <select id="SelectAllModuleInfo" resultMap="ModuleInfoResult">
+        SELECT * FROM tpm_moduleinfo
+    </select>
+
+    <!-- 根据guid查模块信息 (By-pjf)-->
+    <select id="SelectModuleInfo" resultMap="ModuleInfoResult">
+        SELECT * FROM tpm_moduleinfo WHERE Guid = #{ guid }
+    </select>
+
+    <!-- 根据ruid查模块信息 (By-pjf)-->
+    <select id="SelectModuleInfoRuid" resultMap="ModuleInfoResult">
+		SELECT * FROM tpm_moduleinfo WHERE Ruid = #{ ruid }
+	</select>
+
+	<!-- 查询当前模块下是否存在子模块 (By-pjf)-->
+	<select id="SelectAllChildModule" resultMap="ModuleInfoResult">
+		SELECT * FROM tpm_moduleinfo WHERE ParentGd = #{ argParentGd } AND isClose = #{ argisClose } and SysVerGd=#{sysVerGd} ORDER BY Pos
+	</select>
+
+    <!-- 查询当前模块下是否存在子模块 (By-pjf)-->
+    <select id="SelectAllChildModuleAdmin" resultMap="ModuleInfoResult">
+		SELECT * FROM tpm_moduleinfo WHERE ParentGd = #{ argParentGd } ORDER BY Pos
+	</select>
+
+    <select id="SelectAllChildModuleAdminBySysVerGd" resultMap="ModuleInfoResult">
+		SELECT * FROM tpm_moduleinfo WHERE ParentGd = #{ argParentGd } AND  SysVerGd=#{sysVerGd} ORDER BY Pos
+	</select>
+
+    <select id="SelectAllBySysVerGd" resultMap="ModuleInfoResult">
+		SELECT * FROM tpm_moduleinfo WHERE  SysVerGd=#{sysVerGd} ORDER BY Pos
+	</select>
+
+	<!-- 新增模块信息 (By-pjf)-->
+	<insert id="InsertModuleInfo">
+        INSERT INTO tpm_moduleinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,parentGd,moduleName,creator,createTime,sysVerGd,
+
+            <if test="resUrl != null">
+                resUrl,
+            </if>
+            <if test="linkType != null">
+                linkType,
+            </if>
+            <if test="pos != null">
+                pos,
+            </if>
+            <if test="isClose != null">
+                isClose,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{parentGd},#{moduleName},#{creator},#{createTime},#{sysVerGd},
+
+            <if test="resUrl != null">
+                #{resUrl},
+            </if>
+            <if test="linkType != null">
+                #{linkType},
+            </if>
+            <if test="pos != null">
+                #{pos},
+            </if>
+            <if test="isClose != null">
+                isClose,
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+	</insert>
+
+    <!-- 删除模块信息 (By-pjf)-->
+    <delete id="DeleteModuleByRuid">
+        DELETE FROM tpm_moduleinfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+
+    <delete id="DeleteModuleBySysVerGd">
+        DELETE FROM tpm_moduleinfo WHERE SysVerGd = #{ sysVerGd }
+    </delete>
+
+    <!-- 编辑模块信息 (By-pjf)-->
+    <update id="UpdateModule">
+        UPDATE tpm_moduleinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="parentGd != null">
+                parentGd = #{ parentGd },
+            </if>
+            <if test="moduleName != null">
+                moduleName = #{ moduleName },
+            </if>
+
+            <if test="resUrl != null">
+                resUrl = #{ resUrl },
+            </if>
+            <if test="linkType != null">
+                linkType = #{ linkType },
+            </if>
+            <if test="pos != null">
+                pos = #{ pos },
+            </if>
+            <if test="isClose != null">
+                isClose=#{ isClose },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+    <!-- 根据名称查询模块信息 (By-pjf)-->
+    <select id="SelectModuleByName" resultMap="ModuleInfoResult">
+        SELECT * FROM tpm_moduleinfo WHERE ModuleName = #{ argModuleName } AND sysVerGd=#{sysVerGd}
+        <if test="argParentGd != null">
+            AND ParentGd = #{ argParentGd }
+        </if>
+    </select>
+
+</mapper>

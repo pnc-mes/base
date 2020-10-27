@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.OEMLineDAO">
+        <resultMap id="OEMLineMap" type="pnc.mesadmin.entity.OEMLineinfo">
+            <id column="Ruid" property="ruid"></id>
+            <result column="LineGD" property="LineGD"></result>
+            <result column="OEMLineGD" property="OEMLineGD"></result>
+        </resultMap>
+    <select id="SelectOEMLineinfoByGuid"  resultMap="OEMLineMap">
+        SELECT * FROM `tpm_oemlineinfo` WHERE LineGD = #{LineGD}
+    </select>
+    <select id="SelectOEMLineinfoByGui"  resultMap="OEMLineMap">
+        SELECT * FROM `tpm_oemlineinfo` WHERE OEMLineGD = #{OEMLineGD}
+    </select>
+
+    <insert id="InsertOEMLineinfo">
+        INSERT INTO tpm_oemlineinfo (LineGD,OEMLineGD)
+        VALUES (#{LineGD},#{OEMLineGD})
+    </insert>
+    <delete id="deleteOEMLineinfoByruid" parameterType="int">
+        delete from `tpm_oemlineinfo` where Ruid=#{ruid}
+    </delete>
+
+    <update id="UpdateOEMLineinfo">
+        UPDATE `tpm_oemlineinfo`
+        SET
+        LineGD = #{LineGd}
+        where WOGD = #{woGd}
+    </update>
+</mapper>

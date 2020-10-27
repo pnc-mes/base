@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.TeamLineDAO" >
+    <resultMap type="pnc.mesadmin.entity.TeamLineInfo" id="TeamIineInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="teamGd" column="teamGd" />
+        <result property="lineGd" column="lineGd" />
+    </resultMap>
+
+
+    <select id="SelectAllTeamIineInfoByteamGd" resultMap="TeamIineInfoResult">
+		select * from tpm_teamlineinfo where  teamGd =#{teamGd}
+	</select>
+
+    <insert id="InsertTeamIineInfo">
+        <selectKey resultType="int" keyProperty="ruid" order="AFTER" >
+            SELECT @@IDENTITY
+        </selectKey>
+        INSERT INTO tpm_teamlineinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           teamGd,lineGd,
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           #{teamGd},#{lineGd},
+        </trim>
+    </insert>
+
+    <delete id="deleteTeamIineInfo" parameterType="int">
+          delete from tpm_teamlineinfo where ruid=#{ruid}
+    </delete>
+
+</mapper>

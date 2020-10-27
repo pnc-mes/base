@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.PDDtlDAO" >
+    <resultMap type="pnc.mesadmin.entity.PDDtlInfo" id="PDDtlInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="pDTkGd" column="pDTkGd" />
+        <result property="barType" column="barType" />
+        <result property="barCode" column="barCode" />
+        <result property="batch" column="batch" />
+        <result property="storeGd" column="storeGd" />
+        <result property="storeName" column="storeName" />
+        <result property="locationGd" column="locationGd" />
+        <result property="lName" column="lName" />
+        <result property="maVerGd" column="maVerGd" />
+        <result property="materialCode" column="materialCode" />
+        <result property="materialName" column="materialName" />
+        <result property="num" column="num" />
+        <result property="unitName" column="unitName" />
+        <result property="productDate" column="productDate" />
+        <result property="expireDate" column="expireDate" />
+        <result property="chgReason" column="chgReason" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!--查询盘点所有信息表-->
+    <select id="SelectAllPDDtlInfo" resultMap="PDDtlInfoResult">
+        SELECT * FROM tpm_pddtlinfo
+    </select>
+
+    <!--关联查询盘点单信息表-->
+    <select id="SelectByGuid" resultMap="PDDtlInfoResult">
+        SELECT * FROM tpm_pddtlinfo p WHERE p.`pDTkGd` = #{guid}
+    </select>
+
+    <select id="SelectByBatch" resultMap="PDDtlInfoResult">
+        SELECT  * from tpm_pddtlinfo WHERE batch = #{argBatch}
+    </select>
+
+    <!--查询物料代码-->
+    <select id="SelectBymaterialCode" resultMap="PDDtlInfoResult">
+        SELECT  * from tpm_pddtlinfo WHERE materialCode = #{materialCode}
+    </select>
+
+    <insert id="InsertPDDtlInfo" parameterType="pnc.mesadmin.entity.PDDtlInfo">
+        INSERT INTO tpm_pddtlinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            guid,pDTkGd,barType,barCode,batch,storeGd,storeName,locationGd,lName,maVerGd,materialCode,
+            materialName,num,unitName,productDate,creator,createTime,
+            <if test="expireDate != null">
+                expireDate,
+            </if>
+            <if test="chgReason != null">
+                chgReason,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{pDTkGd},#{barType},#{barCode},#{batch},#{storeGd},#{storeName},#{locationGd},
+            #{lName},#{maVerGd},#{materialCode},#{materialName},#{num},#{unitName},#{productDate},
+            #{creator},#{createTime},
+            <if test="expireDate != null">
+                #{expireDate},
+            </if>
+            <if test="chgReason != null">
+                #{chgReason},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="UpdatePDDtlInfoLocationAndNum" >
+        update tpm_pddtlinfo
+        <trim prefix="set" suffixOverrides=",">
+
+            locationGd = #{locationGd},
+            lName = #{lName},
+            <if test="num != null">
+               num = #{num},
+            </if>
+            <if test="chgReason != null">
+                chgReason = #{chgReason},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </trim>
+        where ruid=#{ruid}
+    </update>
+
+    <select id="SelectPDDtlInfoByBatch" resultMap="PDDtlInfoResult">
+        SELECT  * from tpm_pddtlinfo WHERE batch = #{argBatch}
+    </select>
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CarrierDao">
+    <resultMap id="CarrierMapper" type="pnc.mesadmin.entity.CarrierInfo">
+        <id property="Ruid" column="Ruid"></id>
+        <result property="Guid" column="Guid"></result>
+        <result property="CarrierName" column="CarrierName"></result>
+        <result property="SupplierGd" column="SupplierGd"></result>
+        <result property="CarrierFamilyGd" column="CarrierFamilyGd"></result>
+        <result property="VenderSN" column="VenderSN"></result>
+        <result property="DevSMGd" column="DevSMGd"></result>
+        <result property="DevSGD" column="DevSGd"></result>
+        <result property="FaGd" column="FaGd"></result>
+        <result property="Creator" column="Creator"></result>
+        <result property="CreateTime" column="CreateTime"></result>
+        <result property="LastModifyMan" column="LastModifyMan"></result>
+        <result property="LastModifyTime" column="LastModifyTime"></result>
+        <result property="Remark" column="Remark"></result>
+        <result property="Status" column="Status"></result>
+
+    </resultMap>
+
+    <!-- 获取工具列表信息-->
+    <select id="SelectAllCarrierInfo" resultMap="CarrierMapper">
+        SELECT * FROM `tpm_carrierinfo`
+    </select>
+
+
+    <!--更新工具信息-->
+    <update id="UpdateCarrierInfoByruid">
+        UPDATE `tpm_carrierinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Guid != null">
+                Guid = #{ Guid },
+            </if>
+            <if test="CarrierName != null">
+                CarrierName = #{ CarrierName },
+            </if>
+            <if test="SupplierGd != null">
+                SupplierGd = #{ SupplierGd },
+            </if>
+            <if test="CarrierFamilyGd != null">
+                CarrierFamilyGd = #{ CarrierFamilyGd },
+            </if>
+            <if test="VenderSN != null">
+                VenderSN = #{ VenderSN },
+            </if>
+            <if test="DevSMGd != null">
+                DevSMGd = #{ DevSMGd },
+            </if>
+            <if test="DevSGD != null">
+                DevSGD=#{DevSGD},
+            </if>
+            <if test="FaGd != null">
+                FaGd = #{ FaGd },
+            </if>
+            <if test="Creator != null">
+                Creator = #{ Creator },
+            </if>
+            <if test="CreateTime != null">
+                CreateTime = #{ CreateTime },
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{ LastModifyMan },
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{ LastModifyTime },
+            </if>
+            <if test="Remark != null">
+                Remark = #{ Remark },
+            </if>
+            <if test="Status != null">
+                Status = #{ Status }
+            </if>
+        </trim>
+        WHERE Ruid = #{ Ruid }
+    </update>
+
+
+    <!--根据工具ruid查询工厂信息-->
+    <select id="SelectCarrierInfoByruid" resultMap="CarrierMapper" parameterType="int">
+        SELECT * FROM `tpm_carrierinfo` WHERE Ruid=#{Ruid}
+    </select>
+
+    <!--增加工具信息-->
+    <insert id="InsertCarrierInfo">
+        INSERT INTO `tpm_carrierinfo`(Guid,CarrierName,SupplierGd,CarrierFamilyGd,VenderSN,DevSMGd,FaGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{CarrierName},#{SupplierGd},#{CarrierFamilyGd},#{VenderSN},#{DevSMGd},#{FaGd},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+
+    <!--根据guid查询工具信息 ,此查询是在工作中心中查询 -->
+    <select id="SelectCarrierInfoByguid" resultMap="CarrierMapper" parameterType="string">
+        SELECT * FROM `tpm_carrierinfo` WHERE Guid=#{Guid}
+    </select>
+
+    <!--根据名称查工具信息 ,此查询是在工作中心中查询 -->
+    <select id="SelectCarrierInfoByFactoryName" resultMap="CarrierMapper" parameterType="string">
+        SELECT * FROM `tpm_carrierinfo` WHERE CarrierName=#{CarrierName}
+    </select>
+    <!--删除工具信息，根据工厂ID-->
+    <delete id="DeleteToolInfoByruid">
+        DELETE FROM `tpm_carrierinfo` WHERE Ruid=#{Ruid}
+    </delete>
+
+    <!--根据载具序列号查询载具信息-->
+    <select id="SelectCarrierSN" resultMap="CarrierMapper" >
+        SELECT * FROM tpm_carrierinfo WHERE VenderSN=#{VenderSN}
+    </select>
+
+</mapper>

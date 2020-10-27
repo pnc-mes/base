@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.FileGpDAO" >
+    <resultMap type="pnc.mesadmin.entity.FileGpInfo" id="FileGpInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="fileGpName" column="fileGpName" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+    <!--查询文件组信息-->
+    <select id="SelectAllFileGpInfo" resultMap="FileGpInfoResult">
+        select * from tpm_filegpinfo
+    </select>
+
+    <!--查询文件列表信息-->
+    <select id="SelectByruid" resultMap="FileGpInfoResult">
+        SELECT * FROM tpm_filegpinfo f WHERE f.`Ruid` = #{fileGRd}
+    </select>
+
+    <!--查询关联文件组明细信息-->
+    <select id="SelectByguid" resultMap="FileGpInfoResult">
+        SELECT * FROM tpm_filegpinfo f WHERE f.guid = #{fileGpGd}
+    </select>
+
+    <!--查询文件组名称-->
+    <select id="SelectfileGpName" resultMap="FileGpInfoResult">
+        select * from tpm_filegpinfo f WHERE f.fileGpName=#{fileGpName}
+    </select>
+
+    <!--新增文件组信息-->
+    <insert id="InsertFileFileGpInfo">
+        INSERT INTO tpm_filegpinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,FileGpName,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{fileGpName},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除文件组信息-->
+    <delete id="DeleteFileGpInfo">
+        DELETE FROM tpm_filegpinfo WHERE Ruid = #{fileGRd}
+    </delete>
+
+    <!--更新文件组信息-->
+    <update id="UpdateFileGpInfo">
+        UPDATE tpm_filegpinfo
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="fileGpName != null">
+                fileGpName = #{fileGpName},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+</mapper>

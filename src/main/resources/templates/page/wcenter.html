@@ -1,0 +1,489 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：工作中心
+* 创建人：蒋鑫韡
+* 创建时间：2020-09-23
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>工作中心</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+        .dPanel{
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="width: 120px">工作中心名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="WCName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+
+<!--- 子页面 -->
+<div id="content" style="display: none;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">工作中心</li>
+            <li>其它</li>
+        </ul>
+        <div class="layui-form layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-row">
+                    <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                        <div class="dPanel">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label required">工作中心名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="WCName" lay-verify="required" class="layui-input" lay-reqtext="工作中心名称不能为空" placeholder="请输入工作中心名称" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                        <div class="dPanel">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label required">所属工厂</label>
+                                <div class="layui-input-block">
+                                    <div id="FaName" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <!-- 其它 -->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="creator" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="createTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyMan" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea id="remark" name="remark" class="layui-textarea inputRead" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'element','xmSelect'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            xmSelect = layui.xmSelect;
+
+        //页面首次加载
+        load();
+
+        //单选通用设置
+        let radioSetting = {
+            radio: true
+            ,clickClose: true
+            ,theme: {
+                color: '#5FB878',
+            },model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            },toolbar: {
+                show: true,
+            },
+            filterable: true
+        }
+
+        //tree通用设置
+        let treeSetting = {
+            show: true,
+            showFolderIcon: true,
+            showLine: true,
+            indent: 20,
+            expandedKeys: true,
+            strict: false,
+            simple: false
+        }
+
+        //加载企业
+        let FaNameS = xmSelect.render({
+            el: '#FaName'
+            ,...radioSetting
+            ,prop: {
+                name: 'FaName',
+                value: 'FaRd',
+            }
+            ,data: []
+        });
+        requests({url: "/Factory/GetAllFaNew"}, function (res) {
+            FaNameS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //select下拉框选中触发事件
+        form.on("select", function(data){
+            //加载类别树
+            //loadTreeSelect(data.value);
+            //formSelects.value('treeSelect', []);
+        });
+
+        //checkbox触发事件
+        form.on("checkbox(checkbox)", function (data) {
+            if(data.elem.checked){
+                $("#minPCheck").show();
+            }else{
+                $("#minPCheck").hide();
+            }
+        });
+
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {
+                clear();
+                let index = layer.open({
+                    title: '添加工作中心',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#content"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                //获取选中id
+                let wcId = data.WCRd;
+                requests({url: "/WorkC/GetWCInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify({"WCRd": wcId})
+                    }}, function (res) {
+                    let data = res.Data;
+
+                    clear();
+
+                    loadData(data, false);
+
+
+                    let index = layer.open({
+                        title: '编辑工作中心',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin:true,
+                        shadeClose: true,
+                        area: ['50%', '70%'],
+                        content: $("#content"),
+                        btn: ['确认保存'],
+                        yes: function (index, layero) {
+                            save(index, 2, wcId);
+                        }
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                });
+
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    requests({url: "/WorkC/SaveWCInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                            "BusData": JSON.stringify({WCRd: data.WCRd})
+                        }}, function (res) {
+                        //obj.del();
+                        layer.msg("删除成功", {icon: 1});
+                        table.reload('currentTableId');
+                    });
+
+                    layer.close(index);
+                });
+            } else if(obj.event === 'read') {
+                read(data);
+                return false;
+            }
+        });
+        //监听行双击事件
+        table.on('rowDouble(currentTableFilter)', function(obj){
+            read(obj.data);
+            return false;
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: [
+                        {
+                            fieldName: "CenterName",
+                            fieldOpt: "like",
+                            fieldVal: data.field.WCName
+                        },
+                        {
+                            fieldName: "Ruid",
+                            fieldOpt: "Order BY",
+                            fieldVal: ""
+                        }
+                    ]
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //查看
+        function read(data) {
+            //获取选中id
+            let wcId = data.WCRd;
+            requests({url: "/WorkC/GetWCInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({"WCRd": wcId})
+                }}, function (res) {
+                let data = res.Data;
+
+                clear();
+
+                loadData(data, true);
+                let index = layer.open({
+                    title: '查看工作中心',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#content"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+            return false;
+        }
+        //保存
+        function save(index, type, wcId) {
+            //type-> 1.新增 2.编辑 3.删除
+            let data = {
+                WCName: $("#WCName").val(),
+                FaRd: FaNameS.getValue("valueStr"),
+
+            };
+            if(type === 1){
+                requests({url: "/WorkC/SaveWCInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }else if(type === 2){
+                data.WCRd = wcId;
+                requests({url: "/WorkC/SaveWCInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/WorkC/GetAllWCNew",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {field: 'WCRd', title: 'ID', sort: true},
+                        {field: 'WCName', title: '工作中心名称'},
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        //赋值渲染
+        function loadData(data, type) {
+            $("#WCName").val(data.WCName);
+            FaNameS.setValue(data.FaRd == undefined ? [] : [data.FaRd]);
+
+
+            $("#creator").val(data.Creator);
+            $("#createTime").val(data.CreateTime);
+            $("#lastModifyMan").val(data.LastModifyMan);
+            $("#lastModifyTime").val(data.LastModifyTime);
+            $("#remark").val(data.Remark);
+
+            $("#content input").prop("disabled", type);
+            //true->禁用
+            if(type){
+                $("#content input").addClass("inputRead");
+                $("#remark").addClass("inputRead");
+                $("#Status").prop("disabled", true);
+            }else{
+                $("#content input").removeClass("inputRead");
+                $("#remark").removeClass("inputRead");
+                $("#remark").prop("disabled", false);
+                $("#creator").addClass("inputRead");
+                $("#createTime").addClass("inputRead");
+                $("#lastModifyMan").addClass("inputRead");
+                $("#lastModifyTime").addClass("inputRead");
+                $("#creator").prop("disabled", true);
+                $("#createTime").prop("disabled", true);
+                $("#lastModifyMan").prop("disabled", true);
+                $("#lastModifyTime").prop("disabled", true);
+            }
+
+            FaNameS.update({disabled: type});
+            form.render("select");
+        }
+
+
+        //清空
+        function clear() {
+            $("#WCName").val("");
+
+            FaNameS.setValue([]);
+
+
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+
+            $("#content input").prop("disabled", false);
+
+            $("#content input").removeClass("inputRead");
+            $("#remark").removeClass("inputRead");
+            $("#remark").prop("disabled", false);
+            $("#creator").addClass("inputRead");
+            $("#createTime").addClass("inputRead");
+            $("#lastModifyMan").addClass("inputRead");
+            $("#lastModifyTime").addClass("inputRead");
+            $("#creator").prop("disabled", true);
+            $("#createTime").prop("disabled", true);
+            $("#lastModifyMan").prop("disabled", true);
+            $("#lastModifyTime").prop("disabled", true);
+
+            FaNameS.update({disabled: false});
+            form.render("select");
+
+        }
+    });
+</script>
+</body>
+</html>

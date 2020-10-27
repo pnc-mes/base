@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.StorePMDAO" >
+    <resultMap type="pnc.mesadmin.entity.StorePMInfo" id="StorePMInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="storeGd" column="storeGd" />
+        <result property="pMorGd" column="pMorGd" />
+        <result property="pMType" column="pMType" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!-- 根据仓库guid查询仓库权限信息 -->
+    <select id="SelectStorePMInfostoreGd" resultMap="StorePMInfoResult">
+        select * from tpm_storepminfo s WHERE s.StoreGd=#{guid}
+    </select>
+
+    <!--根据仓库的ruid-->
+    <select id="SelectStorePMInfoRuid" resultMap="StorePMInfoResult">
+        select * from tpm_storepminfo s WHERE s.Ruid=#{ruid}
+    </select>
+
+    <!--根据pMorGd查询信息-->
+    <select id="SelectStorePMInfopMorGd" resultMap="StorePMInfoResult">
+        select * from tpm_storepminfo s WHERE s.PMorGd=#{argpMorGd}
+    </select>
+
+ <!--根据pMorGd查询信息-->
+    <select id="SelectStorePMInfoByUserOrRole" resultMap="StorePMInfoResult">
+        select * from tpm_storepminfo s
+        WHERE s.StoreGd=#{argStoreGd}
+        AND s.PMorGd=#{argPMorGd}
+        AND s.pMType=#{argPMType}
+    </select>
+
+    <!-- 保存权限信息 -->
+    <insert id="InsertStorePMInfo">
+        INSERT INTO tpm_storepminfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,StoreGd,PMorGd,PMType,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{storeGd},#{pMorGd},#{pMType},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除权限信息 -->
+    <delete id="DeleteStorePMInfo">
+        DELETE FROM tpm_storepminfo WHERE StoreGd = #{storeGd}
+    </delete>
+
+    <!-- 更新权限信息 -->
+    <update id="UpdateStorePMInfo">
+        UPDATE tpm_storepminfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pMType != null">
+                pMType = #{pMType},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CompanyDAO">
+        <resultMap id="companyMap" type="pnc.mesadmin.entity.CompanyInfo">
+            <id column="Ruid" property="ruid"></id>
+            <result column="Guid" property="guid"></result>
+            <result column="CompanyCode" property="companyCode"></result>
+            <result column="CompanyName" property="companyName"></result>
+            <result column="Contactor" property="contactor"></result>
+            <result column="Address" property="address"></result>
+            <result column="DSource" property="dSource"></result>
+            <result column="Status" property="status"></result>
+            <result column="Creator" property="creator"></result>
+            <result column="CreateTime" property="createTime"></result>
+            <result column="LastModifyMan" property="lastModifyMan"></result>
+            <result column="LastModifyTime" property="lastModifyTime"></result>
+            <result column="Remark" property="remark"></result>
+        </resultMap>
+    <!--增加企业信息 张亮亮-->
+    <insert id="InsertCompanyInfo">
+        INSERT INTO `tpm_companyinfo`(Guid,CompanyCode,CompanyName,Contactor,Address,DSource,Status,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{companyCode},#{companyName},#{contactor},#{address},#{dSource},#{status},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <!--删除企业信息 张亮亮-->
+    <delete id="DeleteCompanyInfoByruid" parameterType="int">
+        DELETE  FROM `tpm_companyinfo` WHERE Ruid=#{ruid}
+    </delete>
+
+    <!--更新企业信息 张亮亮-->
+    <update id="UpdateConmpanyInfoByruid" parameterType="int">
+      UPDATE `tpm_companyinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="companyCode != null">
+                CompanyCode = #{ companyCode },
+            </if>
+            <if test="companyName != null">
+                CompanyName = #{ companyName },
+            </if>
+            <if test="contactor != null">
+                Contactor = #{ contactor },
+            </if>
+            <if test="address != null">
+                Address = #{ address },
+            </if>
+            <if test="status != null">
+                Status = #{ status },
+            </if>
+            <if test="dSource != null">
+                DSource = #{ dSource },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+    <!--查询所有企业信息 张亮亮-->
+    <select id="SelectAllCompanyInfo" resultMap="companyMap">
+        SELECT * FROM  `tpm_companyinfo`
+    </select>
+
+    <!--根据ruid查询企业信息 张亮亮-->
+    <select id="SelectCompanyInfoByRuid" resultMap="companyMap" parameterType="int">
+        SELECT * FROM  `tpm_companyinfo` where Ruid =#{ruid}
+    </select>
+
+
+    <!--根据guid查询企业信息，此查询用在工厂信息里面，根据工厂里面的企业id查询所属企业-->
+    <select id="SelectCompanyInfoByGuid" resultMap="companyMap" parameterType="string">
+        SELECT * FROM  `tpm_companyinfo` where Guid =#{guid}
+    </select>
+
+    <!--根据companyName查询企业信息 张亮亮-->
+    <select id="SelectCompanyInfoByCompanyName" resultMap="companyMap" parameterType="string">
+        SELECT * FROM  `tpm_companyinfo` where CompanyName =#{companyName}
+    </select>
+
+    <select id="SelectCompanyInfoBycompanyCode" resultMap="companyMap" parameterType="string">
+        SELECT * FROM  `tpm_companyinfo` where CompanyCode =#{companyCode}
+    </select>
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.EmailMessageDAO" >
+    <resultMap type="pnc.mesadmin.entity.EmailMessageInfo" id="ResInfoResult">
+        <id property="Ruid" column="Ruid" />
+        <result property="Guid" column="Guid" />
+        <result property="EmailName" column="EmailName" />
+        <result property="Description" column="Description" />
+        <result property="Subject" column="Subject" />
+        <result property="Message" column="Message" />
+        <result property="SenderGd" column="SenderGd" />
+        <result property="SMTPGd" column="SMTPGd" />
+        <result property="MessageFormat" column="MessageFormat" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyMan" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+   <select id="SelectAllEmailMessageInfo" resultMap="ResInfoResult">
+       select * from tpm_emailmessageinfo
+   </select>
+    <select id="SelectAllEmailMessageInfoByEmailName" resultMap="ResInfoResult" parameterType="string">
+       select * from tpm_emailmessageinfo where EmailName=#{EmailName}
+   </select>
+    <select id="SelectEmailMessageByID" resultMap="ResInfoResult">
+       select * from tpm_emailmessageinfo where Ruid = #{EmailRd}
+    </select>
+    <select id="SelectEmailMessageInfoByGuid" resultMap="ResInfoResult">
+          select * from tpm_emailmessageinfo where Guid = #{Guid}
+    </select>
+    <insert id="InsertEmailMessageInfo">
+        INSERT INTO tpm_emailmessageinfo (Guid,EmailName,Subject,Message,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{Guid},#{EmailName},#{Subject},#{Message},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark})
+    </insert>
+    <delete id="DeleteEmailMessageInfo">
+          DELETE FROM tpm_emailmessageinfo WHERE Ruid = #{Ruid}
+    </delete>
+    <update id="UpdateEmailMessageInfo">
+        UPDATE tpm_emailmessageinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Guid != null">
+                Guid = #{Guid},
+            </if>
+            <if test="EmailName != null">
+                EmailName = #{EmailName},
+            </if>
+            <if test="Subject != null">
+                Subject = #{Subject},
+            </if>
+            <if test="Message != null">
+                Message = #{Message},
+            </if>
+
+            <if test="Creator != null">
+                Creator = #{Creator},
+            </if>
+            <if test="CreateTime != null">
+                CreateTime = #{CreateTime},
+            </if>
+            <if test="LastModifyMan != null">
+                LastModifyMan = #{LastModifyMan},
+            </if>
+            <if test="LastModifyTime != null">
+                LastModifyTime = #{LastModifyTime},
+            </if>
+            <if test="Remark != null">
+                Remark = #{Remark}
+            </if>
+        </trim>
+        where Ruid = #{Ruid}
+    </update>
+</mapper>

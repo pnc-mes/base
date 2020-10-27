@@ -1,0 +1,24 @@
+package pnc.mesadmin.dto.GetShiftInfo;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+
+/**
+ * Created by PNC on 2018/6/19.
+ */
+public class GetShiftInfoReqBD00 implements Serializable{
+
+
+    @JsonProperty("ShiftRd")
+    private int  ShiftRd;
+    @JsonIgnore
+    public int getShiftRd() {
+        return ShiftRd;
+    }
+    @JsonIgnore
+    public void setShiftRd(int shiftRd) {
+        ShiftRd = shiftRd;
+    }
+}

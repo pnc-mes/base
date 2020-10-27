@@ -1,0 +1,585 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：物料类别管理
+* 创建人：CXJ
+* 创建时间：2020-09-10
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>物料类别管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类别代码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="MTCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类别名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="MTName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">主类别</label>
+                            <div class="layui-input-inline">
+                                <select id="mType_s" name="MaterialType" lay-verify="" lay-search>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+
+<!--- 子页面 -->
+<div id="content" style="display: none;">
+    <div class="layui-form layuimini-form" style="width: 90%;margin-top: 20px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">主类别</label>
+            <div class="layui-input-block">
+                <select id="mType" name="mType" lay-verify="" lay-search>
+
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级类别</label>
+            <div class="layui-input-block">
+                <select name="treeSelect" xm-select="treeSelect" xm-select-radio="" xm-select-search>
+
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label required">类别代码</label>
+            <div class="layui-input-block">
+                <input type="text" id="maTCode" name="maTCode" lay-verify="required" class="layui-input" lay-reqtext="代码不能为空" placeholder="请输入物料类别代码" />
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label required">类别名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="maTName" name="maTName" lay-verify="required" class="layui-input" placeholder="请输入物料类别名称" />
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">扩展字段</label>
+            <div class="layui-input-block">
+                <select id="expand" name="expand" lay-verify="" lay-search>
+
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea id="remark" name="remark" class="layui-textarea" placeholder="请输入备注信息"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 查看子页面 -->
+<div class="layui-form layuimini-form" id="readContent" style="display: none;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基础信息</li>
+            <li>其它</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">主类别</label>
+                    <div class="layui-input-block">
+                        <select id="mType_" name="mType" lay-verify="" disabled>
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">父级类别</label>
+                    <div class="layui-input-block">
+                        <select name="treeSelect" xm-select="treeSelect" xm-select-radio="" xm-select-search disabled="disabled">
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">类别代码</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="maTCode_" name="maTCode" lay-verify="required" class="layui-input inputRead" disabled />
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">类别名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="maTName_" name="maTName" lay-verify="required" class="layui-input inputRead" disabled />
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">扩展字段</label>
+                    <div class="layui-input-block">
+                        <select id="expand_" name="expand" lay-verify="" disabled>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="creator" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="createTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyMan" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea id="remark_" name="remark" class="layui-textarea inputRead" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form','element','treeTable','formSelects'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            treeTable = layui.treeTable,
+            formSelects = layui.formSelects;
+
+        //页面首次加载
+        load();
+
+        //加载扩展字段
+        requests({url: "/Expand/GetAllExpandNew", data: JSON.stringify({})
+        }, function (res) {
+            let list = res.data.list;
+
+            let s = "<option value=''>请选择</option>";
+
+            for(let i=0,len=list.length; i<len; i++){
+                s += "<option value='" + list[i].ExpandRd + "'>" + list[i].ExpandName + "</option>";
+            }
+
+            $("#expand").html(s);
+            $("#expand_").html(s);
+
+            form.render('select');
+        });
+
+        //加载主类别
+        requests({url: "/Material/GetMaTypeInfo", contentType: "application/x-www-form-urlencoded",data: {"ExecType": "00"}
+        }, function (res) {
+            let data = res.Data;
+
+            let s = "<option value=''>请选择</option>";
+
+            for(let i=0,len=data.length; i<len; i++){
+                s += "<option value='" + data[i].MaType + "'>" + data[i].TName + "</option>";
+            }
+
+            $("#mType").html(s);
+            $("#mType_").html(s);
+            $("#mType_s").html(s);
+
+            form.render('select');
+        });
+
+        //加载所有类别列表
+        formSelects.config('treeSelect', {
+            type: 'post',
+            head: 'application/json;charset=UTF-8',
+            keyName: 'MTCode',
+            keyVal: 'MTRd',
+            keyChildren: 'CMTInfo'
+        }, true);
+
+        //select下拉框选中触发事件
+        form.on("select", function(data){
+            //加载类别树
+            //loadTreeSelect(data.value);
+            formSelects.value('treeSelect', []);
+        });
+
+        loadTreeSelect();
+
+        //toolbar监听事件
+        treeTable.on('toolbar(currentTableId)', function (obj) {
+            if (obj.event === 'add') {
+                clear();
+                let index = layer.open({
+                    title: '添加物料类别',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#content"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //表格中按钮事件
+        treeTable.on('tool(currentTableId)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                //loadTreeSelect();
+
+                //获取选中id
+                let mtRd = data.MTRd;
+                requests({url: "/MaType/GetMTInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify({"MTRd": mtRd})
+                    }}, function (res) {
+                    let data = res.Data;
+
+                    clear();
+
+                    $("#mType").val(data.MaterialType);
+                    $("#maTCode").val(data.MTCode);
+                    $("#maTName").val(data.MTName);
+                    $("#expand").val(data.ExpandInfo == undefined || data.ExpandInfo.ExpandRd === 0 ? "" : data.ExpandInfo.ExpandRd);
+                    form.render();
+                    $("#remark").val(data.Remark);
+                    formSelects.value('treeSelect', [data.PMTRd]);
+
+                    let index = layer.open({
+                        title: '编辑类别',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin:true,
+                        shadeClose: true,
+                        area: ['50%', '70%'],
+                        content: $("#content"),
+                        btn: ['确认保存'],
+                        yes: function (index, layero) {
+                            save(index, 2, mtRd);
+                        }
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                });
+
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    requests({url: "/MaType/SaveMTInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                            "BusData": JSON.stringify({MTRd: data.MTRd})
+                        }}, function (res) {
+                        layer.msg("删除成功", {icon: 1});
+                        treeTable.reload('currentTableId');
+                        loadTreeSelect();
+                    });
+
+                    layer.close(index);
+                });
+            } else if(obj.event === 'read') {
+                read(data);
+
+                return false;
+            }
+        });
+
+        //监听行双击事件
+        treeTable.on('rowDouble(currentTableId)', function(obj){
+            read(obj.data);
+            return false;
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            treeTable.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: [
+                        {
+                            fieldName: "MaterialType",
+                            fieldOpt: "like",
+                            fieldVal: data.field.MaterialType
+                        },
+                        {
+                            fieldName: "maTCode",
+                            fieldOpt: "like",
+                            fieldVal: data.field.MTCode
+                        },
+                        {
+                            fieldName: "maTName",
+                            fieldOpt: "like",
+                            fieldVal: data.field.MTName
+                        },
+                        {
+                            fieldName: "Ruid",
+                            fieldOpt: "Order BY",
+                            fieldVal: ""
+                        }
+                    ]
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //查看
+        function read(data) {
+            //loadTreeSelect();
+
+            //获取选中id
+            let mtRd = data.MTRd;
+            requests({url: "/MaType/GetMTInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify({"MTRd": mtRd})
+                }}, function (res) {
+                let data = res.Data;
+
+                clear();
+
+                $("#mType_").val(data.MaterialType);
+                $("#maTCode_").val(data.MTCode);
+                $("#maTName_").val(data.MTName);
+                $("#expand_").val(data.ExpandInfo == undefined || data.ExpandInfo.ExpandRd === 0 ? "" : data.ExpandInfo.ExpandRd);
+                $("#remark_").val(data.Remark);
+                formSelects.value('treeSelect', [data.PMTRd]);
+                form.render();
+
+                $("#creator").val(data.Creator);
+                $("#createTime").val(data.CreateTime);
+                $("#lastModifyMan").val(data.LastModifyMan);
+                $("#lastModifyTime").val(data.LastModifyTime);
+
+                let index = layer.open({
+                    title: '查看类别',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#readContent"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+        }
+
+        //保存
+        function save(index, type, mtRd) {
+            //type-> 1.新增 2.编辑
+            let data = {
+                PMTRd: formSelects.value('treeSelect', 'valStr'),
+                MTCode: $("#maTCode").val(),
+                MTName: $("#maTName").val(),
+                ExpandRd: $("#expand").val(),
+                MaType: $("#mType").val(),
+                Remark: $("#remark").val()
+            };
+            if(type === 1){
+                requests({url: "/MaType/SaveMTInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    treeTable.reload('currentTableId');
+                    loadTreeSelect();
+                });
+            }else if(type === 2){
+                data.MTRd = mtRd;
+                requests({url: "/MaType/SaveMTInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    treeTable.reload('currentTableId');
+                    loadTreeSelect();
+                });
+            }
+        }
+
+        //初始化表格数据
+        function load() {
+            treeTable.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/MaType/GetAllMTNew",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                tree: {
+                    iconIndex: 1,
+                    isPidData: false,
+                    childName: 'CMTInfo',
+                },
+                cols: [
+                    [
+                        {field: 'MTRd', title: 'ID', singleLine:false, hide: true},
+                        {field: 'MTCode', title: '类别代码', singleLine:false},
+                        {field: 'MTName', title: '类别名称', singleLine:false},
+                        {field: 'MaType', title: '主类别', singleLine: false, hide: true},
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                skin: 'row '
+            });
+        }
+
+        //初始化类别树
+        function loadTreeSelect(type){
+            let data = {};
+            if(type !== undefined){
+                data.fields = [{
+                    fieldName: "Ruid",
+                    fieldOpt: "Order BY",
+                    fieldVal: ""
+                },{
+                    fieldName: "MaterialType",
+                    fieldOpt: "=",
+                    fieldVal: type
+                }];
+            }
+            formSelects.data('treeSelect', 'server', {
+                url: getBasePath() + '/MaType/GetAllMTNew',
+                data: data,
+                beforeSuccess: function(id, url, searchVal, result){
+                    return result.body.data.list;
+                }
+            });
+            formSelects.on('treeSelect', function () {
+                $("#mType").val("");
+                form.render();
+            });
+        }
+
+        //清空
+        function clear() {
+            $("#mType").val("");
+            $("#maTCode").val("");
+            $("#maTName").val("");
+            $("#expand").val("");
+            form.render();
+            $("#remark").val("");
+
+            $("#maTCode_").val("");
+            $("#maTName_").val("");
+            $("#expand_").val("");
+            $("#remark_").val("");
+
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+
+            formSelects.value('treeSelect', []);
+        }
+    });
+</script>
+</body>
+</html>

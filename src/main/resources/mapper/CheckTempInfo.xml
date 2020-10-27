@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckTempDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CheckTempInfo" id="CheckTempInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAll" resultMap="CheckTempInfoMap">
+        SELECT * FROM tpm_checktempinfo
+    </select>
+
+    <select id="SelectByRuid" resultMap="CheckTempInfoMap">
+        SELECT * FROM tpm_checktempinfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="CheckTempInfoMap">
+        SELECT * FROM tpm_checktempinfo where  Guid=#{guid}
+    </select>
+
+    <select id="SelectByName" resultMap="CheckTempInfoMap">
+        SELECT * FROM tpm_checktempinfo where  CheckTempName=#{name}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_checktempinfo(Guid,CheckTempName,Status,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{checkTempName},#{status},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <update id="UpdateByGuid">
+        UPDATE tpm_checktempinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="CheckTempName != null">
+                CheckTempName = #{CheckTempName},
+            </if>
+            <if test="Status != null">
+                Status = #{Status},
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark},
+            </if>
+        </trim>
+        WHERE Guid =#{guid}
+    </update>
+
+    <delete id="DeleteByGuid">
+        DELETE  FROM tpm_checktempinfo WHERE Guid =#{guid}
+    </delete>
+
+</mapper>
+

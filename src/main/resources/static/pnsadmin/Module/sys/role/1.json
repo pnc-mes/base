@@ -1,0 +1,23 @@
+[
+	{
+		"caption": "名称",
+		"name": "name",
+		"valtype": "00"
+	},
+	{
+		"caption": "日期",
+		"name": "date",
+		"valtype": "02"
+	},
+	{
+		"caption": "状态",
+		"name": "status",
+		"valtype": "01",
+		"data": "\"1001\":\"zhangsan\"|\"1002\":\"lisi\""
+	},
+	{
+		"caption": "工作",
+		"name": "job",
+		"valtype": "00"
+	}
+]

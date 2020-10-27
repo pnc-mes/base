@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.GSExpectLogDAO">
+
+    <resultMap type="pnc.mesadmin.entity.GSExpectLoginfo" id="GSExpectLogMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <insert id="InsertGSExpectLogInfo">
+      insert into  tpm_gsexpectloginfo(
+         Guid,LineName,SpecName,StationName,Batch,Msg,OpertName,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark
+        ) values(
+             #{Guid},#{LineName},#{SpecName},#{StationName},#{Batch},#{Msg},#{OpertName},#{Creator},#{CreateTime},#{LastModifyMan},#{LastModifyTime},#{Remark}
+        )
+     </insert>
+
+</mapper>

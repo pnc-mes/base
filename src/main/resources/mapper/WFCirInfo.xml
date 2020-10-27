@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.WFCirDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.WFCirInfo" id="WFCirInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="wFSpecGd" column="wFSpecGd" />
+		<result property="expression" column="expression" />
+		<result property="specVerGd" column="specVerGd" />
+        <result property="routeType" column="routeType" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <!-- 新增非正常工序流转信息  (By-pjf)-->
+    <insert id="InsertWFCir">
+        INSERT INTO tpm_wfcirinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,wFSpecGd,expression,specVerGd,routeType,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{wFSpecGd},#{expression},#{specVerGd},#{routeType},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 删除非正常工序流转信息  (By-pjf)-->
+    <delete id="DeleteWFCir">
+        DELETE FROM tpm_wfcirinfo WHERE Ruid = #{ argRuid }
+    </delete>
+
+    <!-- 根据WFSpecGd删除  (By-pjf)-->
+    <delete id="DeleteByWFSpecGd">
+        DELETE FROM tpm_wfcirinfo WHERE WFSpecGd = #{ argWFSpecGd }
+    </delete>
+
+    <!-- 根据WFSpecGd查询非正常工序流转信息  (By-pjf)-->
+	<select id="SelectByWFSpecGd" resultMap="WFCirInfoResult">
+        SELECT * FROM tpm_wfcirinfo WHERE WFSpecGd = #{ argWFSpecGd }
+	</select>
+
+    <!-- 根据WFSpecGd+线路类型查询非正常工序流转信息  (By-pjf)-->
+    <select id="SelectByWFGdRT" resultMap="WFCirInfoResult">
+        SELECT * FROM tpm_wfcirinfo WHERE WFSpecGd = #{ argWFSpecGd } AND RouteType = #{ argRouteType }
+    </select>
+</mapper>

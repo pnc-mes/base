@@ -1,0 +1,549 @@
+<!--
+* @Description 设备组
+* @Author yin.yang
+* @Param
+* @Return
+* @Exception
+*-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>设备组</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">名称</label>
+                            <div class="layui-input-inline" style="width: 250px">
+                                <input type="text" name="devGpName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary" lay-submit
+                                    lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加</button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="deviceGroupList" lay-filter="deviceGroupList" style="font-size: 5px"></table>
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="del">删除</a>
+        </script>
+    </div>
+</div>
+
+<!--- 新增页 -->
+<div id="content" style="display: none;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基础信息</li>
+            <li>其它</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form layuimini-form" lay-filter="addContent" id="addContent" style="width: 90%;margin-top: 20px;">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备组名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="devGroupName" name="devGroupName" required lay-verify="required"
+                                       lay-reqtext="设备组名称不能为空" placeholder="请输入设备组名称"
+                                       value="" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备名称</label>
+                            <div class="layui-input-block" style="width: 300px">
+                                <select name="devRd" xm-select="select_dev" xm-select-search-type="dl" xm-select-search>
+                                    <option value="">请选择设备进行添加</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="addDecDetail">添加
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <table class="layui-hide" id="addDeviceGroupList" lay-filter="addDeviceGroupList" style="font-size: 5px"></table>
+
+                <script type="text/html" id="addDeviceGroupTableBar">
+                    <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                </script>
+            </div>
+
+            <!--其它信息-->
+            <div class="layui-tab-item">
+                <form class="layui-form" lay-filter="addContentDetail-1" id="addContentDetail-1">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">创建人</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="creator" name="creator" lay-verify="required" disabled
+                                   class="layui-input inputRead">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">创建时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="createTime" name="createTime" lay-verify="required" disabled
+                                   class="layui-input inputRead">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">修改人</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="lastModifyMan" name="lastModifyMan" lay-verify="required" disabled
+                                   class="layui-input inputRead">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">修改时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="lastModifyTime" name="lastModifyTime" lay-verify="required" disabled
+                                   class="layui-input inputRead">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <textarea id="remark_detail" name="remark_detail" class="layui-textarea inputRead"
+                                      disabled></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 详情页 -->
+<div class="layui-form layuimini-form" id="readContent" lay-filter="readContent" style="display: none;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基础信息</li>
+            <li>其它</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <table class="layui-hide" id="addDeviceGroupList_dt" lay-filter="addDeviceGroupList_dt" style="font-size: 5px"></table>
+            </div>
+
+            <!--其它信息-->
+            <div class="layui-tab-item">
+                <form class="layui-form" lay-filter="addContentDetail-2" id="addContentDetail-2">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">创建人</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="creator" lay-verify="required" disabled
+                                   class="layui-input inputRead">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">创建时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="createTime" lay-verify="required" disabled
+                                   class="layui-input inputRead">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">修改人</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="lastModifyMan" lay-verify="required" disabled
+                                   class="layui-input inputRead">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">修改时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="lastModifyTime" lay-verify="required" disabled
+                                   class="layui-input inputRead">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <textarea  name="remark_detail" class="layui-textarea inputRead"
+                                      disabled></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'formSelects', 'element', 'laydate', 'util'], function () {
+        var table = layui.table,
+            form = layui.form,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            util = layui.util,
+            laydate = layui.laydate,
+            $ = layui.jquery;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#entryTime' //指定元素
+        });
+
+        /**
+         * 列表分页
+         * */
+        table.render({
+            id: 'deviceGroupList',
+            height: 650,
+            elem: '#deviceGroupList',
+            url: getBasePath() + '/DeviceG/GetDevGroupList', //数据接口
+            method: 'post', //类型
+            title: '设备信息',
+            toolbar: '#toolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            totalRow: true, //开启合计
+            page: true,  //开启分页
+            limits: [10, 30, 50, 100, 500],
+            cols: [
+                [
+                    {field: 'devGpName', title: '设备组名称', width: 400}
+                    , {field: 'creator', title: '创建人', width: 160}
+                    , {
+                    field: 'createTime', title: '时间', sort: true, width: 200, templet: function (d) {
+                        return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                    , {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                ]
+            ],
+            parseData: function (res) {
+                return {
+                    "code": res.status, //解析接口状态
+                    "msg": res.body.msgDes, //解析提示文本
+                    "count": res.body.data == null ? 0 : res.body.data.total, //解析数据长度
+                    "data": res.body.data == null ? "" : res.body.data.records //解析数据列表
+                };
+            }
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('deviceGroupList', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    "devGpName": data.field.devGpName,
+                }
+            }, 'data');
+
+            return false;
+        });
+
+
+        /**
+         * 新增操作
+         * */
+        //toolbar监听事件
+        table.on('toolbar(deviceGroupList)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                clear();
+                let index = layer.open({
+                    title: '设备组管理',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['60%', '80%'],
+                    content: $("#content"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //==========================新增页
+        table.render({
+            id: 'addDeviceGroupList',
+            elem: '#addDeviceGroupList',
+            url: '',
+            data: [],
+            height: 460,
+            limit: 1000,
+            title: 'BOM信息',
+            toolbar: '#addDeviceGrouptoolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'devRd', title: 'id', hide: true}
+                    , {field: 'devName', title: '设备名称',  width: 500}
+                    , {field: 'devCode', title: '设备编号',  width: 350}
+                    , {title: '操作', width: 150, toolbar: '#addDeviceGroupTableBar', align: "center"}
+                ]
+            ]
+        });
+
+        //添加设备列表事件
+        form.on('submit(addDecDetail)', function (data) {
+            var dataBak = [];
+            var dataBak1 = [];
+            var tableBak = table.cache.addDeviceGroupList;
+            for (var i = 0; i < tableBak.length; i++) {
+                dataBak.push(tableBak[i]);
+                dataBak1.push(tableBak[i]);
+            }
+            var datas = formSelects.value('select_dev', 'all');
+            var isTrue = 0;
+            $.each(datas, function (index, item) {
+                $.each(dataBak1, function (index1, item1) {
+                    if (item1.devCode == item.devCode) {
+                        layer.msg(item.devCode + "重复");
+                        isTrue = 1;
+                        return;
+                    }
+                });
+                let data = {
+                    "devRd": item.ruid,
+                    "devName": item.devName,
+                    "devCode": item.devCode
+                };
+                dataBak.push(data);
+            });
+
+            table.reload('addDeviceGroupList', {
+                data: isTrue == 0 ? dataBak : dataBak1
+            });
+            formSelects.value('select_dev', []);
+            return false;
+        });
+
+        //表格中按钮事件
+        table.on('tool(addDeviceGroupList)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'delete') {
+                obj.del();
+                return false;
+            }
+        });
+
+        /**
+         * 表格操作项
+         * */
+        //表格中按钮事件
+        table.on('tool(deviceGroupList)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'read') {
+                clear();
+                read(data.ruid);
+                let index = layer.open({
+                    title: '设备组管理',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['70%', '80%'],
+                    content: $("#readContent"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            } else if (obj.event =='del') {
+                layer.confirm('确定删除！', function (index) {
+                    requests({
+                        url: "/DeviceG/SaveDevGpInfo",
+                        contentType: "application/x-www-form-urlencoded",
+                        data: {"ExecType": "01","busData": JSON.stringify({"DevGRd":data.ruid})}
+                    }, function (res) {
+                        layer.msg("删除成功", {icon: 1});
+                        table.reload('deviceReload');
+                    });
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event =='edit') {
+                clear();
+                read(data.ruid);
+                let index = layer.open({
+                    title: '设备组管理',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['70%', '80%'],
+                    content: $("#content"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 2,data.ruid);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //查看
+        table.render({
+            id: 'addDeviceGroupList_dt',
+            elem: '#addDeviceGroupList_dt',
+            url: '',
+            data: [],
+            height: 460,
+            limit: 1000,
+            title: 'BOM信息',
+            toolbar: '#addDeviceGrouptoolbar',  //开启头部工具栏，并为其绑定左侧模板
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+                    {field: 'devRd', title: 'id', hide: true}
+                    , {field: 'devName', title: '设备名称',  width: 550}
+                    , {field: 'devCode', title: '设备编号',  width: 450}
+                ]
+            ]
+        });
+        function read(data) {
+            requests({url: "/DeviceG/GetDevGInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00","BusData": JSON.stringify({"DevGRd":data})}}, function (res) {
+                var dataBak = [];
+                var data = res.Data;
+                $.each(res.Data.DevInfo,function (index,item) {
+                    dataBak.push({
+                        "devRd": item.DevRd,
+                        "devName": item.DevName,
+                        "devCode": item.DevName
+                    });
+                });
+                table.reload('addDeviceGroupList', {
+                    data: dataBak
+                });
+                table.reload('addDeviceGroupList_dt', {
+                    data: dataBak
+                });
+                form.val('addContent', {
+                    devGroupName: data.DevGpName
+                });
+                form.val('addContentDetail-1', {
+                    "creator":data.Creator,
+                    "createTime":util.toDateString(data.CreateTime, "yyyy-MM-dd HH:mm:ss"),
+                    "lastModifyMan":data.LastModifyMan,
+                    "lastModifyTime":data.LastModifyTime,
+                    "remark_detail":data.Remark
+                });
+
+                form.val('addContentDetail-2', {
+                    "creator":data.Creator,
+                    "createTime": util.toDateString(data.CreateTime, "yyyy-MM-dd HH:mm:ss"),
+                    "lastModifyMan":data.LastModifyMan,
+                    "lastModifyTime":data.LastModifyTime,
+                    "remark_detail":data.Remark
+                });
+
+
+            });
+
+        }
+
+        //保存
+        function save(index, type, id) {
+            //type-> 1.新增 2.编辑
+            let addcon=form.val('addContent');
+            let dataBak = [];
+            let tableBak = table.cache.addDeviceGroupList;
+            for (let i = 0; i < tableBak.length; i++) {
+                if (tableBak[i].devRd!=undefined) {
+                    let tableBakData={
+                        "DevRd":tableBak[i].devRd
+                    };
+                    dataBak.push(tableBakData);
+                }
+            }
+            let data = {
+                "DevGRd":id,
+                "DevGpName": addcon.devGroupName,
+                "DevInfo": dataBak,
+            };
+            if (type === 1) {
+                requests({url: "/DeviceG/SaveDevGpInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00","busData": JSON.stringify(data)}}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('deviceGroupList');
+                });
+            } else if (type === 2) {
+                requests({url: "/DeviceG/SaveDevGpInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02","busData": JSON.stringify(data)}}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('deviceGroupList');
+                });
+            }
+        }
+
+
+        //select查询
+        formSelects.config('select_dev', {
+            type: 'post',
+            head: 'application/json;charset=UTF-8',
+        }, true);
+
+        formSelects.data('select_dev', 'server', {
+            url: getBasePath() + '/BaseRequestSelect/GetAllDev',
+            beforeSuccess: function (id, url, searchVal, result) {
+                result = result.body.data;
+                $.each(result, function (index, item) {
+                    item.name = item.devName;
+                    item.value = item.ruid;
+                });
+                return result;
+            }
+        });
+
+        formSelects.render('select_dev', {
+            template: function (name, value, selected, disabled) {
+                return value.devName + '<span style="position: absolute; right: 0; color: #A0A0A0; font-size: 12px;">' + value.devCode + '</span>';
+            }
+        });
+
+        //清空
+        function clear() {
+            $("#addContent")[0].reset();
+            table.reload('addDeviceGroupList', {
+                data: []
+            });
+            formSelects.value('select_dev', []);
+            form.render();
+        }
+    });
+
+</script>
+</html>

@@ -1,0 +1,228 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：计划管理
+* 创建人：cxj
+* 创建时间：2020-09-17
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>无源创批</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .Dwidth{
+            width: 40%
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <blockquote class="layui-elem-quote layui-text">
+            批次信息
+        </blockquote>
+        <form class="layui-form layuimini-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">物料</label>
+                <div class="layui-input-block">
+                    <div id="maCode" class="xm-select-demo Dwidth"></div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">创批数</label>
+                <div class="layui-input-block">
+                    <input type="text" id="SplitBCount" lay-verify="required|number" autocomplete="off" class="layui-input Dwidth">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label required">每批数量</label>
+                <div class="layui-input-block">
+                    <input type="text" id="BCount" lay-verify="required|number" autocomplete="off" class="layui-input Dwidth">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label required" >打印模板</label>
+                <div class="layui-input-block ">
+                    <div id="printTemp" class="xm-select-demo Dwidth" lay-verify="required" value=""></div>
+                </div>
+
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">打印机</label>
+                <div class="layui-input-block">
+                    <div id="printer" class="xm-select-demo Dwidth" ></div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <input type="checkbox" id="IsPrintPack" title="是否打印包裹批次">
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn"  id="save">创建批次</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form','element','table','xmSelect'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            xmSelect = layui.xmSelect;
+
+        //单选通用设置
+        let radioSetting = {
+            radio: true
+            ,clickClose: true
+            ,theme: {
+                color: '#5FB878',
+            },model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            },toolbar: {
+                show: true,
+            },
+            filterable: true
+        };
+
+        //tree通用设置
+        let treeSetting = {
+            show: true,
+            showFolderIcon: true,
+            showLine: true,
+            indent: 20,
+            expandedKeys: true,
+            strict: false,
+            simple: false
+        };
+
+        //加载物料信息
+        let maCode = xmSelect.render({
+            el: '#maCode'
+            ,...radioSetting
+            ,template({ item, sels, name, value }){
+                return item.MaCode  + '<span style="position: absolute; right: 10px; color: #8799a3">'+ item.MaName + '</span>'
+            }
+            ,prop: {
+                name: 'MaCode',
+                value: 'MaVerRd'
+            }
+            ,pageRemote: true
+            ,remoteMethod: function(val, cb, show, pageIndex){
+                requests({url: "/Material/GetAllMaNew", data: JSON.stringify({fields: [{
+                    fieldName: "ruid",
+                    fieldOpt: "Order BY",
+                    fieldVal: "desc"
+                },{
+                    fieldName: "materialCode",
+                    fieldOpt: "like",
+                    fieldVal: val
+                }]})}, function (res) {
+                    cb(res.data.list, res.data.totalPage);
+                });
+            }
+        });
+
+        //加载打印模板
+        let printTemp = xmSelect.render({
+            el: '#printTemp'
+            ,...radioSetting
+            ,prop: {
+                name: 'PtName',
+                value: 'PtRd',
+            }
+            ,data:[]
+        });
+        requests({url: "/PrintT/GetAllPtNew"},function (res) {
+            printTemp.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载打印机
+        let printer = xmSelect.render({
+            el: '#printer'
+            ,...radioSetting
+            ,prop: {
+                name: 'PrName',
+                value: 'PrRd',
+            }
+            ,data:[]
+        });
+        requests({url: "/Printer/GetAllPrNew"},function (res) {
+            printer.update({
+                data: res.data.list,
+                autoRow: true
+            })
+
+        });
+        //select下拉框选中触发事件
+        form.on("select", function(data){
+        });
+
+        //保存事件
+        $("#save").click(function () {
+            let data = {
+                WoSource: "00",
+                MaVerRd: maCode.getValue("valueStr"),
+                PrintTRd: printTemp.getValue("valueStr"),
+                PrintRd: printer.getValue("valueStr"),
+                SplitBCount: $("#SplitBCount").val(),
+                BCount: $("#BCount").val(),
+                IsPrintPack: $("#IsPrintPack").prop("checked")? "00" : "01",
+                JStartDate: "",
+                JFinishDate: "",
+                IsPrint: '00'
+            };
+
+            if (data.MaVerRd === undefined || data.MaVerRd.trim() === ''){
+                layer.msg("请选择物料", {icon: 2});
+                return;
+            }
+            if (data.SplitBCount === undefined || data.SplitBCount.trim() === ''|| !(/(^[1-9]\d*$)/).test(data.SplitBCount.trim())){
+                layer.msg("创批数不能为空且需为正整数", {icon: 2});
+                return;
+            }
+            if (data.BCount === undefined || data.BCount.trim() === ''||data.BCount.trim() == 0||!(/^\d+(\.\d+)?$/).test(data.BCount.trim())){
+                layer.msg("每批数量不能为空且需为正数", {icon: 2});
+                return;
+            }
+            if (data.PrintTRd === undefined || data.PrintTRd.trim() === ''){
+                layer.msg("请选择打印模板", {icon: 2});
+                return;
+            }
+
+            requests({url: "/Batch/SaveBatchInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                    "BusData": JSON.stringify(data)
+                }}, function (res) {
+                layer.msg("创建成功", {icon: 1});
+            });
+        });
+    });
+</script>
+</body>
+</html>

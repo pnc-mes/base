@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MVDtlDAO" >
+    <resultMap type="pnc.mesadmin.entity.MVDtlInfo" id="mVDtlInfoMap">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="mVTkGd" column="mVTkGd" />
+        <result property="materialCode" column="materialCode" />
+        <result property="materialName" column="materialName" />
+        <result property="BarType" column="BarType" />
+        <result property="batch" column="batch" />
+        <result property="mOStoreGd" column="mOStoreGd" />
+        <result property="mONum" column="mONum" />
+        <result property="mIStoreGd" column="mIStoreGd" />
+        <result property="mINum" column="mINum" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <insert id="InsertMVDtlInfo">
+        INSERT INTO tpm_mvdtlinfo
+        (Guid,MVTkGd,MaterialCode,MaterialName,BarType,Batch,MOStoreGd,MONum,
+        MIStoreGd,MINum,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES
+        (#{guid},#{mVTkGd},#{materialCode},#{materialName},#{BarType},#{batch},#{mOStoreGd},#{mONum},
+        #{mIStoreGd},#{mINum},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+    <!--zll-->
+    <select id="SelectMVDtlInfoBymVTkGd" parameterType="string" resultMap="mVDtlInfoMap">
+        SELECT * FROM `tpm_mvdtlinfo` WHERE mVTkGd=#{mVTkGd}
+    </select>
+</mapper>

@@ -1,0 +1,1061 @@
+<!--
+* 公司名称：驭航信息技术（上海）有限公司
+* 系统名称：PNC-MES管理系统
+* 子系统名称：物料管理
+* 创建人：pjf
+* 创建时间：2020-09-11
+* 修改人：
+* 修改时间：
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>物料管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/layui-v2.5.5/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuimini/css/public.css}" media="all">
+    <style>
+        .inputRead {
+            background: #f2f2f2;
+        }
+        .dPanel{
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">主类别</label>
+                            <div class="layui-input-inline">
+                                <select id="mType_s" name="MaterialType" lay-verify="" lay-search>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">物料代码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="MaCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">物料名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="MaName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-read" lay-event="read">查看</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+
+<!--- 子页面 -->
+<div id="content" style="display: none;">
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基本资料</li>
+            <li>物流信息</li>
+            <li>工艺信息</li>
+            <li>包装规格</li>
+            <li>其它</li>
+        </ul>
+        <div class="layui-form layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-row">
+                    <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                        <div class="dPanel">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label required">物料代码</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="maCode" name="maCode" lay-verify="required" class="layui-input" lay-reqtext="代码不能为空" placeholder="请输入物料代码" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">物料名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="maName" name="maName" lay-verify="required" class="layui-input" placeholder="请输入物料名称" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">物料描述</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="maDes" name="maDes" lay-verify="required" class="layui-input" placeholder="请输入物料描述" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">物料家族</label>
+                                <div class="layui-input-block">
+                                    <div id="maFamily" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">企业</label>
+                                <div class="layui-input-block">
+                                    <div id="maCompany" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">状态</label>
+                                <div class="layui-input-block">
+                                    <div id="status" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                        <div class="dPanel">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label required">物料类别</label>
+                                <div class="layui-input-block">
+                                    <div id="maType" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">物料条码</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="cusMacCode" name="cusMacCode" lay-verify="required" class="layui-input" placeholder="请输入物料条码" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">单位</label>
+                                <div class="layui-input-block">
+                                    <div id="unit" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">序号规则</label>
+                                <div class="layui-input-block">
+                                    <div id="sn" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label required">物料标签</label>
+                                <div class="layui-input-block">
+                                    <div id="printT" class="xm-select-demo"></div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item layui-form-text">
+                                <div class="layui-input-block">
+                                    <input id="isBatch" type="checkbox" lay-filter="checkbox" title="启用批次">
+
+                                    <input id="isExem" type="checkbox" lay-filter="checkbox" title="免检">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <!-- 物流信息 -->
+                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                    <div class="dPanel">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label required">最低库存</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="minStore" name="minStore" lay-verify="required" class="layui-input" />
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label required">最大库存</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="maxStore" name="maxStore" lay-verify="required" class="layui-input" />
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">订货号</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="orderNum" name="orderNum" lay-verify="required" class="layui-input" />
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">品牌</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="brand" name="brand" lay-verify="required" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                    <div class="dPanel">
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label required">制造商</label>
+                            <div class="layui-input-block">
+                                <div id="supplier" class="xm-select-demo"></div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label required">客户代码</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="cusMaCode" name="cusMaCode" lay-verify="required" class="layui-input" />
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label required">原厂代码</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="suMaCode" name="suMaCode" lay-verify="required" class="layui-input" />
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label required">配送规则</label>
+                            <div class="layui-input-block">
+                                <input id="minCheckbox" type="checkbox" lay-filter="checkbox" name="like[write]" title="按最小包装配送">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text" id="minPCheck" style="display: none;">
+                            <label class="layui-form-label required">最小包装数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="minPackNum" name="minPackNum" lay-verify="number" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <!-- 工艺信息 -->
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">工艺流程</label>
+                    <div class="layui-input-block">
+                        <div id="workFlow" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">BOM</label>
+                    <div class="layui-input-block">
+                        <div id="bom" class="xm-select-demo"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+                <!-- 包装规则 -->
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">栈板包装</label>
+                    <div class="layui-input-block">
+                        <div id="pack1" class="xm-select-demo"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label required">箱包包装</label>
+                    <div class="layui-input-block">
+                        <div id="pack2" class="xm-select-demo"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item" id="other">
+                <!-- 其它 -->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="creator" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="createTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改人</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyMan" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">修改时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="lastModifyTime" name="name" lay-verify="required" disabled class="layui-input inputRead">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea id="remark" name="remark" class="layui-textarea inputRead" disabled></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/static/layuimini/lib/layui-v2.5.5/layui.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/js/lay-config.js}" charset="utf-8"></script>
+<script th:src="@{/static/layuimini/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/static/utils/commons.js}" charset="utf-8"></script>
+<script>
+    layui.use(['form','element','table','xmSelect'], function () {
+        let $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            xmSelect = layui.xmSelect;
+
+        //页面首次加载
+        load();
+
+        //单选通用设置
+        let radioSetting = {
+            radio: true
+            ,clickClose: true
+            ,theme: {
+                color: '#5FB878',
+            },model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            },toolbar: {
+                show: true,
+            },
+            filterable: true
+        }
+
+        //tree通用设置
+        let treeSetting = {
+            show: true,
+            showFolderIcon: true,
+            showLine: true,
+            indent: 20,
+            expandedKeys: true,
+            strict: false,
+            simple: false
+        }
+
+        let types = {
+            radio: true
+            ,clickClose: true
+            ,filterable: true
+            ,tree: treeSetting
+            ,data: []
+        };
+
+        //加载物料类别
+        let maTypeS = xmSelect.render({
+            el: '#maType'
+            ,...radioSetting
+            ,prop: {
+                name: 'TName',
+                value: 'MaType'
+            }
+        });
+
+        //加载主类别
+        requests({url: "/Material/GetMaTypeInfo", contentType: "application/x-www-form-urlencoded",data: {"ExecType": "00"}
+        }, function (res) {
+            let data = res.Data;
+
+            let s = "<option value=''>请选择</option>";
+
+            for(let i=0,len=data.length; i<len; i++){
+                s += "<option value='" + data[i].MaType + "'>" + data[i].TName + "</option>";
+            }
+
+            $("#mType_s").html(s);
+
+            form.render('select');
+
+            maTypeS.update({
+                data: data,
+                autoRow: true
+            });
+        });
+
+        /*let maTypeS = xmSelect.render({
+            el: '#maType'
+            ,...types
+            ,prop: {
+                name: 'MTCode',
+                value: 'MTRd',
+                children: 'CMTInfo'
+            }
+        });
+        let maTypeS2 = xmSelect.render({
+            el: '#maType2'
+            ,...types
+            ,prop: {
+                name: 'MTCode',
+                value: 'MTGd',
+                children: 'CMTInfo'
+            }
+        });
+        requests({url: "/MaType/GetAllMTNew"}, function (res) {
+            maTypeS.update({
+                data: res.data.list,
+                autoRow: true
+            });
+            maTypeS2.update({
+                data: res.data.list,
+                autoRow: true
+            });
+        });*/
+
+        //加载物料家族
+        let maFamilyS = xmSelect.render({
+            el: '#maFamily'
+            ,...types
+            ,prop: {
+                name: 'PdfName',
+                value: 'PdfRd',
+            }
+            ,data: []
+        });
+        requests({url: "/PF/GetAllPdFamilyNew"}, function (res) {
+            maFamilyS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载企业信息
+        let maCompanyS = xmSelect.render({
+            el: '#maCompany'
+            ,...radioSetting
+            ,prop: {
+                name: 'CpName',
+                value: 'CpRd',
+            }
+            ,data: []
+        });
+        requests({url: "/Cp/GetAllCpNew"}, function (res) {
+            maCompanyS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载单位信息
+        let unitS = xmSelect.render({
+            el: '#unit'
+            ,...radioSetting
+            ,prop: {
+                name: 'UnitName',
+                value: 'UnitRd',
+            }
+            ,data: []
+        });
+        requests({url: "/Unit/GetAllUnitNew"}, function (res) {
+            unitS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载序号规则信息
+        let snS = xmSelect.render({
+            el: '#sn'
+            ,...radioSetting
+            ,prop: {
+                name: 'SNName',
+                value: 'SNRd',
+            }
+            ,data: []
+        });
+        requests({url: "/SN/GetAllSNNew"}, function (res) {
+            snS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载打印模板信息
+        let ptS = xmSelect.render({
+            el: '#printT'
+            ,...radioSetting
+            ,prop: {
+                name: 'PtName',
+                value: 'PtRd',
+            }
+            ,data: []
+        });
+        requests({url: "/PrintT/GetAllPtNew"}, function (res) {
+            ptS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载状态
+        let statusS = xmSelect.render({
+            el: '#status'
+            ,radio: true
+            ,clickClose: true
+            ,theme: {
+                color: '#5FB878',
+            }
+            ,model: {
+                icon: 'hidden',
+                label: {
+                    type: 'text'
+                }
+            }
+            ,data: [{name: '激活', value: '00'},{name: '未激活', value: '01'}]
+        });
+
+        //加载供应商信息
+        let supplierS = xmSelect.render({
+            el: '#supplier'
+            ,...radioSetting
+            ,template({ item, sels, name, value }){
+                return item.SupName  + '<span style="position: absolute; right: 10px; color: #8799a3">'+ item.SupCode + '</span>'
+            }
+            ,prop: {
+                name: 'SupName',
+                value: 'SupRd',
+            }
+            ,data: []
+        });
+        requests({url: "/Supplier/GetAllSupNew"}, function (res) {
+            supplierS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载workflow信息
+        let workFlowS = xmSelect.render({
+            el: '#workFlow'
+            ,filterable: true
+            ,clickClose: true
+            ,prop: {
+                name: 'WfName',
+                value: 'WfVerRd',
+            }
+            ,data: []
+        });
+        requests({url: "/WF/GetAllWfNew", data: JSON.stringify({fields: [{
+            fieldName: "Status",
+            fieldOpt: "=",
+            fieldVal: "00"
+        }]})}, function (res) {
+            workFlowS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载BOM信息
+        let bomS = xmSelect.render({
+            el: '#bom'
+            ,...radioSetting
+            ,template({ item, sels, name, value }){
+                return item.BomName  + '<span style="position: absolute; right: 10px; color: #8799a3">'+ item.BomCode + '</span>'
+            }
+            ,prop: {
+                name: 'BomName',
+                value: 'BomRd',
+            }
+            ,data: []
+        });
+        requests({url: "/BOM/GetAllBOMNew", data: JSON.stringify({fields: [{
+            fieldName: "Status",
+            fieldOpt: "=",
+            fieldVal: "00"
+        }]})}, function (res) {
+            bomS.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //加载包装规则
+        let packS1 = xmSelect.render({
+            el: '#pack1'
+            ,...radioSetting
+            ,prop: {
+                name: 'MPName',
+                value: 'MPRd',
+            }
+            ,data: []
+        });
+        requests({url: "/PackSp/GetAllMPKNew", data: JSON.stringify({fields: [{
+            fieldName: "PackType",
+            fieldOpt: "=",
+            fieldVal: "00"
+        }]})}, function (res) {
+            packS1.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+        let packS2 = xmSelect.render({
+            el: '#pack2'
+            ,...radioSetting
+            ,prop: {
+                name: 'MPName',
+                value: 'MPRd',
+            }
+            ,data: []
+        });
+        requests({url: "/PackSp/GetAllMPKNew", data: JSON.stringify({fields: [{
+                    fieldName: "PackType",
+                    fieldOpt: "=",
+                    fieldVal: "01"
+                }]})}, function (res) {
+            packS2.update({
+                data: res.data.list,
+                autoRow: true
+            })
+        });
+
+        //select下拉框选中触发事件
+        form.on("select", function(data){
+            //加载类别树
+            //loadTreeSelect(data.value);
+            //formSelects.value('treeSelect', []);
+        });
+
+        //checkbox触发事件
+        form.on("checkbox(checkbox)", function (data) {
+            if(data.elem.checked){
+                $("#minPCheck").show();
+            }else{
+                $("#minPCheck").hide();
+            }
+        });
+
+        //toolbar监听事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {
+                clear();
+                let index = layer.open({
+                    title: '添加物料',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#content"),
+                    btn: ['确认保存'],
+                    yes: function (index, layero) {
+                        save(index, 1);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            }
+        });
+
+        //表格中按钮事件
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            if (obj.event === 'edit') {
+                //获取选中id
+                let maVerRd = data.MaVerRd;
+                requests({url: "/Material/GetMaInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                        "BusData": JSON.stringify({"MaVerRd": maVerRd})
+                    }}, function (res) {
+                    let data = res.Data;
+
+                    clear();
+
+                    loadData(data, false);
+
+                    $("#maCode").addClass("inputRead");
+                    $("#maCode").prop("disabled", true);
+
+                    let index = layer.open({
+                        title: '编辑物料',
+                        type: 1,
+                        shade: 0.2,
+                        maxmin:true,
+                        shadeClose: true,
+                        area: ['50%', '70%'],
+                        content: $("#content"),
+                        btn: ['确认保存'],
+                        yes: function (index, layero) {
+                            save(index, 2, maVerRd);
+                        }
+                    });
+                    $(window).on("resize", function () {
+                        layer.full(index);
+                    });
+                });
+
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    requests({url: "/Material/SaveMaInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                            "BusData": JSON.stringify({MaVerRd: data.MaVerRd})
+                        }}, function (res) {
+                        layer.msg("删除成功", {icon: 1});
+                        table.reload('currentTableId');
+                    });
+
+                    layer.close(index);
+                });
+            } else if(obj.event === 'read') {
+                read(data);
+
+                return false;
+            }
+        });
+
+        //监听行双击事件
+        table.on('rowDouble(currentTableFilter)', function(obj){
+            read(obj.data);
+            return false;
+        });
+
+        //监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            let fields = [];
+            if(data.field.MaterialType !== undefined && data.field.MaterialType !== ""){
+                fields.push({
+                    fieldName: "MaterialType",
+                    fieldOpt: "=",
+                    fieldVal: data.field.MaterialType
+                });
+            }
+            if(data.field.select !== undefined && data.field.select !== ""){
+                fields.push({
+                    fieldName: "MaTypeGd",
+                    fieldOpt: "=",
+                    fieldVal: data.field.select
+                });
+            }
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    fields: [
+                        ...fields,
+                        {
+                            fieldName: "materialCode",
+                            fieldOpt: "like",
+                            fieldVal: data.field.MaCode
+                        },
+                        {
+                            fieldName: "materialName",
+                            fieldOpt: "like",
+                            fieldVal: data.field.MaName
+                        },
+                        {
+                            fieldName: "Ruid",
+                            fieldOpt: "Order BY",
+                            fieldVal: ""
+                        }
+                    ]
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //查看
+        function read(data) {
+            //获取选中id
+            let maVerRd = data.MaVerRd;
+            requests({url: "/Material/GetMaInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "01",
+                    "BusData": JSON.stringify({"MaVerRd": maVerRd})
+                }}, function (res) {
+                let data = res.Data;
+
+                clear();
+
+                loadData(data, true);
+
+                let index = layer.open({
+                    title: '查看物料',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['50%', '70%'],
+                    content: $("#content"),
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            });
+        }
+
+        //保存
+        function save(index, type, maVerRd) {
+            //type-> 1.新增 2.编辑
+            let data = {
+                MaCode: $("#maCode").val(),
+                MaName: $("#maName").val(),
+                MaDes: $("#maDes").val(),
+                MaBarCode: $("#cusMacCode").val(),
+                Version: 1,
+                MaTRd: maTypeS.getValue("valueStr"),
+                WFInfo: workFlowS.getValue().map(o => { return { WfVerRd: o.WfVerRd } }),
+                BOMRd: bomS.getValue("valueStr"),
+                SRRd: snS.getValue("valueStr"),
+                PtRd: ptS.getValue("valueStr"),
+                UnitRd: unitS.getValue("valueStr"),
+                CpRd: maCompanyS.getValue("valueStr"),
+                MinPQ: $("#minPackNum").val(),
+                SuName: supplierS.getValue("nameStr"),
+                SuMaCode: $("#suMaCode").val(),
+                CusMaCode: $("#cusMaCode").val(),
+                PDFRd: maFamilyS.getValue("valueStr"),
+                TrayPSpRd: packS1.getValue("valueStr"),
+                BoxPSpRd: packS2.getValue("valueStr"),
+                IsBatch: $("#isBatch").prop("checked") ? "00" : "01",
+                IsExem: $("#isExem").prop("checked") ? "00" : "01",
+                DisRule: $("#minCheckbox").prop("checked") ? "01" : "00",
+                MinSNum: $("#minStore").val(),
+                MaxSNum: $("#maxStore").val(),
+                Remark: $("#remark").val(),
+                MaPropertyInfo: [],
+                ReMaInfo: []
+            };
+            if(type === 1){
+                requests({url: "/Material/SaveMaInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "00",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("新增成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }else if(type === 2){
+                data.MaVerRd = maVerRd;
+                requests({url: "/Material/SaveMaInfo", contentType: "application/x-www-form-urlencoded", data: {"ExecType": "02",
+                        "BusData": JSON.stringify(data)
+                    }}, function (res) {
+                    layer.msg("保存成功", {icon: 1});
+                    layer.close(index);
+                    table.reload('currentTableId');
+                });
+            }
+        }
+
+        //初始化表格数据
+        function load() {
+            table.render({
+                elem: '#currentTableId',
+                url: getBasePath() + "/Material/GetAllMaNew",
+                method: 'post',
+                contentType: 'application/json',
+                toolbar: '#toolbar',
+                where: {
+                    fields: [{
+                        fieldName: "Ruid",
+                        fieldOpt: "Order BY",
+                        fieldVal: ""
+                    }]
+                },
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [
+                        {field: 'MaVerRd', title: 'ID', hide: true},
+                        {field: 'MaCode', title: '物料代码' },
+                        {field: 'MaName', title: '物料名称' },
+                        {field: 'MaDes', title: '物料描述' },
+                        {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                    ]
+                ],
+                request: {
+                    pageName: 'current',
+                    limitName: 'size'
+                },
+                parseData: function(res){
+                    return {
+                        code: res.status,
+                        msg: res.body.msgDes,
+                        count: res.body.data.total,
+                        data: res.body.data.list
+                    }
+                },
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'row '
+            });
+        }
+
+        //赋值渲染
+        function loadData(data, type) {
+            $("#maCode").val(data.MaCode);
+            $("#maName").val(data.MaName);
+            $("#maDes").val(data.MaDes);
+
+            maFamilyS.setValue(data.PDFInfo.PDFRd == undefined ? [] : [data.PDFInfo.PDFRd]);
+            maCompanyS.setValue(data.CPInfo.CpRd == undefined ? [] : [data.CPInfo.CpRd]);
+            statusS.setValue([data.Status]);
+            maTypeS.setValue(data.MaterialType == undefined ? [] : [data.MaterialType]);
+            $("#isBatch").prop("checked", data.IsBatch === "00" ? true : false);
+            $("#isExem").prop("checked", data.IsExem === "00" ? true : false);
+            $("#minCheckbox").prop("checked", data.DisRule === "00" ? false : true);
+            if($("#minCheckbox").prop("checked")){
+                $("#minPCheck").show();
+            }else{
+                $("#minPCheck").hide();
+            }
+            form.render("checkbox");
+
+            $("#cusMacCode").val(data.MaBarCode);
+            unitS.setValue(data.UnitInfo.UnitRd == undefined ? [] : [data.UnitInfo.UnitRd]);
+            snS.setValue(data.SRInfo.SRRd == undefined ? [] : [data.SRInfo.SRRd]);
+            ptS.setValue(data.PtInfo.PtRd == undefined ? [] : [data.PtInfo.PtRd]);
+
+            $("#minStore").val(data.MinSNum);
+            $("#maxStore").val(data.MaxSNum);
+            $("#orderNum").val(data.OrderNum);
+            $("#brand").val(data.Brand);
+            supplierS.setValue([]);
+            $("#cusMaCode").val(data.CusMaCode);
+            $("#suMaCode").val(data.SuMaCode);
+            $("#minPackNum").val(data.MinPQ);
+
+            workFlowS.setValue(data.WFInfo.map(o => { return o.WfVerRd }));
+            bomS.setValue(data.BOMInfo.BOMRd == undefined ? [] : [data.BOMInfo.BOMRd]);
+
+            packS1.setValue(data.TrayPackInfo.PackSpRd == undefined ? [] : [data.TrayPackInfo.PackSpRd]);
+            packS2.setValue(data.BoxPackInfo.PackSpRd == undefined ? [] : [data.BoxPackInfo.PackSpRd]);
+
+            $("#creator").val(data.Creator);
+            $("#createTime").val(data.CreateTime);
+            $("#lastModifyMan").val(data.LastModifyMan);
+            $("#lastModifyTime").val(data.LastModifyTime);
+            $("#remark").val(data.Remark);
+
+            $("#content input").prop("disabled", type);
+            //true->禁用
+            if(type){
+                $("#content input").addClass("inputRead");
+                $("#remark").addClass("inputRead");
+                $("#remark").prop("disabled", true);
+            }else{
+                $("#content input").removeClass("inputRead");
+                $("#remark").removeClass("inputRead");
+                $("#remark").prop("disabled", false);
+                $("#creator").addClass("inputRead");
+                $("#createTime").addClass("inputRead");
+                $("#lastModifyMan").addClass("inputRead");
+                $("#lastModifyTime").addClass("inputRead");
+                $("#creator").prop("disabled", true);
+                $("#createTime").prop("disabled", true);
+                $("#lastModifyMan").prop("disabled", true);
+                $("#lastModifyTime").prop("disabled", true);
+            }
+
+            maFamilyS.update({disabled: type});
+            maCompanyS.update({disabled: type});
+            statusS.update({disabled: type});
+            maTypeS.update({disabled: type});
+            unitS.update({disabled: type});
+            snS.update({disabled: type});
+            ptS.update({disabled: type});
+            supplierS.update({disabled: type});
+            workFlowS.update({disabled: type});
+            bomS.update({disabled: type});
+            packS1.update({disabled: type});
+            packS2.update({disabled: type});
+        }
+
+        //清空
+        function clear() {
+            $("#maCode").val("");
+            $("#maName").val("");
+            $("#maDes").val("");
+
+            maFamilyS.setValue([]);
+            maCompanyS.setValue([]);
+            statusS.setValue(['00']);
+            maTypeS.setValue([]);
+
+            $("#cusMacCode").val("");
+            unitS.setValue([]);
+            snS.setValue([]);
+            ptS.setValue([]);
+
+            $("#minStore").val("");
+            $("#maxStore").val("");
+            $("#orderNum").val("");
+            $("#brand").val("");
+            supplierS.setValue([]);
+            $("#cusMaCode").val("");
+            $("#suMaCode").val("");
+            $("#minPackNum").val("");
+
+            workFlowS.setValue([]);
+            bomS.setValue([]);
+
+            packS1.setValue([]);
+            packS2.setValue([]);
+
+            $("#creator").val("");
+            $("#createTime").val("");
+            $("#lastModifyMan").val("");
+            $("#lastModifyTime").val("");
+            $("#remark").val("");
+
+            $("#content input").removeClass("inputRead").prop("disabled", false);
+            $("#other input").addClass("inputRead").prop("disabled", true);
+            $("#remark").removeClass("inputRead").prop("disabled", false);
+
+            maFamilyS.update({disabled: false});
+            maCompanyS.update({disabled: false});
+            statusS.update({disabled: false});
+            maTypeS.update({disabled: false});
+            unitS.update({disabled: false});
+            snS.update({disabled: false});
+            ptS.update({disabled: false});
+            supplierS.update({disabled: false});
+            workFlowS.update({disabled: false});
+            bomS.update({disabled: false});
+            packS1.update({disabled: false});
+            packS2.update({disabled: false});
+        }
+    });
+</script>
+</body>
+</html>

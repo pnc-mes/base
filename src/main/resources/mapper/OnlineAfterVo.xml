@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.OnlineAfterVoDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.vo.OnlineAfterVo" id="ResultOnlineAfterVo">
+        <result property="BadName" column="badName" />
+        <result property="BadCode" column="badCode" />
+        <result property="GradeName" column="gradeName" />
+        <result property="Creator" column="creator" />
+        <result property="CreateTime" column="createTime" />
+    </resultMap>
+    <!--压后目检的数据-->
+    <select id="selectOnlineAfterVoYHCheckDAOByBatch" resultMap="ResultOnlineAfterVo" parameterType="string">
+SELECT a.GradeName,a.CreateTime,a.Creator,b.BadCode,b.BadName  FROM trt_yhcheckinfo a LEFT JOIN  trt_YHCheckDtlInfo b  ON  a.Guid=b.YHCheckGd WHERE a.Batch=#{ batch }   ORDER BY CreateTime DESC LIMIT 1
+    </select>
+
+    <!--前EL的数据-->
+    <select id="selectOnlineAfterVoPELDAOByBatch" resultMap="ResultOnlineAfterVo" parameterType="string">
+SELECT a.GradeName,a.CreateTime,a.Creator,b.BadCode,b.BadName  FROM trt_pelinfo a LEFT JOIN  trt_PTELBadInfo b  ON  a.Guid=b.ELGd AND b.Source='00' WHERE a.Batch=#{ batch }   ORDER BY CreateTime DESC LIMIT 1
+    </select>
+
+    <!--后EL的数据-->
+    <select id="selectOnlineAfterVoTELDAOByBatch" resultMap="ResultOnlineAfterVo" parameterType="string">
+SELECT a.GradeName,a.CreateTime,a.Creator,b.BadCode,b.BadName  FROM trt_pelinfo a LEFT JOIN  trt_PTELBadInfo b  ON  a.Guid=b.ELGd AND b.Source='01' WHERE a.Batch=#{ batch }   ORDER BY CreateTime DESC LIMIT 1
+    </select>
+
+    <!--终检的数据-->
+    <select id="selectOnlineAfterVoZJCheckDAOByBatch" resultMap="ResultOnlineAfterVo" parameterType="string">
+SELECT a.GradeName,a.CreateTime,a.Creator,b.BadCode,b.BadName  FROM trt_ZJCheckInfo a LEFT JOIN  trt_ZJCheckDtlInfo b  ON  a.Guid=b.ZJCheckGd WHERE a.Batch=#{ batch }   ORDER BY CreateTime DESC LIMIT 1
+    </select>
+</mapper>

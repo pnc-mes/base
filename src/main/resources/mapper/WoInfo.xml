@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.WODAO">
+    <resultMap id="woInfoMap" type="pnc.mesadmin.entity.WoInfo">
+        <id column="Ruid" property="ruid"></id>
+        <result column="Guid" property="guid"></result>
+        <result column="WoTGd" property="woTGd"></result>
+        <result column="WoCode" property="woCode"></result>
+        <result column="PKEFlag" property="pKEFlag"></result>
+        <result column="PEndFlag" property="pEndFlag"></result>
+        <result column="MaVerGd" property="maVerGd"></result>
+        <result column="UrcyGd" property="urcyGd"></result>
+        <result column="bomVerGd" property="bomVerGd"></result>
+        <result column="wFVerGd" property="wFVerGd"></result>
+        <result column="OrderCode" property="orderCode"></result>
+        <result column="Num" property="num"></result>
+        <result column="FinishNum" property="finishNum"></result>
+        <result column="wIPNum" property="wIPNum"></result>
+        <result column="TrayPackGd" property="trayPackGd"></result>
+        <result column="BoxPackGd" property="boxPackGd"></result>
+        <result column="UnCBatNum" property="unCBatNum"></result>
+        <result column="UnitGd" property="unitGd"></result>
+        <result column="JStartDate" property="jStartDate"></result>
+        <result column="JFinishDate" property="jFinishDate"></result>
+        <result column="SStartDate" property="sStartDate"></result>
+        <result column="SFinishDate" property="sFinishDate"></result>
+        <result column="releaseDate" property="releaseDate"></result>
+        <result column="Status" property="status"></result>
+        <result column="DSource" property="dSource"></result>
+        <result column="Creator" property="creator"></result>
+        <result column="CreateTime" property="createTime"></result>
+        <result column="LastModifyMan" property="lastModifyMan"></result>
+        <result column="LastModifyTime" property="lastModifyTime"></result>
+        <result column="Remark" property="remark"></result>
+
+    </resultMap>
+    <!--增加工单信息 张亮亮-->
+    <insert id="InsertWoInfo">
+		INSERT INTO `tpm_woinfo`(Guid,PEndFlag,PKEFlag,WoCode,UrcyGd,bomVerGd,wFVerGd,WoTGd,TrayPackGd,BoxPackGd,MaVerGd,OrderCode,Num,FinishNum,UnCBatNum,UnitGd,JStartDate,JFinishDate,SStartDate,SFinishDate,Status,DSource,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+		VALUES (#{guid},#{pEndFlag},#{pKEFlag},#{woCode},#{urcyGd},#{bomVerGd},#{wFVerGd},#{woTGd},#{trayPackGd},#{boxPackGd},#{maVerGd},#{orderCode},#{num},#{finishNum},#{unCBatNum},#{unitGd},#{jStartDate},#{jFinishDate},#{sStartDate},#{sFinishDate},#{status},#{dSource},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+	</insert>
+    <!--删除工单信息 张亮亮-->
+    <delete id="DeleteWoInfo">
+		DELETE FROM `tpm_woinfo` WHERE Ruid=#{ruid}
+	</delete>
+    <!--更新工单信息 张亮亮-->
+    <update id="UpdateWoInfo">
+        UPDATE `tpm_woinfo`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="woCode != null">
+                WoCode = #{ woCode },
+            </if>
+            <if test="pEndFlag != null">
+                PEndFlag = #{ pEndFlag },
+            </if>
+            <if test="pKEFlag != null">
+                PKEFlag = #{ pKEFlag },
+            </if>
+            <if test="urcyGd != null">
+                UrcyGd = #{ urcyGd },
+            </if>
+            <if test="bomVerGd != null">
+                bomVerGd = #{bomVerGd},
+            </if>
+            <if test="wFVerGd != null">
+                wFVerGd = #{wFVerGd},
+            </if>
+            <if test="woTGd != null">
+                WoTGd = #{ woTGd },
+            </if>
+            <if test="trayPackGd != null">
+                TrayPackGd = #{ trayPackGd },
+            </if>
+            <if test="boxPackGd != null">
+                BoxPackGd = #{ boxPackGd },
+            </if>
+            <if test="maVerGd != null">
+                MaVerGd = #{ maVerGd },
+            </if>
+            <if test="orderCode != null">
+                OrderCode = #{ orderCode },
+            </if>
+            <if test="num != null">
+                Num = #{ num },
+            </if>
+            <if test="finishNum != null">
+                FinishNum = #{ finishNum },
+            </if>
+            <if test="wIPNum != null">
+                wIPNum = #{ wIPNum },
+            </if>
+            <if test="unCBatNum != null">
+                UnCBatNum = #{ unCBatNum },
+            </if>
+            <if test="unitGd != null">
+                UnitGd = #{ unitGd },
+            </if>
+            <if test="jStartDate != null">
+                JStartDate = #{ jStartDate },
+            </if>
+            <if test="jFinishDate != null">
+                JFinishDate = #{ jFinishDate },
+            </if>
+            <if test="sStartDate != null">
+                SStartDate = #{ sStartDate },
+            </if>
+            <if test="sFinishDate != null">
+                SFinishDate = #{ sFinishDate },
+            </if>
+            <if test="releaseDate != null">
+                releaseDate = #{ releaseDate },
+            </if>
+            <if test="status != null">
+                Status = #{ status },
+            </if>
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ ruid }
+    </update>
+
+
+    <!--查询工单列表信息 张亮亮-->
+    <select id="SelectWoInfo" resultMap="woInfoMap">
+		SELECT * FROM `tpm_woinfo`
+	</select>
+    <!--获取工单信息 张亮亮-->
+    <select id="SelectWoInfoByruid" resultMap="woInfoMap" parameterType="_int">
+		SELECT * FROM `tpm_woinfo` WHERE Ruid=#{ruid}
+	</select>
+    <!--根据工单号查询工单信息 张亮亮-->
+    <select id="SelectWoInfoBywoCode" resultMap="woInfoMap" parameterType="string">
+		SELECT * FROM `tpm_woinfo` WHERE WoCode=#{woCode}
+	</select>
+
+    <!--根据工单ID查询工单信息 王怀龙-->
+    <select id="SelectWoInfoByGuid" resultMap="woInfoMap" parameterType="string">
+		SELECT * FROM `tpm_woinfo` WHERE Guid=#{argGuid}
+	</select>
+
+    <!-- 根据工单代码模糊查询 pjf -->
+    <select id="SelectLikeWoCode" resultMap="woInfoMap">
+		SELECT * FROM tpm_woinfo WHERE WoCode LIKE '%${argWoCode}%' AND Status IN ('01','03')
+		ORDER BY CreateTime DESC Limit ${argPageStart}, ${argPageEnd}
+	</select>
+
+    <!-- 根据工单代码模糊查询 pjf -->
+    <select id="SelectLikeWoCodeCount" resultType="int">
+        SELECT COUNT(Guid) FROM tpm_woinfo WHERE WoCode LIKE '%${argWoCode}%' AND Status IN ('01','03')
+    </select>
+
+    <!--查询工单列表信息 张亮亮-->
+    <select id="SelectWoInfoByOrderCode" resultMap="woInfoMap">
+		SELECT * FROM `tpm_woinfo` WHERE OrderCode=#{OrderCode}
+	</select>
+    <!---->
+    <select id="SelectWoInfoByruidStatus" resultMap="woInfoMap">
+        	SELECT * FROM `tpm_woinfo` WHERE Ruid=#{Ruid} AND (Status="01" OR Status="03")
+    </select>
+
+    <select id="SelectAllWoInfoByLineRd" resultMap="woInfoMap">
+        SELECT w.* FROM  tpm_lineinfo l
+            LEFT JOIN  tpm_orderlineinfo ol on l.Guid=ol.LineGd
+            LEFT JOIN  tpm_woinfo w ON  ol.WOGd=w.Guid
+        WHERE l.Ruid=#{LineRd} AND w.Status in ('01','03') ORDER BY w.CreateTime DESC  Limit 0,50
+    </select>
+
+    <select id="SeleAllWoCodeByWoTGd" resultMap="woInfoMap">
+        	SELECT * FROM `tpm_woinfo` WHERE woTGd=#{woTGd} ORDER BY CreateTime DESC
+    </select>
+</mapper>
+
+

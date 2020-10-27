@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.BomReMaterialDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.BomReMaterialInfo" id="BomReMaterialInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="bomMaGd" column="bomMaGd" />
+        <result property="bomVerGd" column="bomVerGd" />
+        <result property="specVerGd" column="specVerGd" />
+		<result property="maVerGd" column="maVerGd" />
+        <result property="aRate" column="aRate" />
+        <result property="num" column="num" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+	<!-- 新增BOM替代料信息  (By-pjf)-->
+	<insert id="InsertBomReMaterialInfo">
+        INSERT INTO tpm_bomrematerialinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            Guid,BomVerGd,SpecVerGd,BomMaGd,MaVerGd,ARate,Num,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+
+            #{guid},#{bomVerGd},#{specVerGd},#{bomMaGd},#{maVerGd},#{aRate},#{num},
+            #{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+	</insert>
+
+    <!-- 删除BOM替代料信息  (By-pjf)-->
+    <delete id="DeleteByMaVerGd">
+        DELETE FROM tpm_bomrematerialinfo WHERE BomMaGd = #{ argMaVerGd }
+    </delete>
+
+    <!-- 查询所有BOM替代料信息  (By-pjf)-->
+	<select id="SelectAllBomReMaterialInfo" resultMap="BomReMaterialInfoResult">
+		SELECT * FROM tpm_bomrematerialinfo
+	</select>
+
+	<!-- 根据Bom用料标识查询所有BOM替代料信息  (By-pjf)-->
+	<select id="SelectByBomMaGd" resultMap="BomReMaterialInfoResult">
+		SELECT * FROM tpm_bomrematerialinfo WHERE BomMaGd = #{ argBomMaGd }
+	</select>
+
+    <!-- 根据物料版本标识查询所有BOM替代料信息  (By-pjf)-->
+    <select id="SelectByMaVerGd" resultMap="BomReMaterialInfoResult">
+        SELECT * FROM tpm_bomrematerialinfo WHERE MaVerGd = #{ argMaVerGd }
+    </select>
+
+    <!--根据guid查询物料消耗信息-->
+    <select id="SelectBomReMaterialInfoByGuid" resultMap="BomReMaterialInfoResult" parameterType="string">
+       SELECT * FROM tpm_bomrematerialinfo WHERE Guid = #{ guid }
+    </select>
+
+    <select id="SelectBomReMaterialInfoByRuid" resultMap="BomReMaterialInfoResult" parameterType="int">
+        SELECT * FROM tpm_bomrematerialinfo WHERE Ruid = #{ ruid }
+    </select>
+
+    <!--根据WoGd,SpecVGd,查询【5.2.1. 工单信息表(tpm_WoInfo)】、【5.7.4. 替代料信息表(tpm_BomReMaterialInfo)】关联信息-->
+    <select id="SelectBomReMaterialInfo" resultMap="BomReMaterialInfoResult">
+        SELECT t2.* FROM tpm_WoInfo t1,tpm_BomReMaterialInfo t2
+        WHERE t1.Guid=#{WoGd}  AND t2.SpecVerGd=#{SpecVGd} AND t2.BomVerGd=t1.BomVerGd
+    </select>
+
+    <select id="SelectBomVerGd" resultMap="BomReMaterialInfoResult">
+        SELECT * FROM tpm_BomReMaterialInfo WHERE BomVerGd=#{BomVerGd}
+    </select>
+
+    <select id="SelectByMaVerGdAndBomVerGd" resultMap="BomReMaterialInfoResult">
+        SELECT * FROM tpm_BomReMaterialInfo WHERE BomVerGd=#{BomVerGd} and  MaVerGd = #{ MaVerGd } and specVerGd=#{specVerGd}
+    </select>
+
+
+</mapper>

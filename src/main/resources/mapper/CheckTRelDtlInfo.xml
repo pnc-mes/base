@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CheckTRelDtlDAO">
+
+    <resultMap type="pnc.mesadmin.entity.CheckTRelDtlInfo" id="CheckTRelDtlInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <select id="SelectAllByRelGd" resultMap="CheckTRelDtlInfoMap">
+        SELECT * FROM tpm_checktreldtlinfo where CheckTRelGd=#{relGd}
+    </select>
+
+    <select id="SelectByRuid" resultMap="CheckTRelDtlInfoMap">
+        SELECT * FROM tpm_checktreldtlinfo where  Ruid=#{ruid}
+    </select>
+
+    <select id="SelectByGuid" resultMap="CheckTRelDtlInfoMap">
+        SELECT * FROM tpm_checktreldtlinfo where  Guid=#{guid}
+    </select>
+
+    <insert id="Insert">
+        INSERT INTO tpm_checktreldtlinfo(Guid,CheckTRelGd,CheckTempGd,CheckLevelGd,AQLRuleGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{CheckTRelGd},#{CheckTempGd},#{CheckLevelGd},#{AQLRuleGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <delete id="DeleteByRelGd">
+        DELETE  FROM tpm_checktreldtlinfo where CheckTRelGd=#{relGd}
+    </delete>
+
+</mapper>
+

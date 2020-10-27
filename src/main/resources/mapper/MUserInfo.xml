@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.MUserDAO">
+        <resultMap id="userInfoMap" type="pnc.mesadmin.entity.UserInfo">
+            <id column="Ruid" property="ruid"/>
+            <result column="Guid" property="guid"></result>
+            <result column="UserName" property="userName"/>
+            <result column="Password" property="passWord"/>
+            <result column="Face" property="face"/>
+            <result column="RealName" property="realName"/>
+            <result column="Creator" property="creator"/>
+            <result column="CreateTime" property="createTime"/>
+            <result column="LastModifyMan" property="lastModifyMan"/>
+            <result column="LastModifyTime" property="lastModifyTime"/>
+            <result column="Remark" property="remark"/>
+        </resultMap>
+
+    <select id="selectUserInfoByUserName" parameterType="java.lang.String" resultMap="userInfoMap">
+         SELECT * FROM tpm_userinfo WHERE username=#{_parameter}
+    </select>
+
+</mapper>

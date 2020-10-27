@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.FileVerDAO" >
+
+    <resultMap type="pnc.mesadmin.entity.FileVerInfo" id="FileVerInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="fileGd" column="fileGd" />
+        <result property="fileName" column="fileName" />
+        <result property="version" column="version" />
+        <result property="filePath" column="filePath" />
+        <result property="status" column="status" />
+        <result property="isDef" column="isDef" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!--查询文件版本所有信息-->
+    <select id="SelectAllfileInfo" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo
+    </select>
+
+    <!--查询文件版本版本信息-->
+    <select id="SelectVersion" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo  WHERE FileGd=#{fileGd} AND Version = #{version}
+    </select>
+
+    <!--&lt;!&ndash;查询文件版本filegd和guid信息&ndash;&gt;
+    <select id="SelectByfileGdguid" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo  WHERE FileGd=#{fileGd} AND Guid = #{guid}
+    </select>-->
+
+    <!--查询文件版本信息-->
+    <select id="SelectByfileRd" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo f WHERE f.`Ruid` = #{fileRd}
+    </select>
+
+    <!--查询文件版本信息-->
+    <select id="SelectByfileVerRd" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo f WHERE f.`Ruid` = #{fileVerRd}
+    </select>
+
+    <!--查询关联文件组明细表信息-->
+    <select id="SelectByFileVerGd" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo f WHERE f.guid = #{fileVerGd}
+    </select>
+
+    <!--查询关联文件组表信息-->
+    <select id="SelectByVerGd" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo f WHERE f.guid = #{verGd}
+    </select>
+
+    <!--查询关联文件组明细表信息-->
+    <select id="SelectByfileGd" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo f WHERE f.fileGd = #{guid}
+    </select>
+
+    <!--查询关联文件信息-->
+    <select id="SelectByguid" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo f WHERE f.fileGd = #{guid}
+    </select>
+
+    <!--根据文件版本得文件标识，来cx 文件版本信息， 此语句是文件的标识-->
+    <select id="SelectFileVerInfoByfileGd" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo f WHERE f.fileGd = #{fileGd}
+    </select>
+
+    <!--保存文件版本信息-->
+    <insert id="InsertFileVerInfo">
+        INSERT INTO tpm_fileverinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,FileGd,FileName,Version,FilePath,IsDef,Status,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{fileGd},#{fileName},#{version},#{filePath},#{isDef},#{status},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新文件版本信息-->
+    <update id="UpdateFileVerInfo">
+        UPDATE tpm_fileverinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="fileGd != null">
+                fileGd = #{fileGd},
+            </if>
+            <if test="fileName != null">
+                fileName = #{fileName},
+            </if>
+            <if test="isDef != null">
+                isDef = #{isDef},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+            <if test="filePath != null">
+                filePath = #{filePath},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+    <!--删除文件版本全部信息-->
+    <delete id="DeleteFileVerInfo">
+        DELETE FROM tpm_fileverinfo WHERE fileGd=#{fileGd} AND guid=#{guid}
+    </delete>
+
+    <!--查询文件版本全部信息-->
+    <select id="SelectFileVerInfofileGd" resultMap="FileVerInfoResult">
+        SELECT * FROM tpm_fileverinfo WHERE fileGd=#{fileGd}
+    </select>
+
+    <!--删除文件版本信息-->
+    <delete id="DeleteFileVerInforuid">
+        DELETE FROM tpm_fileverinfo WHERE ruid=#{fileVerRd}
+    </delete>
+
+    <!-- 根据物料、工序查询 (pjf) -->
+    <select id="SelectByMaSpec" resultMap="FileVerInfoResult">
+        SELECT fv.filename,fv.filepath FROM tpm_fileverinfo fv,tpm_filegpdtlinfo fgp,tpm_sopinfo sop,tpm_sopdlinfo sopd
+        WHERE fv.`Guid` = fgp.`FileVerGd`
+        AND fgp.filegpgd = sopd.filegrgd
+        AND sop.guid = sopd.SOPGd
+        AND sopd.mavergd = #{argMaGd}
+        AND sopd.SpecVerGd = #{argSpecGd}
+        AND sop.WFVerGd = #{ argWFVerGd }
+    </select>
+
+    <!-- 根据工序查询 (pjf) -->
+    <select id="SelectBySpec" resultMap="FileVerInfoResult">
+        SELECT fv.filename,fv.filepath FROM tpm_fileverinfo fv,tpm_filegpdtlinfo fgp,tpm_specverinfo sv
+        WHERE fv.`Guid`=fgp.`FileVerGd`
+        AND fgp.filegpgd = sv.filegrgd
+        AND sv.guid=#{argSpecGd}
+    </select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ProdRepDAO" >
+    <resultMap type="pnc.mesadmin.entity.ProdRepInfo" id="ProdRepInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="specName" column="specName" />
+        <result property="prodDate" column="prodDate" />
+        <result property="miNum" column="miNum" />
+        <result property="moNum" column="moNum" />
+        <result property="yield" column="yield" />
+        <result property="wHours" column="wHours" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="Remark" />
+    </resultMap>
+
+    <select id="SelectProdRepInfo" resultMap="ProdRepInfoResult">
+        SELECT * FROM tpm_prodrepinfo
+    </select>
+
+</mapper>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.InStrategyDAO" >
+    <resultMap type="pnc.mesadmin.entity.InStrategyInfo" id="InStrategyInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="strategyName" column="strategyName" />
+        <result property="isDef" column="isDef" />
+        <result property="sInCome" column="sInCome" />
+        <result property="partRev" column="partRev" />
+        <result property="actOn" column="actOn" />
+        <result property="status" column="status" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <!--查询收货策略列表数据-->
+    <select id="SelectAllByInStrategyInfo" resultMap="InStrategyInfoResult">
+        SELECT * FROM tpm_instrategyinfo
+    </select>
+
+    <!--根据ruid查询收货策略-->
+    <select id="SelectAllByRuid" resultMap="InStrategyInfoResult">
+        SELECT * FROM tpm_instrategyinfo WHERE Ruid=#{ruid}
+    </select>
+
+    <!--根据guid查询-->
+    <select id="SelectAllByGuid" resultMap="InStrategyInfoResult">
+        SELECT * FROM tpm_instrategyinfo WHERE Guid=#{guid}
+    </select>
+
+    <!--通过作用类型查询-->
+    <select id="SelectAllByActOn" resultMap="InStrategyInfoResult">
+        SELECT * FROM tpm_instrategyinfo WHERE ActOn=#{actOn}
+    </select>
+
+    <!--查询策略名称和作用类型-->
+    <select id="SelectstrategyNameANDactOn" resultMap="InStrategyInfoResult">
+        SELECT * FROM tpm_instrategyinfo WHERE StrategyName=#{strategyName} AND ActOn =#{actOn}
+    </select>
+
+    <!--查询策略默认和作用类型-->
+    <select id="SelectisDefANDactOn" resultMap="InStrategyInfoResult">
+        SELECT * FROM tpm_instrategyinfo WHERE IsDef=#{isDef} AND ActOn =#{actOn}
+    </select>
+
+    <!--新增收货策略数据-->
+    <insert id="InsertInStrategyInfo">
+        INSERT INTO tpm_instrategyinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,StrategyName,IsDef,SInCome,PartRev,ActOn,Status,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{strategyName},#{isDef},#{sInCome},#{partRev},#{actOn},#{status},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除收货策略信息-->
+    <delete id="DeleteInStrategyInfoByRuid" >
+        DELETE FROM tpm_instrategyinfo WHERE ruid = #{ ruid }
+    </delete>
+
+    <!--更新收货策略-->
+    <update id="UpdateIInStrategyInfo">
+
+        UPDATE tpm_instrategyinfo
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="strategyName != null">
+                strategyName = #{ strategyName },
+            </if>
+            <if test="isDef != null">
+                isDef = #{ isDef },
+            </if>
+            <if test="sInCome != null">
+                sInCome = #{ sInCome },
+            </if>
+            <if test="partRev != null">
+                partRev = #{ partRev },
+            </if>
+            <if test="actOn != null">
+                actOn = #{ actOn },
+            </if>
+            <if test="status != null">
+                status = #{ status },
+            </if>
+            <if test="creator != null">
+                creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                createTime = #{ createTime },
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                remark = #{ remark },
+            </if>
+        </trim>
+        WHERE ruid = #{ ruid }
+
+    </update>
+
+</mapper>

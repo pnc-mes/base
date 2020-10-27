@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.WoTypeDAO" >
+    <resultMap type="pnc.mesadmin.entity.WoTypeInfo" id="WoTypeInfoResult">
+        <id property="ruid" column="ruid" />
+        <result property="guid" column="guid" />
+        <result property="WoTName" column="WoTName" />
+        <result property="creator" column="creator" />
+        <result property="createTime" column="createTime" />
+        <result property="lastModifyMan" column="lastModifyMan" />
+        <result property="lastModifyTime" column="lastModifyTime" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <update id="UpdateWoType">
+        UPDATE tpm_wotypeinfo SET WoTName = #{WoTName},lastModifyMan = #{lastModifyMan},lastModifyTime = #{lastModifyTime},remark = #{remark}
+        WHERE ruid = #{ruid}
+    </update>
+
+    <insert id="InsertWoType">
+        INSERT INTO tpm_wotypeinfo(guid,WoTName,creator,createTime,remark)
+        VALUES (#{guid},#{WoTName},#{creator},#{createTime},#{remark})
+    </insert>
+
+    <delete id="DeleteWoType">
+        DELETE FROM tpm_wotypeinfo WHERE ruid = #{ruid}
+    </delete>
+
+    <select id="SelectWoTypeByGuid" resultMap="WoTypeInfoResult">
+        SELECT * FROM tpm_wotypeinfo WHERE guid = #{guid}
+    </select>
+
+    <select id="SelectWoTypeInfoByName" resultType="_int">
+        SELECT COUNT(ruid) FROM tpm_wotypeinfo WHERE WoTName = #{wtName} and ruid != #{ruid}
+    </select>
+
+    <select id="SelectWoTypeByName" resultType="_int">
+        SELECT COUNT(ruid) FROM tpm_wotypeinfo WHERE WoTName = #{wtName}
+    </select>
+
+    <select id="SelectAllWoType" resultMap="WoTypeInfoResult">
+        SELECT * FROM tpm_wotypeinfo
+    </select>
+    <select id="SelectWoTypeByRuid" resultMap="WoTypeInfoResult">
+        SELECT * FROM tpm_wotypeinfo WHERE ruid = #{ruid}
+    </select>
+</mapper>

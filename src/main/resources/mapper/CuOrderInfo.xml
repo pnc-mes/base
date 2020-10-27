@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.CuOrderDao">
+
+    <resultMap type="pnc.mesadmin.entity.CuOrderInfo" id="CuOrderInfoMap">
+        <id property="Ruid" column="Ruid"/>
+    </resultMap>
+
+    <!--查询订单信息-->
+    <select id="SelectAllCuOrderInfo" resultMap="CuOrderInfoMap">
+        SELECT * FROM tpm_cusorderinfo
+    </select>
+
+    <!--根据ID订单信息-->
+    <select id="SelectByRuId" resultMap="CuOrderInfoMap">
+        SELECT * FROM tpm_cusorderinfo where  Ruid=#{coRd}
+    </select>
+
+    <select id="SelectAllByOrderCode" resultMap="CuOrderInfoMap">
+        SELECT * FROM tpm_cusorderinfo where  OrderCode=#{code}
+    </select>
+
+    <!--根据ID订单信息-->
+    <select id="SelectByGuId" resultMap="CuOrderInfoMap">
+        SELECT * FROM tpm_cusorderinfo where  Guid=#{guId}
+    </select>
+
+    <insert id="AddOrderInfo">
+        INSERT INTO tpm_cusorderinfo(Guid,OrderCode,CoTGd,MaVerGd,Num,CustomerGd,Creator,CreateTime,LastModifyMan,LastModifyTime,Remark)
+        VALUES (#{guid},#{orderCode},#{coTGd},#{maVerGd},#{num},#{customerGd},#{creator},#{createTime},#{lastModifyMan},#{lastModifyTime},#{remark})
+    </insert>
+
+    <update id="SaveOrderInfo" parameterType="int">
+        UPDATE tpm_cusorderinfo
+        <trim prefix="set" suffixOverrides=",">
+            <if test="guid != null">
+                Guid = #{ guid },
+            </if>
+            <if test="orderCode != null">
+                OrderCode = #{ orderCode },
+            </if>
+            <if test="coTGd != null">
+                CoTGd = #{ coTGd },
+            </if>
+            <if test="maVerGd != null">
+                MaVerGd = #{ maVerGd },
+            </if>
+
+            <if test="num != null">
+                Num = #{ num },
+            </if>
+            <if test="customerGd != null">
+                CustomerGd = #{ customerGd },
+            </if>
+
+            <if test="creator != null">
+                Creator = #{ creator },
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{ createTime },
+            </if>
+
+            <if test="lastModifyMan != null">
+                LastModifyMan = #{ lastModifyMan },
+            </if>
+            <if test="lastModifyTime != null">
+                LastModifyTime = #{ lastModifyTime },
+            </if>
+            <if test="remark != null">
+                Remark = #{ remark },
+            </if>
+        </trim>
+        WHERE Ruid = #{ruid}
+    </update>
+
+    <delete id="delOrderInfo" parameterType="int">
+        DELETE  FROM tpm_cusorderinfo WHERE Ruid=#{coRd}
+    </delete>
+
+</mapper>
+

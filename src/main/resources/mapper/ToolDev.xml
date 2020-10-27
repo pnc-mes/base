@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.ToolDevDAO">
+    <resultMap id="DevToolRelationInfoMapper" type="pnc.mesadmin.entity.DevToolRelationInfo">
+        <id property="Ruid" column="Ruid"></id>
+        <result property="DevGd" column="DevGd"></result>
+        <result property="ToolGd" column="ToolGd"></result>
+    </resultMap>
+
+    <select id="SelectAllDevToolRelationInfoByDevGD" resultMap="DevToolRelationInfoMapper">
+        SELECT * FROM tpm_devtoolrelationinfo where DevGd=#{devGd}
+    </select>
+
+
+    <select id="SelectAllDevToolRelationInfoByModel" resultMap="DevToolRelationInfoMapper">
+        SELECT * FROM tpm_devtoolrelationinfo where ToolGd=#{toolGd}
+    </select>
+
+
+    <insert id="InsrtDevToolRelationInfo">
+        INSERT INTO tpm_devtoolrelationinfo(DevGd,ToolGd)
+        VALUES (#{devGd},#{toolGd})
+    </insert>
+
+    <delete id="DelDevToolRelationInfoByToolGD" parameterType="int">
+        DELETE  FROM tpm_devtoolrelationinfo WHERE ToolGd=#{toolGd}
+    </delete>
+
+
+</mapper>

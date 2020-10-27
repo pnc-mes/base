@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.DevBatchRelDAO" >
+  
+	<resultMap type="pnc.mesadmin.entity.DevBatchRelInfo" id="DevBatchRelInfoResult">
+		<id property="ruid" column="ruid" />
+		<result property="guid" column="guid" />
+		<result property="devGd" column="devGd" />
+		<result property="batch" column="batch" />
+		<result property="creator" column="creator" />
+		<result property="createTime" column="createTime" />
+		<result property="lastModifyMan" column="lastModifyMan" />
+		<result property="lastModifyTime" column="lastModifyTime" />
+		<result property="remark" column="remark" />
+	</resultMap>
+
+    <insert id="InsertDevBatchRelInfo">
+        INSERT INTO tpm_devbatchrelinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,devGd,batch,Creator,CreateTime,
+
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{devGd},#{batch},#{creator},#{createTime},
+
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="DeleteByDevGdBatch">
+        DELETE FROM tpm_devbatchrelinfo WHERE devGd = #{ devGd } AND batch = #{ batch }
+    </delete>
+
+    <select id="SelectByDevGdBatch" resultMap="DevBatchRelInfoResult">
+      select * from tpm_devbatchrelinfo where devGd = #{ devGd } ORDER BY CreateTime DESC
+    </select>
+
+    <select id="SelectByBatch" resultMap="DevBatchRelInfoResult">
+      select *from tpm_devbatchrelinfo WHERE batch = #{ batch } ORDER BY createTime DESC
+    </select>
+</mapper>

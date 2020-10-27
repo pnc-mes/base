@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pnc.mesadmin.dao.InstockDtlDAO">
+    <resultMap type="pnc.mesadmin.entity.InstockDtlInfo" id="InstockDtlInfoResult">
+        <id property="ruid" column="ruid"/>
+        <result property="guid" column="guid"/>
+        <result property="insGd" column="insGd"/>
+        <result property="maVerGd" column="maVerGd"/>
+        <result property="materialCode" column="materialCode"/>
+        <result property="materialName" column="materialName"/>
+        <result property="barType" column="barType"/>
+        <result property="batch" column="batch"/>
+        <result property="num" column="num"/>
+        <result property="storeGd" column="storeGd"/>
+        <result property="locationGd" column="locationGd"/>
+        <result property="productDate" column="productDate"/>
+        <result property="expireDate" column="expireDate"/>
+        <result property="unitName" column="unitName"/>
+        <result property="creator" column="creator"/>
+        <result property="createTime" column="createTime"/>
+        <result property="lastModifyMan" column="lastModifyMan"/>
+        <result property="lastModifyTime" column="lastModifyTime"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!--根据查询库存明细信息-->
+    <select id="SelectAllInstockDtlInfo" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo
+    </select>
+
+    <!--根据查询库存明细信息-->
+    <select id="SelectByinsGd" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo i WHERE i.InsGd=#{guid}   ORDER BY FIELD(remark,'甲供料') DESC, createTime ASC
+    </select>
+
+    <!--根据查询库存明细信息-->
+    <select id="SelectByguid" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo i WHERE i.guid=#{guid}
+    </select>
+
+    <!--根据查询库存明细信息-->
+    <select id="SelectBybatch" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo i WHERE i.batch=#{batch}
+    </select>
+
+    <!--根据storeGd查询库存明细信息-->
+    <select id="SelectstoreGd" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo i WHERE i.storeGd=#{guid}
+    </select>
+
+    <!--根据mamaVerGd和storeGd查询库存明细信息表-->
+    <select id="SelectInstockDtlInfoByMaVerGdAndStoreGd" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo WHERE maVerGd = #{argMaVerGd} AND storeGd = #{argStoreGd}
+    </select>
+
+    <!--根据argBarType和storeGd查询库存明细信息表-->
+    <select id="SelectByStoreGdAndBarTypeAndBatch" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo WHERE Batch = #{argBatch} AND BarType=#{argBarType} AND storeGd = #{argStoreGd}
+    </select>
+
+    <!--根据argBarType和Batch查询库存明细信息表-->
+    <select id="SelectByBarTypeAndBatch" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo WHERE Batch = #{argBatch} AND BarType=#{argBarType}
+    </select>
+
+    <!--根据仓库Guid 物料版本Guid查询推荐批次信息-->
+    <select id="SelectAllRecBatch" resultMap="InstockDtlInfoResult">
+         SELECT * FROM tpm_instockdtlinfo
+         WHERE storeGd=#{argStoreGd}
+         AND  maVerGd=#{argMaVerGd}
+         AND  batch != ''
+         AND  batch != NULL
+         ORDER BY  createTime ASC
+    </select>
+
+    <!--保存库存信息-->
+    <insert id="InsertInstockDtlInfo">
+        INSERT INTO tpm_instockdtlinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            Guid,InsGd,MaVerGd,MaterialCode,MaterialName,Num,StoreGd,LocationGd,ProductDate,
+            ExpireDate,UnitName,Creator,CreateTime,
+
+            <if test="batch != null">
+                batch,
+            </if>
+            <if test="BarType != null">
+                barType,
+            </if>
+            <if test="lastModifyMan != null">
+                lastModifyMan,
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{guid},#{insGd},#{maVerGd},#{materialCode},#{materialName},#{num},#{storeGd},#{locationGd},
+            #{productDate},#{expireDate},#{unitName},#{creator},#{createTime},
+
+            <if test="batch != null">
+                #{batch},
+            </if>
+            <if test="barType != null">
+                #{barType},
+            </if>
+            <if test="lastModifyMan != null">
+                #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除库存明细信息-->
+    <delete id="DeleteInstockDtlInfo">
+        DELETE FROM tpm_instockdtlinfo WHERE Ruid = #{ruid}
+    </delete>
+
+    <!--更新库存信息-->
+    <update id="UpdateInstockDtlInfo">
+        UPDATE tpm_instockdtlinfo
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="num != null">
+                num = #{num},
+            </if>
+            <if test="storeGd != null">
+                storeGd = #{storeGd},
+            </if>
+            <if test="locationGd != null">
+                locationGd = #{locationGd},
+            </if>
+
+            <if test="lastModifyMan != null">
+                lastModifyMan = #{lastModifyMan},
+            </if>
+            <if test="lastModifyTime != null">
+                lastModifyTime = #{lastModifyTime},
+            </if>
+            <if test="remark != null">
+                remark = #{remark}
+            </if>
+        </trim>
+        where ruid = #{ruid}
+    </update>
+
+    <select id="SelectByMaVerGd_Isstore_StoreGd_Batch" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo
+        <where>
+            <if test="maVerGd != null and maVerGd.length()>0">MaVerGd=#{maVerGd}</if>
+
+            <if test="batch != null and batch.length()>0">and batch like '%${batch}%'</if>
+
+            <if test="storeGd != null and storeGd.length()>0">and storeGd = #{storeGd}</if>
+
+        </where>
+    </select>
+
+    <select id="SelectByMaVerStoreBatchLocation" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo WHERE MaVerGd = #{ argMaVerGd }
+        AND StoreGd = #{ argStoreGd }
+        AND Batch IN (NULL,'')
+        <choose>
+            <when test="argLocationGd != null and argLocationGd != ''">
+                AND LocationGd = #{ argLocationGd }
+            </when>
+            <otherwise>
+                AND LocationGd in (NULL, '')
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="SelectByMaVerGdAndStoreGdAndBatchAndLocationGd" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo
+        WHERE MaVerGd = #{argMaVerGd}
+        AND StoreGd = #{argStoreGd}
+        <choose>
+            <when test="argBatch != null and argBatch != ''">
+                AND Batch = #{ argBatch }
+            </when>
+            <otherwise>
+                AND  ( Batch IS NULL OR Batch='')
+            </otherwise>
+        </choose>
+
+        <choose>
+            <when test="argLocationGd != null and argLocationGd != ''">
+                AND LocationGd = #{argLocationGd}
+            </when>
+            <otherwise>
+                AND (LocationGd IS NULL OR LocationGd='' )
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <select id="SelectByStoreGdAndLocationgGdAndBatch" resultMap="InstockDtlInfoResult">
+        SELECT * FROM tpm_instockdtlinfo
+        WHERE StoreGd = #{argStoreGd}
+        <choose>
+            <when test="argLocationGd != null and argLocationGd != ''">
+                AND LocationGd = #{argLocationGd}
+            </when>
+            <otherwise>
+                AND (LocationGd IS NULL OR LocationGd='' )
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="argBatch != null and argBatch != ''">
+                AND Batch = #{ argBatch }
+            </when>
+            <otherwise>
+                AND  ( Batch IS NULL OR Batch='')
+            </otherwise>
+        </choose>
+
+
+
+    </select>
+
+
+
+
+    <select id="selectInstockDtlInfoByBarCodeAndBarType01" resultMap="InstockDtlInfoResult" parameterType="string">
+        select * from tpm_instockdtlinfo where barType= '01' and batch=#{batch}
+    </select>
+
+
+
+</mapper>
